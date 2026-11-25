@@ -27,7 +27,7 @@ const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));retur
 const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-1';
 const MAX_BYTES=3.5*1024*1024;
 // Catálogo canónico compartido con el cliente y Home (js/render-styles.js): mismos ids, alias de versiones anteriores.
-const CATALOG=require('../js/render-styles.js');
+const CATALOG=require('../js/render-styles.js'),Ledger=require('./_spend-ledger.js'),crypto=require('crypto');
 const STYLES=CATALOG.prompts;
 // B8: material alternatives. Closed lists: the professional picks one, the server writes the words (no free text).
 const FLOORS={
@@ -101,7 +101,14 @@ function parseImage(dataUrl){
  if(!m)return null;const bytes=Buffer.from(m[2],'base64');
  if(!bytes.length||bytes.length>MAX_BYTES)return null;return {type:m[1],bytes};
 }
-async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now}={}){
+/* §3 · Cuota GLOBAL persistente (opcional, cerrada por defecto). Con RUBIK_RENDER_GLOBAL_QUOTA=1 cada imagen reserva, de
+   forma atómica entre instancias, 1 unidad y un importe en el libro común (api/_spend-ledger.js, el mecanismo de reservas
+   existente) ANTES de llamar al proveedor, y liquida después. Sin almacén configurado → 503 store-not-configured (nunca se
+   cae a la cuota por instancia). El contador por instancia (createMeter) se conserva como primera barrera. */
+function globalQuota(env){if(env.RUBIK_RENDER_GLOBAL_QUOTA!=='1')return null;
+ const n=(v,d)=>{const x=Number(v);return Number.isFinite(x)&&x>0?x:d;};
+ return {maxImages:Math.floor(n(env.RUBIK_RENDER_GLOBAL_MAX_IMAGES,30)),capUsd:n(env.RUBIK_RENDER_GLOBAL_CAP_USD,5),reserveUsd:n(env.RUBIK_RENDER_RESERVE_USD,0.25)};}
+async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now,store}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
  if(env.RUBIK_RENDER_ENABLED!=='1')return send(res,503,{error:'disabled'});
  if(!env.OPENAI_API_KEY||!env.RUBIK_RENDER_TOKEN)return send(res,503,{error:'not-configured'});
@@ -117,18 +124,25 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
  const image=parseImage(body?.image);if(!image)return send(res,400,{error:'image'});
  const slot=meter.reserve(now(),lim);
  if(!slot.ok){res.setHeader('Retry-After',String(slot.retryAfter));return send(res,429,{error:'limit',retryAfter:slot.retryAfter});}
+ const gq=globalQuota(env);let settle=async()=>{};
+ if(gq){if(store===undefined)store=Ledger.storeFromEnv(env);if(!store)return send(res,503,{error:'store-not-configured'});
+  const id='render-'+crypto.randomUUID();let r0;
+  try{r0=await store.reserve({id,family:'image',usd:gq.reserveUsd,capUsd:gq.capUsd,units:1,maxUnits:gq.maxImages,subject:'render-ia',maxSubjectUnits:gq.maxImages,meta:{kind:'render-ia'}});}
+  catch{return send(res,503,{error:'store-unavailable'});}
+  if(!r0.ok)return send(res,429,{error:'global-limit',reason:r0.reason});
+  settle=async(ok,cost)=>{try{await store.settle(id,{usd:ok?(cost?.amount??gq.reserveUsd):(cost?.amount??0),units:ok?1:0,subject:'render-ia',basis:cost?.basis??(ok?'reserve-estimate':null)});}catch{}};}
  const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');
  form.append('image',new Blob([image.bytes],{type:image.type}),image.type==='image/png'?'view.png':'view.jpg');
  const started=clock(),base={model:MODEL,style,floor,walls};
  let r;try{r=await fetchImpl('https://api.openai.com/v1/images/edits',{method:'POST',headers:{Authorization:`Bearer ${env.OPENAI_API_KEY}`},body:form});}
- catch{logCall({...base,status:'provider-unreachable',ms:clock()-started,usage:null,cost:null},log);return send(res,502,{error:'provider-unreachable'});}
+ catch{logCall({...base,status:'provider-unreachable',ms:clock()-started,usage:null,cost:null},log);await settle(false,null);return send(res,502,{error:'provider-unreachable'});}
  const out=await r.json().catch(()=>null),usage=usageOf(out?.usage),cost=costOf(usage,tariff(env)),ms=clock()-started;
- if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';logCall({...base,status:code,providerStatus:r.status,ms,usage,cost},log);return send(res,502,{error:code});}
- const b64=out?.data?.[0]?.b64_json;if(!b64){logCall({...base,status:'provider-empty',ms,usage,cost},log);return send(res,502,{error:'provider-empty'});}
- logCall({...base,status:'ok',ms,usage,cost},log);
+ if(!r.ok){const code=r.status===429?'provider-rate-limit':r.status===400?'provider-rejected':'provider-error';logCall({...base,status:code,providerStatus:r.status,ms,usage,cost},log);await settle(false,cost);return send(res,502,{error:code});}
+ const b64=out?.data?.[0]?.b64_json;if(!b64){logCall({...base,status:'provider-empty',ms,usage,cost},log);await settle(false,cost);return send(res,502,{error:'provider-empty'});}
+ logCall({...base,status:'ok',ms,usage,cost},log);await settle(true,cost);
  return send(res,200,{image:`data:image/png;base64,${b64}`,model:MODEL,style,floor,walls,usage,cost,generatedAt:new Date().toISOString()});
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.STYLES=STYLES;module.exports.FLOORS=FLOORS;module.exports.WALLS=WALLS;module.exports.prompt=prompt;
-module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;
+module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;module.exports.globalQuota=globalQuota;
 module.exports.usageOf=usageOf;module.exports.tariff=tariff;module.exports.costOf=costOf;

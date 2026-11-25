@@ -1,0 +1,63 @@
+// §3 Render IA · cuota GLOBAL persistente sobre Redis real local: dos instancias (contadores propios) comparten el tope.
+// Lua del almacén se ejecutan de verdad, con conexiones concurrentes. Requiere redis-server en el PATH (la CI lo instala).
+const test=require('node:test'),assert=require('node:assert/strict'),net=require('node:net'),{spawn,execFileSync}=require('node:child_process');
+const Render=require('../api/render.js'),L=require('../api/_spend-ledger.js');
+const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
+let srv,serverClosed,dir,socketPath;
+// Minimal RESP client (one connection = one exec function).
+function resp(){const sock=net.connect({path:socketPath});let buf=Buffer.alloc(0);const q=[];
+ const parse=(b,i)=>{const t=String.fromCharCode(b[i]),e=b.indexOf('\r\n',i);if(e<0)return null;const line=b.toString('utf8',i+1,e);
+  if(t==='+')return [line,e+2];if(t==='-')return [new Error(line),e+2];if(t===':')return [Number(line),e+2];
+  if(t==='$'){const n=Number(line);if(n<0)return [null,e+2];if(b.length<e+2+n+2)return null;return [b.toString('utf8',e+2,e+2+n),e+2+n+2];}
+  if(t==='*'){const n=Number(line);if(n<0)return [null,e+2];let j=e+2;const out=[];for(let k=0;k<n;k++){const r=parse(b,j);if(!r)return null;out.push(r[0]);j=r[1];}return [out,j];}
+  throw new Error('resp '+t);};
+ sock.on('error',err=>{while(q.length)q.shift().rej(err);});
+ sock.on('data',d=>{buf=Buffer.concat([buf,d]);for(;;){if(!buf.length||!q.length)break;const r=parse(buf,0);if(!r)break;buf=buf.subarray(r[1]);const {res,rej}=q.shift();r[0] instanceof Error?rej(r[0]):res(r[0]);}});
+ const exec=cmd=>new Promise((res,rej)=>{q.push({res,rej});sock.write('*'+cmd.length+'\r\n'+cmd.map(a=>{const s=String(a);return '$'+Buffer.byteLength(s)+'\r\n'+s+'\r\n';}).join(''));});
+ exec.close=()=>sock.destroy();return exec;}
+test.before(async()=>{try{execFileSync('redis-server',['--version']);}catch{throw new Error('redis-server no está instalado: es obligatorio para esta prueba (no se omite).');}
+ dir=await fs.mkdtemp(path.join(os.tmpdir(),'rubik-redis-'));
+ socketPath=path.join(dir,'redis.sock');
+ let spawnError;
+ srv=spawn('redis-server',['--port','0','--unixsocket',socketPath,'--unixsocketperm','700','--save','','--appendonly','no'],{stdio:'ignore'});
+ srv.once('error',error=>{spawnError=error;});
+ serverClosed=new Promise(resolve=>srv.once('close',resolve));
+ for(let i=0;i<50;i++){
+  if(spawnError)throw spawnError;
+  if(srv.exitCode!==null||srv.signalCode!==null)throw new Error('test Redis exited before readiness');
+  const e=resp();
+  try{await e(['PING']);return;}catch{await new Promise(r=>setTimeout(r,100));}finally{e.close();}
+ }
+ throw new Error('test Redis socket did not become ready');
+});
+test.after(async()=>{
+ if(srv){srv.kill();await serverClosed;}
+ if(dir)await fs.rm(dir,{recursive:true,force:true});
+});
+const fresh=async()=>{const e=resp();await e(['FLUSHALL']);return e;};
+
+const env={OPENAI_API_KEY:'sk-test',RUBIK_RENDER_TOKEN:'access-123',RUBIK_RENDER_ENABLED:'1',RUBIK_RENDER_GLOBAL_QUOTA:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'2',RUBIK_RENDER_GLOBAL_CAP_USD:'5',RUBIK_RENDER_RESERVE_USD:'0.25'};
+const png='data:image/png;base64,'+Buffer.from([0x89,0x50,0x4e,0x47,1,2,3]).toString('base64');
+const out=()=>({statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}});
+const rq=()=>({method:'POST',headers:{'x-rubik-render-token':'access-123'},body:{style:'nordic',image:png}});
+const ok=async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'AAAA'}]})});
+async function call(store,meter,fetchImpl=ok,e=env){let n=0;const f=async(...a)=>{n++;return fetchImpl(...a);};const o=out();await Render.handler(rq(),o,{env:e,store,meter,fetchImpl:f,log:()=>{}});return {status:o.statusCode,json:JSON.parse(o.body),calls:n};}
+test('dos instancias comparten el tope global: 2 imágenes y la tercera se rechaza sin llamar al proveedor',async()=>{
+ const admin=await fresh(),a=L.redisStore({exec:resp()}),b=L.redisStore({exec:resp()}),ma=Render.createMeter(),mb=Render.createMeter();
+ assert.equal((await call(a,ma)).status,200);assert.equal((await call(b,mb)).status,200);
+ const third=await call(a,ma);assert.equal(third.status,429);assert.equal(third.json.error,'global-limit');assert.equal(third.calls,0);
+ const s=await a.snapshot();assert.equal(s.outputs,2);assert.equal(s.reservedOutputs,0);assert.equal(s.image,0.5);admin.close();});
+test('concurrencia: 6 peticiones simultáneas en 6 conexiones con tope 3 → exactamente 3 llamadas al proveedor',async()=>{
+ const admin=await fresh(),e={...env,RUBIK_RENDER_GLOBAL_MAX_IMAGES:'3'};
+ const r=await Promise.all(Array.from({length:6},()=>call(L.redisStore({exec:resp()}),Render.createMeter(),ok,e)));
+ assert.equal(r.filter(x=>x.status===200).length,3);assert.equal(r.reduce((s,x)=>s+x.calls,0),3);admin.close();});
+test('fallo del proveedor libera la unidad (no consume cuota) y queda en el registro',async()=>{
+ const admin=await fresh(),s=L.redisStore({exec:resp()});
+ const bad=async()=>({ok:false,status:500,json:async()=>({})});
+ assert.equal((await call(s,Render.createMeter(),bad)).status,502);
+ const snap=await s.snapshot();assert.equal(snap.outputs,0);assert.equal(snap.reservedOutputs,0);
+ assert.deepEqual((await s.log()).map(x=>x.op),['reserve','settle']);admin.close();});
+test('cuota global activada sin almacén → 503 store-not-configured; almacén caído → 503 store-unavailable; nunca se llama al proveedor',async()=>{
+ assert.equal((await call(null,Render.createMeter())).json.error,'store-not-configured');
+ const down={reserve:async()=>{throw new Error('down');}};const r=await call(down,Render.createMeter());assert.equal(r.json.error,'store-unavailable');assert.equal(r.calls,0);});
+test('cuota global desactivada por defecto: comportamiento anterior intacto',()=>{assert.equal(Render.globalQuota({}),null);assert.deepEqual(Render.globalQuota({RUBIK_RENDER_GLOBAL_QUOTA:'1'}),{maxImages:30,capUsd:5,reserveUsd:0.25});});
