@@ -90,14 +90,16 @@
    if(e.type==='session.output_audio.done'){this._emit('speaking',{on:false});this._sub='';}
    if(e.type==='session.input_transcript.done'&&e.transcript)this._emit('user',{text:e.transcript});
    if(e.type==='response.event'&&e.event?.type==='response.output_item.done'&&e.event.item?.type==='function_call'){
-    const it=e.event.item;if(this.calls.has(it.call_id))return;this.calls.add(it.call_id);let args={};try{args=JSON.parse(it.arguments||'{}');}catch{}
+    const room=this.room;const it=e.event.item;if(this.calls.has(it.call_id))return;this.calls.add(it.call_id);let args={};try{args=JSON.parse(it.arguments||'{}');}catch{}
     this._emit('tool_call',{name:it.name,args});
     const session={state:this.state,profile:this.profile,mode:this.mode,projectId:this.projectId,rubik:this.rubik};
     const r=root.AsesorTools.run(session,it.name,args);this._emit('tool_result',{name:it.name,result:r});
     // Resultado mínimo: solo lo necesario (sin ids internos ni datos de contacto).
     const out=r.ok?JSON.stringify(r.data):JSON.stringify({error:{message:r.motivo||r.error}});
-    await this.room.send({type:'response.item.create',item:{type:'function_call_output',call_id:it.call_id,output:out.slice(0,24000)}});
-    await this.room.send({type:'response.create'});}
+    // Si la herramienta cerró la voz (p. ej. pasar a texto), la sala ya no existe: no se envía nada más.
+    if(!room||this.room!==room){return;}
+    await room.send({type:'response.item.create',item:{type:'function_call_output',call_id:it.call_id,output:out.slice(0,24000)}});
+    await room.send({type:'response.create'});}
    if(e.type==='error')this._emit('provider_error',{code:e.error?.code});
    if(e.type==='session.closed'&&this.state!=='ended'){this.state='ended';this._release();this._emit('state',{state:'ended',reason:e.reason});}}
   // Texto escrito durante la conversación real: mensaje de la persona en el topic (no es el canal de voz).
