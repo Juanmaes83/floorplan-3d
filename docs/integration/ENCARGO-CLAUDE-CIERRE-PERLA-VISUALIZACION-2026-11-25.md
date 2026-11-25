@@ -8,7 +8,7 @@
 Lee AGENTS.md y el protocolo de coordinación. Verifica las referencias remotas, anota el SHA base de cada corte y usa worktrees y ramas propios. Los commits publicados tras esta foto prevalecen si traen evidencia para el mismo alcance. La rama que contiene el encargo es documental.
 
 1. **Primero, cierre de PERLA.** Parte de la candidata aprobada `09eebc9c6709628e61d9a9d6552414bec1776d40`, PR #322. Aísla y corrige la CI. Entrega el SHA y los deltas a Codex para la integración a master.
-2. **Después, Visualización y Home.** Prepara cortes revisables para Render IA, producción cinematográfica local y acceso al Asesor desde el retrato. Mantén las correcciones de CI trazables por separado del desarrollo de nuevas prestaciones.
+2. **Después, Visualización y Home.** El acceso del Asesor desde el retrato (§2) está publicado; termina Render IA (§3) según sus pendientes y valida el corte. Incorpora después el §2.1 aprobado (Asistente unificado entre texto, voz y avatar) y continúa con el rodaje local (§4). Mantén CI y nuevas prestaciones trazables por separado.
 3. **Presupuestos y geometría.** Cierra MSPDI con la candidata #320, avanza BCCA aportada y reconcilia la evidencia aprobada de A0 y muros. Avanza los bloques independientes si uno queda pendiente de una credencial, permiso o aplicación externa.
 4. **Penúltimo bloque: StoryLayersV1 · Entrega Junior (§8).** La especificación operativa autosuficiente está íntegra en el §8 de este encargo; Claude debe trabajar desde aquí, sin depender de archivos locales no versionados. Si no puede acceder, lo informa y continúa los demás bloques.
 5. **Último bloque: examen grabado de cinco proyectos (§9).** Solo después de cerrar y validar lo anterior, contrasta cinco planos sintéticos con fichas de referencia independientes.
@@ -32,6 +32,26 @@ Medioambiente, Personas y la hoja de ruta de Simuladores quedan aplazados. El al
 **Cierre del adaptador.** Corrige en `api/advisor-session.js` y el cliente la cancelación previa al inicio y el cierre activo. `/abandon` usa el token de sesión. `/end` usa la clave de servidor. Conserva el bloqueo de sesión hasta confirmar estado terminal o reconciliarlo con el proveedor. Cubre cierre rechazado, respuesta 200 aún activa, cancelación que coincide con el arranque, reintento y pérdida de conexión. El transporte de prueba debe exigir las mismas credenciales que el proveedor. Prepara en inglés las instrucciones y descripciones que se envían a Nuance, conforme a su contrato. Los textos de RUBIK pueden mostrarse en español. [Abandono](https://docs.nuancelabs.ai/reference/api/browser/abandon-a-conversation) · [Cierre](https://docs.nuancelabs.ai/reference/api/server/end-a-conversation) · [Idioma y reglas de contenido](https://docs.nuancelabs.ai/safety)
 
 **Aceptación.** En Playwright y Chromium, comprueba los seis retratos y perfiles, ida y vuelta, teclado y toque, traspaso a texto, y que el modo cliente conserva su límite de acceso al pasar a texto. Publica el registro de cero peticiones a Nuance. La prueba privada real queda sujeta a autorización, presupuesto, credenciales y verificación del inicio desde servidor. El lanzamiento en español requiere una conversación real con reconocimiento y respuesta en español.
+
+
+## 2.1. Asistente unificado · Texto, voz y avatar
+
+**Estado y orden.** Este bloque ya fue aprobado por el propietario y sigue pendiente. Integra la experiencia después de cerrar el corte actual de Render IA y antes del rodaje del §4. No es una petición de fusionar o activar Nuance real: el ensayo con proveedor real lo hará el propietario en RUBIK cuando el Preview, credenciales, límites y pasos estén preparados.
+
+**Objetivo.** Unificar la configuración de perfiles, criterios comunes, skills y contexto autorizado que consumen el Asesor de Home, el Asistente de texto y los canales de voz/avatar. Reutiliza capacidades reales de RUBIK; no mantengas personalidades o datos de proyecto contradictorios entre canales. La profesión adapta el enfoque, pero no concede permisos. La identidad verificada y el modo de sesión determinan el acceso.
+
+**Criterios comunes para los seis perfiles.** Todos deben ser profesionales, críticos y realistas; revisar coherencia estética y técnica, organizar tareas, distinguir fechas comprometidas de estimaciones, no prometer plazos sin datos, y ayudar a presentar el proyecto comercialmente sin falsear sus cualidades. Después, cada profesión añade su enfoque específico. Los datos y las acciones citan su fuente y requieren las confirmaciones existentes cuando cambian el proyecto o generan gasto.
+
+**Memoria con control de la persona.** Audita primero qué persistencia existe realmente. Diseña el mínimo de memoria opcional, visible y consentida para nombre preferido, profesión, proyectos del profesional y alguna nota personal que la persona decida guardar. Debe poder consultarla, editarla y borrarla; explicar su alcance y no usarla si no hay consentimiento o identidad confiable. Separa memoria personal de contexto por proyecto y evita filtraciones entre usuarios, clientes o proyectos. No guardes DNI, IBAN, credenciales ni otros datos sensibles. No afirmes memoria compartida si los canales no leen la misma fuente autorizada.
+
+**Traspaso entre canales.** Permite pasar de voz/avatar a texto con solo el resumen y los datos que la persona autorice. Indica claramente qué contexto se entrega. Revocar o borrar el permiso debe impedir futuros traspasos. No abras vistas de costes internos, herramientas técnicas o publicación desde el modo cliente. La sesión Nuance sigue cerrada por defecto y sus pruebas simuladas no acreditan una conexión real.
+
+**Aceptación.**
+- Matriz única de seis profesiones × texto, voz simulada y avatar simulado: saludo, tono, skills comunes y específicas, datos citados y acciones permitidas.
+- Mismo proyecto y contexto autorizado en un cambio de canal; un contexto no autorizado no se transmite. Verifica revocación, olvido y aislamiento entre proyectos/personas.
+- Pruebas de acciones prohibidas en modo cliente; el proyecto debe quedar idéntico y la interfaz explicar el límite.
+- Comprueba accesibilidad y persistencia en escritorio/móvil con Playwright; registra peticiones y datos transferidos. Cero llamadas facturables o reales a Nuance durante pruebas automatizadas.
+- Si no hay identidad verificable o almacenamiento seguro compartido, conserva la experiencia simulada/local y documenta la limitación; no inventes una memoria común.
 
 ## 3. Render IA · Comparación de estilos y exportación 2K–4K
 
