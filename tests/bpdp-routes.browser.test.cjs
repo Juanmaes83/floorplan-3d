@@ -13,7 +13,7 @@ const engine = process.env.BPDP_BROWSER || 'chromium';
 const url = process.env.BPDP_URL || 'http://127.0.0.1:43987/';
 const out = process.env.BPDP_EVIDENCE;
 
-test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 240000 }, async t => {
+test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 1200000 }, async t => {
   const browser = await playwright[engine].launch({
     headless: process.env.BPDP_HEADED !== '1',
     ...(engine === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME } : {})
@@ -85,12 +85,15 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
       console.log('Entregar: ' + id + ' sin codificador; aviso comprobado');
       continue;
     }
-    await download.waitFor({ timeout: 90000 });
+    // Render por CPU (SwiftShader), medido en local: láminas ~3 s; vídeo Blueprint 571 fotogramas ~104 s; vídeo Despiece
+    // 646 fotogramas ~326 s (ver docs/integration/perla-ci-322/bpdp-salidas/verificacion.txt).
+    const tPrep = Date.now(); await download.waitFor({ timeout: 600000 }); console.log(`PREP ${id} ${((Date.now() - tPrep) / 1000).toFixed(1)} s`);
     const [file] = await Promise.all([page.waitForEvent('download'), download.click()]);
     const ext = id.endsWith('lamina') ? 'png' : 'mp4';
     assert.ok(file.suggestedFilename().endsWith('.' + ext));
     const path = await file.path();
     const bytes = await fs.readFile(path);
+    if (process.env.BPDP_SAVE_DIR) await fs.copyFile(path, require('node:path').join(process.env.BPDP_SAVE_DIR, file.suggestedFilename()));
     if (ext === 'png') {
       assert.equal(bytes.subarray(1, 4).toString(), 'PNG');
       assert.equal(bytes.readUInt32BE(16), 3307);
