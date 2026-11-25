@@ -36,17 +36,18 @@ test.after(async()=>{
 });
 const fresh=async()=>{const e=resp();await e(['FLUSHALL']);return e;};
 
-const env={OPENAI_API_KEY:'sk-test',RUBIK_RENDER_TOKEN:'access-123',RUBIK_RENDER_ENABLED:'1',RUBIK_RENDER_GLOBAL_QUOTA:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'2',RUBIK_RENDER_GLOBAL_CAP_USD:'5',RUBIK_RENDER_RESERVE_USD:'0.25'};
+const env={OPENAI_API_KEY:'sk-test',RUBIK_RENDER_TOKEN:'access-123',RUBIK_RENDER_ENABLED:'1',RUBIK_RENDER_GLOBAL_QUOTA:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'2',RUBIK_RENDER_GLOBAL_CAP_USD:'5',RUBIK_RENDER_RESERVE_USD:'0.25',RUBIK_RENDER_PRICE_INPUT_TEXT:'5',RUBIK_RENDER_PRICE_INPUT_IMAGE:'10',RUBIK_RENDER_PRICE_OUTPUT:'40',RUBIK_RENDER_MAX_INPUT_TOKENS:'10000',RUBIK_RENDER_MAX_OUTPUT_TOKENS:'7000'};
+// cota = 10000·10 + 7000·40 = 380000 µ$ → 0,38 USD por imagen (> 0,25 configurado: manda la cota)
 const png='data:image/png;base64,'+Buffer.from([0x89,0x50,0x4e,0x47,1,2,3]).toString('base64');
 const out=()=>({statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}});
 const rq=()=>({method:'POST',headers:{'x-rubik-render-token':'access-123'},body:{style:'nordic',image:png}});
 const ok=async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'AAAA'}]})});
-async function call(store,meter,fetchImpl=ok,e=env){let n=0;const f=async(...a)=>{n++;return fetchImpl(...a);};const o=out();await Render.handler(rq(),o,{env:e,store,meter,fetchImpl:f,log:()=>{}});return {status:o.statusCode,json:JSON.parse(o.body),calls:n};}
+async function call(store,meter,fetchImpl=ok,e=env){let n=0;const logs=[];const f=async(...a)=>{n++;return fetchImpl(...a);};const o=out();await Render.handler(rq(),o,{env:e,store,meter,fetchImpl:f,log:l=>logs.push(JSON.parse(l))});return {status:o.statusCode,json:JSON.parse(o.body),calls:n,logs,headers:o.headers};}
 test('dos instancias comparten el tope global: 2 imágenes y la tercera se rechaza sin llamar al proveedor',async()=>{
  const admin=await fresh(),a=L.redisStore({exec:resp()}),b=L.redisStore({exec:resp()}),ma=Render.createMeter(),mb=Render.createMeter();
  assert.equal((await call(a,ma)).status,200);assert.equal((await call(b,mb)).status,200);
  const third=await call(a,ma);assert.equal(third.status,429);assert.equal(third.json.error,'global-limit');assert.equal(third.calls,0);
- const s=await a.snapshot();assert.equal(s.outputs,2);assert.equal(s.reservedOutputs,0);assert.equal(s.image,0.5);admin.close();});
+ const s=await a.snapshot();assert.equal(s.outputs,2);assert.equal(s.reservedOutputs,0);assert.equal(s.image,0.76);assert.equal(s.reservedUsd,0);admin.close();});
 test('concurrencia: 6 peticiones simultáneas en 6 conexiones con tope 3 → exactamente 3 llamadas al proveedor',async()=>{
  const admin=await fresh(),e={...env,RUBIK_RENDER_GLOBAL_MAX_IMAGES:'3'};
  const r=await Promise.all(Array.from({length:6},()=>call(L.redisStore({exec:resp()}),Render.createMeter(),ok,e)));
@@ -60,4 +61,22 @@ test('fallo del proveedor libera la unidad (no consume cuota) y queda en el regi
 test('cuota global activada sin almacén → 503 store-not-configured; almacén caído → 503 store-unavailable; nunca se llama al proveedor',async()=>{
  assert.equal((await call(null,Render.createMeter())).json.error,'store-not-configured');
  const down={reserve:async()=>{throw new Error('down');}};const r=await call(down,Render.createMeter());assert.equal(r.json.error,'store-unavailable');assert.equal(r.calls,0);});
-test('cuota global desactivada por defecto: comportamiento anterior intacto',()=>{assert.equal(Render.globalQuota({}),null);assert.deepEqual(Render.globalQuota({RUBIK_RENDER_GLOBAL_QUOTA:'1'}),{maxImages:30,capUsd:5,reserveUsd:0.25});});
+test('cuota global desactivada por defecto: comportamiento anterior intacto',()=>{assert.equal(Render.globalQuota({}),null);assert.equal(Render.globalQuota({RUBIK_RENDER_GLOBAL_QUOTA:'1'}).reserveUsd,null);assert.equal(Render.globalQuota(env).reserveUsd,0.38);});
+test('sin tarifa o sin cotas de tokens la cuota no arranca: 503 quota-not-configured, sin proveedor',async()=>{
+ const e={...env};delete e.RUBIK_RENDER_MAX_OUTPUT_TOKENS;const r=await call(L.redisStore({exec:resp()}),Render.createMeter(),ok,e);
+ assert.equal(r.json.error,'quota-not-configured');assert.equal(r.calls,0);});
+test('tope en USD con concurrencia: 12 simultáneas, tope 1 USD y cota 0,38 → 2 llamadas; reservado+gastado nunca supera el tope',async()=>{
+ const admin=await fresh(),e={...env,RUBIK_RENDER_GLOBAL_CAP_USD:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'100'};
+ const worst=async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'AAAA'}],usage:{input_tokens:10000,output_tokens:7000,input_tokens_details:{text_tokens:0,image_tokens:10000}}})});
+ const r=await Promise.all(Array.from({length:12},()=>call(L.redisStore({exec:resp()}),Render.createMeter(),worst,e)));
+ assert.equal(r.reduce((a,x)=>a+x.calls,0),2);const s=await L.redisStore({exec:resp()}).snapshot();assert.ok(s.spentUsd+s.reservedUsd<=1);assert.equal(s.image,0.76);admin.close();});
+test('coste real por encima de la reserva → render-overrun registrado y cuota detenida (503 global-halted)',async()=>{
+ const admin=await fresh(),st=L.redisStore({exec:resp()});
+ const over=async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'AAAA'}],usage:{input_tokens:10000,output_tokens:20000,input_tokens_details:{text_tokens:0,image_tokens:10000}}})});
+ const a=await call(st,Render.createMeter(),over);assert.equal(a.status,200);assert.ok(a.logs.some(l=>l.status==='render-overrun'));
+ const b=await call(st,Render.createMeter());assert.equal(b.json.error,'global-halted');assert.equal(b.calls,0);admin.close();});
+test('liquidación fallida NO se silencia: log ledger-settle-failed, cabecera x-rubik-ledger=unsettled y la reserva sigue contando',async()=>{
+ const admin=await fresh(),real=L.redisStore({exec:resp()}),st={...real,settle:async()=>{throw new Error('down');}};
+ const r=await call(st,Render.createMeter());assert.equal(r.status,200);assert.equal(r.headers['x-rubik-ledger'],'unsettled');
+ assert.ok(r.logs.some(l=>l.status==='ledger-settle-failed'));const s=await real.snapshot();assert.equal(s.reservedUsd,0.38);assert.equal(s.reservedOutputs,1);
+ const rec=L.reconcile(await real.log(),[]);assert.equal(rec.verdict,'review');admin.close();});

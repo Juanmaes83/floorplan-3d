@@ -103,11 +103,20 @@ function parseImage(dataUrl){
 }
 /* §3 · Cuota GLOBAL persistente (opcional, cerrada por defecto). Con RUBIK_RENDER_GLOBAL_QUOTA=1 cada imagen reserva, de
    forma atómica entre instancias, 1 unidad y un importe en el libro común (api/_spend-ledger.js, el mecanismo de reservas
-   existente) ANTES de llamar al proveedor, y liquida después. Sin almacén configurado → 503 store-not-configured (nunca se
-   cae a la cuota por instancia). El contador por instancia (createMeter) se conserva como primera barrera. */
+   existente) ANTES de llamar al proveedor, y liquida después. Sin almacén → 503 store-not-configured (nunca se cae a la
+   cuota por instancia). El contador por instancia (createMeter) se conserva como primera barrera.
+   COBERTURA DEL COSTE MÁXIMO: la reserva por imagen es max(RUBIK_RENDER_RESERVE_USD, cota) con
+   cota = MAX_INPUT_TOKENS·max(precio texto, precio imagen) + MAX_OUTPUT_TOKENS·precio salida. Sin tarifa o sin cotas de
+   tokens configuradas la cuota NO arranca (503 quota-not-configured). Como el tope común se comprueba con la reserva, la
+   suma de reservas en vuelo (concurrencia incluida) nunca pasa del tope; si una liquidación real superase su reserva
+   (cota mal configurada) se registra 'render-overrun' y se DETIENE la cuota (bloqueo persistente) hasta revisión. */
 function globalQuota(env){if(env.RUBIK_RENDER_GLOBAL_QUOTA!=='1')return null;
- const n=(v,d)=>{const x=Number(v);return Number.isFinite(x)&&x>0?x:d;};
- return {maxImages:Math.floor(n(env.RUBIK_RENDER_GLOBAL_MAX_IMAGES,30)),capUsd:n(env.RUBIK_RENDER_GLOBAL_CAP_USD,5),reserveUsd:n(env.RUBIK_RENDER_RESERVE_USD,0.25)};}
+ const n=(v,d)=>{const x=Number(v);return Number.isFinite(x)&&x>0?x:d;},t=tariff(env);
+ const maxIn=n(env.RUBIK_RENDER_MAX_INPUT_TOKENS,null),maxOut=n(env.RUBIK_RENDER_MAX_OUTPUT_TOKENS,null);
+ const bound=t&&maxIn&&maxOut?+((maxIn*Math.max(t.inputText,t.inputImage)+maxOut*t.output)/1e6).toFixed(6):null;
+ return {maxImages:Math.floor(n(env.RUBIK_RENDER_GLOBAL_MAX_IMAGES,30)),capUsd:n(env.RUBIK_RENDER_GLOBAL_CAP_USD,5),
+  bound,reserveUsd:bound===null?null:Math.max(n(env.RUBIK_RENDER_RESERVE_USD,0),bound)};}
+const HALT='render-ia:halt';
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now,store}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
  if(env.RUBIK_RENDER_ENABLED!=='1')return send(res,503,{error:'disabled'});
@@ -125,12 +134,22 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
  const slot=meter.reserve(now(),lim);
  if(!slot.ok){res.setHeader('Retry-After',String(slot.retryAfter));return send(res,429,{error:'limit',retryAfter:slot.retryAfter});}
  const gq=globalQuota(env);let settle=async()=>{};
- if(gq){if(store===undefined)store=Ledger.storeFromEnv(env);if(!store)return send(res,503,{error:'store-not-configured'});
+ if(gq){if(gq.reserveUsd===null)return send(res,503,{error:'quota-not-configured'});
+  if(store===undefined)store=Ledger.storeFromEnv(env);if(!store)return send(res,503,{error:'store-not-configured'});
   const id='render-'+crypto.randomUUID();let r0;
-  try{r0=await store.reserve({id,family:'image',usd:gq.reserveUsd,capUsd:gq.capUsd,units:1,maxUnits:gq.maxImages,subject:'render-ia',maxSubjectUnits:gq.maxImages,meta:{kind:'render-ia'}});}
+  try{if(await store.get(HALT))return send(res,503,{error:'global-halted'});
+   r0=await store.reserve({id,family:'image',usd:gq.reserveUsd,capUsd:gq.capUsd,units:1,maxUnits:gq.maxImages,subject:'render-ia',maxSubjectUnits:gq.maxImages,meta:{kind:'render-ia'}});}
   catch{return send(res,503,{error:'store-unavailable'});}
   if(!r0.ok)return send(res,429,{error:'global-limit',reason:r0.reason});
-  settle=async(ok,cost)=>{try{await store.settle(id,{usd:ok?(cost?.amount??gq.reserveUsd):(cost?.amount??0),units:ok?1:0,subject:'render-ia',basis:cost?.basis??(ok?'reserve-estimate':null)});}catch{}};}
+  // Nunca se silencia: un fallo de liquidación se registra, se marca en la respuesta y la reserva queda ABIERTA (sigue
+  // contando contra el tope y aparece como 'open-reservations' en la conciliación).
+  settle=async(ok,cost)=>{const known=cost&&Number.isFinite(cost.amount);
+   const usd=ok?(known?cost.amount:gq.reserveUsd):(known?cost.amount:0);
+   if(known&&cost.amount>gq.reserveUsd){logCall({status:'render-overrun',id,reservedUsd:gq.reserveUsd,actualUsd:cost.amount},log);
+    try{await store.set(HALT,{at:new Date(now()).toISOString(),id,reservedUsd:gq.reserveUsd,actualUsd:cost.amount});}catch{logCall({status:'render-halt-not-stored',id},log);}}
+   if(ok&&!known)logCall({status:'render-cost-unknown',id,settledUsd:usd},log);
+   let r;try{r=await store.settle(id,{usd,units:ok?1:0,subject:'render-ia',basis:known?cost.basis:(ok?'reserve-bound':null)});}catch(e){r={settled:false,reason:'store-error'};}
+   if(!r||!r.settled){logCall({status:'ledger-settle-failed',id,reason:r&&r.reason||'unknown',usd},log);res.setHeader('x-rubik-ledger','unsettled');}};}
  const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');
  form.append('image',new Blob([image.bytes],{type:image.type}),image.type==='image/png'?'view.png':'view.jpg');
  const started=clock(),base={model:MODEL,style,floor,walls};
