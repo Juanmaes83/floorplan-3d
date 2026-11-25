@@ -1,0 +1,196 @@
+diff --git a/css/perla-editor.css b/css/perla-editor.css
+index 8a44fbc0..8352461c 100644
+--- a/css/perla-editor.css
++++ b/css/perla-editor.css
+@@ -553,3 +553,24 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
+ }
+ /* Inicio en el teléfono: objetivo táctil de al menos 40 × 40 px. */
+ @media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #welcomeBtn{min-width:40px!important;min-height:40px}}
++@media (max-width:760px),(max-width:1100px) and (max-height:500px){
++  body.perla .perla-r2{position:relative}
++  body.perla .perla-r2>#perlaReturn{position:absolute;left:8px;top:calc(100% + 8px);z-index:30;min-height:44px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.12)}
++}
++/* Tableta vertical: el panel lateral abierto no tapa la botonera inferior (Propiedades, Biblioteca). */
++@media (max-width:1100px) and (min-height:501px){
++  body.perla:has(aside.right.open) #mobileDock,body.perla:has(aside.lib.open) #mobileDock{z-index:60!important}
++}
++/* Teléfono estrecho (≤400 px): la cabecera cabe sin solapes. El selector conserva ES · EN · ZH y el nombre del proyecto cede
++   espacio (queda su desplegable); ningún control se oculta. */
++@media (max-width:400px){
++  body.perla .perla-r1>.perla-left{flex:1 1 0!important;min-width:0;overflow:hidden}
++  body.perla .perla-r1>.perla-utils{flex:0 0 auto!important;gap:2px}
++  body.perla .perla-r1{column-gap:4px;padding-inline:6px}
++  body.perla .perla-r1>.perla-left{gap:4px}
++  body.perla .perla-r1>.perla-left>#welcomeBtn{margin:0!important;min-width:36px!important;width:36px!important;padding:0!important}
++  body.perla .perla-utils>#actionSearchBtn{min-width:36px!important;width:36px!important;padding:0!important}
++  body.perla .perla-utils #langBtn{padding:0 4px!important}
++  body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
++  body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
++}
+diff --git a/js/perla-return.js b/js/perla-return.js
+index 645d53d0..4d295b7d 100644
+--- a/js/perla-return.js
++++ b/js/perla-return.js
+@@ -13,7 +13,10 @@
+  // Diálogos abiertos: Chromium cierra un diálogo modal en el mismo paso que «Atrás» (quita «open» antes de avisar con
+  // «close»), así que se lleva la cuenta propia: un diálogo sigue en la lista hasta que llega su evento «close».
+  const openDialogs=new Set();
+- for(const m of ['showModal','show']){const f=HTMLDialogElement.prototype[m];HTMLDialogElement.prototype[m]=function(...a){const r=f.apply(this,a);openDialogs.add(this);return r;};}
++ // Un diálogo retirado del documento (p. ej. el visor Blueprint/Despiece, que se cierra y se elimina en el mismo paso)
++ // recibe «close» ya desconectado y el aviso no llega a document: se descarta aquí para no retener su lienzo WebGL.
++ const prune=()=>{for(const d of openDialogs)if(!d.isConnected)openDialogs.delete(d);};
++ for(const m of ['showModal','show']){const f=HTMLDialogElement.prototype[m];HTMLDialogElement.prototype[m]=function(...a){const r=f.apply(this,a);prune();openDialogs.add(this);this.addEventListener('close',()=>openDialogs.delete(this),{once:true});return r;};}
+  document.addEventListener('close',e=>openDialogs.delete(e.target),true);
+  let origin=null,pending=null,fromPop=false,last=null,btn=null;
+ 
+@@ -39,7 +42,8 @@
+   const r2=$('.perla-r2'),b=ensureBtn();
+   if(a==='design'&&pending&&r2){if(b.parentElement!==r2)r2.prepend(b);b.textContent='← '+tx('Volver a ','Back to ','返回 ')+label(pending.area);b.hidden=false;}
+   else b.hidden=true;}
+- function goBack(){const p=pending;if(!p)return;pending=null;PW()?.open(p.area);
++ function goBack(){const p=pending;if(!p)return;pending=null;origin=null;// volver no crea un retorno nuevo (evita el vaivén entre dos áreas)
++ PW()?.open(p.area);
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{const s=section();if(s){s.scrollTop=p.y;
+     // Misma posición en pantalla: la acción pulsada vuelve a quedar donde estaba.
+     const el=p.route&&[...s.querySelectorAll(`[data-route="${p.route}"]`)].find(e=>e.checkVisibility());if(el)s.scrollTop+=el.getBoundingClientRect().top-p.top;}
+@@ -62,7 +66,7 @@
+   if(st.perlaArea&&st.perlaArea===a)return;
+   // Con un diálogo abierto en un área, «Atrás» cierra el diálogo y deja a la persona en su área.
+   // (Chromium cierra él mismo un diálogo modal al ir Atrás, justo antes de este evento: también cuenta.)
+-  const dlg=[...document.querySelectorAll('dialog[open]')].pop(),justClosed=[...openDialogs].some(d=>!d.open);
++  prune();const dlg=[...document.querySelectorAll('dialog[open]')].pop(),justClosed=[...openDialogs].some(d=>!d.open);
+   if(a!=='design'&&(dlg||justClosed)){e.stopImmediatePropagation();if(dlg){const c=new Event('cancel',{cancelable:true});if(dlg.dispatchEvent(c))dlg.close();}history.pushState({...history.state,perlaArea:a},'',location.href);return;}
+   if(st.perlaArea&&(st.perlaArea!=='design'||a!=='design')){e.stopImmediatePropagation();fromPop=true;if(st.perlaArea==='design')PW()?.close?.();else PW()?.open(st.perlaArea);if(areaNow()===a)fromPop=false;return;}
+   if(a!=='design'){e.stopImmediatePropagation();fromPop=true;PW()?.close?.();if(areaNow()===a)fromPop=false;}},true);
+diff --git a/tests/anchored-comments.browser.test.cjs b/tests/anchored-comments.browser.test.cjs
+index 616bf885..d0d756e6 100644
+--- a/tests/anchored-comments.browser.test.cjs
++++ b/tests/anchored-comments.browser.test.cjs
+@@ -19,7 +19,7 @@ test('Phase B6: comments anchored to an element, a point of the plan and an imag
+  await workspace.locator('[data-route="prepare-views"]').first().click();await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy',null,{timeout:240000});
+  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+  const bed=await page.evaluate(()=>{const o=FloorPlanApp.project.objects.find(x=>x.type==='bed');return {id:o.id};});
+- const download=page.waitForEvent('download');await workspace.locator('[data-route="client-file"]').click();const file=path.join(dir,'cliente.html');await (await download).saveAs(file);
++ const download=page.waitForEvent('download');const p7=workspace.locator('[data-entrega-code="P7"]');if(!(await p7.locator('[data-route="client-file"]').isVisible()))await p7.locator('.perla-card-selector').click();await workspace.locator('[data-entrega-code="P7"] [data-route="client-file"]:visible, .perla-panel-open:has(.perla-panel-code:text-is("P7")) [data-perla-mirror="client-file"]').click();const file=path.join(dir,'cliente.html');await (await download).saveAs(file);
+ 
+  // The client, offline, on a phone.
+  const client=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,acceptDownloads:true});t.after(()=>client.close());
+diff --git a/tests/assistant-ai-v2.browser.test.cjs b/tests/assistant-ai-v2.browser.test.cjs
+index cf01706b..0d2edcf3 100644
+--- a/tests/assistant-ai-v2.browser.test.cjs
++++ b/tests/assistant-ai-v2.browser.test.cjs
+@@ -242,7 +242,7 @@ test('guía de cinco fases: 27 recorridos, destinos efectivos y ninguna escritur
+     }else{
+      await action.click();
+      if(id==='navigate')await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
+-     else await page.locator(target).first().waitFor({state:'visible'});
++     else await page.locator(target).filter({visible:true}).first().waitFor({state:'visible'});
+     }
+ 
+     assert.deepEqual(await project(page),original,id+' navigation preserves project');
+diff --git a/tests/bpdp-routes.browser.test.cjs b/tests/bpdp-routes.browser.test.cjs
+index 915e2991..95e2d1b7 100644
+--- a/tests/bpdp-routes.browser.test.cjs
++++ b/tests/bpdp-routes.browser.test.cjs
+@@ -13,7 +13,7 @@ const engine = process.env.BPDP_BROWSER || 'chromium';
+ const url = process.env.BPDP_URL || 'http://127.0.0.1:43987/';
+ const out = process.env.BPDP_EVIDENCE;
+ 
+-test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 240000 }, async t => {
++test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo real', { timeout: 1200000 }, async t => {
+   const browser = await playwright[engine].launch({
+     headless: process.env.BPDP_HEADED !== '1',
+     ...(engine === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME } : {})
+@@ -85,12 +85,15 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
+       console.log('Entregar: ' + id + ' sin codificador; aviso comprobado');
+       continue;
+     }
+-    await download.waitFor({ timeout: 90000 });
++    // Render por CPU (SwiftShader), medido en local: láminas ~3 s; vídeo Blueprint 571 fotogramas ~104 s; vídeo Despiece
++    // 646 fotogramas ~326 s (ver docs/integration/perla-ci-322/bpdp-salidas/verificacion.txt).
++    const tPrep = Date.now(); await download.waitFor({ timeout: 600000 }); console.log(`PREP ${id} ${((Date.now() - tPrep) / 1000).toFixed(1)} s`);
+     const [file] = await Promise.all([page.waitForEvent('download'), download.click()]);
+     const ext = id.endsWith('lamina') ? 'png' : 'mp4';
+     assert.ok(file.suggestedFilename().endsWith('.' + ext));
+     const path = await file.path();
+     const bytes = await fs.readFile(path);
++    if (process.env.BPDP_SAVE_DIR) await fs.copyFile(path, require('node:path').join(process.env.BPDP_SAVE_DIR, file.suggestedFilename()));
+     if (ext === 'png') {
+       assert.equal(bytes.subarray(1, 4).toString(), 'PNG');
+       assert.equal(bytes.readUInt32BE(16), 3307);
+diff --git a/tests/capture-3d.browser.test.cjs b/tests/capture-3d.browser.test.cjs
+index 467b3053..d0854afa 100644
+--- a/tests/capture-3d.browser.test.cjs
++++ b/tests/capture-3d.browser.test.cjs
+@@ -30,6 +30,12 @@ async function capture(page,size,aspect){
+  assert.ok(colours>40,`rendered content, ${colours} colour buckets`);
+  return {png,width,height,dims};}
+ const ratio=(w,h)=>w/h;
++// Cámara: tolerancia absoluta de 1e-9 por componente numérico (el render por software de la CI deja ruido de ~1e-15).
++// El resto del estado (proyecto, historial, almacenamiento, lienzo y campos no numéricos de la cámara) se compara exacto.
++const sameCamera=(a,b,where,path='camera')=>{if(typeof a==='number'&&typeof b==='number'){const d=Math.abs(a-b);assert.ok(d<=1e-9,`${where}: ${path} se desvía ${d} (${a} frente a ${b})`);return;}
++ if(a&&b&&typeof a==='object'&&typeof b==='object'){assert.deepEqual(Object.keys(a).sort(),Object.keys(b).sort(),`${where}: claves de ${path}`);for(const k of Object.keys(a))sameCamera(a[k],b[k],where,`${path}.${k}`);return;}
++ assert.deepEqual(a,b,`${where}: ${path}`);};
++const sameState=(now,initial,where)=>{const {camera:c1,...r1}=now,{camera:c0,...r0}=initial;assert.deepEqual(r1,r0,where);sameCamera(c1,c0,where);};
+ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`3D capture options download real PNGs without touching the working view ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
+  const {page,errors,mobile}=await setup(t,viewport),name=`${viewport.width}x${viewport.height}`,initial=await state(page);
+  // Default: unchanged historical behaviour (current canvas buffer).
+@@ -43,7 +49,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`3D
+   else{assert.equal(Math.max(out.width,out.height),Number(size));assert.ok(Math.abs(ratio(out.width,out.height)-ratio(initial.canvas.width,initial.canvas.height))<0.01,'same as view keeps the working aspect');}
+   assert.equal(out.dims,`${out.width} × ${out.height} px`);
+   await fs.writeFile(`docs/qa/artifacts/capture-3d/${name}-${size}-${aspect.replace(':','x')}.png`,out.png);
+-  assert.deepEqual(await state(page),initial,`no mutation after ${size} ${aspect}`);
++  sameState(await state(page),initial,`no mutation after ${size} ${aspect}`);
+  }
+  // The working canvas keeps rendering at its own size after captures.
+  assert.deepEqual(await page.evaluate(()=>View3D.canvasState),initial.canvas);
+@@ -62,5 +68,5 @@ test('capture size is bounded by the pixel budget and GPU limits, and 2D export
+  assert.equal(dl.suggestedFilename(),'rubik-sota-floor-plan.png');const chunks=[];for await(const c of await dl.createReadStream())chunks.push(c);const png=Buffer.concat(chunks);
+  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.readUInt32BE(16),3200);
+  assert.equal(await page.locator('#shot3dOptions').isVisible(),false,'3D options are hidden in 2D');
+- assert.deepEqual(await state(page),before);assert.deepEqual(errors,[]);
++ sameState(await state(page),before,'final');assert.deepEqual(errors,[]);
+ });
+diff --git a/tests/professional-workspace.browser.test.cjs b/tests/professional-workspace.browser.test.cjs
+index 018d4958..a2a739cb 100644
+--- a/tests/professional-workspace.browser.test.cjs
++++ b/tests/professional-workspace.browser.test.cjs
+@@ -89,7 +89,7 @@ test('Point9 saved studio identity, legacy shortcuts, guide delivery and exterio
+  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanProfessionalUI);const model=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),nav=page.locator('.perla-r1'),workspace=page.locator('#professionalWorkspace');
+  for(const id of ['solarNorth','solarOpen','territoryOpen','presentationBtn','guidePresent','openSurfaceSheet','openSheet','reviewNotesBtn','brandManage','exportPng','exportJson'])assert.equal(await page.locator('#'+id).count(),1,'legacy control remains '+id);
+  await openGuide(page);if(!(await page.locator('#guideStage4').isVisible()))await page.locator('#guideCompact').click();for(const label of ['Preparar','Diseñar','Amueblar','Revisar','Entregar'])assert.ok((await page.locator('.guide-steps').innerText()).includes(label));await page.locator('#guideStage4').click();await workspace.getByRole('heading',{name:'Lo que recibirá tu cliente'}).waitFor();await nav.getByRole('button',{name:'Mi estudio',exact:true}).click();await workspace.getByRole('button',{name:'Gestionar identidades'}).click();await page.locator('#brand-name').fill('Estudio UX');await page.locator('#brand-email').fill('ux@example.com');await page.locator('#brandSave').click();await page.locator('#brandClose').click();await workspace.locator('.brand-select').selectOption({label:'Estudio UX'});assert.match(await workspace.innerText(),/ux@example.com/);await nav.getByRole('button',{name:'Entregar',exact:true}).click();assert.match(await workspace.innerText(),/Estudio UX/);await workspace.getByRole('button',{name:'Gestionar observaciones'}).click();await page.locator('#reviewText').fill('Revisar la propuesta con el cliente.');await page.locator('#reviewAdd').click();await page.keyboard.press('Escape');await workspace.locator('[data-entrega-code=S2] .perla-pill').filter({hasText:'1 observaciones redactadas'}).waitFor();assert.match(await workspace.innerText(),/1 observaciones redactadas/);
+- await workspace.getByRole('button',{name:'← Volver a Diseñar',exact:true}).click();if(await page.locator('#perlaTasks').getAttribute('aria-expanded')==='true')await page.locator('#perlaTasks').click();await page.locator('#solarNorth').click();await page.locator('#solarDialog[open]').waitFor();await page.locator('#solarDialog [data-professional-home="analyze"]').click();await workspace.getByRole('heading',{name:'Analizar',exact:true}).waitFor();await workspace.getByRole('button',{name:'Revisar exterior 3D'}).click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);const roof=await page.evaluate(()=>View3D.roofInfo);assert.equal(roof.status,'unavailable','reference example keeps its existing conservative exterior limit');assert.ok(roof.reason);assert.match(await page.locator('#toast').innerText(),/Cubierta no disponible/);await nav.getByRole('button',{name:'Entregar',exact:true}).click();await workspace.getByRole('button',{name:'Preparar presentación'}).click();await page.locator('#presentationConfig').getByRole('button',{name:'Iniciar presentación',exact:true}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');assert.equal(await nav.isVisible(),false,'client presentation does not expose editor navigation');await page.evaluate(()=>{
++ await workspace.getByRole('button',{name:'← Volver a Mi estudio',exact:true}).click();await workspace.getByRole('button',{name:'← Volver a Diseñar',exact:true}).click();if(await page.locator('#perlaTasks').getAttribute('aria-expanded')==='true')await page.locator('#perlaTasks').click();await page.locator('#solarNorth').click();await page.locator('#solarDialog[open]').waitFor();await page.locator('#solarDialog [data-professional-home="analyze"]').click();await workspace.getByRole('heading',{name:'Analizar',exact:true}).waitFor();await workspace.getByRole('button',{name:'Revisar exterior 3D'}).click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);const roof=await page.evaluate(()=>View3D.roofInfo);assert.equal(roof.status,'unavailable','reference example keeps its existing conservative exterior limit');assert.ok(roof.reason);assert.match(await page.locator('#toast').innerText(),/Cubierta no disponible/);await nav.getByRole('button',{name:'Entregar',exact:true}).click();await workspace.getByRole('button',{name:'Preparar presentación'}).click();await page.locator('#presentationConfig').getByRole('button',{name:'Iniciar presentación',exact:true}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');assert.equal(await nav.isVisible(),false,'client presentation does not expose editor navigation');await page.evaluate(()=>{
+   const back=history.back.bind(history);
+   history.back=()=>{
+    history.back=back;
+diff --git a/tests/regression-partitions.json b/tests/regression-partitions.json
+index 3ce712a7..d8adf018 100644
+--- a/tests/regression-partitions.json
++++ b/tests/regression-partitions.json
+@@ -1,6 +1,10 @@
+ {
+  "_": "Browser tests that no other workflow runs (cross review of #240: 39 of 145). `blocking` must be green on every PR. `historical` shards run on every PR but do NOT block: they were never in CI, so each red must first be classified (pre-existing defect, obsolete assertion or new regression) in `classification`; a file moves to `blocking` once it is green and classified. scripts/qa/check-browser-test-coverage.cjs fails when a *.browser.test.cjs is neither named in a workflow nor listed here.",
+  "blocking": [
++  "tests/perla-dialog-assistant.browser.test.cjs",
++  "tests/perla-done.browser.test.cjs",
++  "tests/perla-return.browser.test.cjs",
++  "tests/perla-semaforo.browser.test.cjs",
+   "tests/home-ux312.browser.test.cjs",
+ "tests/m07-f03v2.browser.test.cjs",
+   "tests/no-chinese-display.browser.test.cjs",
+diff --git a/tests/tour-video.browser.test.cjs b/tests/tour-video.browser.test.cjs
+index 6f0f2487..759bdd75 100644
+--- a/tests/tour-video.browser.test.cjs
++++ b/tests/tour-video.browser.test.cjs
+@@ -65,7 +65,9 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
+  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'recording never changes the project');
+  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
+ });
+-test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 240000}, async t => {
++// Exportar el vuelo de dron (433 fotogramas a 640×360) cuesta ~200 s de render por CPU en SwiftShader (456 ms/fotograma;
++// preparación 0,9 s, codificación 0,06 s): ver docs/integration/perla-ci-322/sculpt-dron-fases.txt y film.cjs.
++test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 600000}, async t => {
+  const context=await browser.newContext({viewport:{width:1440,height:900}});
+  t.after(()=>context.close());
+  const page=await context.newPage(),errors=[];
