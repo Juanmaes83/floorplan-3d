@@ -10,7 +10,7 @@ Lee AGENTS.md y el protocolo de coordinación. Verifica las referencias remotas,
 1. **Primero, cierre de PERLA.** Parte de la candidata aprobada `09eebc9c6709628e61d9a9d6552414bec1776d40`, PR #322. Aísla y corrige la CI. Entrega el SHA y los deltas a Codex para la integración a master.
 2. **Después, Visualización y Home.** Prepara cortes revisables para Render IA, producción cinematográfica local y acceso al Asesor desde el retrato. Mantén las correcciones de CI trazables por separado del desarrollo de nuevas prestaciones.
 3. **Presupuestos y geometría.** Cierra MSPDI con la candidata #320, avanza BCCA aportada y reconcilia la evidencia aprobada de A0 y muros. Avanza los bloques independientes si uno queda pendiente de una credencial, permiso o aplicación externa.
-4. **Penúltimo bloque: StoryLayersV1 · Entrega Junior (§8).** Antes de implementarlo, Claude lee su especificación en el documento madre RUBIK — Auditoría de referencias. Si no puede acceder, lo informa y continúa los demás bloques.
+4. **Penúltimo bloque: StoryLayersV1 · Entrega Junior (§8).** La especificación operativa autosuficiente está íntegra en el §8 de este encargo; Claude debe trabajar desde aquí, sin depender de archivos locales no versionados. Si no puede acceder, lo informa y continúa los demás bloques.
 5. **Último bloque: examen grabado de cinco proyectos (§9).** Solo después de cerrar y validar lo anterior, contrasta cinco planos sintéticos con fichas de referencia independientes.
 
 Medioambiente, Personas y la hoja de ruta de Simuladores quedan aplazados. El alcance cinematográfico de este encargo corresponde a la exportación, el render local y la entrega.
