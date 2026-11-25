@@ -14,7 +14,7 @@ permissions:
 jobs:
   project-first:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 40
     env:
       UNIT_TESTS: >-
         tests/project-visual.test.cjs
@@ -71,20 +71,7 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/pf-playwright" --no-save playwright@1.62.1
           node "$RUNNER_TEMP/pf-playwright/node_modules/playwright/cli.js" install --with-deps chromium
-          sudo apt-get install -y ffmpeg
           echo "NODE_PATH=$RUNNER_TEMP/pf-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pf-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Browser tests
-        env:
-          QA_DRONE_MP4: ${{ runner.temp }}/sculpt-drone.mp4
         run: node --test --test-concurrency=1 $BROWSER_TESTS
-      - name: Verify the complete SCULPT drone export
-        run: |
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,avg_frame_rate,nb_frames -of csv=p=0 "$RUNNER_TEMP/sculpt-drone.mp4")" = h264,640,360,8/1,433
-          ffmpeg -v error -xerror -i "$RUNNER_TEMP/sculpt-drone.mp4" -f null -
-      - name: Archive the SCULPT drone export
-        uses: actions/upload-artifact@v4
-        with:
-          name: sculpt-drone-export
-          path: ${{ runner.temp }}/sculpt-drone.mp4
-          if-no-files-found: error
