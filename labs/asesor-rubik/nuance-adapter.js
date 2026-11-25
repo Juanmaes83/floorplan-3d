@@ -20,16 +20,16 @@
  class MockRoom{constructor(base,id,token){Object.assign(this,{base,id,token,after:-1,open:true,handlers:[]});}
   async join(){await fetch(`${this.base}/mock-room/${this.id}/join`,{method:'POST',headers:{Authorization:'Bearer '+this.token}});this._loop();
    // Pistas del avatar simuladas: vídeo (lienzo animado) y audio (oscilador silencioso) — como avatar.videoTrack/audioTrack.
-   const cv=document.createElement('canvas');cv.width=320;cv.height=240;const g=cv.getContext('2d');let f=0;
+   const cv=document.createElement('canvas');cv.width=320;cv.height=240;cv.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px';document.body.append(cv);this._cv=cv;const g=cv.getContext('2d');let f=0;
    this._anim=setInterval(()=>{g.fillStyle=`hsl(${(f++*7)%360} 40% 40%)`;g.fillRect(0,0,320,240);g.fillStyle='#fff';g.font='28px sans-serif';g.fillText('Avatar IA (simulado)',20,130);},100);
-   this.videoStream=cv.captureStream(10);const ac=new AudioContext();const o=ac.createOscillator(),gain=ac.createGain();gain.gain.value=0.0001;const d=ac.createMediaStreamDestination();o.connect(gain).connect(d);o.start();
+   g.fillStyle='#7a2e45';g.fillRect(0,0,320,240);this.videoStream=cv.captureStream(10);const ac=new AudioContext();const o=ac.createOscillator(),gain=ac.createGain();gain.gain.value=0.0001;const d=ac.createMediaStreamDestination();o.connect(gain).connect(d);o.start();
    this._ac=ac;this.audioStream=d.stream;}
   on(h){this.handlers.push(h);}
   async _loop(){while(this.open){try{const r=await fetch(`${this.base}/mock-room/${this.id}/recv?after=${this.after}`,{headers:{Authorization:'Bearer '+this.token}});const j=await r.json();
     for(const ev of j.events||[]){this.after=Number(ev.event_id.slice(4));for(const h of this.handlers)h(ev);}}catch{await sleep(300);}}}
   async send(ev){await fetch(`${this.base}/mock-room/${this.id}/send`,{method:'POST',headers:{Authorization:'Bearer '+this.token,'Content-Type':'application/json'},body:JSON.stringify(ev)});}
   async publishMic(track){this.micTrack=track;}
-  async leave(){this.open=false;clearInterval(this._anim);try{this._ac?.close();}catch{}for(const t of [...(this.videoStream?.getTracks()||[]),...(this.audioStream?.getTracks()||[])])t.stop();
+  async leave(){this.open=false;clearInterval(this._anim);this._cv?.remove();try{this._ac?.close();}catch{}for(const t of [...(this.videoStream?.getTracks()||[]),...(this.audioStream?.getTracks()||[])])t.stop();
    try{await fetch(`${this.base}/mock-room/${this.id}/leave`,{method:'POST',headers:{Authorization:'Bearer '+this.token}});}catch{}}}
  // ---- Sala LiveKit real -------------------------------------------------------------------------------------------
  class LiveKitRoom{constructor(url,token){Object.assign(this,{url,token,handlers:[]});}

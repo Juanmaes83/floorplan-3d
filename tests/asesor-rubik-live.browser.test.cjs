@@ -46,6 +46,7 @@ test(`Nuance Live (simulador del protocolo) ${viewport.width}x${viewport.height}
  await page.waitForFunction(()=>/una IA/.test(document.querySelector('#subtitle').textContent),null,{timeout:10000});
  await page.waitForFunction(()=>{const v=document.querySelector('#avatarVideo');return !!v.srcObject&&v.srcObject.getVideoTracks().length===1;});
  assert.equal(await page.evaluate(()=>document.querySelector('#avatarAudio').srcObject?.getAudioTracks().length),1,'audio del avatar conectado');
+ await page.waitForFunction(()=>{const v=document.querySelector('#avatarVideo');return !v.hidden&&v.videoWidth>0&&v.readyState>=2;},null,{timeout:10000});
  assert.match(await page.locator('#log').textContent(),/tope 60 s/);await page.screenshot({path:path.join(shots,`${name}-01-conectado.png`)});
 
  // 2 · Herramienta permitida pedida por la persona del proveedor (delegación) → resultado real de RUBIK por el topic.

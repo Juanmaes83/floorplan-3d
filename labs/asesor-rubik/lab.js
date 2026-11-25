@@ -3,7 +3,8 @@
  const $=s=>document.querySelector(s),frame=$('#rubik');let sim=null,rubik=null,lastFail='',textMode=false;
  const log=(t,cls='')=>{const li=document.createElement('li');li.textContent=t;if(cls)li.className=cls;$('#log').prepend(li);};
  const setLive=on=>{for(const e of [$('#say'),$('#sayBtn'),...document.querySelectorAll('#chips .chip')])e.disabled=!on;$('#close').disabled=!on&&sim?.state!=='connecting';$('#start').disabled=on||sim?.state==='connecting';};
- const STATE={connecting:'Conectando… (simulado)',live:'En conversación · sesión simulada',ended:'Conversación terminada',error:'No se pudo continuar',idle:'Listo para empezar'};
+ const isLive=()=>$('#transport').value==='live';
+ const STATE={get connecting(){return isLive()?'Conectando con el servicio de voz…':'Conectando… (simulado)';},get live(){return isLive()?'En conversación · conexión real (Preview privado)':'En conversación · sesión simulada';},ended:'Conversación terminada',error:'No se pudo continuar',idle:'Listo para empezar'};
  function showResults(name,r){const box=$('#results');box.replaceChildren();
   if(!r.ok){const p=document.createElement('p');p.className='denied';p.dataset.denied=r.error;p.textContent='✕ Rechazado: '+(r.motivo||r.error);box.append(p);return;}
   if(name==='consultar_superficies'){const t=document.createElement('table');t.innerHTML='<caption>Superficie útil por estancia</caption><thead><tr><th>Estancia</th><th>m²</th><th>Estado</th></tr></thead>';const tb=document.createElement('tbody');
@@ -14,7 +15,7 @@
  function onEvent(e){
   if(e.type==='session'){log('Conversación creada por el servidor · tope '+e.maxSessionSeconds+' s · herramientas: '+(e.tools||[]).join(', '));}
   if(e.type==='provider_event')log('Evento: '+e.name);
-  if(e.type==='speaking'){const v=$('#avatarVideo');if(v.srcObject){v.hidden=false;}}
+  if(e.type==='speaking'||e.type==='state'){const v=$('#avatarVideo');v.hidden=!v.srcObject;}
   if(e.type==='state'){$('#state').textContent=STATE[e.state]||e.state;setLive(e.state==='live');if(e.state!=='live')$('#avatar').classList.remove('speaking');log('Estado: '+(STATE[e.state]||e.state));}
   if(e.type==='speaking')$('#avatar').classList.toggle('speaking',!!e.on);
   if(e.type==='subtitle')$('#subtitle').textContent=e.text;
@@ -37,7 +38,8 @@
     avatar:{video:$('#avatarVideo'),audio:$('#avatarAudio')}});
   }else sim=new AsesorSim.SimAdapter({rubik,profile,mode,onEvent,failWith:lastFail||null});
   sim.start(e);});
- $('#transport').addEventListener('change',()=>{const live=$('#transport').value==='live';$('#opRow').hidden=!live;$('#badgeSim').textContent=live?'Conexión real (Preview privado)':'Sesión simulada';$('#badgeOff').hidden=live;sim?.close();});
+ $('#transport').addEventListener('change',()=>{const live=$('#transport').value==='live';$('#opRow').hidden=!live;$('#badgeSim').textContent=live?'Conexión real (Preview privado)':'Sesión simulada';$('#badgeOff').hidden=live;
+  document.querySelector('.status .note').textContent=live?'El asesor solo empieza cuando tú lo pulsas. Usa tu micrófono (con cancelación de eco), nunca tu cámara. La sesión tiene un tope de tiempo fijado por el servidor.':'El asesor solo empieza cuando tú lo pulsas. No usa cámara ni micrófono en este laboratorio.';sim?.close();});
  $('#close').addEventListener('click',()=>{sim?.close();$('#subtitle').textContent='';$('#start').focus();});
  $('#retry').addEventListener('click',e=>{$('#error').hidden=true;if(!sim?.retry(e)){$('#retry').hidden=true;}});
  const toText=()=>{sim?.close();if(!ready())return;const mode=document.querySelector('input[name=mode]:checked').value;
