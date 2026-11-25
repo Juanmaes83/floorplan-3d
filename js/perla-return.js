@@ -13,7 +13,10 @@
  // Diálogos abiertos: Chromium cierra un diálogo modal en el mismo paso que «Atrás» (quita «open» antes de avisar con
  // «close»), así que se lleva la cuenta propia: un diálogo sigue en la lista hasta que llega su evento «close».
  const openDialogs=new Set();
- for(const m of ['showModal','show']){const f=HTMLDialogElement.prototype[m];HTMLDialogElement.prototype[m]=function(...a){const r=f.apply(this,a);openDialogs.add(this);return r;};}
+ // Un diálogo retirado del documento (p. ej. el visor Blueprint/Despiece, que se cierra y se elimina en el mismo paso)
+ // recibe «close» ya desconectado y el aviso no llega a document: se descarta aquí para no retener su lienzo WebGL.
+ const prune=()=>{for(const d of openDialogs)if(!d.isConnected)openDialogs.delete(d);};
+ for(const m of ['showModal','show']){const f=HTMLDialogElement.prototype[m];HTMLDialogElement.prototype[m]=function(...a){const r=f.apply(this,a);prune();openDialogs.add(this);this.addEventListener('close',()=>openDialogs.delete(this),{once:true});return r;};}
  document.addEventListener('close',e=>openDialogs.delete(e.target),true);
  let origin=null,pending=null,fromPop=false,last=null,btn=null;
 
@@ -63,7 +66,7 @@
   if(st.perlaArea&&st.perlaArea===a)return;
   // Con un diálogo abierto en un área, «Atrás» cierra el diálogo y deja a la persona en su área.
   // (Chromium cierra él mismo un diálogo modal al ir Atrás, justo antes de este evento: también cuenta.)
-  const dlg=[...document.querySelectorAll('dialog[open]')].pop(),justClosed=[...openDialogs].some(d=>!d.open);
+  prune();const dlg=[...document.querySelectorAll('dialog[open]')].pop(),justClosed=[...openDialogs].some(d=>!d.open);
   if(a!=='design'&&(dlg||justClosed)){e.stopImmediatePropagation();if(dlg){const c=new Event('cancel',{cancelable:true});if(dlg.dispatchEvent(c))dlg.close();}history.pushState({...history.state,perlaArea:a},'',location.href);return;}
   if(st.perlaArea&&(st.perlaArea!=='design'||a!=='design')){e.stopImmediatePropagation();fromPop=true;if(st.perlaArea==='design')PW()?.close?.();else PW()?.open(st.perlaArea);if(areaNow()===a)fromPop=false;return;}
   if(a!=='design'){e.stopImmediatePropagation();fromPop=true;PW()?.close?.();if(areaNow()===a)fromPop=false;}},true);
