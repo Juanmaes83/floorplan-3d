@@ -18,12 +18,13 @@ El commit que publica esta carpeta se indica en la respuesta de entrega; el scri
 | `720/detalle-acabado-actual.png`, `720/balcon-acabado-actual.png` | Revisión rápida del detalle y del balcón | 1280×720 | 69 s / 44 s |
 | `720/segundo-proyecto-f3-openings.png` + `-informe.json` | Segundo proyecto por el flujo del kit (`sh rodar.sh revision interior dia 0-0`) | 1280×720 | 24,8 s |
 | `720/vivienda-ejemplo-informe.json` | Informe del mismo flujo en la vivienda de ejemplo | — | 56,9 s |
+| `1440/interior-{antes-materiales-visor,despues-acabado-actual}.png` + `interior-antes-despues-5120x1440.png` + `recortes/interior-{alfombra,exterior-tras-vidrio,sofa}.png` | Interior con comparativa controlada (misma cámara, luz y exposición) | 2560×1440 | 303,2 s / 459,0 s |
 | `4k-aereo/f0000…f0004.png` + `rodaje-report.json` | 5 de 48 fotogramas del aéreo de día, 4K nativo, pausado (acabado anterior al pase de realismo) | 3840×2160 | 73,8–106 s |
 
 ## En curso / pendiente
 
-- **Comparativa controlada a 1440p** (`r1440.sh`, se lanza desde la carpeta de trabajo). Hechas: detalle antes y detalle después.
-  - Faltan: interior antes y después, y balcón antes y después.
+- **Comparativa controlada a 1440p** (`r1440.sh`, se lanza desde la carpeta de trabajo). Hechas: detalle e interior, antes y después.
+  - Falta: balcón antes y después.
 - **Tramo en movimiento a 1440p** (con alfombra, sombras y vidrio) y comparación de dos muestreos: pendiente de lanzar.
 - **MP4 completo:** espera la aprobación visual.
 
