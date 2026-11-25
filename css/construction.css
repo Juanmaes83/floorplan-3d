@@ -136,3 +136,41 @@
 /* M2-UX-MOB-01 (confirmed by the integration CI on Ubuntu fonts): on phones the footer message takes its own full row
    instead of sharing it with the buttons (flex-basis 0 let it shrink to a narrow column of 4+ lines). */
 @media(max-width:600px){.cx-foot .cx-grow{flex:1 1 100%}}
+
+/* M13 · Jerarquía visual de las tareas del plan (solo este diálogo; tokens existentes del proyecto). */
+.cx-tasks th[scope=row]{font-weight:400}
+.cx-task-name{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:15px;font-weight:650;color:var(--ink,#2b3034);line-height:1.3}
+.cx-wbs{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 6px;border-radius:5px;background:var(--surface-sunken,#efe9de);font-size:12px;font-weight:700;color:var(--ink-muted,#5b5f62)}
+.cx-deps{display:flex!important;gap:5px;align-items:baseline}
+.cx-deps .cx-ico{color:var(--action,#1f5a66);font-weight:700}
+.cx-tasks tr.cx-ms{background:linear-gradient(90deg,rgba(185,130,43,.10),transparent 70%)}
+.cx-tasks tr.cx-ms .cx-wbs{background:#f3e3c4;color:#6d4a10}
+.cx-ms-glyph{color:#b9822b;font-size:14px}
+.cx-chip.cx-chip-ms{min-height:20px;padding:0 8px;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;background:#f3e3c4;color:#6d4a10}
+.cx-dates{min-width:190px}
+.cx-date-line{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.cx-date-line .num{font-weight:600;color:var(--ink,#2b3034)}
+.cx-dur{display:inline-flex;align-items:center;min-height:20px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:700;background:var(--action-soft,#dceaea);color:var(--action,#1f5a66);font-variant-numeric:tabular-nums}
+tr.cx-ms .cx-dur{background:#f3e3c4;color:#6d4a10}
+.cx-gantt{position:relative;height:8px;margin-top:7px;border-radius:4px;background:var(--surface-sunken,#efe9de)}
+.cx-gantt-bar{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--action,#1f5a66)}
+.cx-gantt-ms{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;background:#b9822b;transform:rotate(45deg);border-radius:2px;box-shadow:0 0 0 2px var(--paper,#fffcf6)}
+.cx-chip.cx-none{font-weight:400;background:none;border:1px dashed var(--line,#e2dbcf);color:var(--ink-muted,#5b5f62)}
+.cx-actions .cx-links{flex-wrap:nowrap;gap:4px;justify-content:flex-end}
+.cx-link.cx-edit{font-weight:650}
+.cx-link.cx-icon{display:inline-flex;align-items:center;justify-content:center;width:32px;min-width:32px;padding:0;border-color:transparent;background:none;color:var(--ink-muted,#5b5f62)}
+.cx-link.cx-icon:hover{background:var(--surface-sunken,#efe9de);color:var(--ink,#2b3034)}
+.cx-link.cx-danger:hover{background:var(--danger-soft,#f6dcd8);color:#8a2a1f}
+.cx-svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cx-export-group{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding-left:12px;border-left:1px solid var(--line,#e2dbcf)}
+.cx-export-label{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted,#5b5f62)}
+.cx-export{display:inline-flex;align-items:center;gap:6px}
+.cx-report{flex-basis:100%;margin:4px 0 0}
+.cx-report-head{display:flex;align-items:center;gap:8px;font-size:15px}
+.cx-report-head .cx-svg{width:20px;height:20px;color:var(--action,#1f5a66);stroke-width:2.4}
+.cx-report-main{margin:6px 0 0;padding-left:28px}
+.cx-report-main li{margin:2px 0}
+.cx-report-lost{margin:8px 0 0 28px;font-size:13px;color:var(--ink-muted,#5b5f62)}
+.cx-report-lost summary{cursor:pointer;font-weight:600}
+.cx-report-lost ul{margin:4px 0 0;padding-left:18px}
+@media (max-width:700px){.cx-export-group{margin-left:0;padding-left:0;border-left:0;flex-wrap:wrap}.cx-dates{min-width:150px}}

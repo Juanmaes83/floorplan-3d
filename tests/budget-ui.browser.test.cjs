@@ -61,7 +61,13 @@ test(`Phase C3: BC3 reference prices and export ${viewport.width}x${viewport.hei
  const context=await browser.newContext({viewport,acceptDownloads:true});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],requests=[];page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()!=='GET')requests.push(r.url());});
  await page.route('**/*',r=>{const u=r.request().url();if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();return r.abort();});
- await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanBudgetUI&&window.FloorPlanBc3Budget);
+ const savedProject={...require('../js/reference-project.js'),id:'prj_bc3_saved',name:'Proyecto de ejemplo'};
+ await page.addInitScript(project=>{
+  if(window.top!==window||sessionStorage.getItem('bc3-seeded'))return;
+  localStorage.setItem('rubik-sota-project-library-v1',JSON.stringify({version:1,activeId:'ent_bc3',entries:[{id:'ent_bc3',name:project.name,project}]}));
+  sessionStorage.setItem('bc3-seeded','1');
+ },savedProject);
+ await page.goto(url);await page.locator('#welcomeReturn').click();await page.waitForFunction(()=>window.FloorPlanBudgetUI&&window.FloorPlanBc3Budget);
  await page.locator('#workArea-budget').click();await page.locator('#professionalWorkspace [data-route="budget-edit"]').click();const d=page.locator('#budgetDialog');await d.waitFor();
  assert.match(await d.locator('#budgetBc3').innerText(),/Precios de referencia \(BC3\)/);
  await d.locator('#budgetBc3 summary').click();assert.match(await d.locator('#budgetBc3').innerText(),/Rubik no la sube ni la guarda[\s\S]*Tú respondes de su licencia/);
@@ -81,5 +87,20 @@ test(`Phase C3: BC3 reference prices and export ${viewport.width}x${viewport.hei
  const dl=page.waitForEvent('download');await d.locator('#budgetBc3Export').click();const file=await dl;assert.match(file.suggestedFilename(),/^rubik-sota-presupuesto-proyecto-de-ejemplo\.bc3$/);
  const model=F.parse(new Uint8Array(await fs.readFile(await file.path())));const door=model.concepts.find(c=>c.summary==='Puerta de paso');assert.deepEqual([door.unit,door.prices[0].value],['ud',225]);
  assert.match(await d.locator('#budgetStatus').innerText(),/BC3 generado/);
+ const projectId=await page.evaluate(()=>FloorPlanApp.project.id);
+ const stored=()=>page.evaluate(id=>JSON.parse(FloorPlanApp.storage.getItem('rubik-budget-v1'))?.[id]?.items?.find(x=>x.id==='opening:door')?.unitPrice,projectId);
+ assert.equal(await stored(),225,'BC3 price saved before reload');
+ await d.locator('#budgetClose').click();
+ await page.reload();
+ await page.waitForFunction(()=>window.FloorPlanApp?.project && window.FloorPlanBudgetUI);
+ if(await page.locator('#welcomeReturn').isVisible())await page.locator('#welcomeReturn').click();
+ assert.equal(await stored(),225,'BC3 price exists before reopening budget');
+ await page.locator('#workArea-budget').click();
+ await page.locator('#professionalWorkspace [data-route="budget-edit"]').click();
+ await d.waitFor();
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.id),projectId,'same project after reload');
+ assert.equal(await row('opening:door').locator('[data-field="price"]').inputValue(),'225');
+ assert.match(await row('opening:door').innerText(),/Precio de referencia · BC3 ESTUDIO DE PRUEBA · Zona B PUERTA-LISA/);
+ assert.equal(await row('opening:door').locator('[data-field="review"]').isChecked(),false);
  assert.deepEqual(requests,[],'the BC3 is read locally: nothing is uploaded');assert.deepEqual(errors,[]);
 });

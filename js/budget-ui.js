@@ -26,7 +26,7 @@
  const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
  let state=null,returnFocus=null,base=null,baseColumn=0,openRef=null;
  const X=window.FloorPlanBc3Budget,Bridge=window.FloorPlanBudgetCostBridge;
- function apply(fn){requireSafeIdentity();state.budget=B.validateBudget(fn(state.budget));save();}
+ function apply(fn){requireSafeIdentity();state.budget=B.validateBudget(fn(state.budget));return save();}
  // Current budget of the open project, rebuilt over the project quantities (keeps prices, waste and valid reviews).
  // `over` (CON-03): a validated budget to draft over INSTEAD of the saved one — the import preview; nothing is saved here.
  function load(over=null){const saved=read(BUDGETS)[app.project.id]||null;let previous=null;try{previous=over||(saved?B.parseBudget(JSON.stringify(saved)):null);}catch{previous=null;}
@@ -52,7 +52,7 @@
  }
  const identityError=()=>tx('Presupuesto bloqueado: hay proyectos con el mismo identificador y no se pudo guardar su separación. Libera espacio de este navegador y vuelve a abrir RUBIK; comprueba que cada proyecto tiene su presupuesto antes de editar.','Budget locked: projects share an identity and their separation could not be saved. Free browser storage and reopen RUBIK; check each project budget before editing.','预算已锁定：项目共用标识且无法保存分离结果。请释放浏览器存储空间并重新打开 RUBIK。');
  function requireSafeIdentity(){if(identityUnsafe())throw Error(identityError());}
- function save(){requireSafeIdentity();const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));if(!write(BUDGETS,all))say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));}
+ function save(){requireSafeIdentity();const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(state.budget));const saved=write(BUDGETS,all);if(!saved)say(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));return saved;}
  function say(m){const s=dialog.querySelector('#budgetStatus');if(s)s.textContent=m;}
  // D-04: a hand-made price change is also written to the project's price history (same record as reference prices).
  function logManualPrice(it,prev,revB){try{const Ctx=window.FloorPlanConstructionContext,now=state.budget.items.find(x=>x.id===it.id)?.unitPrice??null;if(!Ctx?.store||prev===now)return;
@@ -144,10 +144,29 @@
  function refPanel(tbody,it){const tr=el('tr',undefined,tbody,'budget-ref-row');const td=el('td',undefined,tr);td.colSpan=6;
   const q=el('input',undefined,td,'budget-ref-q');q.type='search';q.id='budgetRefQuery';q.dataset.field='refq';q.value=it.description.replace(/\(.*\)/,'').trim();q.setAttribute('aria-label',tx('Buscar en la base de precios','Search the price base','搜索价格库'));
   const list=el('ul',undefined,td,'budget-ref-list');list.id='budgetRefResults';const u=UNIT();
+  async function saveQuote(event,code,asPrice){
+   const opened=state, projectId=app.project.id;
+   const sameBudget=()=>dialog.open&&state===opened&&app.project.id===projectId;
+   if(list.inert)return;
+   list.inert=true;
+   q.disabled=true;
+   try{
+    const quote=X.quote(base,code,baseColumn);
+    const saved=apply(b=>asPrice?Bridge.setPriceFromQuote(b,it.id,quote):Bridge.setPriceReferenceFromQuote(b,it.id,quote));
+    if(!saved)return;
+    say(tx('Guardando referencia…','Saving reference…','正在保存参考价格…'));
+    await app.persistence?.requireSaved(event);
+    if(!sameBudget())return;
+    openRef=null;
+    draw(`${it.id}|${asPrice?'price':'ref'}`);
+    say(asPrice?tx('Precio de referencia guardado, sin revisar.','Reference price saved, not reviewed.','参考价格已保存，尚未审核。'):tx('Referencia guardada.','Reference saved.','参考价格已保存。'));
+   }catch(e){if(sameBudget())say(e.message);}
+   finally{list.inert=false;q.disabled=false;}
+  }
   const show=()=>{list.replaceChildren();const found=X.search(base,{text:q.value,unit:it.quantity.unit,limit:12});if(!found.length){el('li',tx(`Sin resultados en ${u[it.quantity.unit]}. Prueba otras palabras.`,`No results in ${u[it.quantity.unit]}.`,'无结果。'),list,'budget-ref-empty');return;}
    for(const r of found){const p=r.prices.find(x=>x.index===baseColumn)||r.prices[0];const li=el('li',undefined,list);el('strong',r.code,li);el('span',` ${r.description} · ${eur(p.value)}/${u[r.unit]}`,li);
-    const use=btn(tx('Usar este precio','Use this price','使用此价格'),li,'btn budget-small');use.dataset.code=r.code;use.onclick=()=>{try{apply(b=>Bridge.setPriceFromQuote(b,it.id,X.quote(base,r.code,baseColumn)));openRef=null;draw(`${it.id}|price`);say(tx('Precio de referencia aplicado, sin revisar.','Reference price applied, not reviewed.','已应用参考价格。'));}catch(e){say(e.message);}};
-    const keep=btn(tx('Sólo como referencia','Reference only','仅作参考'),li,'btn budget-small');keep.onclick=()=>{try{apply(b=>Bridge.setPriceReferenceFromQuote(b,it.id,X.quote(base,r.code,baseColumn)));openRef=null;draw(`${it.id}|ref`);}catch(e){say(e.message);}};}};
+    const use=btn(tx('Usar este precio','Use this price','使用此价格'),li,'btn budget-small');use.dataset.code=r.code;use.onclick=e=>saveQuote(e,r.code,true);
+    const keep=btn(tx('Sólo como referencia','Reference only','仅作参考'),li,'btn budget-small');keep.onclick=e=>saveQuote(e,r.code,false);}};
   q.oninput=show;show();}
  /* CON-03 · «Importar presupuesto (JSON)»: the file Presupuestar itself downloads. It is validated as FloorPlanBudgetV1,
     drafted over the OPEN project (quantities always from the project; prices, waste, VAT and references by item id) and
