@@ -1,0 +1,63 @@
+{
+ "frames": {
+  "0": {
+   "seconds": 73.8,
+   "sha256": "70c5ffe641b9ae212cdc09e1c5952cb5aee14f2c8bed6e933566100d0d830452",
+   "peakRssBytes": 3488096256
+  },
+  "1": {
+   "seconds": 73.7,
+   "sha256": "e29f49673ee9eda9c0e33191f522bfb632599324e466debf0b1c7c8b74d3ff3a",
+   "peakRssBytes": 3561074688
+  },
+  "2": {
+   "seconds": 106.0,
+   "sha256": "54967ec5d017fb9c608cd97f6b081a2592e949e508c71b2e411cd069810d99f2",
+   "peakRssBytes": 3603177472
+  },
+  "3": {
+   "seconds": 96.5,
+   "sha256": "7b513b3f16e581af2f5ac62144310e1997f61ef4c3da3fa6d3f8b836801b7644",
+   "peakRssBytes": 3661959168
+  },
+  "4": {
+   "seconds": 90.8,
+   "sha256": "bb30a83e31cced94d5c7664094997ce969550c9d5ee53b2b8b5b50256d3af137",
+   "peakRssBytes": 3661959168
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "entrega4k",
+ "resolution": [
+  3840,
+  2160
+ ],
+ "samples": 24,
+ "shot": "aereo",
+ "light": "dia",
+ "fps": 24,
+ "frameCount": 48,
+ "declared": [
+  "Cycles CPU, 24 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 14 puntos empotrados de 70° (derivados)",
+  "plano aéreo: arco de 30° y acercamiento del 10 % sobre la vivienda; techos ocultos en este plano (declarado)"
+ ],
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "2ac5584c84f889c7ed57e612d270cdd879fb41fd2c926f2dfa3eda64903128c7"
+ },
+ "script": {
+  "sha256": "f03bc4a78c03587eabd3275d663179e509e5c492ff4613271339380d80541c5e"
+ }
+}
