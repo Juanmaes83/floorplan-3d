@@ -37,3 +37,8 @@ legend{font-size:13px;padding:0 4px}
 @media (max-width:760px){.lab{grid-template-columns:1fr;grid-template-rows:auto 70vh}.advisor{border-right:0;border-bottom:1px solid var(--line);overflow:visible}body{display:block}}
 .avatar{position:relative;overflow:hidden}.avatar video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%}
 label.op input{min-width:200px}
+.mentor{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px}
+.mentor .memo summary{cursor:pointer;font-weight:600}.mentor .memo label{display:flex;flex-direction:column;gap:4px;font-size:13px;flex:1;min-width:120px}
+.mentor-q{margin:0;font-weight:600}.mentor-q:empty{display:none}.mentor-out{margin:0;padding:8px 12px;background:#e9f5ee;border-radius:8px}.mentor-out:empty{display:none}
+.mentor-warn{margin:0;padding-left:18px;color:var(--bad);font-size:13px}.mentor .row input{flex:1;min-width:0}
+[hidden]{display:none!important}

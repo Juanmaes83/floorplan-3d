@@ -59,6 +59,22 @@
     <button type="button" class="chip" data-say="Cambia el suelo del salón" disabled>Cambiar suelo</button>
    </div>
   </form>
+  <section class="mentor" aria-labelledby="menT"><h2 id="menT">Asesoría guiada</h2>
+   <p class="muted">Primero te pregunto para entender qué quieres; después resumo y te pido confirmación. Solo uso datos reales de RUBIK.</p>
+   <details class="memo" open><summary>Lo que recuerdo</summary>
+    <div class="row"><label>Nombre <input id="memNombre" autocomplete="off"></label><label>Tarea <input id="memTarea" autocomplete="off"></label></div>
+    <label>Misión final <input id="memMision" autocomplete="off"></label>
+    <div class="row"><button type="button" class="btn" id="memSave">Recordar</button><button type="button" class="btn" id="memForget">Olvidar todo</button></div>
+    <p class="muted" id="memView" aria-live="polite"></p></details>
+   <div class="chips" id="skillChips" role="group" aria-label="Temas">
+    <button type="button" class="chip" data-skill="presupuesto">Presupuesto</button><button type="button" class="chip" data-skill="organizacion">Organización</button>
+    <button type="button" class="chip" data-skill="puntualidad">Puntualidad</button><button type="button" class="chip" data-skill="negocio">Negocio</button></div>
+   <p class="mentor-q" id="mentorQ" aria-live="polite"></p>
+   <form class="row" id="mentorForm" hidden><input id="mentorA" autocomplete="off" aria-label="Tu respuesta"><button class="btn primary">Responder</button></form>
+   <div class="row" id="mentorConfirm" hidden><button type="button" class="btn primary" id="mentorYes">Sí, es eso</button><button type="button" class="btn" id="mentorNo">No, te explico mejor</button></div>
+   <p class="mentor-out" id="mentorOut" aria-live="polite"></p>
+   <ul class="mentor-warn" id="mentorWarn"></ul>
+  </section>
   <section class="results" aria-labelledby="resT"><h2 id="resT">Resultados</h2><div id="results"><p class="muted">Aún no hay resultados.</p></div></section>
   <details class="qa"><summary>Laboratorio: simular errores del servicio</summary>
    <div class="row"><select id="failSel">
@@ -77,6 +93,7 @@
 <script src="tools.js"></script>
 <script src="adapter.js"></script>
 <script src="nuance-adapter.js"></script>
+<script src="skills.js"></script>
 <script src="lab.js"></script>
 </body>
 </html>

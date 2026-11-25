@@ -25,7 +25,7 @@
   return {
    tools:win.RubikAssistantDomainTools,
    project:()=>win.FloorPlanApp?.project,
-   ctx:()=>({project:win.FloorPlanApp.project}),
+   ctx:()=>{let budget;try{budget=win.FloorPlanBudgetUI?.current?.()?.budget;}catch{}return budget?{project:win.FloorPlanApp.project,budget}:{project:win.FloorPlanApp.project};},
    displayName:n=>nm(n,'room'),
    // Igual que tocar la estancia en el plano: selección (Inspector) y, en 3D, el encuadre del visor.
    focusRoom:id=>{win.select({kind:'room',id});if(win.FloorPlanApp?.viewMode==='3d')win.View3D?.focusRoom?.(id);},

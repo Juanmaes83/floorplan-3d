@@ -37,7 +37,7 @@
   // ---- Fuera del modo cliente (datos internos o cambios). Existen en la lista para poder RECHAZARLAS en ejecución. ----
   T('resumen_presupuesto','Importes del presupuesto del proyecto (costes internos del profesional).',none,
    {readOnlyHint:true,destructiveHint:false},
-   (rubik)=>{const r=rubik.tools.execute('get_budget_summary',{},rubik.ctx(),'lab-bud');return r.ok?{ok:true,data:{neto:r.data?.totals?.net??null}}:{ok:false,error:r.error.code};}),
+   (rubik)=>{const r=rubik.tools.execute('get_budget_summary',{},rubik.ctx(),'lab-bud');return r.ok?{ok:true,data:{neto:r.data?.net??null,sinPrecio:r.data?.unpricedItems?.length??null}}:{ok:false,error:r.error.code};}),
   T('proponer_cambio_suelo','Propone cambiar el suelo de una estancia. Solo se aplica tras confirmación explícita en RUBIK.',
    room({properties:{roomName:{type:'string'},materialId:{type:'string'}},required:['roomName','materialId']}),
    {readOnlyHint:false,destructiveHint:false},

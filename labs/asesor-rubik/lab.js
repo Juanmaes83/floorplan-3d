@@ -53,5 +53,17 @@
  for(const r of document.querySelectorAll('input[name=mode]'))r.addEventListener('change',()=>{if(sim&&sim.state==='live'){sim.close();log('Modo cambiado: la conversación se cerró; vuelve a iniciarla.');}});
  // Cambio de proyecto en el visor → desvincular la conversación.
  setInterval(()=>{if(sim&&sim.state==='live'&&rubik&&rubik.project()?.id!==sim.projectId)sim.unbind();},500);
- window.AsesorLab={get sim(){return sim;},get rubik(){return rubik;}};
+ // ---- Asesoría guiada (skills socráticos) ----
+ let mentor=null;const M=()=>{const mode=document.querySelector('input[name=mode]:checked').value;if(!mentor||mentor.mode!==mode){const keep=mentor?.memoria;mentor=new AsesorSkills.Mentor({rubik,mode});if(keep)mentor.memoria=keep;}return mentor;};
+ const paintMem=()=>{const m=M().memoria;$('#memView').textContent=[m.nombre&&'Nombre: '+m.nombre,m.tarea&&'Tarea: '+m.tarea,m.mision&&'Misión: '+m.mision].filter(Boolean).join(' · ')||'Aún no recuerdo nada.';
+  const w=$('#mentorWarn');w.replaceChildren();for(const a of M().avisos){const li=document.createElement('li');li.textContent=a;w.append(li);}};
+ const show=r=>{$('#mentorQ').textContent=r.texto;$('#mentorQ').dataset.tipo=r.tipo;$('#mentorForm').hidden=!(r.tipo==='pregunta'||r.tipo==='aviso');$('#mentorConfirm').hidden=r.tipo!=='confirmar';
+  if(r.legal&&!M().avisos.includes(r.legal))M().avisos.push(r.legal);if(r.tipo==='propuesta'){$('#mentorOut').textContent=r.texto;$('#mentorQ').textContent='';}
+  paintMem();if(!$('#mentorForm').hidden)$('#mentorA').focus();else if(!$('#mentorConfirm').hidden)$('#mentorYes').focus();};
+ $('#memSave').addEventListener('click',()=>{if(!rubik)return;for(const [k,id] of [['nombre','#memNombre'],['tarea','#memTarea'],['mision','#memMision']]){const v=$(id).value;if(v.trim())M().recuerda(k,v);$(id).value='';}paintMem();});
+ $('#memForget').addEventListener('click',()=>{M().olvida();M().avisos.length=0;$('#mentorOut').textContent='';$('#mentorQ').textContent='';$('#mentorForm').hidden=true;$('#mentorConfirm').hidden=true;paintMem();});
+ for(const c of document.querySelectorAll('#skillChips .chip'))c.addEventListener('click',()=>{if(!rubik)return;$('#mentorOut').textContent='';show(M().empieza(c.dataset.skill));});
+ $('#mentorForm').addEventListener('submit',e=>{e.preventDefault();const v=$('#mentorA').value;$('#mentorA').value='';if(v.trim())show(M().responde(v));});
+ $('#mentorYes').addEventListener('click',()=>show(M().confirma(true)));$('#mentorNo').addEventListener('click',()=>show(M().confirma(false)));
+ window.AsesorLab={get sim(){return sim;},get rubik(){return rubik;},get mentor(){return mentor;}};
 })();
