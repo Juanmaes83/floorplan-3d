@@ -44,3 +44,4 @@ label.op input{min-width:200px}
 [hidden]{display:none!important}
 .profile-intro{margin:0 0 10px}.profile-greeting{margin:0 0 2px;font-weight:600}.profile-tone{margin:0}
 .back-home{display:inline-flex;align-items:center;min-height:44px;margin-bottom:4px;color:#1f5f5b;font-weight:600}
+.memory{margin-top:16px}.memory fieldset{border:1px solid currentColor;border-radius:8px;padding:8px;display:grid;gap:8px}.memory fieldset[disabled]{opacity:.55}.memory input[type=checkbox]{width:22px;height:22px}.memory label.row{gap:8px;align-items:center;min-height:44px}

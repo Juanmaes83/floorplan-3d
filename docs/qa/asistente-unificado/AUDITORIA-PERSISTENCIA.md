@@ -12,7 +12,7 @@ Base: `347b6136` (rama `claude/visualizacion-home`), encargo `73252084`. Rama de
 | Identidad de probadores | `api/_beta-controls.js` (lista en servidor, solo Preview, cerrada por defecto) | Servidor; no hay sesión de usuario en el navegador |
 | Asesor por voz (Nuance) | `api/advisor-session.js`, cerrado por defecto | Sin memoria propia en RUBIK |
 
-**Conclusión:** no hay identidad verificable en el navegador ni almacén seguro compartido entre canales. Por tanto, y según el §2.1, la memoria es **local, opcional, visible y consentida**, y **no se afirma memoria compartida**.
+**Conclusión:** no hay identidad verificable en el navegador ni almacén seguro compartido entre canales. Por tanto, y según el §2.1, la memoria es una **comodidad local del dispositivo**, opcional, visible y consentida. **No es privacidad ni aislamiento seguro entre personas**: quien use el mismo navegador puede verla. No se afirma memoria compartida.
 
 ## Diseño implementado (`js/assistant-unified.js`)
 
@@ -24,7 +24,7 @@ Base: `347b6136` (rama `claude/visualizacion-home`), encargo `73252084`. Rama de
   - Rechaza DNI, NIE, IBAN, credenciales y tarjetas.
   - Se puede consultar, editar, borrar campos y olvidarlo todo.
   - El contexto por proyecto va separado de la memoria personal.
-  - Las claves se separan por persona.
+  - Las claves se separan por titular local para evitar mezclas accidentales, **no** como barrera de seguridad sin identidad verificada.
 - **Traspaso entre canales:** entrega solo los campos que la persona autoriza e indica exactamente cuáles. Si se revoca, no hay más traspasos.
 
 ## Pendiente en este bloque

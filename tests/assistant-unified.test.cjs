@@ -29,6 +29,6 @@ test('traspaso entre canales: solo lo autorizado; revocar impide; olvido borra t
  m.revokeHandoff();assert.equal(m.handoff({resumen:'x'}).reason,'no-autorizado');
  m.project('p1').set('estilo','nórdico');assert.equal(m.project('p1').get().estilo,'nórdico');assert.deepEqual(m.project('p2').get(),{});
  m.forget();assert.equal(s.length,0);assert.equal(m.consent(),false);});
-test('aislamiento entre personas en el mismo dispositivo',()=>{
+test('separación por titular local (comodidad, no seguridad)',()=>{
  const s=mem(),a=U.createMemory({storage:s,owner:'persona-a'}),b=U.createMemory({storage:s,owner:'persona-b'});a.grant();a.set('nota','solo de A');
  assert.equal(b.view(),null);b.grant();assert.deepEqual(b.view(),{});b.forget();assert.deepEqual(a.view(),{nota:'solo de A'});});

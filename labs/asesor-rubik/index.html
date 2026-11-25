@@ -75,6 +75,18 @@
    <p class="mentor-out" id="mentorOut" aria-live="polite"></p>
    <ul class="mentor-warn" id="mentorWarn"></ul>
   </section>
+  <section class="memory" id="memoryPanel" aria-labelledby="memT"><h2 id="memT">Memoria en este dispositivo</h2>
+   <p class="note" id="memScope">Comodidad de este navegador: no es privada ni separa de forma segura a personas que compartan el dispositivo, porque no hay identidad verificada. No se comparte con otros canales ni equipos. Puedes verla, editarla y borrarla.</p>
+   <label class="row"><input type="checkbox" id="memConsent"> Acepto que el asesor recuerde estos datos en este dispositivo</label>
+   <fieldset id="memFields" disabled><legend>Lo que recuerda</legend>
+    <label>Nombre preferido <input id="memPref" autocomplete="off" maxlength="80"></label>
+    <label>Nota personal <input id="memNote" autocomplete="off" maxlength="280" aria-describedby="memHint"></label>
+    <p class="muted" id="memHint">No escribas DNI, IBAN, contraseñas ni datos de tarjeta: se rechazan.</p>
+    <div class="row"><button type="button" class="btn" id="memKeep">Guardar</button><button type="button" class="btn" id="memErase">Borrar todo</button></div>
+    <label class="row"><input type="checkbox" id="memHandoff"> Permitir pasar a texto el resumen y mi nombre preferido</label>
+   </fieldset>
+   <p class="muted" id="memStatus" role="status" aria-live="polite"></p>
+  </section>
   <section class="results" aria-labelledby="resT"><h2 id="resT">Resultados</h2><div id="results"><p class="muted">Aún no hay resultados.</p></div></section>
   <details class="qa"><summary>Laboratorio: simular errores del servicio</summary>
    <div class="row"><select id="failSel">
@@ -96,6 +108,7 @@
 <script src="skills.js"></script>
 <script src="../../js/assistant-unified.js"></script>
 <script src="profiles.js"></script>
+<script src="memory-panel.js"></script>
 <script src="home-entry.js"></script>
 <script src="lab.js"></script>
 </body>

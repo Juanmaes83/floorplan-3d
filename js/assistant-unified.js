@@ -3,7 +3,7 @@
    lo deciden el modo de sesión y la identidad verificada.
    Memoria: AUDITORÍA (docs/qa/asistente-unificado/AUDITORIA-PERSISTENCIA.md): no existe identidad verificable en el
    navegador ni almacén seguro compartido entre canales; por eso la memoria es LOCAL a este dispositivo, opcional, visible
-   y consentida, y no se afirma memoria compartida. Sin consentimiento no se lee ni se escribe nada. */
+   y consentida, no se afirma memoria compartida y NO es privacidad ni aislamiento seguro entre personas (es comodidad del dispositivo). Sin consentimiento no se lee ni se escribe nada. */
 (function(root){'use strict';
  const COMMON=Object.freeze([
   'Profesional, crítico y realista: señala incoherencias estéticas y técnicas aunque no se pregunte.',
@@ -58,7 +58,7 @@
   const st=()=>rd(K)||{consent:false,data:{},handoff:{allowed:false,fields:[]}};
   const api={
    available:()=>!!okOwner&&!!storage,
-   alcance:'Solo en este dispositivo y navegador. No se comparte entre canales remotos ni entre personas. Puedes verla, editarla y borrarla.',
+   alcance:'Comodidad de este dispositivo y navegador: no es privada ni separa de forma segura a quien comparta el dispositivo. No se comparte con canales remotos. Puedes verla, editarla y borrarla.',
    consent(){return api.available()&&st().consent===true;},
    grant(){if(!api.available())return false;const s=st();s.consent=true;return wr(K,s);},
    view(){return api.consent()?{...st().data}:null;},
