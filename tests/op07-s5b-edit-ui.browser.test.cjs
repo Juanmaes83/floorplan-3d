@@ -39,7 +39,14 @@ test('S5b · arrastrar el punto: curva con UN paso de historial y UNA escritura;
   // Plano: piezas por faceta y el salón sigue la cara (S3b).
   assert.ok(await page.evaluate(id=>document.querySelectorAll(`#gWalls [data-wall="${id}"]`).length>4,w.id));
   // Volver a la línea endereza (un paso más).
-  const box2=await page.locator('#gSel circle[data-handle="curve"]').last().boundingBox(),c2={x:box2.x+box2.width/2,y:box2.y+box2.height/2};
+  // Si un elemento flotante tapa el asa (en CI, #fab a 1440×900), se desplaza el plano como haría la persona; residual de UX
+  // documentado. El destino es la cuerda TAL COMO SE DIBUJA tras el desplazamiento.
+  const handleAt=async()=>{const b=await page.locator('#gSel circle[data-handle="curve"]').last().boundingBox();return {x:b.x+b.width/2,y:b.y+b.height/2};};
+  const free=pt=>page.evaluate(([x,y])=>!!document.elementFromPoint(x,y)?.closest?.('[data-handle="curve"]'),[pt.x,pt.y]);
+  let c2=await handleAt(),panned=0;
+  while(!(await free(c2))&&panned<6){await page.evaluate(()=>{view.x0+=160/view.s;view.y0-=120/view.s;applyView();renderAll();});panned++;c2=await handleAt();}
+  assert.ok(await free(c2),'el asa queda accesible');
+  if(panned){const t=await page.evaluate(()=>{const l=document.querySelector('#gSel line[stroke-dasharray]'),m=l.getScreenCTM(),p=l.ownerSVGElement.createSVGPoint();p.x=+l.getAttribute('x1');p.y=+l.getAttribute('y1');const q=p.matrixTransform(m);return {x:q.x,y:q.y};});c.x=t.x;c.y=t.y;}
   await page.mouse.move(c2.x,c2.y);await page.mouse.down();for(let i=1;i<=10;i++)await page.mouse.move(c2.x+(c.x-c2.x)*i/10,c2.y+(c.y-c2.y)*i/10);await page.mouse.up();
   const under=await page.evaluate(([x,y])=>{const e=document.elementFromPoint(x,y);return e?`${e.tagName}#${e.id}.${String(e.className?.baseVal??e.className).slice(0,40)}[${e.dataset?.handle||''}] vista=${JSON.stringify({w:innerWidth,h:innerHeight,s:view.s})}`:'nada';},[c2.x,c2.y]);
   assert.equal((await wallOf(page,w.id)).curve,undefined,'enderezado · bajo el puntero al empezar el 2.º arrastre: '+under);assert.equal((await history(page)).undo,h0.undo+2);
