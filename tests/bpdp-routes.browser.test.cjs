@@ -66,6 +66,7 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
     const outputs = await import('/bpdp/runtime/outputs.js');
     return !!(await outputs.h264Config(1920, 1080, 30));
   });
+  if (process.env.BPDP_REQUIRE_H264 === '1') assert.ok(videoSupported, 'The catalog artifact job requires an H.264 encoder');
   if (videoSupported) {
     const row = dialog.locator('[data-entregable="blueprint-video"]');
     const prepare = row.locator('[data-route="e3-preparar-blueprint-video"]');
@@ -78,6 +79,7 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
   for (const id of ids) {
     const prepare = dialog.locator(`[data-route="e3-preparar-${id}"]`);
     const download = dialog.locator(`[data-route="e3-descargar-${id}"]`);
+    console.log('Preparar:', id);
     await prepare.click();
     if (id.endsWith('video') && !videoSupported) {
       await page.waitForFunction(() => /H\.264|MP4|codific/i.test(document.getElementById('e3Estado').textContent));
@@ -107,6 +109,7 @@ test('Home y Entregar · dos demos, dos visores y cuatro salidas del catálogo r
       const decoded = spawnSync('ffmpeg', ['-v', 'error', '-xerror', '-i', path, '-f', 'null', '-'], { encoding: 'utf8' });
       assert.equal(decoded.status, 0, decoded.stderr);
       assert.equal(decoded.stderr.trim(), '');
+      console.log('MP4 descargado y decodificado:', id);
     }
     if (out) await file.saveAs(`${out}/${engine}-${id}.${ext}`);
     console.log('Entregar:', id, bytes.length);

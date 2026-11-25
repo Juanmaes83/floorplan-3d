@@ -37,8 +37,11 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`dec
  // Phone regression from human QA: while the wall properties drawer is open, sticky «Inicio» must have an opaque
  // separation from horizontally scrolled header controls and neither open nor closed state may create page overflow.
  if(mobile){
-  const shell=()=>page.evaluate(()=>{const b=document.querySelector('#welcomeBtn'),s=getComputedStyle(b);return {overflow:document.documentElement.scrollWidth>window.innerWidth+1,marginRight:parseFloat(s.marginRight)||0,shadow:s.boxShadow,drawer:!!document.querySelector('aside.right.open')};});
-  let m=await shell();assert.equal(m.drawer,true);assert.equal(m.overflow,false);assert.ok(m.marginRight>=10,'Inicio keeps a gutter from scrolled controls');assert.notEqual(m.shadow,'none');
+  const shell=()=>page.evaluate(()=>{const b=document.querySelector('#welcomeBtn'),s=getComputedStyle(b),row=b.closest('.perla-left'),rect=b.getBoundingClientRect(),next=[...(row?.children||[])].find(el=>el!==b&&el.checkVisibility());
+   const gap=next?next.getBoundingClientRect().left-rect.right:null;
+   const clear=b.contains(document.elementFromPoint((rect.left+rect.right)/2,(rect.top+rect.bottom)/2));
+   return {perla:!!row,gap,clear,overflow:document.documentElement.scrollWidth>window.innerWidth+1,marginRight:parseFloat(s.marginRight)||0,shadow:s.boxShadow,drawer:!!document.querySelector('aside.right.open')};});
+  let m=await shell();assert.equal(m.drawer,true);assert.equal(m.overflow,false);if(m.perla){assert.ok(m.gap>=3,'Inicio keeps separation from adjacent controls');assert.equal(m.clear,true,'Inicio receives the touch');}else{assert.ok(m.marginRight>=10,'Inicio keeps a gutter from scrolled controls');assert.notEqual(m.shadow,'none');}
   await page.evaluate(()=>closeDrawers());await page.waitForTimeout(150);m=await shell();assert.equal(m.drawer,false);assert.equal(m.overflow,false);
   await press('#fab [data-a=prop]');await page.waitForTimeout(150);assert.equal((await shell()).drawer,true);
  }

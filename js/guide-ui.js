@@ -399,7 +399,18 @@
   const DPRIO={architecture:['D2','D1','D3','S2','T2'],'real-estate':['P3','P7','P1','P2','P5'],developer:['P6','D3','P1','P2','D2'],renovation:['T2','S1','D1','D4','P1'],interior:['P5','P2','P1','P3','P7'],construction:['S1','P4','D4','D1','P7'],'':['D2','P1','P3','P7','S1']};
   // Encuentra la tarjeta en Entregar y deja el foco en su acción (retorno al contexto, no a la Home).
   function openDeliver(code){if(!window.FloorPlanProfessionalUI)return toast(tx('Esta área no está disponible en esta página.','This area is not available on this page.','此页面无法使用该区域。'),5000);closeWelcome();FloorPlanProfessionalUI.open('deliver');let n=0;
-   const find=()=>{const c=document.querySelector(`#professionalWorkspace [data-entrega-code="${code}"]`);if(c){c.scrollIntoView({block:'center',behavior:'auto'});(c.querySelector('button:not([disabled]),a[href]')||c).focus({preventScroll:true});return;}if(++n<40)setTimeout(find,100);};setTimeout(find,60);}
+   const find=()=>{
+    const card=document.querySelector(`#professionalWorkspace [data-entrega-code="${code}"]`);
+    const action=card&&[...card.querySelectorAll('button:not([disabled]),a[href]')]
+     .find(control=>control.checkVisibility({visibilityProperty:true}));
+    if(action){
+     card.scrollIntoView({block:'center',behavior:'auto'});
+     action.focus({preventScroll:true});
+     return;
+    }
+    if(++n<40)setTimeout(find,100);
+   };
+   setTimeout(find,60);}
   const deliv=el('section',undefined,audienceSection,'welcome-deliverables');deliv.id='welcomeDeliverables';deliv.setAttribute('aria-labelledby','welcomeDeliverablesTitle');
   const dItem=(d,parent,tag='article')=>{const [code,,img,name,what,format,req,signed]=d;const card=el(tag,undefined,parent,'deliverable');card.dataset.entregaCode=code;
    const fig=el('div',undefined,card,'deliverable-thumb');if(img){realImg(fig,img,label(name)+' · '+tx('captura real de RUBIK','real RUBIK capture','RUBIK 真实截图'));}else{fig.classList.add('is-empty');el('span',code,fig);}

@@ -65,8 +65,8 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'recording never changes the project');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
 });
-// Exportar el vuelo de dron (433 fotogramas a 640×360) cuesta ~200 s de render por CPU en SwiftShader (456 ms/fotograma;
-// preparación 0,9 s, codificación 0,06 s): ver docs/integration/perla-ci-322/sculpt-dron-fases.txt y film.cjs.
+// Keep desktop entry-point coverage and the complete 433-frame export. Use a smaller 3D canvas for the
+// readback on software-rendered runners; the exported size, duration and frame assertions stay the same.
 test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 600000}, async t => {
  const context=await browser.newContext({viewport:{width:1440,height:900}});
  t.after(()=>context.close());
@@ -110,10 +110,14 @@ test('SCULPT plan and drone use the active project and the presentation recorder
   for(const key of ['position','quaternion','target'])view.pose[key]=view.pose[key].map(value=>Number(value.toFixed(9)));
   return view;
  });
+ await page.setViewportSize({width:960,height:540});
+ await page.waitForFunction(()=>document.querySelector('#view3d canvas')?.clientWidth<=960);
  const originalView=await readView();
+ await page.exposeFunction('reportDroneProgress',(phase,progress)=>console.log(`SCULPT ${phase}: ${Math.round(progress*100)}%`));
  const moved=await page.evaluate(async()=>{
   const before=View3D.presentationPose().position.toString(),control=new AbortController();
   let moved=false;
+  await window.reportDroneProgress('preview',0);
   try{await FloorPlanPresentationFilm.previsualizar({drone:true,signal:control.signal,onProgress:progress=>{
    moved ||= before!==View3D.presentationPose().position.toString();
    if(progress>0)control.abort();
@@ -123,7 +127,12 @@ test('SCULPT plan and drone use the active project and the presentation recorder
  assert.equal(moved,true);
  assert.deepEqual(await readView(),originalView,'cancel restores the view');
  const flight=await page.evaluate(async()=>{
-  const output=await FloorPlanPresentationFilm.exportar({drone:true,width:640,height:360,fps:8});
+  await window.reportDroneProgress('export',0);
+  let milestone=0;
+  const output=await FloorPlanPresentationFilm.exportar({drone:true,width:640,height:360,fps:8,onProgress:progress=>{
+   if(progress>=milestone+.25){milestone+=.25;void window.reportDroneProgress('render',milestone);}
+  }});
+  await window.reportDroneProgress('export',1);
   const bytes=new Uint8Array(await output.blob.arrayBuffer());
   return {bytes:Array.from(bytes),frames:output.frames,ms:output.durationMs,type:output.type};
  });

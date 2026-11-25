@@ -153,8 +153,17 @@ test('Entregar · vídeo real con firma de «Mi estudio», reproducido y descarg
   await page.evaluate(() => { const s = FloorPlanBrandUI.store, p = FloorPlanBrand.saveProfile(s, { name: 'Estudio Prueba BP-DP', tagline: 'Arquitectura clara', cta: 'Pide cita', web: 'https://estudio-prueba.es' });
     FloorPlanBrand.setDelivery(s, FloorPlanApp.entryId, { profileId: p.id, title: 'Vivienda de ejemplo', hero: { cliente: 'Cliente sin autorizar', clienteAutorizado: false, cierre: '', estilo: 'cine', incluirWeb: true } }); });
   // Cancelar durante la preparación del vídeo de Blueprint: vuelve a la tarjeta, sin salida.
-  const cancelAction = await deliveryAction(page, 'bpdpVideo-blueprint'); await cancelAction.focus(); const o0 = await origin(page);
-  await cancelAction.click(); await page.waitForSelector('dialog.bpdp-host .modal [data-a="cancel"]'); await page.waitForTimeout(1500); await page.click('dialog.bpdp-host .modal [data-a="cancel"]');
+  const cancelAction = await deliveryAction(page, 'bpdpVideo-blueprint');
+  // Capture the real activation position after Playwright's scroll, including any brand refresh before the click.
+  await page.evaluate(() => document.addEventListener('click', event => {
+    const action = event.target.closest('#bpdpVideo-blueprint, [data-perla-mirror="bpdpVideo-blueprint"]');
+    if (action) window.__bpdpCancelOrigin = { area: FloorPlanProfessionalUI.area, focus: 'bpdpVideo-blueprint',
+      open: !!document.querySelector('dialog.bpdp-host'), top: Math.round(action.getBoundingClientRect().top) };
+  }, { capture: true, once: true }));
+  await cancelAction.click();
+  const o0 = await page.evaluate(() => window.__bpdpCancelOrigin);
+  assert.ok(o0, 'captured the clicked action');
+  await page.waitForSelector('dialog.bpdp-host .modal [data-a="cancel"]'); await page.waitForTimeout(1500); await page.click('dialog.bpdp-host .modal [data-a="cancel"]');
   await page.waitForFunction(() => window.BPDP === null); { const o1 = await origin(page);
     // La firma cambió mientras Entregar estaba abierto: lo que se exige es volver a la MISMA tarjeta, en la misma posición de pantalla.
     assert.deepEqual({ area: o1.area, focus: o1.focus, open: o1.open }, { area: o0.area, focus: o0.focus, open: o0.open }, 'cancelar vuelve a la tarjeta');
