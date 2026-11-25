@@ -8,8 +8,9 @@ let server,browser,url;
 before(async()=>{server=createServer((req,res)=>{try{const u=decodeURIComponent(new URL(req.url,'http://l').pathname),file=path.resolve(root,'.'+(u.endsWith('/')?u+'index.html':u));if(!file.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',TYPES[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file));}catch{res.statusCode=404;res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
  browser=await chromium.launch({executablePath:process.env.CHROME||undefined});});
+after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 for(const [viewport,touch] of [[{width:1440,height:900},false],[{width:390,height:844},true]])
-test(`memoria consentida y rechazo cliente ${viewport.width}x${viewport.height}`,{timeout:600000},async t=>{
+test(`memoria consentida y rechazo cliente ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
  const context=await browser.newContext({viewport,isMobile:touch,hasTouch:touch});t.after(()=>context.close());const external=[],sent=[];
  await context.route('**/*',r=>{const u=new URL(r.request().url());if(u.hostname!=='127.0.0.1'){external.push(u.hostname);return r.abort();}if(r.request().method()!=='GET')sent.push(u.pathname);return r.continue();});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -21,7 +22,7 @@ test(`memoria consentida y rechazo cliente ${viewport.width}x${viewport.height}`
  assert.match(await page.locator('#memScope').textContent(),/no es privada ni separa de forma segura/);
  for(const id of ['memKeep','memErase'])assert.ok((await page.locator('#'+id).boundingBox()).height>=44||!touch,id+' 44 px');
  // Sin consentimiento: campos desactivados y nada guardado.
- assert.equal(await page.locator('#memFields').isDisabled(),true);
+ assert.equal(await page.locator('#memFields').evaluate(e=>e.disabled),true);
  assert.equal(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('rubik-asistente')).length),0);
  await press('#memConsent');await page.waitForFunction(()=>!document.getElementById('memFields').disabled);
  await page.locator('#memPref').fill('Ana');await page.locator('#memNote').fill('IBAN ES91 2100 0418 4502 0005 1332');await press('#memKeep');
