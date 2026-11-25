@@ -9,7 +9,8 @@
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const TOKEN_KEY='rubik-render-token',ENDPOINT='api/render';
- const STYLES=()=>[['natural',tx('Luz natural','Natural light','自然光')],['warm',tx('Cálido','Warm','温暖')],['scandinavian',tx('Escandinavo','Scandinavian','北欧')],['premium',tx('Premium inmobiliario','Premium real estate','高端房产')]];
+ // Catálogo canónico (js/render-styles.js): las etiquetas y los ids son los mismos que en la API y en Home.
+ const STYLES=()=>window.RubikRenderStyles.STYLES.map(s=>[s.id,tx(s.es,s.en,s.zh)]);
  // B8: alternatives of finishes, from the server's closed lists (api/render.js FLOORS/WALLS). Empty = keep as is.
  const FLOORS=()=>[['',tx('Sin cambiar','Keep as is','保持不变')],['light-oak',tx('Roble claro','Light oak','浅色橡木')],['walnut',tx('Nogal','Walnut','胡桃木')],['microcement',tx('Microcemento','Microcement','微水泥')],['marble',tx('Mármol blanco','White marble','白色大理石')],['terrazzo',tx('Terrazo','Terrazzo','水磨石')],['large-tile',tx('Porcelánico gran formato','Large-format porcelain','大板瓷砖')]];
  const WALLS=()=>[['',tx('Sin cambiar','Keep as is','保持不变')],['white',tx('Blanco mate','Matte white','哑光白')],['warm-white',tx('Blanco cálido','Warm white','暖白')],['sage',tx('Verde salvia','Sage green','鼠尾草绿')],['sand-plaster',tx('Estuco arena','Sand plaster','沙色灰泥')],['grey-blue',tx('Gris azulado','Grey blue','灰蓝')]];
@@ -64,7 +65,13 @@
   const compare=el('div',undefined,dialog,'ai-render-compare');
   const fig=(src,cap,cls)=>{const f=el('figure',undefined,compare,cls);const i=el('img',undefined,f);i.src=src;i.alt=cap;el('figcaption',cap,f);return f;};
   fig(current.dataUrl,tx('Vista real del proyecto','Real project view','项目真实视图'),'is-real');
-  if(result){fig(result.image,tx('Render IA (orientativo)','AI render (orientative)','AI 渲染（参考）')+(finishText(result)?' · '+finishText(result):''),'is-ai');const u=el('p',usageText(result),dialog,'ai-render-usage');u.id='aiRenderUsage';const dl=el('button',tx('Descargar render IA','Download AI render','下载 AI 渲染'),dialog,'btn');dl.type='button';dl.id='aiRenderDownload';dl.onclick=()=>download(result);}
+  if(result){fig(result.image,tx('Render IA (orientativo)','AI render (orientative)','AI 渲染（参考）')+(finishText(result)?' · '+finishText(result):''),'is-ai');const u=el('p',usageText(result),dialog,'ai-render-usage');u.id='aiRenderUsage';const dl=el('button',tx('Descargar render IA','Download AI render','下载 AI 渲染'),dialog,'btn');dl.type='button';dl.id='aiRenderDownload';dl.onclick=()=>download(result);
+   // §3 · descargas 2K y 4K del render tal cual (sin banda), con su etiqueta nativa o reescalada y los píxeles reales del archivo.
+   const hi=el('div',undefined,dialog,'ai-render-hires');hi.id='aiRenderHires';const note=el('p','',hi,'ai-render-hires-note');note.hidden=true;
+   const img=new Image();img.onload=()=>{for(const o of RubikRenderResolution.options(img.naturalWidth,img.naturalHeight)){const b=el('button',tx('Descargar ','Download ','下载 ')+o.label,hi,'btn');b.type='button';b.id='aiRenderDownload-'+o.key;b.dataset.native=String(o.native);
+    b.onclick=async()=>{b.disabled=true;try{const f=await RubikRenderResolution.exportPng(result.image,o);const a=document.createElement('a');a.href=URL.createObjectURL(f.blob);a.download=`rubik-sota-render-ia-${result.style}-${o.key}-${f.width}x${f.height}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+     note.hidden=false;note.textContent=tx('Archivo descargado: ','Downloaded file: ','已下载文件：')+`${f.width} × ${f.height} px · `+(f.native?tx('nativo','native','原生'):tx('reescalado desde ','upscaled from ','放大自 ')+`${img.naturalWidth} × ${img.naturalHeight}`)+'. '+tx('Los pequeños detalles de tu proyecto en alta resolución 2K–4K.','The small details of your project in 2K–4K high resolution.','以 2K–4K 高分辨率呈现项目细节。');}
+     catch{note.hidden=false;note.textContent=tx('No se pudo preparar el archivo en esta resolución.','The file could not be prepared at this resolution.','无法以此分辨率准备文件。');}finally{b.disabled=false;}};}};img.src=result.image;}
   // Every alternative generated for this view in this session, to compare and go back to one.
   const others=[...results.entries()].filter(([k,r])=>r.viewId===current.id&&k===key(r.viewId,r.style,r.floor,r.walls));
   if(others.length>1||(others.length===1&&!result)){const alt=el('div',undefined,dialog,'ai-render-alternatives');alt.id='aiRenderAlternatives';el('p',tx('Alternativas generadas para esta vista (no cambian el proyecto; para usar un acabado, elígelo en Superficies):','Alternatives generated for this view (they do not change the project; to use a finish, choose it in Surfaces):','此视图已生成的替代方案（不更改项目）：'),alt);
@@ -76,5 +83,5 @@
    catch(e){draw(null,e.message);if(/código de acceso|access code/i.test(e.message))setToken('');}};
  }
  dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
- window.FloorPlanAIRender={open,render,download,get results(){return [...results.entries()].filter(([k,r])=>k===key(r.viewId,r.style,r.floor,r.walls)).map(([,r])=>r);},STYLES:()=>STYLES().map(s=>s[0])};
+ window.FloorPlanAIRender={open,render,download,hires:(result,key)=>{const i=new Image();return new Promise(r=>{i.onload=()=>r(RubikRenderResolution.exportPng(result.image,RubikRenderResolution.options(i.naturalWidth,i.naturalHeight).find(o=>o.key===key)));i.src=result.image;});},get results(){return [...results.entries()].filter(([k,r])=>k===key(r.viewId,r.style,r.floor,r.walls)).map(([,r])=>r);},STYLES:()=>STYLES().map(s=>s[0])};
 })();

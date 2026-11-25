@@ -26,11 +26,9 @@ const {timingSafeEqual}=require('node:crypto');
 const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&timingSafeEqual(x,y);};
 const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-1';
 const MAX_BYTES=3.5*1024*1024;
-const STYLES={
- natural:'natural daylight, soft realistic shadows, neutral contemporary finishes',
- warm:'warm evening light, cosy atmosphere, warm wood and textile tones',
- scandinavian:'Scandinavian style, light oak, white walls, soft textiles, bright diffuse daylight',
- premium:'premium real-estate photography look, refined materials, balanced high-end lighting'};
+// Catálogo canónico compartido con el cliente y Home (js/render-styles.js): mismos ids, alias de versiones anteriores.
+const CATALOG=require('../js/render-styles.js');
+const STYLES=CATALOG.prompts;
 // B8: material alternatives. Closed lists: the professional picks one, the server writes the words (no free text).
 const FLOORS={
  'light-oak':'light natural oak wooden plank floor',
@@ -113,7 +111,7 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
  const token=req.headers['x-rubik-render-token'];
  if(typeof token!=='string'||token.length>200||!same(token,env.RUBIK_RENDER_TOKEN)){meter.fail(now());return send(res,401,{error:'token'});}
  let body=req.body;if(typeof body==='string'){try{body=JSON.parse(body);}catch{return send(res,400,{error:'json'});}}
- const style=body?.style;if(!Object.hasOwn(STYLES,style))return send(res,400,{error:'style'});
+ const style=CATALOG.canonical(body?.style);if(!style)return send(res,400,{error:'style'});
  const floor=body?.floor??null,walls=body?.walls??null;
  if((floor!==null&&!Object.hasOwn(FLOORS,floor))||(walls!==null&&!Object.hasOwn(WALLS,walls)))return send(res,400,{error:'finish'});
  const image=parseImage(body?.image);if(!image)return send(res,400,{error:'image'});
