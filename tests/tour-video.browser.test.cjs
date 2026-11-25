@@ -65,7 +65,9 @@ test(`Phase B3: tour video preview is the downloaded file ${viewport.width}x${vi
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'recording never changes the project');
  assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
 });
-test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 240000}, async t => {
+// Exportar el vuelo de dron (433 fotogramas a 640×360) cuesta ~200 s de render por CPU en SwiftShader (456 ms/fotograma;
+// preparación 0,9 s, codificación 0,06 s): ver docs/integration/perla-ci-322/sculpt-dron-fases.txt y film.cjs.
+test('SCULPT plan and drone use the active project and the presentation recorder', {timeout: 600000}, async t => {
  const context=await browser.newContext({viewport:{width:1440,height:900}});
  t.after(()=>context.close());
  const page=await context.newPage(),errors=[];

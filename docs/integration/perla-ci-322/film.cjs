@@ -1,0 +1,9 @@
+// Fases de FloorPlanPresentationFilm.exportar: preparación (hasta el primer progreso), render (fotogramas), codificación (último progreso → archivo) y descarga.
+const {chromium}=require('playwright'),fs=require('fs');(async()=>{const [,,tree,mode,out]=process.argv;const s=await require(process.env.SERVE||'../probe/serve.cjs')(tree);const b=await chromium.launch();const p=await b.newPage({viewport:{width:1440,height:900}});
+await p.route('https://cdn.jsdelivr.net/**',r=>r.abort());await p.goto(`http://localhost:${s.address().port}/`);await p.locator('#welcomeExample').click();await p.waitForFunction(()=>window.FloorPlanPresentationFilm&&window.View3D);
+await p.evaluate(()=>FloorPlanApp.setSite({...FloorPlanApp.project.site,northOffsetDeg:0,location:{latitude:40.4,longitude:-3.7,timeZone:'Europe/Madrid',source:{providerId:'manual',type:'user-entered'}}}));
+await p.evaluate(()=>document.querySelector('[data-view="3d"]').click());await p.waitForFunction(()=>FloorPlanApp.viewMode==='3d',null,{timeout:60000});await p.waitForTimeout(4000);
+const r=await p.evaluate(async drone=>{const t0=performance.now();let first=null,last=null,n=0;const o=await FloorPlanPresentationFilm.exportar({drone,width:640,height:360,fps:8,onProgress:()=>{const t=performance.now();first??=t;last=t;n++;}});const t1=performance.now();
+ const buf=new Uint8Array(await o.blob.arrayBuffer());let bin='';for(let i=0;i<buf.length;i+=32768)bin+=String.fromCharCode(...buf.subarray(i,i+32768));const t2=performance.now();
+ return {frames:o.frames,type:o.type,bytes:buf.length,preparacion_s:(first-t0)/1000,render_s:(last-first)/1000,codificacion_s:(t1-last)/1000,descarga_s:(t2-t1)/1000,total_s:(t2-t0)/1000,ms_por_fotograma:Math.round((last-first)/Math.max(1,o.frames-1)),b64:btoa(bin)};},mode==='drone');
+fs.writeFileSync(out,Buffer.from(r.b64,'base64'));delete r.b64;console.log(JSON.stringify(r));await b.close();s.close();})();

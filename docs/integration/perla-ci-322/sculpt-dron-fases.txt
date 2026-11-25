@@ -1,0 +1,4 @@
+{"frames":433,"type":"video/mp4","bytes":3206767,"preparacion_s":0.9136000000000931,"render_s":197.0145,"codificacion_s":0.059100000000093134,"descarga_s":1.3006000000000932,"total_s":199.2878000000003,"ms_por_fotograma":456}
+stream|codec_name=h264|width=640|height=360|r_frame_rate=8/1|nb_frames=433
+format|duration=54.125000
+ffmpeg: decodificación completa sin errores
