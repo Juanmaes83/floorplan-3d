@@ -33,7 +33,9 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  let j=await journey(page);await shot(page,'v5-02-recorrido-obra',{escenario:'Recorrido de obra',observado:j?.sum});
  S.check('N.3','Presupuestar muestra el «Recorrido de obra» con 5 pasos ordenados y un siguiente paso',j&&j.steps.length===5&&j.next==='precios',{observed:j});
  await rotulo(page,'El recorrido me dice qué hacer primero: poner precio a las partidas.');
- await page.locator('[data-journey="precios"]').click();await page.waitForSelector('#budgetDialog[open]');
+ await page.locator('[data-journey="precios"]').click();
+ await page.waitForSelector('[data-route="budget-edit"]:focus');await page.locator('[data-route="budget-edit"]:focus').click();
+ await page.waitForSelector('#budgetDialog[open]');
  const n=await page.locator('#budgetDialog [data-field="price"]').count();
  for(let i=0;i<n;i++){const inp=page.locator('#budgetDialog [data-field="price"]').nth(i);await inp.fill(String(20+i));await inp.press('Tab');}
  await page.waitForTimeout(300);const tot=await page.locator('#budgetTotals').innerText();
@@ -41,7 +43,9 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  await shot(page,'v5-03-presupuesto',{escenario:'Presupuesto'});await page.locator('#budgetClose').click();await page.waitForTimeout(700);
  j=await journey(page);S.check('N.5','Tras poner precios, el paso 1 queda hecho y el siguiente es crear el plan',j?.steps[0].state==='done'&&j.next==='plan',{observed:j?.sum});
  // Plan de obra
- await rotulo(page,'Paso 2: crear el plan de obra.');await page.locator('[data-journey="plan"]').click();await page.waitForSelector('#planDialog[open]');
+ await rotulo(page,'Paso 2: crear el plan de obra.');await page.locator('[data-journey="plan"]').click();
+ await page.waitForSelector('[data-route="construction-plan"]:focus');await page.locator('[data-route="construction-plan"]:focus').click();
+ await page.waitForSelector('#planDialog[open]');
  await page.locator('#planCreate').click();await page.waitForTimeout(300);
  const addTask=async({title,start,end,filter,pickN=2,item=true,dep=null,milestone=false})=>{
   await page.locator(milestone?'#planAddMilestone':'#planAddTask').click();await page.fill('#taskTitle',title);await page.fill('#taskStart',start);if(!milestone)await page.fill('#taskEnd',end);

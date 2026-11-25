@@ -58,8 +58,7 @@
    for(const card of $$('#professionalWorkspace .professional-card')){const h=(card.querySelector('h2,h3')?.textContent||'').trim();const m=STATES.find(([re])=>re.test(h));if(!m)continue;
     c[m[1]]++;if(card.dataset.sem!==m[1])card.dataset.sem=m[1];}
    const intro=$('#professionalWorkspace .professional-intro');if(intro&&(c.ok+c.pend+c.req)){let w=intro.nextElementSibling;if(!w?.classList.contains('perla-sem-host')){w=el('div','perla-sem-host',null);intro.after(w);}bar(w,c,tx('Estado del análisis','Analysis status','分析状态'));}}
-  // Recorrido de obra: semáforo en sus pasos. Sus botones se conservan: son el camino guiado paso a paso (decisión
-  // documentada: misma acción que la ficha, ordenada como flujo de trabajo).
+  // Recorrido de obra: el semáforo refleja el estado de cada paso de la guía.
   for(const li of $$('#professionalWorkspace .cx-jstep')){const k=li.dataset.state==='done'?'ok':li.dataset.state==='next'?'pend':'req';if(li.dataset.sem!==k)li.dataset.sem=k;
    }}
 
