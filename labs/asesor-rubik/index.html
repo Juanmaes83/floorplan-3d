@@ -27,13 +27,18 @@
     <option value="interior">Decoración e interiorismo</option>
     <option value="construction">Constructora / jefe de obra</option>
    </select></label>
+   <label>Conexión <select id="transport">
+    <option value="sim" selected>Simulada (sin servicio externo)</option>
+    <option value="live">Nuance Live (requiere autorización)</option>
+   </select></label>
+   <label class="op" id="opRow" hidden>Código de operador <input id="opCode" type="password" autocomplete="off" placeholder="Código del Preview"></label>
    <fieldset class="mode"><legend>Modo</legend>
     <label><input type="radio" name="mode" value="cliente" checked> Cliente (solo consulta)</label>
     <label><input type="radio" name="mode" value="tecnico"> Técnico</label>
    </fieldset>
   </div>
   <div class="avatar-row">
-   <div class="avatar" id="avatar" role="img" aria-label="Avatar del asesor, una IA"><span>IA</span></div>
+   <div class="avatar" id="avatar" role="img" aria-label="Avatar del asesor, una IA"><span>IA</span><video id="avatarVideo" playsinline muted hidden></video><audio id="avatarAudio" hidden></audio></div>
    <div class="status"><strong id="state" aria-live="polite">Listo para empezar</strong><p class="note">El asesor solo empieza cuando tú lo pulsas. No usa cámara ni micrófono en este laboratorio.</p></div>
   </div>
   <p class="subtitle" id="subtitle" aria-live="polite"></p>
@@ -71,6 +76,7 @@
 </main>
 <script src="tools.js"></script>
 <script src="adapter.js"></script>
+<script src="nuance-adapter.js"></script>
 <script src="lab.js"></script>
 </body>
 </html>

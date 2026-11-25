@@ -1,6 +1,6 @@
 /* Asesor RUBIK en vivo · LABORATORIO SIMULADO · interfaz. Une el adaptador simulado con RUBIK real (iframe). */
 (function(){'use strict';
- const $=s=>document.querySelector(s),frame=$('#rubik');let sim=null,rubik=null,lastFail='';
+ const $=s=>document.querySelector(s),frame=$('#rubik');let sim=null,rubik=null,lastFail='',textMode=false;
  const log=(t,cls='')=>{const li=document.createElement('li');li.textContent=t;if(cls)li.className=cls;$('#log').prepend(li);};
  const setLive=on=>{for(const e of [$('#say'),$('#sayBtn'),...document.querySelectorAll('#chips .chip')])e.disabled=!on;$('#close').disabled=!on&&sim?.state!=='connecting';$('#start').disabled=on||sim?.state==='connecting';};
  const STATE={connecting:'Conectando… (simulado)',live:'En conversación · sesión simulada',ended:'Conversación terminada',error:'No se pudo continuar',idle:'Listo para empezar'};
@@ -12,6 +12,9 @@
    const s=document.createElement('p');s.className='muted';s.textContent='Fuente: '+r.fuente+' (motor de RUBIK sobre el proyecto activo).';box.append(s);return;}
   const p=document.createElement('p');p.className='ok';p.textContent=name==='enfocar_estancia'?`✓ ${r.data.estancia} seleccionada en el plano.`:name==='continuar_por_texto'?'✓ Asistente de texto abierto en RUBIK.':'✓ Hecho.';box.append(p);}
  function onEvent(e){
+  if(e.type==='session'){log('Conversación creada por el servidor · tope '+e.maxSessionSeconds+' s · herramientas: '+(e.tools||[]).join(', '));}
+  if(e.type==='provider_event')log('Evento: '+e.name);
+  if(e.type==='speaking'){const v=$('#avatarVideo');if(v.srcObject){v.hidden=false;}}
   if(e.type==='state'){$('#state').textContent=STATE[e.state]||e.state;setLive(e.state==='live');if(e.state!=='live')$('#avatar').classList.remove('speaking');log('Estado: '+(STATE[e.state]||e.state));}
   if(e.type==='speaking')$('#avatar').classList.toggle('speaking',!!e.on);
   if(e.type==='subtitle')$('#subtitle').textContent=e.text;
@@ -23,18 +26,28 @@
   if(e.type==='blocked')log('Inicio bloqueado: hace falta que lo pulses tú.','denied');}
  function ready(){const w=frame.contentWindow;return !!(w&&w.FloorPlanApp?.project&&w.RubikAssistantDomainTools&&w.RubikAssistantUI&&typeof w.select==='function');}
  // Vivienda de ejemplo en el visor (la misma que abre «Ver ejemplo» en la Home).
- frame.addEventListener('load',()=>{const w=frame.contentWindow;const t=setInterval(()=>{const b=w.document.querySelector('#welcomeExample');if(b&&w.FloorPlanApp){clearInterval(t);b.click();setTimeout(()=>{rubik=AsesorSim.rubikBridge(w);document.body.dataset.ready='1';log('Visor listo: vivienda de ejemplo');},600);}},150);});
+ frame.addEventListener('load',()=>{const w=frame.contentWindow;const t=setInterval(()=>{const b=w.document.querySelector('#welcomeExample');if(b&&w.FloorPlanApp){clearInterval(t);b.click();setTimeout(()=>{rubik=AsesorSim.rubikBridge(w);rubik.advisorText=()=>setTimeout(()=>{if(sim&&sim.state!=='ended')sim.close();textMode=true;$('#say').disabled=false;$('#sayBtn').disabled=false;for(const c of document.querySelectorAll('#chips .chip'))c.disabled=false;$('#state').textContent='Por texto con el asesor (mismas consultas del modo cliente)';$('#say').focus();},0);document.body.dataset.ready='1';log('Visor listo: vivienda de ejemplo');},600);}},150);});
  $('#start').addEventListener('click',e=>{if(!ready()){log('El visor aún no está listo.','denied');return;}
   $('#error').hidden=true;sim?.close();lastFail=$('#failSel').value;
-  sim=new AsesorSim.SimAdapter({rubik,profile:$('#profile').value,mode:document.querySelector('input[name=mode]:checked').value,onEvent,failWith:lastFail||null});
+  const mode=document.querySelector('input[name=mode]:checked').value,profile=$('#profile').value;
+  if($('#transport').value==='live'){
+   // Conexión real: solo modo cliente; el servidor decide si está habilitada (cerrada por defecto).
+   if(mode!=='cliente'){log('La conexión real solo admite el modo cliente en este piloto.','denied');return;}
+   sim=new AsesorNuance.NuanceLiveAdapter({rubik,profile,mode,onEvent,operatorCode:$('#opCode').value,allowMock:new URLSearchParams(location.search).get('mock-provider')==='1',
+    avatar:{video:$('#avatarVideo'),audio:$('#avatarAudio')}});
+  }else sim=new AsesorSim.SimAdapter({rubik,profile,mode,onEvent,failWith:lastFail||null});
   sim.start(e);});
+ $('#transport').addEventListener('change',()=>{const live=$('#transport').value==='live';$('#opRow').hidden=!live;$('#badgeSim').textContent=live?'Conexión real (Preview privado)':'Sesión simulada';$('#badgeOff').hidden=live;sim?.close();});
  $('#close').addEventListener('click',()=>{sim?.close();$('#subtitle').textContent='';$('#start').focus();});
  $('#retry').addEventListener('click',e=>{$('#error').hidden=true;if(!sim?.retry(e)){$('#retry').hidden=true;}});
- const toText=()=>{sim?.close();if(!ready())return;rubik.openTextAssistant(null);log('Continuar por texto: Asistente de texto de RUBIK abierto (sin traspasar conversación).','ok');};
+ const toText=()=>{sim?.close();if(!ready())return;const mode=document.querySelector('input[name=mode]:checked').value;
+  if(mode==='cliente'){rubik.advisorText();log('Continuar por texto: con el asesor, mismas consultas del modo cliente (sin costes internos ni edición).','ok');}
+  else{rubik.openTextAssistant(null);log('Continuar por texto: Asistente de texto de RUBIK abierto (sin traspasar conversación).','ok');}};
  $('#toText').addEventListener('click',toText);$('#errToText').addEventListener('click',()=>{$('#error').hidden=true;toText();});
  $('#dropConn').addEventListener('click',()=>sim?.simulate('connection_lost'));
- $('#talk').addEventListener('submit',e=>{e.preventDefault();const t=$('#say').value.trim();if(!t)return;$('#say').value='';sim?.hear(t);});
- for(const c of document.querySelectorAll('#chips .chip'))c.addEventListener('click',()=>sim?.hear(c.dataset.say));
+ const say=t=>{if(sim&&sim.state==='live')return sim.hear(t);if(textMode&&rubik){const s=new AsesorSim.SimAdapter({rubik,profile:$('#profile').value,mode:'cliente',onEvent});s.state='live';s.projectId=rubik.project()?.id;s._say=()=>{};return s.hear(t);}};
+ $('#talk').addEventListener('submit',e=>{e.preventDefault();const t=$('#say').value.trim();if(!t)return;$('#say').value='';say(t);});
+ for(const c of document.querySelectorAll('#chips .chip'))c.addEventListener('click',()=>say(c.dataset.say));
  for(const r of document.querySelectorAll('input[name=mode]'))r.addEventListener('change',()=>{if(sim&&sim.state==='live'){sim.close();log('Modo cambiado: la conversación se cerró; vuelve a iniciarla.');}});
  // Cambio de proyecto en el visor → desvincular la conversación.
  setInterval(()=>{if(sim&&sim.state==='live'&&rubik&&rubik.project()?.id!==sim.projectId)sim.unbind();},500);

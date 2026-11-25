@@ -72,11 +72,17 @@ test(`Asesor RUBIK · laboratorio simulado ${viewport.width}x${viewport.height}`
 
  // 6 · Recorrido 3: continuar con el Asistente de texto real.
  await press('#chips .chip[data-say*="texto"]');await page.waitForTimeout(400);
- assert.equal(await frame().evaluate(()=>RubikAssistantUI.state.open),true,'el Asistente de texto de RUBIK está abierto');
+ // Modo cliente: el texto sigue en el asesor con las mismas consultas; NO se abre el Asistente completo (costes internos).
+ assert.equal(await frame().evaluate(()=>RubikAssistantUI.state.open),false,'modo cliente: no abre el Asistente completo de RUBIK');
+ assert.match(await page.locator('#state').textContent(),/Por texto con el asesor/);assert.equal(await page.locator('#say').isDisabled(),false,'se puede seguir escribiendo');
  await page.screenshot({path:path.join(shots,`${name}-04-asistente-texto.png`)});
- await frame().evaluate(()=>RubikAssistantUI.close());
+ // Por texto, una acción privada sigue rechazada (el traspaso no amplía el acceso).
+ await page.evaluate(()=>document.querySelector('#results').replaceChildren());await page.fill('#say','¿Cuánto cuesta la reforma?');await press('#sayBtn');
+ await page.locator('#results .denied').waitFor();assert.equal(await page.locator('#results .denied').getAttribute('data-denied'),'not_allowed_in_mode','por texto también se rechaza');
 
  // 7 · Cierre: libera recursos y temporizadores; el foco vuelve a «Iniciar».
+ // Pasar a texto ya cerró la voz: se inicia otra conversación para comprobar el cierre explícito.
+ await press('#start');await page.waitForFunction(()=>AsesorLab.sim?.state==='live');
  await press('#close');const closed=await page.evaluate(()=>({state:AsesorLab.sim.state,res:AsesorLab.sim.resources,timers:AsesorLab.sim.timers.size}));
  assert.deepEqual(closed,{state:'ended',res:0,timers:0},'cerrar limpia los recursos');
  assert.equal(await page.evaluate(()=>document.activeElement?.id),'start','el foco vuelve a «Iniciar conversación»');
@@ -111,7 +117,7 @@ test(`Asesor RUBIK · laboratorio simulado ${viewport.width}x${viewport.height}`
  assert.match(await page.locator('#state').textContent(),/proyecto activo cambió/);
 
  // 11 · Red: CERO peticiones a Nuance (ni a ningún host externo salvo el CDN bloqueado del visor).
- const nuance=requests.filter(u=>/nuance/i.test(u));assert.deepEqual(nuance,[],'cero peticiones a Nuance');
+ const nuance=requests.filter(u=>{try{const x=new URL(u);return /nuance/i.test(x.host)||x.pathname.startsWith('/api/advisor-session');}catch{return false;}});assert.deepEqual(nuance,[],'cero peticiones a Nuance ni al servidor de voz en modo simulado');
  const external=requests.filter(u=>!u.startsWith('http://127.0.0.1')&&!u.startsWith('data:')&&!u.startsWith('blob:')&&!u.startsWith('https://cdn.jsdelivr.net/'));
  assert.deepEqual(external,[],'ninguna petición a servicios externos');
  fs.writeFileSync(path.join(shots,`${name}-red.json`),JSON.stringify({total:requests.length,nuance:nuance.length,externos:external.length,hosts:[...new Set(requests.map(u=>{try{return new URL(u).host;}catch{return u.slice(0,20);}}))]},null,1));

@@ -30,7 +30,10 @@
   T('continuar_por_texto','Abre el Asistente de texto de RUBIK. Solo se traspasa el texto que la persona autoriza.',
    {type:'object',properties:{pregunta:{type:'string',description:'Pregunta a traspasar, solo si la persona lo autoriza'}},required:[],additionalProperties:false},
    {readOnlyHint:true,destructiveHint:false},
-   (rubik,args)=>{rubik.openTextAssistant(args.pregunta||null);return {ok:true,data:{abierto:true,traspaso:args.pregunta?'pregunta autorizada':'ninguno'}};}),
+   // Modo cliente: el texto sigue DENTRO del asesor con la misma lista de consultas (el Asistente completo de RUBIK es del
+   // profesional y consulta costes internos: abrirlo aquí ampliaría el acceso). Modo técnico: Asistente de texto de RUBIK.
+   (rubik,args,session)=>{if(session?.mode==='cliente'){rubik.advisorText?.(args.pregunta||null);return {ok:true,data:{abierto:'texto del asesor',consultas:'las mismas del modo cliente',traspaso:args.pregunta?'pregunta autorizada':'ninguno'}};}
+    rubik.openTextAssistant(args.pregunta||null);return {ok:true,data:{abierto:'Asistente de texto de RUBIK',traspaso:args.pregunta?'pregunta autorizada':'ninguno'}};}),
   // ---- Fuera del modo cliente (datos internos o cambios). Existen en la lista para poder RECHAZARLAS en ejecución. ----
   T('resumen_presupuesto','Importes del presupuesto del proyecto (costes internos del profesional).',none,
    {readOnlyHint:true,destructiveHint:false},
@@ -71,7 +74,7 @@
   if(!t.annotations.readOnlyHint)return {ok:false,code:'confirmation_required',motivo:'Los cambios solo se proponen y se confirman en RUBIK.'};
   return {ok:true,tool:t};}
  function run(session,name,args={}){const a=authorize(session,name,args);if(!a.ok)return {ok:false,error:a.code,motivo:a.motivo};
-  try{return a.tool.run(session.rubik,args);}catch(e){return {ok:false,error:'tool_failed',motivo:String(e.message||e)};}}
+  try{return a.tool.run(session.rubik,args,session);}catch(e){return {ok:false,error:'tool_failed',motivo:String(e.message||e)};}}
 
  root.AsesorTools=Object.freeze({TOOLS:TOOLS.map(t=>t.name),PROFILES,MODES,allowed,definitions,authorize,run,MAX_TOOLS});
 })(typeof self!=='undefined'?self:globalThis);
