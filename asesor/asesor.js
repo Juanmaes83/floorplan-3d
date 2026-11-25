@@ -10,6 +10,7 @@
   const start = byId('start');
   const close = byId('close');
   const state = byId('state');
+  const idleAnswer = results.textContent;
   const format = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
   let active = false;
   let summary = '';
@@ -70,7 +71,7 @@
       const room = findRoom(question);
       button.textContent = index === 1
         ? (room ? 'Ver ficha: ' + room.name : 'Ver superficies de las estancias')
-        : question;
+        : (index === 0 && profile.value === 'real-estate' ? '¿Cuál es la superficie útil de la vivienda?' : question);
       button.disabled = !active;
       button.addEventListener('click', () => {
         if (index === 2) continueByText();
@@ -100,9 +101,10 @@
     active = value;
     profile.disabled = value;
     start.disabled = value;
+    start.hidden = value;
     close.disabled = !value;
     text.hidden = true;
-    results.replaceChildren();
+    results.textContent = value ? 'Elige una pregunta para ver la respuesta aquí.' : idleAnswer;
     byId('handoff').textContent = '';
     byId('question').value = '';
     byId('textAnswer').textContent = '';
