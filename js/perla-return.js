@@ -39,7 +39,8 @@
   const r2=$('.perla-r2'),b=ensureBtn();
   if(a==='design'&&pending&&r2){if(b.parentElement!==r2)r2.prepend(b);b.textContent='← '+tx('Volver a ','Back to ','返回 ')+label(pending.area);b.hidden=false;}
   else b.hidden=true;}
- function goBack(){const p=pending;if(!p)return;pending=null;PW()?.open(p.area);
+ function goBack(){const p=pending;if(!p)return;pending=null;origin=null;// volver no crea un retorno nuevo (evita el vaivén entre dos áreas)
+ PW()?.open(p.area);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{const s=section();if(s){s.scrollTop=p.y;
     // Misma posición en pantalla: la acción pulsada vuelve a quedar donde estaba.
     const el=p.route&&[...s.querySelectorAll(`[data-route="${p.route}"]`)].find(e=>e.checkVisibility());if(el)s.scrollTop+=el.getBoundingClientRect().top-p.top;}
