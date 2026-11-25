@@ -42,3 +42,5 @@ label.op input{min-width:200px}
 .mentor-q{margin:0;font-weight:600}.mentor-q:empty{display:none}.mentor-out{margin:0;padding:8px 12px;background:#e9f5ee;border-radius:8px}.mentor-out:empty{display:none}
 .mentor-warn{margin:0;padding-left:18px;color:var(--bad);font-size:13px}.mentor .row input{flex:1;min-width:0}
 [hidden]{display:none!important}
+.profile-intro{margin:0 0 10px}.profile-greeting{margin:0 0 2px;font-weight:600}.profile-tone{margin:0}
+.back-home{display:inline-flex;align-items:center;min-height:44px;margin-bottom:4px;color:#1f5f5b;font-weight:600}

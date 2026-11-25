@@ -251,6 +251,11 @@
    const text=el('div',undefined,purpose,'welcome-audience-purpose-text');
    el('p',label(audiencePurpose[audience]),text);const row=el('div',undefined,text,'welcome-audience-actions');
    btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
+   // §2 · «Hablar con el Asesor» junto al retrato: abre el Asesor (demo simulada) con esta profesión ya elegida.
+   // No inicia ninguna conversación: allí empieza solo si la persona pulsa «Iniciar conversación». La consulta guiada sigue en su entrada.
+   const advisorUrl='labs/asesor-rubik/?perfil='+encodeURIComponent(audience)+'&desde=home';
+   const talk=btn('welcomeAudienceAdvisor',tx('Hablar con el Asesor','Talk to the Advisor','与顾问交谈'),()=>location.assign(advisorUrl),row);talk.dataset.href=advisorUrl;
+   talk.setAttribute('aria-label',tx('Hablar con el Asesor como ','Talk to the Advisor as ','以此职业与顾问交谈：')+label(audiences.find(a=>a[0]===audience)?.[1]||''));
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();
   // HOM-01: «Lo que puedes hacer hoy» — 3–4 capabilities for the chosen profession (or a neutral set), straight from the

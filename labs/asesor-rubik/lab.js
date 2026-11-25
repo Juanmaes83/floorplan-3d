@@ -49,7 +49,8 @@
  $('#dropConn').addEventListener('click',()=>sim?.simulate('connection_lost'));
  const say=t=>{if(sim&&sim.state==='live')return sim.hear(t);if(textMode&&rubik){const s=new AsesorSim.SimAdapter({rubik,profile:$('#profile').value,mode:'cliente',onEvent});s.state='live';s.projectId=rubik.project()?.id;s._say=()=>{};return s.hear(t);}};
  $('#talk').addEventListener('submit',e=>{e.preventDefault();const t=$('#say').value.trim();if(!t)return;$('#say').value='';say(t);});
- for(const c of document.querySelectorAll('#chips .chip'))c.addEventListener('click',()=>say(c.dataset.say));
+ // Delegado: también vale para las preguntas del perfil, que cambian al elegir otra profesión.
+ $('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c&&!c.disabled)say(c.dataset.say);});
  for(const r of document.querySelectorAll('input[name=mode]'))r.addEventListener('change',()=>{if(sim&&sim.state==='live'){sim.close();log('Modo cambiado: la conversación se cerró; vuelve a iniciarla.');}});
  // Cambio de proyecto en el visor → desvincular la conversación.
  setInterval(()=>{if(sim&&sim.state==='live'&&rubik&&rubik.project()?.id!==sim.projectId)sim.unbind();},500);

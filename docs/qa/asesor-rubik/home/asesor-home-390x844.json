@@ -1,0 +1,102 @@
+{
+ "res": [
+  {
+   "id": "architecture",
+   "href": "labs/asesor-rubik/?perfil=architecture&desde=home",
+   "alto": 44,
+   "perfil": "architecture",
+   "saludo": "Hola. Repasemos la distribución y la documentación de tu proyecto.",
+   "ejemplos": [
+    "¿Cuántos metros útiles tiene cada estancia?",
+    "Enséñame el salón",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  },
+  {
+   "id": "real-estate",
+   "href": "labs/asesor-rubik/?perfil=real-estate&desde=home",
+   "alto": 44,
+   "perfil": "real-estate",
+   "saludo": "Hola. Preparemos el recorrido y la presentación del inmueble.",
+   "ejemplos": [
+    "¿Qué superficie total tiene la vivienda?",
+    "Enséñame el dormitorio principal",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  },
+  {
+   "id": "developer",
+   "href": "labs/asesor-rubik/?perfil=developer&desde=home",
+   "alto": 44,
+   "perfil": "developer",
+   "saludo": "Hola. Revisemos variantes y fases de la promoción.",
+   "ejemplos": [
+    "¿Cuántos metros suma la planta?",
+    "Enséñame la cocina",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  },
+  {
+   "id": "renovation",
+   "href": "labs/asesor-rubik/?perfil=renovation&desde=home",
+   "alto": 44,
+   "perfil": "renovation",
+   "saludo": "Hola. Ordenemos el alcance de la reforma y sus dependencias.",
+   "ejemplos": [
+    "¿Cuántos metros tiene el baño?",
+    "Enséñame el baño",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  },
+  {
+   "id": "interior",
+   "href": "labs/asesor-rubik/?perfil=interior&desde=home",
+   "alto": 44,
+   "perfil": "interior",
+   "saludo": "Hola. Hablemos de materiales, luz y coherencia visual.",
+   "ejemplos": [
+    "¿Qué superficie tiene el salón?",
+    "Enséñame el salón",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  },
+  {
+   "id": "construction",
+   "href": "labs/asesor-rubik/?perfil=construction&desde=home",
+   "alto": 44,
+   "perfil": "construction",
+   "saludo": "Hola. Vamos con mediciones, partidas y secuencia de obra.",
+   "ejemplos": [
+    "¿Cuántos metros útiles tiene la vivienda?",
+    "Enséñame la cocina",
+    "Prefiero seguir por texto"
+   ],
+   "badge": "Sesión simulada",
+   "estado": "Listo para empezar",
+   "vuelta": true,
+   "vuelveAHome": true
+  }
+ ],
+ "externas": [],
+ "errores": []
+}
