@@ -10,6 +10,8 @@ Lee AGENTS.md y el protocolo de coordinación. Verifica las referencias remotas,
 1. **Primero, cierre de PERLA.** Parte de la candidata aprobada `09eebc9c6709628e61d9a9d6552414bec1776d40`, PR #322. Aísla y corrige la CI. Entrega el SHA y los deltas a Codex para la integración a master.
 2. **Después, Visualización y Home.** Prepara cortes revisables para Render IA, producción cinematográfica local y acceso al Asesor desde el retrato. Mantén las correcciones de CI trazables por separado del desarrollo de nuevas prestaciones.
 3. **Presupuestos y geometría.** Cierra MSPDI con la candidata #320, avanza BCCA aportada y reconcilia la evidencia aprobada de A0 y muros. Avanza los bloques independientes si uno queda pendiente de una credencial, permiso o aplicación externa.
+4. **Penúltimo bloque: StoryLayersV1 · Entrega Junior (§8).** Antes de implementarlo, Claude lee su especificación en el documento madre RUBIK — Auditoría de referencias. Si no puede acceder, lo informa y continúa los demás bloques.
+5. **Último bloque: examen grabado de cinco proyectos (§9).** Solo después de cerrar y validar lo anterior, contrasta cinco planos sintéticos con fichas de referencia independientes.
 
 Medioambiente, Personas y la hoja de ruta de Simuladores quedan aplazados. El alcance cinematográfico de este encargo corresponde a la exportación, el render local y la entrega.
 
@@ -106,3 +108,36 @@ El nombre Blender Cycles puede figurar en las instrucciones técnicas del flujo 
 - **FFmpeg y FFprobe.** Documenta las características de los MP4 descargados y decodifícalos completos. Para fotos y PNG, inspecciona los píxeles de los originales descargados. Identifica por separado las capturas de evidencia, las muestras estáticas y la salida entregable.
 - **Acta por corte.** Publica en la rama de trabajo una matriz con requisito, ubicación en código, pasos, SHA/árbol, navegador o motor, resultado y enlace a captura o vídeo. Anota pruebas pasadas, fallidas y pendientes. Incluye URL de Preview cuando esté autorizada y disponible, y los commits exactos que Codex debe tomar.
 - **Límites de ejecución.** Trabaja autonomamente en código y pruebas sin cargos con datos de ejemplo, sintéticos o permitidos. Las llamadas facturables a Nuance o Render IA, activaciones, gestión pública de BCCA, migraciones, subidas a la rama de integración, fusión a master y producción conservan sus autorizaciones por separado.
+
+
+## 8. Penúltimo bloque · StoryLayersV1 (Entrega Junior)
+
+**Orden y fuente.** Este es el penúltimo bloque de implementación; el examen del §9 es el último. Antes de trabajar, lee la sección «Floor Plan 3D Rubik — Especificación Técnica Definitiva: StoryLayersV1 (Entrega Junior)» del documento madre **RUBIK — Auditoría de referencias**, y anota aquí la URL y revisión consultadas. Si no está accesible, comunica el bloqueo de este bloque sin detener la cola anterior.
+
+**Contexto que debe revalidarse en el SHA vigente.** La auditoría identificó capturas de vistas del proyecto, composición de imagen y exportación HTML con manifiesto. Referencias: View3D.deliveryShot, js/delivery-image.js y js/before-after-dossier-core.js / exportDossier. Blueprint ofrece captura y secuenciación que podría reutilizarse. Verifica contratos y estado actuales antes de depender de ellos. generateDossierPDF y storyDossierBundle fueron propuestas, no capacidades acreditadas. Componer una imagen no equivale a producir un render fotorrealista de alta resolución.
+
+**Objetivo.** Crear una nueva entrega narrativa visual para el cliente: capítulos en orden, capturas del proyecto y llamadas/rótulos vinculados a elementos visibles y datos verificables. Cada dato debe incluir unidad, origen/revisión y estado (medido, estimado, orientativo o ausente). Debe ser legible y reconocible frente al plano y permitir al profesional explicar el proyecto. El proyecto, cámara y capturas deben corresponder a una revisión identificable; ante cambios, marcar la historia obsoleta y pedir revisión.
+
+**Veracidad y límites.** Usa el plano, los motores de RUBIK o entradas explícitas del profesional. No inventes medidas, geometría, materiales, precios ni resultados. Una imagen generada por IA es ilustrativa, no medición ni prueba geométrica. Los textos requieren revisión profesional. No anuncies 4K/nativo, vídeo, audio, PDF ni funcionamiento offline hasta verificar el archivo descargado. Evalúa Blueprint como reutilización opcional, preservando cámara, revisión y continuidad. La entrada de imágenes para reconstrucción es un flujo separado y necesita revisión humana de escala, geometría y huecos. Incluye narración/audio solo si existe una captura autorizada y sincronizada; de lo contrario, déjalo explícitamente para otra fase.
+
+**Alcance V1.** Prioriza historia web revisable y exportación de imágenes fijas. Prueba una porción de vídeo solo si conserva continuidad y legibilidad y supera la validación del archivo. Ofrece una nueva acción en Entregar; no redirijas ni elimines controles existentes. El manifiesto conserva fuentes y revisión, no depende de URL blob: temporales, y respeta permisos y atribución de recursos.
+
+**Aceptación.**
+- Entrar desde Entregar y volver a la misma ficha, posición y foco; escritorio, móvil, teclado y toque.
+- Crear una historia con el proyecto de ejemplo y datos ausentes/estimados; contrastar cada valor contra referencia independiente.
+- Validar anclajes, cámaras, orden, obsolescencia al cambiar revisión y revisión/aprobación profesional.
+- Abrir y comprobar cada archivo que se anuncie: dimensiones, formato/códec, duración, atribución y offline si se promete. Retirar o etiquetar honestamente formatos no validados.
+- No romper las entregas existentes; probar cancelación, errores, accesibilidad y ausencia de datos inventados.
+- Prototipar primero en labs/. Usa Playwright CLI + Chromium y FFprobe/FFmpeg para artefactos audiovisuales. Publica matriz ligada al SHA final y separa local de CI.
+
+**Valor/dificultad inicial.** Valor comercial potencial alto; dificultad media-alta por trazabilidad, anclajes y exportación. Empieza por una prueba vertical: historia web con capturas y dos llamadas de datos trazables. Amplía a vídeo/audio tras validarlo.
+
+## 9. Último bloque · Examen grabado de cinco proyectos
+
+**Momento.** Tras completar la cola y antes de proponer el MVP a pilotos. No reemplaza pruebas unitarias ni CI. Usa cinco proyectos sintéticos distintos: planta regular, irregular, reforma parcial, varias plantas e información incompleta. Para cada uno crea una ficha de referencia independiente con cotas, superficies, estancias, orientación y datos conocidos/ausentes; no los presentes como proyectos reales.
+
+**Recorrido y verdad.** Claude Code adopta perfiles profesionales y completa los flujos pertinentes en RUBIK desde importación/creación hasta análisis, diseño, presupuesto y Entregar; incluye StoryLayers cuando aplique. Graba recorridos completos con Playwright, conserva capturas y archivos descargados. A través de los cinco casos cubre los seis perfiles sin forzar acciones irrelevantes. Compara plano, 2D/3D, superficies, ubicación/sol si se configuró, imágenes, presupuesto, cronograma y entregables contra la ficha independiente. La coincidencia entre módulos no basta: no debe propagarse un mismo error como si fuera verificación. Los datos ausentes permanecen ausentes.
+
+**Incidencias.** Registra ID, caso, paso, SHA, navegador, esperado/real, ubicación, causa, impacto, severidad y evidencia. Clasifica defecto, entrada, límite de entorno o expectativa incorrecta. Corrige defectos bloqueantes y de veracidad en rama de trabajo; reinicia el caso afectado y repite los demás si la corrección los puede afectar. No escondas fallos no bloqueantes: documéntalos y deja su estado.
+
+**Aceptación final.** Cinco vídeos reproducibles, fichas de verdad, artefactos y matriz ligados a un SHA único. Cada caso queda aprobado, fallido o pendiente. No se aprueba con discrepancias de datos sin resolver, controles rotos, archivos corruptos o formatos anunciados no verificados. No fusionar ni desplegar como parte del examen.
