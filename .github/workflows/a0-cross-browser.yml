@@ -12,6 +12,7 @@ jobs:
       matrix:
         engine: [webkit, firefox]
         size: [desktop, mobile]
+        attempt: [1, 2, 3]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -30,11 +31,13 @@ jobs:
           A0_PATTERN: '.'
           A0_SIZE: ${{ matrix.size }}
           NODE_PATH: ${{ runner.temp }}/pw/node_modules
+        shell: bash
         run: |
+          set -o pipefail
           mkdir -p "$A0_TRACE_OUT"
           node --test-reporter=tap tools/a0-cross/a0-run.cjs ${{ matrix.engine }} a0-browser-residuals.browser.test.cjs a0-writer-fence.browser.test.cjs | tee "$A0_TRACE_OUT/result.tap"
       - if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: a0-${{ matrix.engine }}-${{ matrix.size }}
+          name: a0-${{ matrix.engine }}-${{ matrix.size }}-${{ matrix.attempt }}
           path: ${{ runner.temp }}/a0-out
