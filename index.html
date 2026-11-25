@@ -2317,15 +2317,7 @@ svg.addEventListener('pointermove', e => {
   }
   if (drag.kind === 'curve'){
     if (!drag.moved && !far) return;
-    drag.moved = true;
-    const base = JSON.parse(drag.before), w = base.walls.find(x => x.id === drag.id), {mid, n} = wallChord(w);
-    // Curve midpoint follows the pointer along the wall's normal: sagitta snapped to 10 mm (Shift: 1 mm); near the line
-    // (12 px) it is straight again.
-    const raw = (p.x-mid.x)*n.x + (p.y-mid.y)*n.y, sag = Math.abs(raw) < 12/view.s ? 0 : e.shiftKey ? Math.round(raw) : Math.round(raw/10)*10;
-    const r = Core.setWallCurve(base, drag.id, curveControlFor(w, sag));
-    if (r.ok){ project = r.project; drag.intent = r.intent; drag.refused = ''; refreshProject(); }
-    else drag.refused = r.explanation.join(' ');
-    renderAll(); return;
+    drag.moved = true; curveTo(p, e.shiftKey); renderAll(); return;
   }
   const f = getF(drag.id); if (!f) return;
   if (!drag.moved && !far) return;             // 轻点家具不应让它抖动一下
@@ -2346,9 +2338,20 @@ svg.addEventListener('pointermove', e => {
   renderFurn(); renderSel(); window.FloorPlanBuildingUI?.preview(f.id);
 });
 
+// OP-07 S5b · Curve midpoint follows the pointer along the wall's normal: sagitta snapped to 10 mm (Shift: 1 mm); near the
+// line (12 px) it is straight again. Also applied with the RELEASE position: browsers coalesce pointermove events, so on a
+// slow machine the last move before pointerup may never arrive and the shape committed would be stale (Windows/CI residual).
+function curveTo(p, fine){
+  const base = JSON.parse(drag.before), w = base.walls.find(x => x.id === drag.id), {mid, n} = wallChord(w);
+  const raw = (p.x-mid.x)*n.x + (p.y-mid.y)*n.y, sag = Math.abs(raw) < 12/view.s ? 0 : fine ? Math.round(raw) : Math.round(raw/10)*10;
+  const r = Core.setWallCurve(base, drag.id, curveControlFor(w, sag));
+  if (r.ok){ project = r.project; drag.intent = r.intent; drag.refused = ''; refreshProject(); }
+  else drag.refused = r.explanation.join(' ');
+}
 function onPointerEnd(e){
   touches.delete(e.pointerId);
   if (pinch){ if (touches.size < 2) pinch = null; return; }   // 双指结束后，剩下的手指不再触发操作
+  if (e.type === 'pointerup' && drag?.kind === 'curve' && drag.moved) curveTo(toMM(e), e.shiftKey);
   endDrag(e.type === 'pointercancel');
 }
 svg.addEventListener('pointerup', onPointerEnd);

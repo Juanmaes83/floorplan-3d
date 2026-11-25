@@ -87,3 +87,23 @@ test('S5b · dividir sobre una abertura se rechaza y la nombra; móvil 390x844 s
   assert.deepEqual(watch.errors,[]);
  }finally{await context.close();}
 });
+
+// Regresión del residual de Windows/CI: el navegador fusiona pointermove y el último puede no llegar antes de soltar.
+// Curvar con arrastre real y soltar SOBRE la línea con un pointerup cuya posición no vio ningún pointermove: debe enderezar.
+test('S5b · soltar sobre la línea sin pointermove final (eventos fusionados): se aplica la posición de soltar',{timeout:180000},async()=>{
+ const {context,page,watch}=await setup({width:1440,height:900});
+ try{
+  const w=F.longest(await page.evaluate(()=>structuredClone(FloorPlanApp.project)));await selectWall(page,w);
+  const mid=await screen(page,{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2});
+  const n=await page.evaluate(id=>{const w=FloorPlanApp.project.walls.find(x=>x.id===id),L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y);return {x:-(w.end.y-w.start.y)/L,y:(w.end.x-w.start.x)/L};},w.id);
+  const h0=await history(page);
+  // Arrastre real: abajo en el punto medio, movimientos hacia fuera (curva) …
+  await page.mouse.move(mid.x,mid.y);await page.mouse.down();for(let i=1;i<=8;i++)await page.mouse.move(mid.x+n.x*7*i,mid.y+n.y*7*i);
+  assert.ok((await wallOf(page,w.id)).curve,'curvo durante el arrastre');
+  // … y suelta sobre la línea SIN un pointermove hasta allí (como cuando el navegador lo fusiona y no lo entrega).
+  await page.evaluate(([x,y])=>document.querySelector('#plan').dispatchEvent(new PointerEvent('pointerup',{bubbles:true,pointerId:1,pointerType:'mouse',button:0,isPrimary:true,clientX:x,clientY:y})),[mid.x,mid.y]);
+  assert.equal((await wallOf(page,w.id)).curve,undefined,'la posición de soltar manda: recto');
+  const h1=await history(page);assert.equal(h1.undo,h0.undo,'recto = sin cambio: ningún paso de historial');assert.deepEqual(await wallOf(page,w.id),w,'muro idéntico al original');
+  await page.mouse.up().catch(()=>{});assert.deepEqual(watch.errors,[]);
+ }finally{await context.close();}
+});
