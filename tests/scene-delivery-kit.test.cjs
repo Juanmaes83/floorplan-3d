@@ -27,7 +27,7 @@ const project = { id: 'prj_demo', name: 'Demo', defaults: { wallHeightMm: 2700 }
 
 test('M03 · rooms file: geometry, floor colour and the VISIBLE name only (never the stored raw name)', () => {
   const r = D.roomsDoc({ project, label: room => room.id === 'rom_a' ? 'Salón' : 'Baño' });
-  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped');
+  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped'); assert.equal(r.version, '1.1.0'); assert.ok(Array.isArray(r.objects), 'objetos con su tipo (sin nombres)');
   assert.deepEqual(r.rooms.map(x => [x.id, x.label, x.counted, x.floorColor]), [['rom_a', 'Salón', true, '#c8a27a'], ['rom_b', 'Baño', false, null]]);
   assert.doesNotMatch(JSON.stringify(r), CJK); assert.throws(() => D.roomsDoc({}));
 });

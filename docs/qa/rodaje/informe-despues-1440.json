@@ -1,0 +1,48 @@
+{
+ "frames": {
+  "0": {
+   "seconds": 427.4,
+   "sha256": "a373270a8348b8b733fd3e9696a188f419738f199fcecab5b4f1bd9076262b13",
+   "peakRssBytes": 3000344576
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "entrega1440",
+ "resolution": [
+  2560,
+  1440
+ ],
+ "samples": 32,
+ "shot": "interior",
+ "light": "dia",
+ "fps": 24,
+ "frameCount": 48,
+ "declared": [
+  "Cycles CPU, 32 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 18 puntos empotrados de 70° (derivados)",
+  "suelos: 15 estancias con PBR CC0 a escala real y color medio = color del material del proyecto; sustituciones: [{\"estancia\": \"Balcón de estar\", \"materialProyecto\": \"mat_walnut\", \"recurso\": \"wood_floor\", \"escalaM\": 1.6999996900558472}, {\"estancia\": \"Mirador del dormitorio principal\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5}, {\"estancia\": \"Mirador del dormitorio principal\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5}, {\"estancia\": \"Mirador del dormitorio juvenil\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5}, {\"estancia\": \"Mirador del dormitorio juvenil\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5}, {\"estancia\": \"Dormitorio juvenil\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158}, {\"estancia\": \"Comedor\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0}, {\"estancia\": \"Baño de invitados\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0}, {\"estancia\": \"Pasillo\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0}, {\"estancia\": \"Dormitorio infantil\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158}, {\"estancia\": \"Cocina\", \"materialProyecto\": \"mat_tile600\", \"recurso\": \"floor_tiles_02\", \"escalaM\": 4.0}, {\"estancia\": \"Balcón-lavadero\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0}, {\"estancia\": \"Salón\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0}, {\"estancia\": \"Dormitorio principal\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158}, {\"estancia\": \"Baño en suite\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0}]",
+  "muros: solo relieve y rugosidad (color plano del proyecto) de «painted_plaster_wall» (CC0) en 369 piezas; el color es el del proyecto (sin cambio de tono)",
+  "vidrio físico: 1 materiales (rugosidad 0,02, IOR 1,5)",
+  "mobiliario (APROXIMACIÓN VISUAL por tipo y pieza; el proyecto no identifica el material): {\"armchair → exterior-estructura-metal-lacado\": 8, \"armchair → exterior-tapiceria-lona\": 14, \"armchair → madera-oscura\": 4, \"armchair → tapiceria-tejido\": 7, \"baycushion → tapiceria-tejido\": 10, \"bed → madera-oscura\": 3, \"bed → tapiceria-tejido\": 43, \"bookshelf → hoja\": 12, \"bookshelf → madera-clara-barnizada\": 82, \"bookshelf → papel-carton\": 5, \"cabinet → ceramica-esmaltada\": 1, \"cabinet → flor\": 5, \"cabinet → madera-clara-barnizada\": 13, \"cabinet → madera-oscura\": 7, \"cabinet → papel-carton\": 18, \"cabinet → tallo\": 5, \"chair → madera-oscura\": 60, \"chair → tapiceria-tejido\": 12, \"coffeetable → ceramica-esmaltada\": 2, \"coffeetable → flor\": 5, \"coffeetable → madera-clara-barnizada\": 2, \"coffeetable → madera-oscura\": 5, \"coffeetable → papel-carton\": 3, \"coffeetable → tallo\": 5, \"counter → madera-oscura\": 8, \"desk → ceramica-esmaltada\": 2, \"desk → madera-clara-barnizada\": 10, \"desk → madera-oscura\": 22, \"desk → papel-carton\": 14, \"desk → plastico-satinado\": 4, \"fridge → madera-oscura\": 2, \"fridge → plastico-satinado\": 1, \"nightstand → flor\": 2, \"nightstand → madera-clara-barnizada\": 10, \"nightstand → madera-oscura\": 10, \"nightstand → papel-carton\": 16, \"plant → hoja\": 174, \"plant → maceta-ceramica\": 3, \"plant → tallo\": 6, \"roundtable → ceramica-esmaltada\": 5, \"roundtable → flor\": 5, \"roundtable → madera-clara-barnizada\": 1, \"roundtable → madera-oscura\": 1, \"roundtable → tallo\": 5, \"rug → alfombra-tejida\": 3, \"shoecab → ceramica-esmaltada\": 1, \"shoecab → flor\": 5, \"shoecab → madera-clara-barnizada\": 5, \"shoecab → madera-oscura\": 2, \"shoecab → papel-carton\": 2, \"shoecab → tallo\": 5, \"shower → ceramica-esmaltada\": 2, \"shower → madera-oscura\": 12, \"sofa → madera-oscura\": 4, \"sofa → tapiceria-tejido\": 12, \"stove → madera-oscura\": 4, \"stove → pantalla-vidrio-negro\": 1, \"stove → plastico-satinado\": 16, \"table → ceramica-esmaltada\": 5, \"table → flor\": 5, \"table → madera-clara-barnizada\": 7, \"table → papel-carton\": 4, \"table → tallo\": 5, \"tvstand → ceramica-esmaltada\": 1, \"tvstand → flor\": 5, \"tvstand → madera-clara-barnizada\": 5, \"tvstand → madera-oscura\": 7, \"tvstand → pantalla-vidrio-negro\": 1, \"tvstand → papel-carton\": 6, \"tvstand → plastico-satinado\": 1, \"tvstand → tallo\": 5, \"vanity → ceramica-esmaltada\": 3, \"vanity → madera-clara-barnizada\": 33, \"vanity → madera-oscura\": 7, \"vanity → papel-carton\": 5, \"wardrobe → madera-clara-barnizada\": 18, \"wardrobe → madera-oscura\": 6, \"wardrobe → papel-carton\": 36, \"washer → madera-oscura\": 1, \"washer → plastico-satinado\": 2}",
+  "cielo: HDRI CC0 «kloofendal_48d_partly_cloudy_puresky» 0,6, girado al azimut del sol capturado; el sol del visor se conserva",
+  "plano interior: travelling de 1.01 m hacia el centro de «Salón» a 1,35 m; holgura inicial 0.92 m"
+ ],
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "6db1c16756753f2ce196adfa13deccf1a83b19f20ca9a1453abdebd57c3d594d"
+ },
+ "script": {
+  "sha256": "9e76f08ff37e40673a47282ee5568f4b5b47a89ccd4516571399749a3c6182b3"
+ }
+}

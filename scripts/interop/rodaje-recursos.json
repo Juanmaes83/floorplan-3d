@@ -1,0 +1,379 @@
+{
+ "format": "rubik-sota.rodaje-recursos",
+ "version": "1.0.0",
+ "license": "CC0-1.0 (Poly Haven)",
+ "licenseUrl": "https://polyhaven.com/license",
+ "assets": [
+  {
+   "id": "oak_wood_planks",
+   "use": "mat_wood",
+   "authors": {
+    "Dimitrios Savva": "All"
+   },
+   "dimensionsMm": [
+    1200.0000476837158,
+    1200.0000476837158
+   ],
+   "page": "https://polyhaven.com/a/oak_wood_planks",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/oak_wood_planks/oak_wood_planks_diff_2k.jpg",
+     "file": "oak_wood_planks_diff_2k.jpg",
+     "sha256": "ec3d2deb1fe21150ede5f987b48c691b3c7dbffe4183850a9b8717e904917a46",
+     "bytes": 2736142
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/oak_wood_planks/oak_wood_planks_rough_2k.jpg",
+     "file": "oak_wood_planks_rough_2k.jpg",
+     "sha256": "18b2a97f44b18e1a794652dbb2ec4bbdfc35869e2f028e4bbb85441258da1018",
+     "bytes": 3396426
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/oak_wood_planks/oak_wood_planks_nor_gl_2k.jpg",
+     "file": "oak_wood_planks_nor_2k.jpg",
+     "sha256": "340a51d81e5ec2ead28a1c864637375becb00a1e11861e47a72dde4c03950968",
+     "bytes": 2125233
+    }
+   }
+  },
+  {
+   "id": "wood_floor",
+   "use": "mat_walnut",
+   "authors": {
+    "Dimitrios Savva": "All"
+   },
+   "dimensionsMm": [
+    1699.9996900558472,
+    1699.9996900558472
+   ],
+   "page": "https://polyhaven.com/a/wood_floor",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_floor/wood_floor_diff_2k.jpg",
+     "file": "wood_floor_diff_2k.jpg",
+     "sha256": "7c3ff1164c8dd0758ef2c048e9a266d28174120de01052ec40e6ca486177345c",
+     "bytes": 2983667
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_floor/wood_floor_rough_2k.jpg",
+     "file": "wood_floor_rough_2k.jpg",
+     "sha256": "297eda0d75f2020cc541dbf242e1f5fd058053249567f49a4506fc2c5b1a172b",
+     "bytes": 2267559
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_floor/wood_floor_nor_gl_2k.jpg",
+     "file": "wood_floor_nor_2k.jpg",
+     "sha256": "eff2e4db46bab930dc05997faf5085157eec4fd652cdfc6cd01fa11edd56ef10",
+     "bytes": 1863576
+    }
+   }
+  },
+  {
+   "id": "large_floor_tiles_02",
+   "use": "mat_tile800",
+   "authors": {
+    "Rob Tuytel": "All"
+   },
+   "dimensionsMm": [
+    3000,
+    3000
+   ],
+   "page": "https://polyhaven.com/a/large_floor_tiles_02",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_diff_2k.jpg",
+     "file": "large_floor_tiles_02_diff_2k.jpg",
+     "sha256": "a18c67aedef1099f5ad24abd4e65d9a9fcc44e2b9e60aba27ec255f9220708cd",
+     "bytes": 2409892
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_rough_2k.jpg",
+     "file": "large_floor_tiles_02_rough_2k.jpg",
+     "sha256": "0838441397c114faecb89c4e1fae56ce8df195748b2128d0eb1a9bb116407731",
+     "bytes": 1895686
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_nor_gl_2k.jpg",
+     "file": "large_floor_tiles_02_nor_2k.jpg",
+     "sha256": "436117e6fc10a4e76a7d2d31ebb1e56372709068b52875baa9468ae414330ea3",
+     "bytes": 1272020
+    }
+   }
+  },
+  {
+   "id": "floor_tiles_02",
+   "use": "mat_tile600",
+   "authors": {
+    "Rob Tuytel": "All"
+   },
+   "dimensionsMm": [
+    4000,
+    4000
+   ],
+   "page": "https://polyhaven.com/a/floor_tiles_02",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_02/floor_tiles_02_diff_2k.jpg",
+     "file": "floor_tiles_02_diff_2k.jpg",
+     "sha256": "9a4e5acbb6c71e03979cc75fe1121ae0dc66583153cab9f32116c79e33707634",
+     "bytes": 1381118
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_02/floor_tiles_02_rough_2k.jpg",
+     "file": "floor_tiles_02_rough_2k.jpg",
+     "sha256": "95007052c6cc7a92284a5cea92ebdaecbfae6fcdd6dfd6ac443e2af43ddcd9a6",
+     "bytes": 1214592
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_02/floor_tiles_02_nor_gl_2k.jpg",
+     "file": "floor_tiles_02_nor_2k.jpg",
+     "sha256": "0c0d11a6ee43f523131db810720e4232ff35f05c126a7959d499a715294a1ad6",
+     "bytes": 540151
+    }
+   }
+  },
+  {
+   "id": "marble_01",
+   "use": "mat_marble",
+   "authors": {
+    "Rob Tuytel": "All"
+   },
+   "dimensionsMm": [
+    1500,
+    1500
+   ],
+   "page": "https://polyhaven.com/a/marble_01",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/marble_01/marble_01_diff_2k.jpg",
+     "file": "marble_01_diff_2k.jpg",
+     "sha256": "d403786171716f86718bdd67eba923d4fb6125c0636bacef0e6a21dd5d623a48",
+     "bytes": 1269188
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/marble_01/marble_01_rough_2k.jpg",
+     "file": "marble_01_rough_2k.jpg",
+     "sha256": "1b970e033856c93ee7390d947da5340e101b489fc8c1463354ea9e6655ce039a",
+     "bytes": 281388
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/marble_01/marble_01_nor_gl_2k.jpg",
+     "file": "marble_01_nor_2k.jpg",
+     "sha256": "d5e17ccb2913adbf28fcb781fddf0aa711259ddea6c1c918442f9a3589aa4660",
+     "bytes": 409581
+    }
+   }
+  },
+  {
+   "id": "floor_tiles_06",
+   "use": "mat_antislip",
+   "authors": {
+    "Rob Tuytel": "All"
+   },
+   "dimensionsMm": [
+    3000,
+    3000
+   ],
+   "page": "https://polyhaven.com/a/floor_tiles_06",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_06/floor_tiles_06_diff_2k.jpg",
+     "file": "floor_tiles_06_diff_2k.jpg",
+     "sha256": "fe326c219d096e8f5d31c9be6da5a617f34c58b3042d0733f7d4450a38906b37",
+     "bytes": 1394898
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_06/floor_tiles_06_rough_2k.jpg",
+     "file": "floor_tiles_06_rough_2k.jpg",
+     "sha256": "9b8058cb0f471db05bca1ca47fa9190ea6c31a1684c93c17123e4ecfa2d70e28",
+     "bytes": 483344
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/floor_tiles_06/floor_tiles_06_nor_gl_2k.jpg",
+     "file": "floor_tiles_06_nor_2k.jpg",
+     "sha256": "930ee26e4018f0d44d8f011b364b141c7ccf02bd3e47b85e591cbbaeb9f47046",
+     "bytes": 1010594
+    }
+   }
+  },
+  {
+   "id": "painted_plaster_wall",
+   "use": "walls",
+   "authors": {
+    "Amal Kumar": "All"
+   },
+   "dimensionsMm": [
+    2000,
+    2000
+   ],
+   "page": "https://polyhaven.com/a/painted_plaster_wall",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/painted_plaster_wall/painted_plaster_wall_diff_2k.jpg",
+     "file": "painted_plaster_wall_diff_2k.jpg",
+     "sha256": "6fd812ed8dd5be1873c29aeef38ce9bf1fb30a22c6d4b3a12db725e98c26a1be",
+     "bytes": 3132937
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/painted_plaster_wall/painted_plaster_wall_rough_2k.jpg",
+     "file": "painted_plaster_wall_rough_2k.jpg",
+     "sha256": "35aad595469533cc3b7cc209cc6c7e065d660211f02c867f4492d3b371b1fee1",
+     "bytes": 1595466
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/painted_plaster_wall/painted_plaster_wall_nor_gl_2k.jpg",
+     "file": "painted_plaster_wall_nor_2k.jpg",
+     "sha256": "2d601a46ed5ce2af866741c53cafa3cba472620c272e633b6484d4de16a80eb1",
+     "bytes": 4048392
+    }
+   }
+  },
+  {
+   "id": "kloofendal_48d_partly_cloudy_puresky",
+   "use": "sky-day",
+   "authors": {
+    "Greg Zaal": "Original",
+    "Jarod Guest": "Sky edits"
+   },
+   "page": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+   "files": {
+    "hdri": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/kloofendal_48d_partly_cloudy_puresky_2k.hdr",
+     "file": "kloofendal_48d_partly_cloudy_puresky_2k.hdr",
+     "sha256": "5244534e9cf5b606f2ff513aa00ddb161b0a4826ffd88a0d3bd03ac29247d198",
+     "bytes": 5451493
+    }
+   }
+  },
+  {
+   "id": "rough_linen",
+   "use": "fabric",
+   "authors": {
+    "colormass": "Photography",
+    "Rico Cilliers": "Processing"
+   },
+   "dimensionsMm": [
+    270.7081392676629,
+    271.29998803138733
+   ],
+   "page": "https://polyhaven.com/a/rough_linen",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_linen/rough_linen_diff_2k.jpg",
+     "file": "rough_linen_diff_2k.jpg",
+     "sha256": "e71016e08dfebea1dd4e8a2a675e3b617a889a782af782f1abb795906f4db1b4",
+     "bytes": 3607181
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_linen/rough_linen_rough_2k.jpg",
+     "file": "rough_linen_rough_2k.jpg",
+     "sha256": "48400d48fa203882bf5d984d5beb2f95edb1550309924601c018f2c4f3f80731",
+     "bytes": 4655974
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_linen/rough_linen_nor_gl_2k.jpg",
+     "file": "rough_linen_nor_2k.jpg",
+     "sha256": "c5733ad50cfe0f90c546f3d4076590c1c78a4fd1a83c967cc9c92dc8175b99e6",
+     "bytes": 3849356
+    }
+   }
+  },
+  {
+   "id": "poly_wool_herringbone",
+   "use": "rug",
+   "authors": {
+    "colormass": "Photography",
+    "Rico Cilliers": "Processing"
+   },
+   "dimensionsMm": [
+    270.0788548673393,
+    275.70000290870667
+   ],
+   "page": "https://polyhaven.com/a/poly_wool_herringbone",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/poly_wool_herringbone/poly_wool_herringbone_diff_2k.jpg",
+     "file": "poly_wool_herringbone_diff_2k.jpg",
+     "sha256": "ca21de8e2e7f43178f8290361bfb2271eb264af0d2887c7c93e76a113ff3cc64",
+     "bytes": 3650614
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/poly_wool_herringbone/poly_wool_herringbone_rough_2k.jpg",
+     "file": "poly_wool_herringbone_rough_2k.jpg",
+     "sha256": "8678dfb7f474440c12a5f317fe01802dd1aabbb205a6c947bb044ade72294fa7",
+     "bytes": 3674893
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/poly_wool_herringbone/poly_wool_herringbone_nor_gl_2k.jpg",
+     "file": "poly_wool_herringbone_nor_2k.jpg",
+     "sha256": "bd68cd14cafdb033dccb80ff8aff2600317e66ef11eb37ef7f224e420075f1fd",
+     "bytes": 4048573
+    }
+   }
+  },
+  {
+   "id": "ash_veneer",
+   "use": "wood-light",
+   "authors": {
+    "Jenelle van Heerden": "All"
+   },
+   "dimensionsMm": [
+    1000,
+    1000
+   ],
+   "page": "https://polyhaven.com/a/ash_veneer",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/ash_veneer/ash_veneer_diff_2k.jpg",
+     "file": "ash_veneer_diff_2k.jpg",
+     "sha256": "00abb70f86bdfe49aa6e09f350af9e8e1605ccf13171f9be46ceb6018846c06b",
+     "bytes": 2479757
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/ash_veneer/ash_veneer_rough_2k.jpg",
+     "file": "ash_veneer_rough_2k.jpg",
+     "sha256": "3e6b077f6af6ba7725668b438bfc523f1342d0fb4bd497f1c9668663ad189ef0",
+     "bytes": 3297524
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/ash_veneer/ash_veneer_nor_gl_2k.jpg",
+     "file": "ash_veneer_nor_2k.jpg",
+     "sha256": "64bbd775ba2978aa12108ecd58419c333eb0c194b52cbc8e1d2bea02252020af",
+     "bytes": 1866146
+    }
+   }
+  },
+  {
+   "id": "black_walnut_veneer_01",
+   "use": "wood-dark",
+   "authors": {
+    "Jenelle van Heerden": "All"
+   },
+   "dimensionsMm": [
+    1000,
+    1000
+   ],
+   "page": "https://polyhaven.com/a/black_walnut_veneer_01",
+   "files": {
+    "diff": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/black_walnut_veneer_01/black_walnut_veneer_01_diff_2k.jpg",
+     "file": "black_walnut_veneer_01_diff_2k.jpg",
+     "sha256": "131a5322d045f86dcf6fa413cdf34f230f8f7f96d820221a1637647108bf2304",
+     "bytes": 2487539
+    },
+    "rough": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/black_walnut_veneer_01/black_walnut_veneer_01_rough_2k.jpg",
+     "file": "black_walnut_veneer_01_rough_2k.jpg",
+     "sha256": "8c2ab9b1ab0681c93e777906e2bd98eedb0a4c37db5a7b3ad28a734a0de88814",
+     "bytes": 3012578
+    },
+    "nor": {
+     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/black_walnut_veneer_01/black_walnut_veneer_01_nor_gl_2k.jpg",
+     "file": "black_walnut_veneer_01_nor_2k.jpg",
+     "sha256": "8970308650c9e8b44b3fad5f14459239869a8dc74db40d00b6a095b38e7e24e9",
+     "bytes": 1897687
+    }
+   }
+  }
+ ]
+}

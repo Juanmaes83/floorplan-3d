@@ -69,7 +69,7 @@ def load_rooms(cap, manifest):
         mats = [{"id": "floor:" + r["id"], "appearance": {"color": r["floorColor"]}} for r in e["rooms"] if r.get("floorColor")]
         rooms = [{"id": r["id"], "polygon": r["polygon"], "counted": r.get("counted", True), "levelId": r.get("levelId"),
                   "floorMaterialId": ("floor:" + r["id"]) if r.get("floorColor") else None} for r in e["rooms"]]
-        return {"rooms": rooms, "materials": mats, "defaults": {"wallHeightMm": e.get("wallHeightMm", 2800)}}, {r["id"]: r.get("label") or r["id"] for r in e["rooms"]}
+        return {"rooms": rooms, "materials": mats, "objects": e.get("objects", []), "defaults": {"wallHeightMm": e.get("wallHeightMm", 2800)}}, {r["id"]: r.get("label") or r["id"] for r in e["rooms"]}
     fail("ROOMS_MISSING", "Falta rubik-estancias.json: descarga de nuevo la escena desde RUBIK (Entregar › Escena para Blender)")
 
 def area_m2(poly):

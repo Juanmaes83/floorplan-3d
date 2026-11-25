@@ -41,7 +41,11 @@
       return { id: r.id, label: String(typeof label === 'function' ? label(r) : r.id).slice(0, 80), polygon: r.polygon.map(p => ({ x: p.x, y: p.y })),
         counted: r.counted !== false, levelId: r.levelId ?? null, floorColor: /^#[0-9a-f]{6}$/i.test(color || '') ? color : null };
     });
-    return { format: 'rubik-sota.scene-rooms', version: '1.0.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms };
+    // §4 (1.1.0, aditivo) · tipo de catálogo de cada objeto (clave ASCII, nunca el nombre guardado): el render local da a
+    // cada pieza el acabado de su tipo (tejido, madera, vegetación…) en lugar de adivinarlo por el color.
+    const objects = (Array.isArray(project.objects) ? project.objects : []).filter(o => o && typeof o.id === 'string')
+      .map(o => ({ id: o.id, type: /^[a-z0-9_-]{1,40}$/.test(o.type || '') ? o.type : null }));
+    return { format: 'rubik-sota.scene-rooms', version: '1.1.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms, objects };
   }
 
   /** Manifiesto de la entrega. `capture` = resultado de View3D.captureScene() ({doc, info}). */
