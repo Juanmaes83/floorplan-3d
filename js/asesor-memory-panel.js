@@ -2,10 +2,10 @@
 (function(){'use strict';
  const U=window.RubikAssistantUnified,$=id=>document.getElementById(id);
  let store=null;try{store=window.localStorage;}catch{}
- const m=U.createMemory({storage:store,owner:'este-dispositivo'});
+ const m=U.createMemory({storage:store,owner:document.body.dataset.memoryOwner||'este-dispositivo'});
  const status=t=>{$('memStatus').textContent=t;};
  const render=()=>{const on=m.consent();$('memConsent').checked=on;$('memFields').disabled=!on;const v=m.view()||{};
-  $('memPref').value=v.nombrePreferido||'';$('memNote').value=v.nota||'';
+  $('memPref').value=v.nombrePreferido||'';$('memNote').value=v.nota||'';$('memHandoff').checked=m.handoff({}).ok;
   if(!m.available())status('Este navegador no permite guardar datos: el asesor no recordará nada.');};
  $('memConsent').addEventListener('change',e=>{if(e.target.checked){m.grant();status('Memoria activada en este dispositivo.');}else{m.forget();status('Memoria desactivada y borrada.');}render();});
  $('memKeep').addEventListener('click',()=>{const r=[['nombrePreferido',$('memPref').value],['nota',$('memNote').value]].map(([k,v])=>v?m.set(k,v):(m.remove(k),{ok:true}));
