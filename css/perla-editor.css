@@ -553,3 +553,7 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
 }
 /* Inicio en el teléfono: objetivo táctil de al menos 40 × 40 px. */
 @media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #welcomeBtn{min-width:40px!important;min-height:40px}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r2{position:relative}
+  body.perla .perla-r2>#perlaReturn{position:absolute;left:8px;top:calc(100% + 8px);z-index:30;min-height:44px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+}
