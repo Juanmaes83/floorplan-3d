@@ -48,3 +48,7 @@ La prueba de `bpdp-routes` admite dos desenlaces verdes; solo el primero acredit
 ## Siguiente paso (requiere coordinación)
 
 La batería se dispara con `pull_request`; una subida a `claude/perla-ci-322` no la lanza. Para ejecutarla sobre el mismo SHA final hay que llevar este delta a la rama de #322. **Estado (propietario):** Codex aplicó el parche sobre `09eebc9c` en copia aislada; los 9 archivos de código y pruebas coinciden exactamente con `d6d32120` y la cobertura da 0 archivos sin cubrir. Codex prepara el commit de integración y, con la subida autorizada de ese SHA exacto, ejecuta la batería. Entonces se cruzan los 16 trabajos rojos del SHA anterior con el resultado nuevo y se rellena la columna CI. Firefox, WebKit y móvil físico siguen pendientes. Sin fusión a master, Production ni activaciones.
+
+## Resultado de CI (propietario, 25/11/2026)
+
+La batería de la PR #322 está en verde en `codex/integracion-perla-5835`, SHA `899415f3e1359c2f5eb4c7e53e57ad2c718b1636` (commit de integración de Codex con este parche verificado). Checks: https://github.com/Juanmaes83/floorplan-3d/pull/322/checks. Queda pendiente consignar, del log de `bpdp-browser`, si los vídeos BPDP dieron «MP4 descargado y decodificado» o «aviso por falta de codificador». Firefox, WebKit y móvil físico: pendientes.
