@@ -15,8 +15,7 @@ async function setup(t,viewport){const mobile=viewport.width<1000,context=await 
  await page.waitForTimeout(1500);return {page,errors,mobile};}
 // Guide output evidence is separate metadata and may change; editable document and other storage stay untouched.
 // Everything the capture must leave untouched: project, history, storage, working camera and working canvas.
-// Cámara redondeada a 1e-9: restaurar la vista en software (CI) puede dejar ruido de 1e-15, no una mutación.
-const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).filter(k=>k!=='rubik-sota-guide-v1').sort().map(k=>[k,localStorage.getItem(k)]))),camera:JSON.parse(JSON.stringify(View3D.cameraState,(k,v)=>typeof v==='number'?Math.round(v*1e9)/1e9:v)),canvas:View3D.canvasState}));
+const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).filter(k=>k!=='rubik-sota-guide-v1').sort().map(k=>[k,localStorage.getItem(k)]))),camera:View3D.cameraState,canvas:View3D.canvasState}));
 async function capture(page,size,aspect){
  await page.evaluate(([size,aspect])=>{document.querySelector('details.menu').open=true;const s=document.querySelector('#shot3dSize'),a=document.querySelector('#shot3dAspect');s.value=size;s.dispatchEvent(new Event('change'));a.value=aspect;a.dispatchEvent(new Event('change'));},[size,aspect]);
  assert.equal(await page.locator('#shot3dAspect').isDisabled(),size==='view','aspect only applies to explicit sizes');
@@ -31,6 +30,12 @@ async function capture(page,size,aspect){
  assert.ok(colours>40,`rendered content, ${colours} colour buckets`);
  return {png,width,height,dims};}
 const ratio=(w,h)=>w/h;
+// Cámara: tolerancia absoluta de 1e-9 por componente numérico (el render por software de la CI deja ruido de ~1e-15).
+// El resto del estado (proyecto, historial, almacenamiento, lienzo y campos no numéricos de la cámara) se compara exacto.
+const sameCamera=(a,b,where,path='camera')=>{if(typeof a==='number'&&typeof b==='number'){const d=Math.abs(a-b);assert.ok(d<=1e-9,`${where}: ${path} se desvía ${d} (${a} frente a ${b})`);return;}
+ if(a&&b&&typeof a==='object'&&typeof b==='object'){assert.deepEqual(Object.keys(a).sort(),Object.keys(b).sort(),`${where}: claves de ${path}`);for(const k of Object.keys(a))sameCamera(a[k],b[k],where,`${path}.${k}`);return;}
+ assert.deepEqual(a,b,`${where}: ${path}`);};
+const sameState=(now,initial,where)=>{const {camera:c1,...r1}=now,{camera:c0,...r0}=initial;assert.deepEqual(r1,r0,where);sameCamera(c1,c0,where);};
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`3D capture options download real PNGs without touching the working view ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
  const {page,errors,mobile}=await setup(t,viewport),name=`${viewport.width}x${viewport.height}`,initial=await state(page);
  // Default: unchanged historical behaviour (current canvas buffer).
@@ -44,7 +49,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`3D 
   else{assert.equal(Math.max(out.width,out.height),Number(size));assert.ok(Math.abs(ratio(out.width,out.height)-ratio(initial.canvas.width,initial.canvas.height))<0.01,'same as view keeps the working aspect');}
   assert.equal(out.dims,`${out.width} × ${out.height} px`);
   await fs.writeFile(`docs/qa/artifacts/capture-3d/${name}-${size}-${aspect.replace(':','x')}.png`,out.png);
-  assert.deepEqual(await state(page),initial,`no mutation after ${size} ${aspect}`);
+  sameState(await state(page),initial,`no mutation after ${size} ${aspect}`);
  }
  // The working canvas keeps rendering at its own size after captures.
  assert.deepEqual(await page.evaluate(()=>View3D.canvasState),initial.canvas);
@@ -63,5 +68,5 @@ test('capture size is bounded by the pixel budget and GPU limits, and 2D export 
  assert.equal(dl.suggestedFilename(),'rubik-sota-floor-plan.png');const chunks=[];for await(const c of await dl.createReadStream())chunks.push(c);const png=Buffer.concat(chunks);
  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.readUInt32BE(16),3200);
  assert.equal(await page.locator('#shot3dOptions').isVisible(),false,'3D options are hidden in 2D');
- assert.deepEqual(await state(page),before);assert.deepEqual(errors,[]);
+ sameState(await state(page),before,'final');assert.deepEqual(errors,[]);
 });
