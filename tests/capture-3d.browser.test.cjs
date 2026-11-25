@@ -15,7 +15,8 @@ async function setup(t,viewport){const mobile=viewport.width<1000,context=await 
  await page.waitForTimeout(1500);return {page,errors,mobile};}
 // Guide output evidence is separate metadata and may change; editable document and other storage stay untouched.
 // Everything the capture must leave untouched: project, history, storage, working camera and working canvas.
-const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).filter(k=>k!=='rubik-sota-guide-v1').sort().map(k=>[k,localStorage.getItem(k)]))),camera:View3D.cameraState,canvas:View3D.canvasState}));
+// Cámara redondeada a 1e-9: restaurar la vista en software (CI) puede dejar ruido de 1e-15, no una mutación.
+const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).filter(k=>k!=='rubik-sota-guide-v1').sort().map(k=>[k,localStorage.getItem(k)]))),camera:JSON.parse(JSON.stringify(View3D.cameraState,(k,v)=>typeof v==='number'?Math.round(v*1e9)/1e9:v)),canvas:View3D.canvasState}));
 async function capture(page,size,aspect){
  await page.evaluate(([size,aspect])=>{document.querySelector('details.menu').open=true;const s=document.querySelector('#shot3dSize'),a=document.querySelector('#shot3dAspect');s.value=size;s.dispatchEvent(new Event('change'));a.value=aspect;a.dispatchEvent(new Event('change'));},[size,aspect]);
  assert.equal(await page.locator('#shot3dAspect').isDisabled(),size==='view','aspect only applies to explicit sizes');
