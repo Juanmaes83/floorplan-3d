@@ -24,10 +24,19 @@ CI = resultado de GitHub Actions sobre el SHA final: **PENDIENTE** en todas las 
 | 4 | capture-3d: cámara con ruido 1e-15 | E | Tolerancia absoluta 1e-9 por componente, indicando cuál se desvía; resto exacto | `b0ce653c` | 3/3 | PENDIENTE | — |
 | 5 | assistant-ai-v2 t9: acción de cliente oculta | S | Espera la acción visible; destino y proyecto sin cambios se mantienen | `639782ba` | 1/1 | PENDIENTE | — |
 | 6a | anchored-comments B6: no llega la descarga | S | Abre P7 y pulsa la acción dentro de su ficha o panel; descarga y HTML sin conexión se mantienen | `b0ce653c` | 1/1 | PENDIENTE | — |
-| 6b | tour-video SCULPT agota 240 s | E | Límite 600 s, justificado por fases: preparación 0,9 s · render 197 s (456 ms/fotograma) · codificación 0,06 s · descarga 1,3 s | `8a57e122` | pasa (387 s con carga) | PENDIENTE | `film.cjs`, `sculpt-dron-fases.txt`, `sculpt-dron-640x360.mp4` (H.264 640×360 8 fps, 433 fotogramas, 54,1 s; FFmpeg decodifica entero) |
+| 6b | tour-video SCULPT agota 240 s | E · tiempo de render medido en el entorno de prueba (sin equivalente cronometrado en `master`: el dron es nuevo en #322) | Límite 600 s, justificado por fases: preparación 0,9 s · render 197 s (456 ms/fotograma) · codificación 0,06 s · descarga 1,3 s | `8a57e122` | pasa (387 s con carga) | PENDIENTE | `film.cjs`, `sculpt-dron-fases.txt`, `sculpt-dron-640x360.mp4` (H.264 640×360 8 fps, 433 fotogramas, 54,1 s; FFmpeg decodifica entero) |
 | 7 | presentation R2 P05 360×800: `.perla-utils` tapa «Crear una copia local del ejemplo» | R | ≤400 px: huecos e iconos compactos y el nombre del proyecto cede sitio; se conservan todos los controles y `ES · EN · ZH` | `d1c9ca36` | P05 4/4 (incl. 360×800); `r1.cjs`: el clic llega al botón a 360 px y en escritorio | PENDIENTE | `r1.cjs`, `r1-360x800.png`, `r1-1440x900.png` |
 | 8a | bpdp-candidate: +24,7 MB tras 6 aperturas | R | `perla-return.js` dejaba de retener diálogos retirados del documento (el visor se cierra y se elimina en el mismo paso) | `9277e2cc` | Recursos 1/1 (< 8 MB) · perla-return 2/2 | PENDIENTE | — |
-| 8b | bpdp-routes: no aparece la descarga del vídeo | E | Límites según tiempos medidos: espera por salida 600 s; prueba 1200 s | `d6d32120` | 2/2 | PENDIENTE | `bpdp-salidas/` (2 PNG y 2 MP4 H.264 1920×1080 30 fps: Blueprint 571 fotogramas 19,0 s; Despiece 646 fotogramas 21,5 s; FFmpeg decodifica entero) · `verificacion.txt` |
+| 8b | bpdp-routes: no aparece la descarga del vídeo | E · tiempo de render medido en el entorno de prueba | Límites según tiempos medidos: espera por salida 600 s; prueba 1200 s | `d6d32120` | 2/2 · **MP4 descargado y decodificado** (Blueprint y Despiece; el codificador H.264 estaba disponible en local) | PENDIENTE | `bpdp-salidas/` (2 PNG y 2 MP4 H.264 1920×1080 30 fps: Blueprint 571 fotogramas 19,0 s; Despiece 646 fotogramas 21,5 s; FFmpeg decodifica entero) · `verificacion.txt` |
+
+## Resultado de las salidas de vídeo por entorno
+
+La prueba de `bpdp-routes` admite dos desenlaces verdes; solo el primero acredita la exportación.
+
+| Entorno | Blueprint vídeo | Despiece vídeo |
+|---|---|---|
+| Local (Chromium + SwiftShader) | MP4 descargado y decodificado | MP4 descargado y decodificado |
+| CI sobre el SHA de integración | PENDIENTE: registrar si es «MP4 descargado y decodificado» o «aviso por falta de codificador comprobado» (línea `Entregar: … sin codificador; aviso comprobado` del log). En el segundo caso la exportación sigue pendiente de acreditar en ese entorno | ídem |
 
 ## Límites y observaciones
 
@@ -38,4 +47,4 @@ CI = resultado de GitHub Actions sobre el SHA final: **PENDIENTE** en todas las 
 
 ## Siguiente paso (requiere coordinación)
 
-La batería se dispara con `pull_request`; una subida a `claude/perla-ci-322` no la lanza. Para ejecutarla sobre el mismo SHA final hay que llevar este delta a la rama de #322. **Codex:** aplica `delta-codigo-09eebc9c..d6d32120.patch` (o fusiona `d6d32120`) en la rama de #322 y lanza la batería; con los resultados se rellena la columna CI. Sin fusión a master, Production ni activaciones.
+La batería se dispara con `pull_request`; una subida a `claude/perla-ci-322` no la lanza. Para ejecutarla sobre el mismo SHA final hay que llevar este delta a la rama de #322. **Estado (propietario):** Codex aplicó el parche sobre `09eebc9c` en copia aislada; los 9 archivos de código y pruebas coinciden exactamente con `d6d32120` y la cobertura da 0 archivos sin cubrir. Codex prepara el commit de integración y, con la subida autorizada de ese SHA exacto, ejecuta la batería. Entonces se cruzan los 16 trabajos rojos del SHA anterior con el resultado nuevo y se rellena la columna CI. Firefox, WebKit y móvil físico siguen pendientes. Sin fusión a master, Production ni activaciones.
