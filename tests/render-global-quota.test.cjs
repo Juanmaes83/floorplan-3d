@@ -36,13 +36,14 @@ test.after(async()=>{
 });
 const fresh=async()=>{const e=resp();await e(['FLUSHALL']);return e;};
 
-const env={OPENAI_API_KEY:'sk-test',RUBIK_RENDER_TOKEN:'access-123',RUBIK_RENDER_ENABLED:'1',RUBIK_RENDER_GLOBAL_QUOTA:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'2',RUBIK_RENDER_GLOBAL_CAP_USD:'5',RUBIK_RENDER_RESERVE_USD:'0.25',RUBIK_RENDER_PRICE_INPUT_TEXT:'5',RUBIK_RENDER_PRICE_INPUT_IMAGE:'10',RUBIK_RENDER_PRICE_OUTPUT:'40',RUBIK_RENDER_MAX_INPUT_TOKENS:'10000',RUBIK_RENDER_MAX_OUTPUT_TOKENS:'7000'};
+const env={OPENAI_API_KEY:'sk-test',RUBIK_RENDER_TOKEN:'access-123',RUBIK_RENDER_ENABLED:'1',RUBIK_RENDER_GLOBAL_QUOTA:'1',RUBIK_RENDER_GLOBAL_MAX_IMAGES:'2',RUBIK_RENDER_GLOBAL_CAP_USD:'5',RUBIK_RENDER_RESERVE_USD:'0.25',RUBIK_RENDER_PRICE_INPUT_TEXT:'5',RUBIK_RENDER_PRICE_INPUT_IMAGE:'10',RUBIK_RENDER_PRICE_OUTPUT:'40',RUBIK_RENDER_MAX_INPUT_TOKENS:'10000',RUBIK_RENDER_MAX_OUTPUT_TOKENS:'7000',RUBIK_RENDER_QUOTA_BOUND_MODEL:Render.MODEL};
 // cota = 10000·10 + 7000·40 = 380000 µ$ → 0,38 USD por imagen (> 0,25 configurado: manda la cota)
-const png='data:image/png;base64,'+Buffer.from([0x89,0x50,0x4e,0x47,1,2,3]).toString('base64');
+const pngOf=(w,h)=>{const b=Buffer.alloc(33);b.writeUInt32BE(0x89504e47,0);b.writeUInt32BE(0x0d0a1a0a,4);b.writeUInt32BE(13,8);b.write('IHDR',12);b.writeUInt32BE(w,16);b.writeUInt32BE(h,20);return 'data:image/png;base64,'+b.toString('base64');};
+const png=pngOf(1536,1024);
 const out=()=>({statusCode:0,headers:{},body:'',setHeader(k,v){this.headers[k]=v;},end(b){this.body=b;}});
-const rq=()=>({method:'POST',headers:{'x-rubik-render-token':'access-123'},body:{style:'nordic',image:png}});
+const rq=(image=png)=>({method:'POST',headers:{'x-rubik-render-token':'access-123'},body:{style:'nordic',image}});
 const ok=async()=>({ok:true,status:200,json:async()=>({data:[{b64_json:'AAAA'}]})});
-async function call(store,meter,fetchImpl=ok,e=env){let n=0;const logs=[];const f=async(...a)=>{n++;return fetchImpl(...a);};const o=out();await Render.handler(rq(),o,{env:e,store,meter,fetchImpl:f,log:l=>logs.push(JSON.parse(l))});return {status:o.statusCode,json:JSON.parse(o.body),calls:n,logs,headers:o.headers};}
+async function call(store,meter,fetchImpl=ok,e=env,image=png){let n=0;const logs=[];const f=async(...a)=>{n++;return fetchImpl(...a);};const o=out();await Render.handler(rq(image),o,{env:e,store,meter,fetchImpl:f,log:l=>logs.push(JSON.parse(l))});return {status:o.statusCode,json:JSON.parse(o.body),calls:n,logs,headers:o.headers};}
 test('dos instancias comparten el tope global: 2 imágenes y la tercera se rechaza sin llamar al proveedor',async()=>{
  const admin=await fresh(),a=L.redisStore({exec:resp()}),b=L.redisStore({exec:resp()}),ma=Render.createMeter(),mb=Render.createMeter();
  assert.equal((await call(a,ma)).status,200);assert.equal((await call(b,mb)).status,200);
@@ -62,6 +63,12 @@ test('cuota global activada sin almacén → 503 store-not-configured; almacén 
  assert.equal((await call(null,Render.createMeter())).json.error,'store-not-configured');
  const down={reserve:async()=>{throw new Error('down');}};const r=await call(down,Render.createMeter());assert.equal(r.json.error,'store-unavailable');assert.equal(r.calls,0);});
 test('cuota global desactivada por defecto: comportamiento anterior intacto',()=>{assert.equal(Render.globalQuota({}),null);assert.equal(Render.globalQuota({RUBIK_RENDER_GLOBAL_QUOTA:'1'}).reserveUsd,null);assert.equal(Render.globalQuota(env).reserveUsd,0.38);});
+test('cota no verificada para el modelo en uso (p. ej. gpt-image-2.5-sunburst) → 503 quota-bound-unverified, sin proveedor',async()=>{
+ for(const m of [undefined,'otro-modelo']){const e={...env};if(m)e.RUBIK_RENDER_QUOTA_BOUND_MODEL=m;else delete e.RUBIK_RENDER_QUOTA_BOUND_MODEL;
+  const r=await call(L.redisStore({exec:resp()}),Render.createMeter(),ok,e);assert.equal(r.json.error,'quota-bound-unverified');assert.equal(r.calls,0);}});
+test('dimensiones de entrada: lado largo > máximo → 413 image-dimensions, sin proveedor; PNG y JPEG se miden',async()=>{
+ const r=await call(L.redisStore({exec:resp()}),Render.createMeter(),ok,env,pngOf(4000,3000));assert.equal(r.status,413);assert.equal(r.calls,0);
+ const j=Buffer.from([0xff,0xd8,0xff,0xc0,0,17,8,0x04,0x00,0x06,0x00]);assert.deepEqual(Render.imageDims(Buffer.concat([j,Buffer.alloc(8)])),{w:1536,h:1024});});
 test('sin tarifa o sin cotas de tokens la cuota no arranca: 503 quota-not-configured, sin proveedor',async()=>{
  const e={...env};delete e.RUBIK_RENDER_MAX_OUTPUT_TOKENS;const r=await call(L.redisStore({exec:resp()}),Render.createMeter(),ok,e);
  assert.equal(r.json.error,'quota-not-configured');assert.equal(r.calls,0);});

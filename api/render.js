@@ -110,11 +110,22 @@ function parseImage(dataUrl){
    tokens configuradas la cuota NO arranca (503 quota-not-configured). Como el tope común se comprueba con la reserva, la
    suma de reservas en vuelo (concurrencia incluida) nunca pasa del tope; si una liquidación real superase su reserva
    (cota mal configurada) se registra 'render-overrun' y se DETIENE la cuota (bloqueo persistente) hasta revisión. */
-function globalQuota(env){if(env.RUBIK_RENDER_GLOBAL_QUOTA!=='1')return null;
+// COTA VERIFICADA: la cuota solo arranca si el propietario declara, para el MODELO EXACTO en uso, que las cotas de tokens
+// proceden de una fuente oficial o de una medición propia que garantiza el máximo (RUBIK_RENDER_QUOTA_BOUND_MODEL=<modelo>).
+// Para gpt-image-2.5-* no hay hoy fuente que garantice un máximo antes de llamar (el calculador de GPT Image 2 no estima 2.5),
+// así que la cuota queda CERRADA (503 quota-bound-unverified). Los controles quedan listos para cuando exista esa fuente.
+function imageDims(bytes){
+ if(bytes.length>=24&&bytes.readUInt32BE(0)===0x89504e47)return {w:bytes.readUInt32BE(16),h:bytes.readUInt32BE(20)};
+ if(bytes[0]===0xff&&bytes[1]===0xd8){let i=2;while(i+9<bytes.length){if(bytes[i]!==0xff){i++;continue;}const m=bytes[i+1],len=bytes.readUInt16BE(i+2);
+  if(m>=0xc0&&m<=0xcf&&m!==0xc4&&m!==0xc8&&m!==0xcc)return {w:bytes.readUInt16BE(i+7),h:bytes.readUInt16BE(i+5)};i+=2+len;}}
+ return null;}
+function globalQuota(env,model=MODEL){if(env.RUBIK_RENDER_GLOBAL_QUOTA!=='1')return null;
  const n=(v,d)=>{const x=Number(v);return Number.isFinite(x)&&x>0?x:d;},t=tariff(env);
  const maxIn=n(env.RUBIK_RENDER_MAX_INPUT_TOKENS,null),maxOut=n(env.RUBIK_RENDER_MAX_OUTPUT_TOKENS,null);
- const bound=t&&maxIn&&maxOut?+((maxIn*Math.max(t.inputText,t.inputImage)+maxOut*t.output)/1e6).toFixed(6):null;
- return {maxImages:Math.floor(n(env.RUBIK_RENDER_GLOBAL_MAX_IMAGES,30)),capUsd:n(env.RUBIK_RENDER_GLOBAL_CAP_USD,5),
+ const verified=typeof env.RUBIK_RENDER_QUOTA_BOUND_MODEL==='string'&&env.RUBIK_RENDER_QUOTA_BOUND_MODEL===model;
+ const bound=verified&&t&&maxIn&&maxOut?+((maxIn*Math.max(t.inputText,t.inputImage)+maxOut*t.output)/1e6).toFixed(6):null;
+ return {verified,maxImages:Math.floor(n(env.RUBIK_RENDER_GLOBAL_MAX_IMAGES,30)),capUsd:n(env.RUBIK_RENDER_GLOBAL_CAP_USD,5),
+  maxInputPx:Math.floor(n(env.RUBIK_RENDER_MAX_INPUT_PX,1536)),size:'1536x1024',n:1,
   bound,reserveUsd:bound===null?null:Math.max(n(env.RUBIK_RENDER_RESERVE_USD,0),bound)};}
 const HALT='render-ia:halt';
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter=defaultMeter,now=Date.now,log=console.log,clock=Date.now,store}={}){
@@ -134,7 +145,8 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
  const slot=meter.reserve(now(),lim);
  if(!slot.ok){res.setHeader('Retry-After',String(slot.retryAfter));return send(res,429,{error:'limit',retryAfter:slot.retryAfter});}
  const gq=globalQuota(env);let settle=async()=>{};
- if(gq){if(gq.reserveUsd===null)return send(res,503,{error:'quota-not-configured'});
+ if(gq){if(!gq.verified)return send(res,503,{error:'quota-bound-unverified'});if(gq.reserveUsd===null)return send(res,503,{error:'quota-not-configured'});
+  const d=imageDims(image.bytes);if(!d||d.w<1||d.h<1||Math.max(d.w,d.h)>gq.maxInputPx)return send(res,413,{error:'image-dimensions',maxInputPx:gq.maxInputPx});
   if(store===undefined)store=Ledger.storeFromEnv(env);if(!store)return send(res,503,{error:'store-not-configured'});
   const id='render-'+crypto.randomUUID();let r0;
   try{if(await store.get(HALT))return send(res,503,{error:'global-halted'});
@@ -163,5 +175,5 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
 }
 module.exports=(req,res)=>handler(req,res);
 module.exports.handler=handler;module.exports.STYLES=STYLES;module.exports.FLOORS=FLOORS;module.exports.WALLS=WALLS;module.exports.prompt=prompt;
-module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;module.exports.globalQuota=globalQuota;
+module.exports.createMeter=createMeter;module.exports.limits=limits;module.exports.DEFAULT_LIMITS=DEFAULT_LIMITS;module.exports.globalQuota=globalQuota;module.exports.imageDims=imageDims;module.exports.MODEL=MODEL;
 module.exports.usageOf=usageOf;module.exports.tariff=tariff;module.exports.costOf=costOf;

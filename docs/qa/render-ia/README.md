@@ -19,12 +19,19 @@ Encargo `121ad35a` §3 · rama `claude/visualizacion-home` · base `899415f3`. T
 
 ## Pendiente
 
-- **Contador por instancia y cuota global persistente: corregido tras la revisión del propietario; sigue cerrado por defecto.** El contador por instancia (`createMeter`) se conserva como primera barrera. Con `RUBIK_RENDER_GLOBAL_QUOTA=1`, `api/render.js` reserva de forma atómica 1 imagen y un importe en el libro común (`api/_spend-ledger.js`) **antes** de llamar al proveedor.
-  - **Reserva ≥ coste máximo real.** Reserva = max(`RUBIK_RENDER_RESERVE_USD`, cota), con cota = `RUBIK_RENDER_MAX_INPUT_TOKENS`·max(precio texto, precio imagen) + `RUBIK_RENDER_MAX_OUTPUT_TOKENS`·precio salida. Sin tarifa o sin cotas → `503 quota-not-configured`. El tope en USD se comprueba sobre gastado + reservado, así que con concurrencia la suma en vuelo nunca lo supera (prueba: 12 simultáneas, tope 1 USD, cota 0,38 → 2 llamadas).
-  - **Si el coste real supera la reserva** (cota mal configurada): registro `render-overrun` y bloqueo persistente `render-ia:halt` → `503 global-halted` hasta revisión.
-  - **Liquidación fallida no silenciada:** registro `ledger-settle-failed`, cabecera `x-rubik-ledger: unsettled`; la reserva queda abierta (sigue contando contra el tope) y la conciliación devuelve `review`. Coste desconocido → se liquida la cota y se registra `render-cost-unknown`.
-  - **Cotas de tokens: decisión del propietario.** Deben salir de la tarifa y del consumo máximo documentado por el proveedor para 1536×1024 y la imagen de entrada máxima (`MAX_BYTES`); el código no las inventa.
-  - Pruebas: `tests/render-global-quota.test.cjs` 9/9 sobre Redis real local. Nada activado; cero llamadas al proveedor.
-  - CI: `point-6-solar` en `2a6fa960` = success ([run 45656216227](https://github.com/Juanmaes83/floorplan-3d/actions/runs/45656216227)); este corte se vuelve a lanzar sobre su SHA.
+- **Cuota global persistente: código preparado, DESACTIVADA y BLOQUEADA por defecto.** No está cerrada como capacidad: falta una cota superior demostrable.
+  - **Modelo de referencia:** `gpt-image-2.5-sunburst`, el de Production (variable de configuración, no secreta). No se descifró la variable del Preview. El código por defecto sigue en `gpt-image-1`: la migración no se hizo porque la documentación oficial no es accesible desde este entorno (el proxy rechaza platform.openai.com) y no se ha podido verificar el soporte ni los parámetros.
+  - **Cómo se calcula la reserva:** reserva = max(`RUBIK_RENDER_RESERVE_USD`, cota), con cota = `RUBIK_RENDER_MAX_INPUT_TOKENS` · max(precio de texto, precio de imagen) + `RUBIK_RENDER_MAX_OUTPUT_TOKENS` · precio de salida (USD por millón, `RUBIK_RENDER_PRICE_*`). El tope se comprueba atómicamente sobre lo gastado más lo reservado, así que la concurrencia no lo supera.
+  - **Por qué está bloqueada:** para gpt-image-2.5 no hay una fuente que garantice un máximo de tokens antes de llamar; la documentación advierte que el calculador de GPT Image 2 no estima 2.5. Sin cota garantizada, una estimación no sirve como garantía. Por eso la cuota exige `RUBIK_RENDER_QUOTA_BOUND_MODEL` igual al modelo exacto en uso, declarado por el propietario solo cuando exista una fuente oficial o una medición que garantice el máximo. Sin eso responde `503 quota-bound-unverified` sin llamar al proveedor.
+  - **Límites explícitos de la petición** (con la cuota activa):
+    - Salida: `size=1536x1024` y `n=1`.
+    - Entrada: lado largo ≤ `RUBIK_RENDER_MAX_INPUT_PX` (1536 por defecto), medido en la cabecera PNG o JPEG (no por bytes); si lo supera, `413 image-dimensions`.
+    - La **calidad** no se fija: no se puede verificar el valor admitido por 2.5 sin documentación. Es un pendiente del propietario o de la documentación.
+  - **Otras salvaguardas:**
+    - Sobrecoste: `render-overrun` y detención persistente (`503 global-halted`).
+    - Liquidación fallida: registro `ledger-settle-failed`, cabecera `x-rubik-ledger: unsettled`, reserva abierta y conciliación en `review`.
+    - Sin almacén: `503 store-not-configured`.
+  - **Pruebas:** `tests/render-global-quota.test.cjs` 11/11 sobre Redis real local; cero llamadas al proveedor y ningún gasto.
+  - **CI:** `point-6-solar` y `op02-render-demand` correctos en `347b6136` (runs 45657604425 y 45658853019). Consolidation Regression en `347b6136`: run 45658846332, resultado pendiente de anotar.
 - **Validación visual de que la variante sigue representando el espacio** con salidas reales del producto, y **cualquier capacidad generativa nueva** (p. ej. 4K nativo del proveedor): requieren ensayo autorizado con el proveedor.
 - Firefox, WebKit y móvil físico: NOT_RUN.
