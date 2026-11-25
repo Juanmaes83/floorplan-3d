@@ -92,6 +92,7 @@ test(`Phase C3: BC3 reference prices and export ${viewport.width}x${viewport.hei
  assert.equal(await stored(),225,'BC3 price saved before reload');
  await d.locator('#budgetClose').click();
  await page.reload();
+ await page.waitForFunction(()=>window.FloorPlanApp?.project && window.FloorPlanBudgetUI);
  if(await page.locator('#welcomeReturn').isVisible())await page.locator('#welcomeReturn').click();
  assert.equal(await stored(),225,'BC3 price exists before reopening budget');
  await page.locator('#workArea-budget').click();
