@@ -561,3 +561,16 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
 @media (max-width:1100px) and (min-height:501px){
   body.perla:has(aside.right.open) #mobileDock,body.perla:has(aside.lib.open) #mobileDock{z-index:60!important}
 }
+/* Teléfono estrecho (≤400 px): la cabecera cabe sin solapes. El selector conserva ES · EN · ZH y el nombre del proyecto cede
+   espacio (queda su desplegable); ningún control se oculta. */
+@media (max-width:400px){
+  body.perla .perla-r1>.perla-left{flex:1 1 0!important;min-width:0;overflow:hidden}
+  body.perla .perla-r1>.perla-utils{flex:0 0 auto!important;gap:2px}
+  body.perla .perla-r1{column-gap:4px;padding-inline:6px}
+  body.perla .perla-r1>.perla-left{gap:4px}
+  body.perla .perla-r1>.perla-left>#welcomeBtn{margin:0!important;min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils>#actionSearchBtn{min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils #langBtn{padding:0 4px!important}
+  body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
+  body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
+}
