@@ -24,7 +24,7 @@
 'use strict';
 const {timingSafeEqual}=require('node:crypto');
 const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&timingSafeEqual(x,y);};
-const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-1';
+const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-2.5-sunburst';
 const MAX_BYTES=3.5*1024*1024;
 // Catálogo canónico compartido con el cliente y Home (js/render-styles.js): mismos ids, alias de versiones anteriores.
 const CATALOG=require('../js/render-styles.js'),Ledger=require('./_spend-ledger.js'),crypto=require('crypto');
@@ -162,7 +162,7 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env,meter
    if(ok&&!known)logCall({status:'render-cost-unknown',id,settledUsd:usd},log);
    let r;try{r=await store.settle(id,{usd,units:ok?1:0,subject:'render-ia',basis:known?cost.basis:(ok?'reserve-bound':null)});}catch(e){r={settled:false,reason:'store-error'};}
    if(!r||!r.settled){logCall({status:'ledger-settle-failed',id,reason:r&&r.reason||'unknown',usd},log);res.setHeader('x-rubik-ledger','unsettled');}};}
- const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');
+ const form=new FormData();form.append('model',MODEL);form.append('prompt',prompt(style,{floor,walls}));form.append('n','1');form.append('size','1536x1024');form.append('quality','high');
  form.append('image',new Blob([image.bytes],{type:image.type}),image.type==='image/png'?'view.png':'view.jpg');
  const started=clock(),base={model:MODEL,style,floor,walls};
  let r;try{r=await fetchImpl('https://api.openai.com/v1/images/edits',{method:'POST',headers:{Authorization:`Bearer ${env.OPENAI_API_KEY}`},body:form});}
