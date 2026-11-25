@@ -1,0 +1,10 @@
+1440 design: sin duplicados a la vista
+1440 analyze: sin duplicados a la vista
+1440 budget: Abrir presupuesto ×2 · Crear plan de obra ×2
+1440 deliver: sin duplicados a la vista
+1440 studio: sin duplicados a la vista
+390 design: sin duplicados a la vista
+390 analyze: sin duplicados a la vista
+390 budget: sin duplicados a la vista
+390 deliver: sin duplicados a la vista
+390 studio: sin duplicados a la vista

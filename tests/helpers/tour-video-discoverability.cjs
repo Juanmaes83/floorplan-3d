@@ -95,7 +95,7 @@ module.exports = ({ getBrowser, getOrigin }) => {
         const buttonVisible=document.getElementById('presentationVideo').getClientRects().length!==0;
         hint.focus();
         window.recordingDuringStory={
-          buttonVisible,role:hint.getAttribute('role'),text:hint.textContent,
+          buttonVisible,buttonBlocked:document.getElementById('presentationVideo').getAttribute('aria-disabled')==='true',role:hint.getAttribute('role'),text:hint.textContent,
           keyboard:hint.tabIndex===0&&document.activeElement===hint,
           unobscured:hint.contains(hit)&&box.left>=0&&box.right<=innerWidth&&box.top>=0&&box.bottom<=innerHeight,
         };
@@ -106,9 +106,10 @@ module.exports = ({ getBrowser, getOrigin }) => {
     await page.locator('#presentationStoryFull').click();
     await page.waitForFunction(()=>window.recordingDuringStory);
     const recorded=await page.evaluate(()=>window.recordingDuringStory);
-    assert.equal(recorded.buttonVisible,false,'the unavailable action does not compete with the active story player');
+    assert.equal(recorded.buttonVisible,true,'recording remains discoverable during the story');
+    assert.equal(recorded.buttonBlocked,true,'recording cannot interrupt the active story');
     assert.equal(recorded.role,'status');
-    assert.match(recorded.text,/Grabar vídeo · Termina la historia/);
+    assert.match(recorded.text,/Termina la historia/);
     assert.equal(recorded.unobscured,true,'the recording instruction is visible and unobscured');
     assert.equal(recorded.keyboard,true,'the recording instruction can receive keyboard focus');
     await scene(page,'paused');

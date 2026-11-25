@@ -10,7 +10,7 @@ const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.projec
 async function capture(page,name){const folder=process.env.MINIMAP_ARTIFACTS||'qa-results/serra-r3-m13';await fs.mkdir(folder,{recursive:true});await page.screenshot({path:path.join(folder,name+'.png')});}
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R3 M13 minimap room identity, direction and return ${viewport.width}x${viewport.height}`,{timeout:budget(150000)},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
- await page.locator('#guidePresent').click();await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.locator('#guidePresent:visible, #presentationBtn:visible').first().click();await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!document.querySelector('#presentationMinimap').hidden,null,{timeout:budget(30000)});
  const toggle=page.locator('#presentationMinimapToggle'),panel=page.locator('#presentationMinimapPanel');
  const initiallyOpen=viewport.width>=700&&viewport.height>500;assert.equal(await panel.isVisible(),initiallyOpen);
@@ -32,7 +32,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 
 test('R3 M13 resize keeps map coordinates and camera heading aligned with the current stage',{timeout:budget(150000)},async t=>{
  const {page,errors}=await setup(t,{width:360,height:800}),beforeState=await state(page);
- await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.locator('#guidePresent:visible, #presentationBtn:visible').first().click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:budget(30000)});
  await page.locator('#presentationMinimapToggle').click();const original=await page.locator('#presentationMinimap svg').getAttribute('viewBox');
  await page.setViewportSize({width:844,height:390});

@@ -1,6 +1,9 @@
 // Phase B2: AI render from a real view. The dialog says what is sent and where, asks for consent and the access code,
 // sends ONLY the view image and a style to /api/render (intercepted here: no OpenAI call), shows the AI result next
 // to the real view, labels it as AI everywhere and never changes the project. Server errors are said plainly.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..');let server,browser,url;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary'};
@@ -20,7 +23,7 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#aiRenderDialog');
  await page.locator('#workArea-deliver').click();await workspace.locator('[data-route="prepare-views"]').first().click();
  await page.waitForFunction(()=>FloorPlanProjectViews.status()!=='busy',null,{timeout:240000});const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- await workspace.getByRole('button',{name:'Generar imágenes',exact:true}).click();await workspace.getByRole('button',{name:'Render IA de: Vista general',exact:true}).click();await dialog.waitFor();
+ await abrirFicha(page,'P2');await workspace.locator('.panel-f').getByRole('button',{name:'Generar imágenes',exact:true}).click();await workspace.getByRole('button',{name:'Render IA de: Vista general',exact:true}).click();await dialog.waitFor();
  assert.match(await dialog.locator('#aiRenderConsent').innerText(),/Se envía sólo la imagen de esta vista a OpenAI[\s\S]*No se envían el proyecto, la ubicación ni tus datos/);
  // Consent and access code are required before anything leaves the browser.
  await dialog.locator('#aiRenderGo').click();assert.match(await dialog.locator('#aiRenderStatus').innerText(),/Confirma que entiendes qué se envía/);

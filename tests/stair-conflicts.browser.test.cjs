@@ -35,14 +35,16 @@ test(`BW5 furniture over a stair, import to correction ${viewport.width}x${viewp
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await open(context);
  const tapOrClick=l=>mobile?l.tap():l.click();
+ // UX-312 PERLA: en teléfono «Plantas…» está en el menú «⋯» de la cabecera (tests/helpers-perla-editor.cjs).
+ const {mostrar}=require('./helpers-perla-editor.cjs');
  const closePanel=()=>page.evaluate(()=>{if(matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right')?.classList.contains('open'))document.querySelector('#tgPanel').click();});
  const level=async i=>{if((await page.evaluate(()=>FloorPlanBuildingUI.context.order))!==i){await tapOrClick(page.locator('#levelBar [data-level]').nth(i));await page.waitForFunction(o=>FloorPlanBuildingUI.context.order===o,i);}await closePanel();};
  const fit=()=>page.evaluate(()=>document.querySelector('#fit').click());
  const to=async mode=>{await page.evaluate(m=>setView(m),mode);await page.waitForFunction(m=>FloorPlanApp.viewMode===m,mode);await page.waitForTimeout(mode==='3d'?1500:300);};
  const shot=async step=>{await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);await page.screenshot({path:path.join(shots,`${name}-${step}.png`)});};
  const chip=page.locator('#levelConflicts');
- const chipClear=async()=>{const r=await page.evaluate(()=>{const c=document.querySelector('#levelConflicts').getBoundingClientRect(),hit=[...document.querySelectorAll('#gDims text,#scalebar,#viewSeg,#levelBar,#fab.show,#gSel > *')].map(e=>e.getBoundingClientRect()).filter(b=>b.width&&b.left<c.right&&c.left<b.right&&b.top<c.bottom&&c.top<b.bottom);return {c:{l:c.left,r:c.right,b:c.bottom},hit:hit.length,vw:innerWidth,vh:innerHeight};});
-  assert.ok(r.c.l>=0&&r.c.r<=r.vw+1&&r.c.b<=r.vh+1,'chip inside the viewport');assert.equal(r.hit,0,'chip covers no dimension, scale bar or view/level control');};
+ const chipClear=async()=>{const r=await page.evaluate(()=>{const c=document.querySelector('#levelConflicts').getBoundingClientRect(),hit=[...document.querySelectorAll('#gDims text,#scalebar,#viewSeg,#levelBar,#fab.show,#gSel > *')].filter(e=>{const b=e.getBoundingClientRect();return b.width&&b.left<c.right&&c.left<b.right&&b.top<c.bottom&&c.top<b.bottom;});return {c:{l:c.left,r:c.right,b:c.bottom},names:hit.map(e=>e.id||e.tagName),hit:hit.length,vw:innerWidth,vh:innerHeight};});
+  assert.ok(r.c.l>=0&&r.c.r<=r.vw+1&&r.c.b<=r.vh+1,'chip inside the viewport');assert.equal(r.hit,0,'chip covers no dimension, scale bar or view/level control: '+r.names.join(', '));};
 
  // 1. Import the ZIP in a clean context: kept as received (canonical content, IDs, positions); state pending.
  await page.locator('#uploadIn').setInputFiles(path.join(tmp,'duplex.zip'));await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:60000});
@@ -116,7 +118,7 @@ test(`BW5 furniture over a stair, import to correction ${viewport.width}x${viewp
  assert.equal(B.canonical(await building(page)),B.canonical(saved));assert.equal((await status(page)).state,'clear');
 
  // 9. Stair form: lists the furniture that a new position would cover on BOTH levels; closing without saving changes nothing.
- await tapOrClick(page.locator('#levelsBtn'));await page.locator('#levelsDialog[open]').waitFor();const preview=page.locator('#stairConflictsPreview');
+ await tapOrClick(await mostrar(page,'#levelsBtn'));await page.locator('#levelsDialog[open]').waitFor();const preview=page.locator('#stairConflictsPreview');
  await page.fill('#stairX','1600');await page.fill('#stairY','700');await page.fill('#stairRotation','0');
  assert.match(await preview.textContent(),/Quedarían sobre la escalera \(BW5\): «Mesa» en «Planta baja»[^;]*; «Escritorio» en «Planta primera»/);
  assert.match(await preview.textContent(),/la distribución quedará pendiente/);await preview.scrollIntoViewIfNeeded();await shot('11-stair-form-preview');

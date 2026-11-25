@@ -1,0 +1,582 @@
+/* UX-312 · PERLA · Editor en dos filas (V4). Solo bajo body.perla; capa de disposición (js/perla-editor-ui.js).
+   Jerarquía: navegación centrada y con peso · auxiliares compactos · acción principal en vino apagado ·
+   segundo nivel en verde petróleo · laterales vino casi blanco · lienzo neutro. */
+body.perla{
+  --perla-wine:#783B4B;--perla-wine-hover:#6A3342;--perla-wine-pressed:#5A2B38;--perla-wine-ring:#F4E8EC;
+  --perla-petrol:#1F5A66;--perla-petrol-soft:#E3ECEE;--perla-side:#FAF7F8;--perla-canvas:#EEF0F0;
+  --perla-line:#E4DDE0;--perla-ink:#1f2326;--perla-muted:#5b6266;
+}
+/* ── Cabecera: dos filas ── */
+body.perla .app>header{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;padding:0!important;height:auto!important;min-height:0!important;flex-wrap:nowrap!important;background:#fff;border-bottom:1px solid var(--perla-line)}
+body.perla .perla-keep{display:none!important}
+body.perla .perla-r1,body.perla .perla-r2{display:flex;align-items:center;gap:8px;padding:6px 14px;min-width:0}
+body.perla .perla-r1{min-height:56px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+body.perla .perla-r2{min-height:50px;border-top:1px solid var(--perla-line);background:#fff;flex-wrap:nowrap}
+body.perla .perla-left,body.perla .perla-utils{display:flex;align-items:center;gap:6px;min-width:0}
+body.perla .perla-utils{justify-content:flex-end}
+body.perla .perla-ico{flex:none;display:block}
+body.perla .perla-brand{display:inline-flex!important;align-items:center;gap:8px;border:0!important;background:none!important;font-size:16px;color:var(--perla-ink);padding:6px 8px!important;min-height:40px}
+body.perla .perla-brand b{font-weight:700;letter-spacing:.01em;white-space:nowrap}
+body.perla .perla-brand-meta{display:none!important}
+body.perla .perla-project{display:inline-flex;align-items:center;gap:6px;min-height:36px;max-width:220px;padding:4px 10px;border:1px solid var(--perla-line);border-radius:8px;background:#fff;font-size:13px;color:var(--perla-ink)}
+body.perla .perla-project-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.perla .perla-copy{display:inline-flex!important;align-items:center;gap:6px;min-height:36px;font-size:13px;color:var(--perla-petrol)!important;border:1px solid var(--perla-petrol)!important;background:#fff!important;border-radius:8px;padding:4px 10px}
+body.perla .perla-copy[hidden]{display:none!important}
+/* Áreas: centradas, con más peso; la activa subrayada en vino */
+body.perla .perla-areas{display:flex;align-items:stretch;gap:4px;justify-self:center}
+body.perla .perla-areas>button{min-height:44px;padding:0 18px!important;font-size:15px!important;font-weight:600!important;color:var(--perla-ink)!important;background:transparent!important;border:0!important;border-radius:8px 8px 0 0!important;box-shadow:inset 0 -3px 0 transparent!important;white-space:nowrap}
+body.perla .perla-areas>button:hover{background:#F6F1F3!important}
+body.perla .perla-areas>button[aria-current="page"],body.perla .perla-areas>button[aria-pressed="true"],body.perla .perla-areas>button.on,body.perla .perla-areas>button[aria-expanded="true"]{color:var(--perla-wine)!important;box-shadow:inset 0 -3px 0 var(--perla-wine)!important}
+/* Utilidades compactas */
+body.perla .perla-icon{display:inline-flex!important;align-items:center;justify-content:center;gap:4px;min-width:36px;min-height:36px;padding:0 8px!important;font-size:12px;color:var(--perla-muted)!important;background:transparent!important;border:1px solid transparent!important;border-radius:8px}
+body.perla .perla-icon:hover{background:#F3F4F4!important;border-color:var(--perla-line)!important}
+body.perla #actionSearchBtn{font-size:12px}
+body.perla #actionSearchBtn kbd{font-size:11px}
+body.perla .perla-utils #editHistory{display:inline-flex;gap:2px}
+body.perla .perla-utils #editHistory button{min-width:34px;min-height:36px;padding:0 6px}
+body.perla .perla-studio{display:inline-flex!important;align-items:center;gap:6px;min-height:36px;font-size:13px!important;font-weight:500!important;padding:0 10px!important;border:1px solid var(--perla-line)!important;border-radius:8px!important;background:#fff!important;color:var(--perla-ink)!important}
+body.perla .perla-lang{min-height:36px;font-size:12px}
+body.perla details.menu>summary{list-style:none}
+body.perla details.menu>summary::-webkit-details-marker{display:none}
+body.perla .perla-more{position:relative}
+body.perla .perla-pop{position:absolute;z-index:60;min-width:240px;display:flex;flex-direction:column;gap:2px;padding:6px;background:#fff;border:1px solid var(--perla-line);border-radius:10px;box-shadow:0 12px 32px rgba(40,20,28,.14)}
+body.perla .perla-more .perla-pop{right:0;left:auto}
+body.perla .perla-pop>button,body.perla .perla-pop>label,body.perla .perla-pop>a{justify-content:flex-start;text-align:start;width:100%;min-height:40px}
+/* Fila 2 */
+body.perla .perla-menu{position:relative}
+body.perla .perla-menu>summary,body.perla .perla-tasks{display:inline-flex!important;align-items:center;gap:6px;min-height:38px;padding:0 12px!important;font-size:13px;font-weight:500;border:1px solid var(--perla-line)!important;border-radius:8px;background:#fff!important;color:var(--perla-ink)!important;cursor:pointer;white-space:nowrap}
+body.perla .perla-menu .perla-pop{left:0;top:calc(100% + 6px)}
+body.perla .perla-r2 #viewSeg{flex:none}
+body.perla .perla-progress{display:flex;align-items:center;gap:10px;min-width:0;padding:0 6px;font-size:13px;color:var(--perla-muted)}
+body.perla .perla-step{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+body.perla .perla-step b{color:var(--perla-ink);font-weight:600}
+body.perla .perla-step small{margin-inline-start:8px;font-size:12px}
+body.perla .perla-meter{flex:none;width:96px;height:6px;border-radius:3px;background:#EDE6E9;overflow:hidden}
+body.perla .perla-meter>i{display:block;height:100%;background:var(--perla-petrol);border-radius:3px;transition:width .2s}
+body.perla .perla-tasks{color:var(--perla-petrol)!important;border-color:var(--perla-petrol)!important}
+body.perla .perla-tasks[aria-expanded="true"]{background:var(--perla-petrol-soft)!important}
+body.perla .perla-spacer{flex:1 1 auto}
+/* Segundo nivel: verde petróleo, contorno */
+body.perla .perla-secondary{display:inline-flex!important;align-items:center;gap:6px;min-height:40px;padding:0 14px!important;font-weight:600;font-size:14px;color:var(--perla-petrol)!important;background:#fff!important;border:1.5px solid var(--perla-petrol)!important;border-radius:9px!important;white-space:nowrap}
+body.perla .perla-secondary:hover{background:var(--perla-petrol-soft)!important}
+/* Primaria: vino apagado, sombra suave, anillo de foco claro */
+body.perla .perla-primary{min-height:42px;padding:0 20px!important;font-size:14px;font-weight:700;color:#fff!important;background:var(--perla-wine)!important;border:1px solid var(--perla-wine)!important;border-radius:10px!important;box-shadow:0 4px 12px rgba(120,59,75,.24),0 1px 2px rgba(120,59,75,.2)!important;white-space:nowrap}
+body.perla .perla-primary:hover{background:var(--perla-wine-hover)!important}
+body.perla .perla-primary:active{background:var(--perla-wine-pressed)!important;box-shadow:0 1px 3px rgba(120,59,75,.25)!important}
+body.perla .perla-primary:focus-visible{outline:3px solid var(--perla-wine)!important;outline-offset:2px;box-shadow:0 0 0 6px var(--perla-wine-ring)!important}
+body.perla .perla-primary:disabled{opacity:.55;box-shadow:none!important;cursor:not-allowed}
+body.perla .perla-primary[hidden]{display:none!important}
+/* Guía como panel a demanda */
+body.perla #guideBar{display:none!important}
+body.perla.perla-guide-open #guideBar:not([hidden]){display:grid!important;position:absolute;z-index:55;right:14px;top:112px;width:min(560px,calc(100vw - 28px));max-height:calc(100vh - 140px);overflow:auto;border:1px solid var(--perla-line);border-radius:12px;box-shadow:0 18px 40px rgba(40,20,28,.18);background:#fff}
+body.perla .guide-example{display:none!important}
+body.perla #professionalNav{display:none!important}
+/* ── Paneles laterales y lienzo ── */
+body.perla aside.lib,body.perla aside.right{background:var(--perla-side)!important}
+body.perla aside.lib .palette-tabs,body.perla aside.right #panel>*{background-color:transparent}
+body.perla #stage{background:var(--perla-canvas)!important;position:relative}
+body.perla .perla-canvas-top{position:absolute;z-index:20;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;max-width:calc(100% - 220px)}
+body.perla .perla-canvas-top>.btn,body.perla .perla-canvas-top>details>summary{min-height:34px;font-size:13px;background:#fff;border:1px solid var(--perla-line);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+body.perla .perla-canvas-top .layers-pop,body.perla .perla-canvas-top .menu-pop{top:calc(100% + 6px);left:0}
+body.perla .perla-canvas-top>details{position:relative}
+body.perla .perla-canvas-bottom{position:absolute;z-index:20;left:12px;bottom:12px;display:flex;align-items:center;gap:4px;padding:4px;background:#fff;border:1px solid var(--perla-line);border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+body.perla .perla-canvas-bottom>.btn,body.perla .perla-canvas-bottom>details>summary{min-width:34px;min-height:34px;font-size:13px}
+body.perla .perla-scales{position:relative}
+body.perla .perla-scales .perla-pop{bottom:calc(100% + 6px);left:0;top:auto;min-width:140px}
+body.perla .perla-canvas-bottom #scalebar{position:static!important;margin-inline-start:6px}
+body.perla #stage>#solarNorth{position:absolute;top:12px;right:12px;left:auto;bottom:auto}
+/* Plegar paneles (los mismos tgLib / tgPanel), abajo a la derecha del lienzo */
+body.perla #stage>#mobileDock{position:absolute;z-index:20;right:12px;bottom:12px;display:flex!important;gap:4px;padding:4px;background:#fff;border:1px solid var(--perla-line);border-radius:10px}
+body.perla #stage>#mobileDock #viewSeg{display:none}
+body.perla #mobileDock #paneBtns{display:flex;gap:4px}
+/* Inspector */
+body.perla .perla-inspector-head{padding:12px 14px 0;border-bottom:1px solid var(--perla-line);background:var(--perla-side)}
+body.perla .perla-inspector-title{margin:0 0 8px;font-size:15px;font-weight:700;color:var(--perla-ink)}
+body.perla .perla-tabs{display:flex;gap:2px}
+body.perla .perla-tabs>button{flex:1;min-height:38px;font-size:13px;font-weight:500;border:0!important;border-radius:0!important;background:transparent!important;color:var(--perla-muted)!important;box-shadow:inset 0 -2px 0 transparent}
+body.perla .perla-tabs>button[aria-selected="true"]{color:var(--perla-petrol)!important;font-weight:700;box-shadow:inset 0 -3px 0 var(--perla-petrol)}
+body.perla .perla-props-hint{margin:12px 14px;padding:10px 12px;font-size:13px;color:var(--perla-muted);border:1px dashed var(--perla-line);border-radius:8px;background:#fff}
+body.perla .perla-props-hint[hidden]{display:none}
+body.perla aside.right[data-perla-tab="estancias"] #panel:has(>[data-group="areas"],[data-group="areas"]) [data-group="keys"]{display:none!important}
+body.perla aside.right[data-perla-tab="informe"] #panel:has([data-group="areas"]) [data-group="areas"]{display:none!important}
+/* Propiedades sin selección: la vista general se retira (queda la indicación); con selección, el panel vigente entero */
+body.perla aside.right[data-perla-tab="propiedades"] #panel:has([data-group="areas"]) [data-group]{display:none!important}
+body.perla .perla-inspector-foot{padding:10px 14px;border-top:1px solid var(--perla-line);background:var(--perla-side)}
+body.perla .perla-inspector-foot #assistantOpen{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;color:var(--perla-petrol)!important;border:1.5px solid var(--perla-petrol)!important;background:#fff!important;border-radius:9px;font-weight:600}
+/* Foco: anillo vino en la cabecera PERLA */
+body.perla .perla-r1 :focus-visible,body.perla .perla-r2 :focus-visible,body.perla .perla-canvas-top :focus-visible,body.perla .perla-canvas-bottom :focus-visible{outline:3px solid var(--perla-wine);outline-offset:2px}
+/* ── Escritorio estrecho ── */
+@media (max-width:1280px){
+  body.perla .perla-areas>button{padding:0 12px!important;font-size:14px!important}
+  body.perla .perla-studio>span,body.perla #actionSearchBtn kbd{display:none}
+  body.perla .perla-step small{display:none}
+}
+@media (max-width:1100px){
+  body.perla .perla-r1{grid-template-columns:auto 1fr auto}
+  body.perla .perla-project{max-width:140px}
+  body.perla .perla-meter{width:60px}
+  body.perla .perla-tasks>span,body.perla .perla-menu>summary>span{display:none}
+}
+/* ── Móvil vertical ── */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r1{display:flex;padding:4px 8px;min-height:48px;gap:4px}
+  body.perla .perla-areas{order:3;flex:1 1 100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+  body.perla .perla-r1{flex-wrap:wrap}
+  body.perla .perla-areas>button{min-height:40px;padding:0 10px!important;font-size:14px!important}
+  body.perla .perla-left{flex:1;min-width:0}
+  body.perla .perla-brand b,body.perla .perla-copy-label,body.perla #editHistory{display:none!important}
+  body.perla .perla-project{max-width:130px}
+  body.perla .perla-r2{padding:4px 8px;gap:6px;overflow-x:auto;scrollbar-width:none}
+  body.perla .perla-progress{display:none}
+  body.perla .perla-secondary{min-height:40px;padding:0 10px!important}
+  body.perla .perla-secondary>:not(svg){display:none}
+  body.perla .perla-primary{padding:0 14px!important;flex:none}
+  body.perla .perla-canvas-top{max-width:calc(100% - 24px)}
+  body.perla #stage>#solarNorth{top:auto;bottom:76px}
+  body.perla .perla-canvas-bottom{bottom:72px}
+  body.perla #stage>#mobileDock{position:fixed;left:0;right:0;bottom:0;border-radius:0;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border:0;border-top:1px solid var(--perla-line);z-index:70}
+  body.perla #mobileDock #paneBtns{display:contents}
+  body.perla #mobileDock button{flex:1;display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;font-size:12px;border:0!important;background:transparent!important}
+  body.perla.perla-guide-open #guideBar{position:fixed;top:auto;bottom:70px;right:8px;left:8px;width:auto;max-height:60vh}
+  body.perla .perla-menu .perla-pop,body.perla .perla-more .perla-pop{position:fixed;left:8px;right:8px;top:auto;bottom:76px;min-width:0}
+}
+/* ── Móvil horizontal ── */
+@media (max-height:500px) and (orientation:landscape){
+  body.perla .perla-r1{min-height:44px;padding:2px 10px}
+  body.perla .perla-r2{min-height:42px;padding:2px 10px}
+  body.perla .perla-areas>button{min-height:38px}
+  body.perla .perla-progress{display:none}
+}
+/* Ajustes tras la primera captura */
+body.perla .perla-r2>*{order:0!important}
+body.perla #actionSearchBtn .guide-search-prompt,body.perla #actionSearchBtn .guide-search-compact{display:none!important}
+body.perla #editHistory .edit-history-scope{display:none!important}
+body.perla .perla-utils #editHistory #undo,body.perla .perla-utils #editHistory #redo{font-size:0!important;min-width:34px;width:34px;padding:0!important;background:transparent!important;border:1px solid transparent!important;color:var(--perla-muted)}
+body.perla .perla-utils #editHistory #undo::before,body.perla .perla-utils #editHistory #redo::before{font-size:18px;line-height:1}
+body.perla .perla-utils #editHistory #undo::before{content:"↶"}
+body.perla .perla-utils #editHistory #redo::before{content:"↷"}
+/* Móvil · ajuste a la V4 móvil */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .app>header{padding-bottom:0!important;margin-bottom:0!important}
+  body.perla .perla-left{overflow:hidden}
+  body.perla .perla-copy{padding:0 8px;min-width:36px}
+  body.perla #perlaHelp{display:none!important}
+  body.perla .perla-r2{flex-wrap:wrap;overflow:visible;row-gap:6px;padding:6px 8px}
+  body.perla .perla-r2 #viewSeg{flex:1 1 0;min-width:0;display:flex}
+  body.perla .perla-r2 #viewSeg>*{flex:1}
+  body.perla .perla-progress{display:flex;order:5!important;flex:1 1 0;padding:0 2px}
+  body.perla .perla-step{white-space:normal;line-height:1.25}
+  body.perla .perla-step small{display:block;margin:0}
+  body.perla .perla-meter{display:none}
+  body.perla .perla-tasks{order:6!important}
+  body.perla .perla-tasks>span{display:none}
+  body.perla #presentationBtn{order:6!important}
+  body.perla .perla-primary{order:7!important}
+  body.perla .perla-spacer{display:none}
+  body.perla .perla-menu>summary>span{display:inline}
+  body.perla #perlaFile>summary>span{display:none}
+  body.perla .perla-canvas-bottom{right:12px;max-width:calc(100% - 24px);overflow:hidden}
+  body.perla .perla-canvas-bottom #scalebar{min-width:0;max-width:90px;overflow:hidden}
+  body.perla #mobileDock #assistantOpen{flex:1;display:inline-flex;align-items:center;justify-content:center;min-height:52px;font-size:12px;border:0!important;background:transparent!important;color:var(--perla-ink)!important}
+}
+body.perla .perla-break{display:none}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r2>*{order:3!important}
+  body.perla .perla-r2>.perla-split{order:1!important}
+  body.perla #perlaFile{order:2!important}
+  body.perla .perla-r2 #viewSeg{order:3!important;flex:1 1 auto}
+  body.perla .perla-r2 #viewSeg .seg-label,body.perla .perla-r2 #viewSeg>span:first-child:not(.pill){display:none}
+  body.perla .perla-break{display:block;order:4!important;flex-basis:100%;height:0}
+  body.perla .perla-progress{order:5!important;display:flex}
+  body.perla .perla-tasks{order:6!important}
+  body.perla #presentationBtn{order:6!important}
+  body.perla .perla-primary{order:7!important}
+  body.perla .perla-project{max-width:118px}
+  body.perla .perla-left{flex:1 1 auto}
+}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-left{flex:1 1 0!important;min-width:0}
+  body.perla .perla-utils{flex:none}
+  body.perla #presentationBtn{font-size:0!important;padding:0 10px!important;min-width:44px}
+  body.perla .perla-lang{padding:0 6px!important;font-size:11px}
+}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-project{max-width:104px}
+  body.perla .perla-left{overflow:visible}
+  body.perla #mobileDock #assistantOpen{order:9}
+  body.perla #mobileDock #assistantOpen::before{content:"✦";font-size:16px;margin-inline-end:4px}
+}
+/* Filas de la rejilla explícitas: sin ellas, el espacio libre estiraba la cabecera (fila auto) en móvil */
+body.perla:not(.presenting,.professional-area) .app:not(:has(>#roomPlanJoinResult:not([hidden]))){grid-template-rows:auto auto auto minmax(0,1fr) 30px!important}
+body.perla .app>header::after{content:none!important;display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla:not(.presenting,.professional-area) .app:not(:has(>#roomPlanJoinResult:not([hidden]))){grid-template-rows:auto auto auto minmax(0,1fr) 24px!important}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla .perla-project{max-width:92px}body.perla .perla-left{overflow:hidden}body.perla .perla-brand{padding:6px 4px!important}}
+/* Área profesional abierta: la fila 1 sigue (Inicio, proyecto, áreas, Mi estudio, idioma, Más); la fila 2 y lo que actúa
+   sobre el editor (inerte detrás del área) se ocultan, como hacía la cabecera anterior. */
+body.perla.professional-area .app.app>header>.perla-r1{display:grid!important}
+body.perla.professional-area .app>header>.perla-r2{display:none!important}
+body.perla.professional-area .perla-r1 #actionSearchBtn,body.perla.professional-area .perla-r1 #editHistory,body.perla.professional-area #perlaHelp,body.perla.professional-area .perla-copy{display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.professional-area .app.app>header>.perla-r1{display:flex!important}}
+/* Móvil horizontal: una sola línea por fila (la altura útil es escasa) */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .perla-r1{flex-wrap:nowrap;min-height:44px}
+  body.perla .perla-areas{order:0;flex:0 1 auto;overflow-x:auto;justify-content:center}
+  body.perla .perla-areas>button{min-height:38px;padding:0 8px!important;font-size:13px!important}
+  body.perla .perla-left{flex:0 1 auto!important}
+  body.perla .perla-project{max-width:120px}
+  body.perla .perla-r2{flex-wrap:nowrap;min-height:44px;padding:3px 8px}
+  body.perla .perla-break{display:none}
+  body.perla .perla-progress{display:flex;order:3!important;flex:1 1 0}
+  body.perla .perla-step small{display:none}
+  body.perla .perla-r2 #viewSeg{flex:0 0 auto}
+  body.perla #stage>#mobileDock{position:absolute;left:auto;right:8px;bottom:8px;width:auto;border-radius:10px;border:1px solid var(--perla-line);padding:3px;gap:2px;display:flex!important;grid-template-columns:none}
+  body.perla #mobileDock button{flex:none;flex-direction:row;min-height:40px;padding:0 10px!important;gap:6px}
+  body.perla .perla-canvas-bottom{bottom:8px;right:auto;max-width:calc(100% - 360px)}
+  body.perla #stage>#solarNorth{top:8px;bottom:auto}
+}
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .app>main{margin-right:0!important}
+  body.perla aside.right.open{margin-right:0!important}
+  body.perla #stage>#mobileDock{top:auto!important;width:auto!important;height:auto!important;overflow:visible}
+  body.perla #mobileDock button{min-height:40px!important}
+}
+@media (max-width:1100px) and (max-height:500px){
+  body.perla .perla-left{flex:none!important;overflow:visible}
+  body.perla .perla-project{max-width:96px}
+  body.perla .perla-areas{flex:1 1 auto;min-width:0;gap:0}
+  body.perla .perla-areas>button{padding:0 7px!important;font-size:12.5px!important}
+  body.perla .perla-utils{gap:2px}
+}
+/* Asistente en la fila 1 mientras hay un área abierta */
+body.perla .perla-assistant-slot{display:contents}
+body.perla .perla-assistant-slot #assistantOpen{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;font-size:13px;font-weight:600;color:var(--perla-petrol)!important;border:1.5px solid var(--perla-petrol)!important;background:#fff!important;border-radius:8px}
+/* Mi estudio en el teléfono: solo icono (la acción se conserva) */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-utils .perla-studio{display:inline-flex!important;font-size:0!important;min-width:36px;padding:0 9px!important;border-color:transparent!important;background:transparent!important}
+  body.perla .perla-utils .perla-studio::before{margin:0!important}
+  body.perla .perla-assistant-slot #assistantOpen{padding:0 8px;font-size:12px}
+}
+/* 3D: las capas del plano son solo 2D (como su menú original, .only2d) y la barra del lienzo deja libre la
+   pastilla de navegación 3D (#nav3d, arriba a la izquierda) */
+body.perla.m3d .perla-canvas-top>[data-layer]{display:none!important}
+body.perla.m3d .perla-canvas-top{left:auto;right:12px;justify-content:flex-end;max-width:calc(100% - 160px)}
+body.perla.m3d #stage>#solarNorth{top:auto;bottom:64px}
+/* Teléfono en 3D: la barra de escena es UNA fila desplazable (no tapa la escena); «Presentar» sigue en la fila 2 */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla.m3d .perla-canvas-top{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 150px);top:8px}
+  body.perla.m3d .perla-canvas-top>*{flex:none}
+  body.perla .perla-r2 #presentationBtn{position:static!important;left:auto!important;bottom:auto!important;transform:none!important}
+}
+@media (max-width:1100px) and (max-height:500px){body.perla .perla-project{max-width:84px}}
+/* Zoom, Ajustar, 1:60 / 1:100 y barra de escala son del plano (su grupo original era .only2d) */
+body.perla.m3d .perla-canvas-bottom{display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.m3d .perla-canvas-top{justify-content:flex-start}}
+/* Paseo 3D (joystick visible): la vista queda despejada; la barra inferior se pliega a la izquierda del minimapa */
+/* Paseo: la barra del lienzo deja a la vista solo los modos 3D («Vista aérea» / «Recorrer»): se puede salir del paseo
+   con el mismo botón de siempre. En el teléfono la barra se oculta entera (joystick y «Salir del recorrido»). */
+body.perla.perla-walking .perla-canvas-top>:not(#modes3d){display:none!important}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla.perla-walking .perla-canvas-top{display:none!important}}
+body.perla.perla-walking #stage>#mobileDock{right:auto;left:50%;transform:translateX(-50%)}
+@media (max-width:760px){body.perla.perla-walking #stage>#mobileDock{left:0;transform:none}}
+/* Presentación: las barras del lienzo del editor se retiran (antes vivían en la cabecera, que la presentación oculta) */
+body.perla.presenting .perla-canvas-top,body.perla.presenting .perla-canvas-bottom,body.perla.presenting #stage>#mobileDock{display:none!important}
+body.perla footer #scaleConfidence{display:inline-flex!important;align-items:center;margin-inline-end:12px;font-size:12px;color:var(--perla-muted)}
+/* Selector de proyecto = #projectsBtn: el texto i18n del botón se oculta y se muestra el nombre del proyecto */
+body.perla .perla-left #projectsBtn.perla-project{font-size:0!important;position:relative}
+body.perla .perla-left #projectsBtn.perla-project::before{content:attr(data-perla-name);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+body.perla .perla-left #projectsBtn.perla-project::after{content:"";flex:none;width:7px;height:7px;margin-left:8px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg) translateY(-2px)}
+/* Importar: botón dividido «Subir plano» | ▾ */
+body.perla .perla-split{display:inline-flex;align-items:stretch}
+body.perla .perla-split>#uploadPlanBtn{display:inline-flex!important;align-items:center;gap:6px;min-height:38px;padding:0 12px!important;font-size:13px!important;font-weight:600;border:1px solid var(--perla-line)!important;border-radius:8px 0 0 8px!important;background:#fff!important;color:var(--perla-ink)!important;box-shadow:none!important;white-space:nowrap}
+body.perla .perla-split>#perlaImport>summary{border-radius:0 8px 8px 0!important;border-left:0!important;padding:0 8px!important;min-width:34px;justify-content:center}
+@media (max-width:760px){body.perla .perla-split>#uploadPlanBtn{padding:0 9px!important;font-size:12.5px!important}}
+@media (pointer:coarse),(max-width:760px){body.perla .perla-split>#perlaImport>summary{min-width:44px}}
+/* Escritorio estrecho y zoom 200 %: «Presentar» solo icono y sin rótulo «Vista:» para que la acción principal quepa */
+@media (max-width:1100px){
+  body.perla .perla-r2 #presentationBtn{font-size:0!important;padding:0 10px!important;min-width:44px}
+  body.perla .perla-r2 #viewSeg .professional-control-label{display:none}
+  body.perla .perla-r2{gap:6px}
+}
+
+/* Las barras del lienzo quedan por debajo de los avisos y paneles propios del lienzo (conflictos de plantas, etc.) */
+body.perla .perla-canvas-top,body.perla .perla-canvas-bottom{z-index:6}
+body.perla #stage>#mobileDock{z-index:6}
+@media (max-width:760px){body.perla #stage>#mobileDock{z-index:50} /* sobre los cajones (6), bajo superficies a pantalla completa (60+) */}
+/* Menús propios de PERLA (no son details.menu: «Archivo» sigue siendo el único menú de la cabecera con esa clase) */
+body.perla details.perla-dd{position:relative}
+body.perla details.perla-dd>summary{list-style:none;cursor:pointer}
+body.perla details.perla-dd>summary::-webkit-details-marker{display:none}
+/* 3D: la barra de escena va abajo a la izquierda (zoom y escala no se ven en 3D): arriba quedan libres la navegación 3D,
+   el minimapa del paseo y «Capas de contexto» */
+body.perla.m3d .perla-canvas-top{top:auto!important;bottom:12px;left:12px;right:auto;justify-content:flex-start;max-width:calc(100% - 330px)}
+@media (max-width:760px){
+  body.perla.m3d .perla-canvas-top{bottom:12px;left:8px;max-width:calc(100% - 16px)}
+  /* La barra inferior fija no tapa lo que el lienzo muestra abajo (avisos de plantas, etc.) */
+  body.perla:not(.presenting) .app>main{margin-bottom:46px}
+}
+@media (max-width:1100px) and (max-height:500px){body.perla.m3d .perla-canvas-top{bottom:8px;left:8px;max-width:calc(100% - 340px)}}
+
+/* Editor completo (guía cerrada o «todas las herramientas»): como en la base, las herramientas avanzadas de la cabecera
+   vuelven a estar a la vista, en una tercera fila compacta (en el modo guiado siguen en la paleta Construir). */
+body.perla:not(.guided):not(.professional-area):not(.presenting) .app>header>.perla-keep{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 14px;border-top:1px solid var(--perla-line);background:#fff}
+body.perla .perla-keep>.hdr-break,body.perla .perla-keep>.hdr-break2,body.perla .perla-keep>.spacer,body.perla .perla-keep>.plan-meta{display:none!important}
+body.perla .perla-keep>*{order:0!important}
+body.perla .perla-keep .btn{min-height:34px;font-size:13px}
+/* Modo «Plano propio» (#tracePanel visible): el Inspector no aplica; sus pestañas y su pie se retiran */
+body.perla aside.right:has(#tracePanel:not([hidden])) .perla-inspector-head,body.perla aside.right:has(#tracePanel:not([hidden])) .perla-props-hint{display:none!important}
+
+/* Orden de capas en el lienzo: las barras PERLA (4) quedan por debajo de los avisos del lienzo (conflictos de plantas,
+   z 5) y de los cajones Construir / Inspector (z 6). En el teléfono (vertical y horizontal) la barra inferior queda por
+   encima de los cajones para poder cerrarlos siempre. */
+body.perla .perla-canvas-top,body.perla .perla-canvas-bottom,body.perla #stage>#mobileDock{z-index:4}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #stage>#mobileDock{z-index:50} /* sobre los cajones (6), bajo superficies a pantalla completa (60+) */}
+/* Fila 1: las columnas laterales nunca encogen por debajo de su contenido; así las utilidades no tapan las áreas */
+body.perla .perla-r1{grid-template-columns:minmax(max-content,1fr) auto minmax(max-content,1fr)}
+@media (max-width:1280px){body.perla .perla-r1{gap:6px}body.perla .perla-utils .perla-studio>*:not(svg){display:none}}
+/* Editor completo en el teléfono: la fila de herramientas avanzadas es una sola línea desplazable */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla:not(.guided):not(.professional-area):not(.presenting) .app>header>.perla-keep{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:3px 8px}
+  body.perla .perla-keep>*{flex:none}
+}
+
+/* La confirmación de entrada al paseo queda encima de la barra del lienzo. */
+body.perla #stage:has(#walkOverlay[style*="display: flex"]) .perla-canvas-top>:not(#modes3d){visibility:hidden}
+/* …pero los modos 3D («Vista aérea» / «Recorrer») siguen a mano por encima del panel: con el paseo en pausa se puede
+   volver a la vista aérea con el mismo botón de siempre (como en master, donde estaban en la cabecera). */
+body.perla #stage:has(#walkOverlay[style*="display: flex"]) .perla-canvas-top{z-index:60}
+
+/* El visor utiliza el alto del escenario, que PERLA calcula con su propia cabecera. */
+body.perla #stage #view3d{height:auto}
+body.perla .perla-r1 :is(.perla-areas > .btn,#workArea-studio){min-height:40px}
+@media (max-height:500px) and (pointer:coarse){
+ body.perla #stage #joy{width:88px;height:88px}
+ body.perla #stage #joy i{width:40px;height:40px;margin:-20px 0 0 -20px}
+}
+@media (max-height:500px) and (orientation:landscape) and (pointer:coarse){
+ body.perla #stage .nav3d-map{right:156px;top:8px}
+}
+@media (min-width:1101px) and (min-height:501px){
+ body.perla.m3d #stage:has(#nav3d.open:not([hidden])) .perla-canvas-top{left:324px;max-width:calc(100% - 336px)}
+}
+body.perla .app>header:has(.perla-dd[open]){z-index:75;overflow:visible}
+
+body.perla.presenting .app>header{display:none!important}
+
+body.perla:not(.professional-area) #perlaMore[open] #editHistory{display:flex!important}
+body.perla #perlaMore #editHistory button{font-size:13px!important;width:auto!important;min-height:44px!important}
+body.perla #perlaMore #editHistory button::before{content:none!important}
+body.perla:not(.guided):not(.professional-area):not(.presenting) #perlaMore[open] .perla-keep{
+ display:flex!important;flex-wrap:wrap;gap:6px;padding:6px 0 0;border-top:1px solid var(--perla-line)
+}
+body.perla #perlaMore .perla-keep .btn{min-height:44px}
+body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!important}
+
+@media (max-width:1100px) and (max-height:500px){
+ body.perla .perla-r2 .perla-progress{display:none}
+}
+
+/* Teléfono · editor completo: la fila 2 cabe en dos líneas y el lienzo conserva al menos el 60 % de la pantalla.
+   «Guardar proyecto JSON» se muestra como icono (su nombre sigue siendo el texto del botón); el resumen del paso de la
+   guía se oculta solo con la guía cerrada (sigue «Recuperar guía» y la acción principal). */
+@media (max-width:760px){
+ body.perla .perla-r2>.perla-break{display:none}
+ body.perla .perla-r2>.perla-split{order:1!important}body.perla .perla-r2>#perlaFile{order:2!important}body.perla .perla-r2>#exportJsonQuick{order:3!important}
+ body.perla .perla-r2>#guideResume{order:4!important}body.perla .perla-r2>#perlaTasks{order:4!important}body.perla .perla-r2>#viewSeg{order:5!important;flex:0 1 auto!important}
+ body.perla .perla-r2>#presentationBtn{order:6!important}body.perla .perla-r2>#perlaPrimary{order:7!important;margin-left:auto}body.perla .perla-r2>#perlaProgress{order:8!important}
+ body.perla .perla-r2>#exportJsonQuick{font-size:0!important;width:44px;min-width:44px;height:38px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+ body.perla .perla-r2>#exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+ body.perla .perla-r2>#viewSeg .btn,body.perla .perla-r2>#viewSeg button{min-width:0;padding-inline:12px}
+ body.perla:not(.guided) .perla-r2>#perlaProgress{display:none}
+ body.perla .perla-r2{column-gap:6px!important}
+ body.perla .perla-r2>#guideResume{padding-inline:10px}
+ body.perla .perla-r2>#levelStatus{position:absolute}
+}
+/* La barra de selección (#fab) sube por encima de la barra inferior del lienzo (zoom y escala): nunca se pisan.
+   En el teléfono vertical la barra del lienzo ya va encima del dock y la de selección queda debajo, sin tocarse. */
+@media (min-width:761px) and (min-height:501px){body.perla #stage>#fab{bottom:72px}}
+/* Teléfono en horizontal: la barra de selección va en la franja superior libre, a la derecha (a la izquierda siguen Cotas,
+   Estancias y Muebles); abajo quedan zoom, escala y la barra de paneles. El aviso del norte cede su sitio mientras tanto. */
+@media (max-width:1100px) and (max-height:500px){
+ body.perla #stage>#fab{top:3px!important;bottom:auto!important;left:auto!important;right:12px!important;transform:none!important;max-width:calc(100% - 330px)}
+ body.perla #stage:has(>#fab.show) #solarNorth{visibility:hidden}
+}
+/* Teléfono en horizontal: mientras se dibuja (aviso «Dibujando muros» a la vista), las barras inferiores del lienzo no
+   tapan el plano; el aviso trae «Terminar» y al terminar vuelven. */
+@media (max-width:1100px) and (max-height:500px){
+ body.perla:has(#paletteWallBanner:not([hidden])) #stage>#mobileDock,body.perla:has(#paletteWallBanner:not([hidden])) .perla-canvas-bottom{visibility:hidden}
+}
+/* Aviso de conflictos entre plantas (#levelConflicts): en PERLA la escala y el zoom van en la barra inferior del lienzo;
+   el aviso queda por encima de esa barra (y de la de selección), sin tapar la escala ni los controles de vista. */
+@media (max-width:760px){
+ body.perla #stage>.level-conflicts,body.perla #stage:has(#fab.show)>.level-conflicts{top:103px;bottom:auto;left:12px;right:12px;max-width:none}
+ body.perla #stage:has(>#relocationPanel:not([hidden])):has(>#levelConflicts:not([hidden]))>#relocationPanel{max-height:calc(100% - 190px)}
+ body.perla #stage:has(>#relocationPanel:not([hidden]))>#levelConflicts{top:auto;bottom:120px}
+ /* mientras el aviso está a la vista, el plano se encaja debajo de él: no tapa cotas ni estancias */
+ body.perla #stage:has(>.level-conflicts:not([hidden]))>#plan{margin-top:153px!important;height:calc(100% - 153px)!important}
+}
+@media (min-width:761px){
+ body.perla #stage>.level-conflicts{bottom:72px}
+ body.perla #stage:has(#fab.show)>.level-conflicts{bottom:128px}
+ body.perla #stage:has(>#levelConflicts:not([hidden]))>#furnitureOverlaps{top:54px;bottom:auto}
+}
+/* Teléfono: con un panel lateral abierto (Inspector, revisión, Construir) solo queda libre la franja izquierda del plano:
+   los botones de zoom pasan a esa franja, en vertical; escala y «Ajustar» vuelven al cerrar el panel. */
+@media (max-width:760px){
+ body.perla:has(aside.right.open) .perla-canvas-bottom,body.perla:has(aside.lib.open) .perla-canvas-bottom{top:54px;bottom:auto;left:8px;right:auto;width:auto;max-width:56px;flex-direction:column;padding:4px;gap:4px}
+ body.perla:has(aside.right.open) .perla-canvas-bottom>*:not(:has(#zoomIn)):not(:has(#zoomOut)):not(#zoomIn):not(#zoomOut),
+ body.perla:has(aside.lib.open) .perla-canvas-bottom>*:not(:has(#zoomIn)):not(:has(#zoomOut)):not(#zoomIn):not(#zoomOut){display:none!important}
+ body.perla:has(aside.right.open) .perla-canvas-bottom :is(#fit,#scalebar,.perla-scale-switch),body.perla:has(aside.lib.open) .perla-canvas-bottom :is(#fit,#scalebar,.perla-scale-switch){display:none!important}
+ body.perla:has(aside.right.open) .perla-canvas-bottom>*,body.perla:has(aside.lib.open) .perla-canvas-bottom>*{flex-direction:column}
+}
+/* Teléfono · modo guiado: el resumen del paso ocupa su propia línea, compacta y sin cortes de palabra en columna. */
+@media (max-width:760px){
+ body.perla.guided .perla-r2>#perlaProgress{flex:1 1 100%!important;min-width:0;display:flex;align-items:center;gap:8px;min-height:0}
+ body.perla.guided .perla-r2>#perlaProgress *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+}
+/* Fila 1 en teléfono: inicio, proyecto y «Crear copia» caben siempre enteros junto a las utilidades. El chip del proyecto es
+   el que encoge (puntos suspensivos; el nombre completo sigue en su título y nombre accesible); nada queda cortado. */
+@media (max-width:760px){
+ body.perla .perla-r1>.perla-left{display:flex;align-items:center;gap:6px;overflow:visible;min-width:0}
+ body.perla .perla-left>#welcomeBtn,body.perla .perla-left>.perla-copy,body.perla .perla-left>#guideCopyExample{flex:0 0 auto}
+ body.perla .perla-left>.perla-project{flex:0 1 auto;min-width:44px;max-width:100%;overflow:hidden}
+ body.perla .perla-left>.perla-project::before{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+}
+/* Tableta (761–1100 px): la barra de paneles del lienzo es compacta, a la derecha (no una franja blanca de lado a lado
+   que tape el zoom), y la fila 1 cabe entera: marca, «Crear copia» y «Mi estudio» se quedan en su icono (su nombre
+   sigue siendo el nombre accesible del botón). */
+@media (min-width:761px) and (max-width:1100px) and (min-height:501px){
+ body.perla #stage>#mobileDock{position:absolute!important;left:auto!important;right:12px!important;bottom:12px!important;top:auto!important;width:auto!important;height:auto!important;border-radius:10px!important;border:1px solid var(--perla-line)!important;padding:4px!important;gap:4px!important;display:flex!important;grid-template-columns:none!important;justify-content:flex-end}
+ body.perla #stage>#mobileDock button{flex:none!important;min-height:40px!important}
+}
+@media (min-width:761px) and (max-width:1180px) and (min-height:501px){
+ body.perla .perla-brand>b,body.perla .perla-copy-label,body.perla .perla-studio>*:not(svg){display:none}
+ body.perla .perla-r1{gap:6px}body.perla .perla-areas .btn{padding-inline:10px}
+ body.perla .perla-project{max-width:150px}
+ body.perla .perla-utils #actionSearchBtn,body.perla .perla-utils .perla-studio{font-size:0!important;min-width:36px;padding:0 9px!important;gap:0!important}
+ body.perla .perla-utils #actionSearchBtn kbd{display:none}
+ body.perla .perla-utils #actionSearchBtn svg,body.perla .perla-utils .perla-studio svg{flex:none}
+}
+/* Teléfono estrecho (≤380 px): el chip del proyecto conserva un nombre legible y las cuatro áreas caben sin cortar. */
+@media (max-width:420px){
+ body.perla .perla-left>.perla-project{min-width:60px}
+ body.perla .perla-utils{gap:2px}body.perla .perla-utils>.btn,body.perla .perla-utils>details>summary{padding-inline:6px}
+ body.perla .perla-areas>button{padding-inline:7px!important;font-size:14px!important}
+ body.perla .perla-utils{gap:2px!important}
+ body.perla .perla-utils #langBtn{padding:0 5px!important;font-size:11px!important;min-width:0!important}
+ body.perla .perla-left>.perla-project{min-width:72px;padding-inline:7px!important;gap:0!important}
+ body.perla .perla-left>.perla-project>svg,body.perla .perla-left>.perla-project>.perla-ico{display:none}
+}
+/* Teléfono: el aviso del norte («Norte sin configurar») va por encima de la barra de zoom y escala, sin taparla. */
+@media (max-width:760px){body.perla #solarNorth{top:60px!important;bottom:auto!important;right:8px!important;left:auto!important}}
+/* Con «Mostrar ▾» abierto, la barra del lienzo pasa por encima de la brújula, los avisos y la barra inferior:
+   sus opciones nunca quedan debajo. */
+body.perla .perla-canvas-top:has(#layersMenu[open]){z-index:60!important}
+/* Teléfono: el plano se encaja en la zona libre entre la barra superior del lienzo (Cotas, Estancias, Muebles) y la de
+   zoom y escala. «Ajustar» muestra la vivienda entera sin nada encima y cada estancia se puede tocar. */
+/* (vertical: sin encaje; el plano conserva todo el alto del lienzo y el margen alrededor de la vivienda) */
+@media (max-width:1100px) and (max-height:500px){body.perla:not(.m3d):not(.presenting) #stage>#plan{margin-top:48px;height:calc(100% - 48px - 58px)}}
+/* Deshacer / Rehacer en la barra del lienzo (teléfono y horizontal): dos iconos con su nombre accesible. */
+body.perla .perla-canvas-top>#editHistory{display:inline-flex!important;gap:4px}
+body.perla .perla-canvas-top>#editHistory .edit-history-scope{display:none!important}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo){font-size:0!important;min-width:36px;width:36px;min-height:36px;padding:0!important;background:#fff;border:1px solid var(--perla-line);border-radius:8px}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo)::before{font-size:18px;line-height:1;color:var(--perla-ink,#1f2326)}
+body.perla .perla-canvas-top>#editHistory #undo::before{content:"↶" / ""}
+body.perla .perla-canvas-top>#editHistory #redo::before{content:"↷" / ""}
+body.perla .perla-canvas-top>#editHistory :is(#undo,#redo):disabled{opacity:.45}
+/* Escala «1:60 · 1:100»: su menú se abre hacia arriba y por encima de todo; la barra no lo recorta. */
+body.perla .perla-canvas-bottom:has(details[open]){overflow:visible!important;z-index:60!important}
+body.perla .perla-canvas-bottom details.perla-scales>.perla-pop{top:auto!important;bottom:calc(100% + 6px)!important}
+/* UX-312 PERLA · teléfono: la barra inferior se apoya ENCIMA del pie (24 px), así «Legal y uso» y el pie siguen a la vista y pulsables. */
+@media (max-width:760px){
+  body.perla:not(.presenting) #stage>#mobileDock{bottom:24px}
+  body.perla.perla-guide-open #guideBar:not([hidden]){position:fixed;top:auto;bottom:94px;right:8px;left:8px;width:auto;max-height:50vh}
+  body.perla .perla-menu .perla-pop,body.perla .perla-more .perla-pop{bottom:100px}
+  body.perla .perla-canvas-bottom{bottom:72px}
+}
+/* UX-312 PERLA · teléfono horizontal con el Inspector abierto: el panel termina encima de la barra inferior (56 px), que ya no tapa su contenido ni el plano. */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla aside.right.open{max-height:calc(100dvh - 180px)}
+}
+/* UX-312 PERLA · ventanas estrechas (también con ratón): Plano 2D / Escena 3D conservan 40 px de alto para el toque. */
+@media (max-width:1100px){body.perla .perla-r2 #viewSeg [data-view]{min-height:40px}}
+/* UX-312 PERLA · teléfono horizontal: la barra de selección cabe entera junto a los controles del lienzo. Girar, Duplicar y
+   Eliminar quedan como icono; su nombre sigue en el árbol accesible (texto recortado, no oculto). */
+@media (max-width:1100px) and (max-height:500px){
+  body.perla #stage>#fab .fab-text{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  body.perla #stage>#fab button{padding-inline:10px;min-width:44px;justify-content:center}
+}
+/* UX-312 PERLA · escritorio con dos plantas: el selector de planta entra en la fila 2; «Guardar proyecto JSON» pasa a icono
+   (conserva su nombre accesible y su title) y la vista pierde su rótulo «Vista:», para que «Abrir 3D» no se salga. */
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick{font-size:0!important;width:44px;min-width:44px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+body.perla .perla-r2:has(>#levelBar:not([hidden])) #viewSeg>span:first-child:not(.pill),body.perla .perla-r2:has(>#levelBar:not([hidden])) #viewSeg .seg-label{display:none}
+/* UX-312 PERLA · teléfono vertical: Deshacer/Rehacer van en la barra inferior (iconos con nombre accesible), visibles con cualquier cajón abierto. */
+@media (max-width:760px){
+  body.perla #mobileDock>#editHistory{display:flex!important;gap:2px;flex:0 0 auto;align-items:center;border:0!important;background:none!important;padding:0!important;box-shadow:none!important;margin:0!important}
+  body.perla #mobileDock>#editHistory .edit-history-scope{display:none!important}
+  body.perla #mobileDock>#editHistory :is(#undo,#redo){flex:0 0 44px;min-width:44px;font-size:0!important;padding:0!important}
+  body.perla #mobileDock>#editHistory :is(#undo,#redo)::before{font-size:20px;line-height:1;color:var(--perla-ink,#1f2326)}
+  body.perla #mobileDock>#editHistory #undo::before{content:"↶" / ""}
+  body.perla #mobileDock>#editHistory #redo::before{content:"↷" / ""}
+  body.perla #mobileDock>#editHistory :is(#undo,#redo):disabled{opacity:.4}
+}
+body.perla #mobileDock>#editHistory :is(#undo,#redo){min-height:52px!important;border:0!important;background:transparent!important;display:inline-flex!important;align-items:center;justify-content:center}
+/* UX-312 PERLA · U9: «← Volver a <área>» en el editor, en el sitio del «Volver» de siempre (inicio de la fila 2). */
+body.perla .perla-r2>#perlaReturn{order:-10!important;flex:0 0 auto;min-height:40px;padding:0 14px;border:1px solid var(--perla-wine,#7a2e45);color:var(--perla-wine,#7a2e45);background:#fff;font-weight:600;border-radius:10px;white-space:nowrap}
+body.perla .perla-r2>#perlaReturn:hover{background:#faf3f5}
+body.perla .perla-r2>#perlaReturn[hidden]{display:none!important}
+/* UX-312 PERLA · U9: en el móvil el acceso «Asistente» de un diálogo es una BARRA INFERIOR a todo el ancho (fondo propio):
+   sigue a la vista sin desplazar (contrato E2) y el contenido pasa por debajo como en cualquier pie de diálogo, en vez de
+   que una píldora flotante tape a medias los botones de al lado. */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  dialog #assistantAccess{width:auto!important;max-width:none!important;margin:8px 0 0!important;padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex!important;justify-content:center;background:#fff;border-top:1px solid #e6dde0;bottom:0!important}
+}
+/* UX-312 PERLA · U9 aviso «Guardado»: estado discreto con color + texto (no solo color). */
+.perla-saved{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:#e9f5ee;color:#1d6b3f;border:1px solid #b9dcc6}
+.perla-saved[data-state="error"]{background:#fdecec;color:#a12a2a;border-color:#f0bcbc}
+.perla-saved[hidden]{display:none!important}
+body.perla .perla-left>#perlaSaved{order:99}
+#professionalWorkspace .professional-head .perla-saved{margin:2px 0 4px;width:max-content}
+body.perla .perla-left>#perlaSaved{font-size:0;min-width:28px;padding:0;justify-content:center}body.perla .perla-left>#perlaSaved::before{content:"✓";font-size:14px}body.perla .perla-left>#perlaSaved[data-state="error"]::before{content:"!"}
+/* UX-312 PERLA · U11 «botón hecho»: verde de hecho, con ✓ en el texto (no solo color). */
+button[data-perla-done="1"],button.btn[data-perla-done="1"]{background:#e9f5ee!important;color:#1d6b3f!important;border-color:#9fd0b2!important;box-shadow:none!important}
+button[data-perla-done="1"]:hover{background:#dcefe3!important}
+body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before,body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
+button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
+/* UX-312 PERLA · tableta estrecha (761–900 px, también el escritorio con zoom al 200 %): las dos filas caben enteras.
+   Deshacer/Rehacer van a la barra del lienzo (como en el móvil); idioma, proyecto y áreas se compactan; «Guardar proyecto
+   JSON» queda como icono con su nombre accesible. */
+@media (min-width:761px) and (max-width:900px){
+ body.perla .perla-areas>button,body.perla .perla-areas .btn{padding-inline:5px!important;font-size:13.5px!important}
+ body.perla .perla-r1{gap:4px!important}body.perla .perla-utils{gap:2px!important}
+ body.perla .perla-utils #langBtn{padding:0 5px!important;font-size:11px!important;min-width:0!important}
+ body.perla .perla-left>.perla-project{max-width:84px}
+ body.perla .perla-r2>#exportJsonQuick{font-size:0!important;width:44px;min-width:44px;padding:0!important;display:inline-flex;align-items:center;justify-content:center}
+ body.perla .perla-r2>#exportJsonQuick::before{content:'⤓' / '';font-size:20px;line-height:1;color:var(--ink,#1f2326)}
+ body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
+ body.perla .perla-r2 #viewSeg>span:first-child:not(.pill),body.perla .perla-r2 #viewSeg .seg-label{display:none}
+ body.perla .perla-sem-dots{display:none}
+}
+/* Inicio en el teléfono: objetivo táctil de al menos 40 × 40 px. */
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){body.perla #welcomeBtn{min-width:40px!important;min-height:40px}}
+@media (max-width:760px),(max-width:1100px) and (max-height:500px){
+  body.perla .perla-r2{position:relative}
+  body.perla .perla-r2>#perlaReturn{position:absolute;left:8px;top:calc(100% + 8px);z-index:30;min-height:44px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+}
+/* Tableta vertical: el panel lateral abierto no tapa la botonera inferior (Propiedades, Biblioteca). */
+@media (max-width:1100px) and (min-height:501px){
+  body.perla:has(aside.right.open) #mobileDock,body.perla:has(aside.lib.open) #mobileDock{z-index:60!important}
+}
+/* Teléfono estrecho (≤400 px): la cabecera cabe sin solapes. El selector conserva ES · EN · ZH y el nombre del proyecto cede
+   espacio (queda su desplegable); ningún control se oculta. */
+@media (max-width:400px){
+  body.perla .perla-r1>.perla-left{flex:1 1 0!important;min-width:0;overflow:hidden}
+  body.perla .perla-r1>.perla-utils{flex:0 0 auto!important;gap:2px}
+  body.perla .perla-r1{column-gap:4px;padding-inline:6px}
+  body.perla .perla-r1>.perla-left{gap:4px}
+  body.perla .perla-r1>.perla-left>#welcomeBtn{margin:0!important;min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils>#actionSearchBtn{min-width:36px!important;width:36px!important;padding:0!important}
+  body.perla .perla-utils #langBtn{padding:0 4px!important}
+  body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
+  body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
+}

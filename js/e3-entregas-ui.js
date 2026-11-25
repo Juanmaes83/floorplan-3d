@@ -21,19 +21,36 @@
   if(g[0]==='FloorPlanTourVideo')return existe(['FloorPlanPresentation','open'])&&!!window.FloorPlanTourRecorder?.pickType?.();
   return true;
  };
+ // UX-312 E04/E08 (navegación continua): delegar en un generador no expulsa del flujo. Antes de cerrar E3 se registra el
+ // retorno (paso, selección, entregable y desplazamiento); cuando se cierra el diálogo que abre el generador (Cerrar o
+ // Escape), E3 se reabre en ese paso con su selección, su desplazamiento y el foco en la acción de ese entregable.
+ // Si el generador no abre un diálogo (p. ej. la Presentación), no hay retorno que restaurar.
  function ejecutar(e){
   if(!disponible(e.generador))throw Error(tx('El generador no está disponible. Elige otro.','The generator is unavailable. Choose another.','生成器不可用，请选择其他交付物。'));
   const [obj,metodo]=e.generador;
+  const retorno={paso,sel:valida().slice(),id:e.id,scroll:dlg.querySelector('.e3-cuerpo')?.scrollTop||0},antes=new Set(document.querySelectorAll('dialog[open]'));
   if(e.id==='render-ia'){
    const v=vistas()[0];
    if(!v)throw Error(tx('Prepara primero una vista actual del proyecto.','Prepare a current view of the project first.','请先准备当前项目视图。'));
-   dlg.close();
+   dlg.close();volverTras(retorno,antes);
    return window[obj][metodo](v);
   }
   dlg.close();
   if(e.id==='video'&&!window.FloorPlanPresentation.active)return window.FloorPlanPresentation.open();
+  volverTras(retorno,antes);
   return window[obj][metodo]();
  }
+ function volverTras(ret,antes){let intentos=0;
+  const buscar=()=>{const d=[...document.querySelectorAll('dialog[open]')].find(x=>x!==dlg&&!antes.has(x));
+   if(d){d.addEventListener('close',()=>setTimeout(()=>reabrir(ret),0),{once:true});return;}
+   if(++intentos<30)setTimeout(buscar,100);};
+  setTimeout(buscar,0);}
+ async function reabrir(ret){
+  if(!dlg||dlg.open||document.querySelector('dialog[open]'))return; // otra tarea ya ocupa la pantalla: no se le roba
+  paso=ret.paso;sel=ret.sel.slice();valida();await pintar();if(!dlg.open)dlg.showModal();
+  const cuerpo=dlg.querySelector('.e3-cuerpo');if(cuerpo)cuerpo.scrollTop=ret.scroll;
+  const accion=dlg.querySelector(`.e3-prep[data-entregable="${CSS.escape(ret.id)}"] button`)||dlg.querySelector('#e3T');accion?.focus({preventScroll:true});
+  estado(tx('Has vuelto a «Preparar». Tu selección se conserva.','Back to «Prepare». Your selection is kept.','已返回“准备”，你的选择已保留。'));}
  const EJEMPLO_OP10='assets/e3/op10-entrega-viewer.jpg'; // render Cycles real del OP-10 (perfil delivery) de la vivienda de ejemplo
  const vistas=()=>{try{return window.FloorPlanProjectViews?.current?.()||[];}catch{return [];}};
  const titulo=()=>{const s=marca();const n=window.FloorPlanApp?.project?.name||'';return s?.title||(typeof nm==='function'?nm(n):n);};
@@ -55,15 +72,16 @@
   const btn=el('button',tx('Preparar entregables','Prepare deliverables','准备交付物'),c,'btn');btn.type='button';btn.dataset.route='e3-entregas';btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-describedby',h.id);btn.onclick=()=>abrir(btn);
   return c;}
  // ---------------------------------------------------------------- diálogo
- let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0;
+ let dlg=null,sel=['vistas','blender','lamina'],paso=1,origen=null,ocupado=false,render=0,bpdpJob=null,seleccionAnterior=null;
  const valida=()=>{sel=C.seleccionValida(sel,disponible);return sel;};
- function abrir(desde){origen=desde||document.activeElement;
+ function abrir(desde,id){origen=desde||document.activeElement;
+  if(id){seleccionAnterior=sel.slice();sel=[id];}
   if(!dlg){dlg=document.createElement('dialog');dlg.id='e3Entregas';dlg.className='e3-dlg';dlg.setAttribute('aria-labelledby','e3T');document.body.append(dlg);
-   dlg.addEventListener('close',()=>{if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
+   dlg.addEventListener('close',()=>{bpdpJob?.abort();if(seleccionAnterior){sel=seleccionAnterior;seleccionAnterior=null;}if(!document.activeElement||document.activeElement===document.body||dlg.contains(document.activeElement)){
     const trigger=origen?.isConnected?origen:document.querySelector('#professionalWorkspace [data-route="e3-entregas"]');
     trigger?.focus();
    }});}
-  paso=1;valida();pintar();if(!dlg.open){origen?.focus?.({preventScroll:true});dlg.showModal();}dlg.querySelector('#e3T')?.focus();}
+  paso=id&&valida().length?3:1;valida();pintar();if(!dlg.open){origen?.focus?.({preventScroll:true});dlg.showModal();}dlg.querySelector('#e3T')?.focus();}
  function cabecera(){const h=el('div',undefined,dlg,'e3-cab');const t=el('h2',tx('Entregables profesionales','Professional deliverables','专业交付物'),h);t.id='e3T';t.tabIndex=-1;
   const x=el('button','×',h,'e3-cerrar');x.type='button';x.setAttribute('aria-label',tx('Cerrar','Close','关闭'));x.onclick=()=>dlg.close();
   const pasos=el('ol',undefined,dlg,'e3-pasos');pasos.setAttribute('aria-label',tx('Pasos','Steps','步骤'));
@@ -122,12 +140,45 @@
   await pintar();
   estado(tx(`${vistas().length} vistas preparadas.`,`${vistas().length} views prepared.`,`已准备 ${vistas().length} 个视图。`));
  }
+ function bpdpAcciones(e,b,tt,acc){
+  const [modulo,tipo]=e.bpdp,E=window.BpdpEntregar;
+  let salida=null;
+  el('p',e.que,tt,'e3-nota');
+  const preparar=b(tx('Preparar','Prepare','准备'),'e3-preparar-'+e.id,async()=>{
+   const job=new AbortController();bpdpJob=job;
+   salida=null;descargar.hidden=true;preparar.disabled=true;cancelar.hidden=false;cancelar.focus({preventScroll:true});
+   estado(tx('Preparando…','Preparing…','正在准备…'));
+   try {
+    await E.activar3D();
+    const resultado=await E.preparar(modulo,tipo,{signal:job.signal});
+    if(!preparar.isConnected||!dlg.open||job.signal.aborted)return;
+    if(!resultado.vigente)throw Error(tx('El proyecto cambió. Vuelve a preparar la salida.','The project changed. Prepare the output again.','项目已更改，请重新准备。'));
+    salida=resultado;descargar.hidden=false;descargar.focus({preventScroll:true});
+    estado(tx('Salida lista para descargar.','Output ready to download.','交付物可下载。'));
+   }catch(error){
+    if(!dlg.open||!preparar.isConnected)return;
+    if(error.code!=='CANCELLED'&&!job.signal.aborted)throw error;
+    estado(tx('Preparación cancelada.','Preparation cancelled.','已取消准备。'));
+   }finally{
+    bpdpJob=null;preparar.disabled=false;cancelar.hidden=true;
+    if(dlg.open&&preparar.isConnected&&!salida)preparar.focus({preventScroll:true});
+   }
+  },true);
+  const descargar=b(tx('Descargar','Download','下载'),'e3-descargar-'+e.id,async()=>{
+   try {await E.descargar(salida);}
+   catch(error){salida=null;descargar.hidden=true;preparar.focus({preventScroll:true});throw error;}
+  });
+  descargar.hidden=true;
+  const cancelar=el('button',tx('Cancelar preparación','Cancel preparation','取消准备'),acc,'btn');
+  cancelar.type='button';cancelar.hidden=true;cancelar.onclick=()=>bpdpJob?.abort();
+ }
  function paso3(){const cuerpo=el('div',undefined,dlg,'e3-cuerpo');
   for(const e of C.catalogo(L()).filter(e=>valida().includes(e.id))){const row=el('div',undefined,cuerpo,'e3-prep');row.dataset.entregable=e.id;const tt=el('div',undefined,row,'e3-txt');el('b',e.nombre,tt);el('small',e.formato,tt);
    const acc=el('div',undefined,row,'e3-acc');
    const b=(t,ruta,fn,primary)=>{const x=el('button',t,acc,'btn'+(primary?' primary':''));x.type='button';x.dataset.route=ruta;x.onclick=async()=>{if(ocupado)return;ocupado=true;x.setAttribute('aria-busy','true');
      try{await fn();}catch(err){estado(err.message);window.toast?.(err.message,5000);}finally{ocupado=false;x.removeAttribute('aria-busy');}};return x;};
-   if(e.id==='vistas'){const v=vistas();
+   if(e.bpdp)bpdpAcciones(e,b,tt,acc);
+   else if(e.id==='vistas'){const v=vistas();
     if(!v.length)b(tx('Preparar las vistas','Prepare the views','准备视图'),'e3-preparar-vistas',prepararVistas,true);
     else{b(tx('Descargar limpias','Download clean','下载无标识'),'e3-vistas-limpias',()=>{v.forEach(x=>bajar(x.dataUrl,`rubik-sota-${slug(x.label)}-limpia.png`));estado(tx(`${v.length} imágenes limpias descargadas.`,`${v.length} clean images downloaded.`,`已下载 ${v.length} 张无标识图像。`));});
      b(tx('Descargar con tu firma','Download signed','下载签名版'),'e3-vistas-firmadas',async()=>{for(const x of v)await window.FloorPlanProjectViews.download(x.id);estado(tx(`${v.length} imágenes firmadas descargadas.`,`${v.length} signed images downloaded.`,`已下载 ${v.length} 张签名图像。`));},true);}}
@@ -145,20 +196,20 @@
   if(render!==currentRender)return;
   pie();dlg.querySelector('#e3T')?.focus();
  }
- window.RubikE3Entregables={card,abrir,firmarRender,get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
+ window.RubikE3Entregables={card,abrir,firmarRender,catalogo:()=>C.catalogo(L()).map(e=>({...e,disponible:disponible(e.generador)})),get seleccion(){return valida().slice();},set seleccion(v){sel=[...v];valida();}};
  const css=document.createElement('style');css.textContent=`
  .e3-dlg{width:min(1040px,96vw);max-height:92vh;max-height:92dvh;border:0;border-radius:16px;padding:18px;background:var(--surface-app);color:var(--ink);box-sizing:border-box;overflow:hidden}
  .e3-dlg[open]{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr) auto}
  .e3-dlg::backdrop{background:rgb(31 35 38 / .42)}
  .e3-cab,.e3-pasos,.e3-firma,.e3-estado,.e3-cuerpo{grid-column:1/-1}
- .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:Georgia,serif;margin:0;font-size:clamp(20px,3vw,26px)}
+ .e3-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}.e3-cab h2{font-family:var(--font-sans);margin:0;font-size:clamp(20px,3vw,26px)}
  .e3-cerrar{flex:none;width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface-panel);font-size:22px;cursor:pointer}
  .e3-pasos{display:flex;gap:6px;list-style:none;padding:0;margin:6px 0;flex-wrap:wrap}
  .e3-pasos li{padding:4px 10px;border-radius:999px;background:var(--select-soft);font-size:13px}.e3-pasos li[aria-current]{background:var(--select);color:var(--select-ink);font-weight:600}
  .e3-firma{font-size:13px;color:var(--ink-muted);margin:0 0 4px}.e3-estado{font-size:13px;color:var(--ink);margin:2px 0 4px}
  .e3-estado:empty{margin:0}
  .e3-cuerpo{min-height:0;display:grid;align-content:start;gap:12px;overflow:auto;overscroll-behavior:contain;padding:4px;scroll-padding:4px;scrollbar-gutter:stable}
- .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;align-content:start;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:Georgia,serif;font-size:18px;margin:6px 0}
+ .e3-grupo{min-width:0;border:0;padding:0;margin:0;display:grid;align-content:start;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.e3-grupo legend{font-family:var(--font-sans);font-size:18px;margin:6px 0}
  .e3-dlg .e3-item{margin:0}
  .e3-item{display:grid;grid-template-columns:auto 112px minmax(0,1fr);grid-template-areas:'c m t' 'c m h';gap:3px 8px;align-items:center;padding:8px;border-radius:12px;background:var(--surface-panel);border:1px solid var(--line);cursor:pointer;min-height:68px}
  .e3-item:has(input:checked){border-color:var(--line-strong);background:var(--select-soft)}
@@ -170,7 +221,7 @@
  .e3-chip-nunca{background:var(--action-soft);color:var(--action-pressed)}
  .e3-off{cursor:default}.e3-off .e3-mini{filter:grayscale(.65)}
  .e3-sello{position:absolute;left:3px;bottom:3px;font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;background:var(--surface-panel);color:var(--ink)}.e3-formato{font-size:10px;font-weight:700}
- .e3-prev h3{font-family:Georgia,serif;margin:4px 0}.e3-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.e3-fig{margin:0;display:flex;flex-direction:column;gap:4px}.e3-fig img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}.e3-fig figcaption{font-size:12px;font-weight:600}
+ .e3-prev h3{font-family:var(--font-sans);margin:4px 0}.e3-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.e3-fig{margin:0;display:flex;flex-direction:column;gap:4px}.e3-fig img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}.e3-fig figcaption{font-size:12px;font-weight:600}
  .e3-firmada figcaption{color:var(--action)}.e3-nota{font-size:13px;color:var(--ink-muted);margin:0}
  .e3-prep{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}.e3-acc{display:flex;gap:6px;flex-wrap:wrap}.e3-acc .btn,.e3-pie .btn{min-height:44px}
  .e3-acc .btn[aria-busy=true]{opacity:.7;cursor:progress}

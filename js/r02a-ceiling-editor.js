@@ -243,6 +243,7 @@
   function arm() {
     const svg = doc.getElementById('plan'); if (!svg) return;
     st.placing = true;
+    showNotice();
     const swallow = e => { e.stopImmediatePropagation(); e.preventDefault(); };
     const down = e => {
       if (!svg.contains(e.target)) return;
@@ -301,7 +302,7 @@
   }
   function showNotice() {
     let el = doc.getElementById('r02aNotice');
-    if (!st.notice) { if (el) el.hidden = true; return; }
+    if (!st.notice || st.placing) { if (el) el.hidden = true; return; }
     if (!el) { el = doc.createElement('div'); el.id = 'r02aNotice'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); doc.body.append(el); }
     el.dataset.kind = st.notice.kind; el.hidden = false;
     markup(el, `<span>${esc(st.notice.text)}</span> <button type="button" aria-label="${esc(tx('Cerrar aviso', 'Close notice', '关闭提示'))}">×</button>`);

@@ -27,13 +27,15 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  S.check('N.1','La portada ofrece un punto de partida claro (subir plano, crear o probar el ejemplo)',await page.getByText('Probar el ejemplo').first().isVisible());
  await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(1200);
  await rotulo(page,'Abro el ejemplo. La app me sugiere crear mi copia para guardar cambios.');
- const copy=page.getByText('Crear mi copia').first();S.check('N.2','El ejemplo invita a crear una copia propia',await copy.isVisible());await copy.click();await page.waitForTimeout(1200);
+ const copy=page.locator('#guideCopyExample');S.check('N.2','El ejemplo invita a crear una copia propia',await copy.isVisible());await copy.click();await page.waitForTimeout(1200);
  // Presupuestar
  await rotulo(page,'Voy a «Presupuestar», donde empieza la parte de obra.');await area(page,'budget');await page.waitForSelector('#obraJourney');await page.waitForTimeout(500);
  let j=await journey(page);await shot(page,'v5-02-recorrido-obra',{escenario:'Recorrido de obra',observado:j?.sum});
  S.check('N.3','Presupuestar muestra el «Recorrido de obra» con 5 pasos ordenados y un siguiente paso',j&&j.steps.length===5&&j.next==='precios',{observed:j});
  await rotulo(page,'El recorrido me dice qué hacer primero: poner precio a las partidas.');
- await page.locator('[data-journey="precios"]').click();await page.waitForSelector('#budgetDialog[open]');
+ await page.locator('[data-journey="precios"]').click();
+ await page.waitForSelector('[data-route="budget-edit"]:focus');await page.locator('[data-route="budget-edit"]:focus').click();
+ await page.waitForSelector('#budgetDialog[open]');
  const n=await page.locator('#budgetDialog [data-field="price"]').count();
  for(let i=0;i<n;i++){const inp=page.locator('#budgetDialog [data-field="price"]').nth(i);await inp.fill(String(20+i));await inp.press('Tab');}
  await page.waitForTimeout(300);const tot=await page.locator('#budgetTotals').innerText();
@@ -41,7 +43,9 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  await shot(page,'v5-03-presupuesto',{escenario:'Presupuesto'});await page.locator('#budgetClose').click();await page.waitForTimeout(700);
  j=await journey(page);S.check('N.5','Tras poner precios, el paso 1 queda hecho y el siguiente es crear el plan',j?.steps[0].state==='done'&&j.next==='plan',{observed:j?.sum});
  // Plan de obra
- await rotulo(page,'Paso 2: crear el plan de obra.');await page.locator('[data-journey="plan"]').click();await page.waitForSelector('#planDialog[open]');
+ await rotulo(page,'Paso 2: crear el plan de obra.');await page.locator('[data-journey="plan"]').click();
+ await page.waitForSelector('[data-route="construction-plan"]:focus');await page.locator('[data-route="construction-plan"]:focus').click();
+ await page.waitForSelector('#planDialog[open]');
  await page.locator('#planCreate').click();await page.waitForTimeout(300);
  const addTask=async({title,start,end,filter,pickN=2,item=true,dep=null,milestone=false})=>{
   await page.locator(milestone?'#planAddMilestone':'#planAddTask').click();await page.fill('#taskTitle',title);await page.fill('#taskStart',start);if(!milestone)await page.fill('#taskEnd',end);
@@ -123,7 +127,7 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
 
 test('V5 · el recorrido de obra también guía en el móvil (390×844)',{timeout:300000},()=>run('V5-movil','Recorrido de obra en móvil',async S=>{
  const s=await boot({state:{},viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true}),{page,log}=s;
- try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await page.getByText('Crear mi copia').first().click().catch(()=>{});await page.waitForTimeout(800);
+ try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await page.locator('#guideCopyExample').click().catch(()=>{});await page.waitForTimeout(800);
   await area(page,'budget');await page.waitForSelector('#obraJourney');await page.locator('#obraJourney').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
   const m=await page.evaluate(()=>{const j=document.getElementById('obraJourney'),r=j.getBoundingClientRect();return {w:Math.round(r.width),overflow:j.scrollWidth>j.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,
    btns:[...j.querySelectorAll('button')].map(b=>Math.round(b.getBoundingClientRect().height))};});

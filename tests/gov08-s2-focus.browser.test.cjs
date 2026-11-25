@@ -3,6 +3,9 @@
 // the modal dialog — and the dialog scrolled back to the top, far from the entry acted on (390×844). Real api/share.js
 // and api/unshare.js over an in-memory Blob simulator; fictitious codes; no network.
 'use strict';
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{Readable}=require('node:stream'),{chromium}=require('playwright');
 const Share=require('../api/share.js'),Unshare=require('../api/unshare.js');
 const root=path.resolve(__dirname,'..'),SHARE='share-fixture-code-0123456789abcdef',RENDER='render-fixture-code-0123456789abcdef';
@@ -26,7 +29,7 @@ test('S2 focus: after cancel, withdrawal, a wrong code and the history buttons, 
   if(u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:'))return r.continue();return r.abort();});
  const page=await context.newPage();page.setDefaultTimeout(30000);
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink);
- await page.locator('#workArea-deliver').click();await page.locator('#professionalWorkspace').getByRole('button',{name:'Publicar enlace para el cliente'}).click();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;
  const d=page.locator('#shareLinkDialog');
  for(let i=0;i<2;i++){await d.locator('#shareLinkAgree').check();await d.locator('#shareLinkToken').fill(SHARE);const done=page.waitForResponse(r=>r.url().startsWith(url+'api/share'));await d.locator('#shareLinkGo').click();await done;await d.locator('#shareLinkUrl').waitFor();}
  const where=()=>page.evaluate(()=>{const a=document.activeElement,dl=document.querySelector('#shareLinkDialog'),li=a.closest?.('.share-publication');const r=a.getBoundingClientRect();

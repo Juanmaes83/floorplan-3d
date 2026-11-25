@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Rubik Sota · Contexto territorial</title>
+<link rel="stylesheet" href="../css/design-system.css">
+<link rel="stylesheet" href="sculpt-workspace.css">
+<link rel="stylesheet" href="../css/territory-map.css">
+<header class="lab-header"><div>
+  <span class="lab-brand">Rubik Sota</span>
+  <nav aria-label="Herramientas del laboratorio">
+    <a class="btn" href="plan-lab.html">Plano, sol y vuelo</a>
+    <a class="btn on" aria-current="page" href="territory-map.html">Contexto territorial</a>
+  </nav>
+</div></header>
+<main>
+  <h1>Contexto territorial</h1>
+  <p class="lab-lead">Vista de laboratorio con parcelas de demostración. Puedes abrir un archivo GML local.</p>
+  <section class="lab-card" aria-labelledby="map-title">
+    <h2 id="map-title">Selección de parcela</h2>
+    <label>Documento GML/XML <input type="file" id="parcel-file" accept=".gml,.xml"></label>
+    <div class="actions territory-map-tools">
+      <label>Referencia <select id="parcel-choice"></select></label>
+      <button class="btn" id="map-zoom-in" aria-label="Acercar">+</button>
+      <button class="btn" id="map-zoom-out" aria-label="Alejar">−</button>
+      <button class="btn" id="map-reset">Encuadrar</button>
+      <button class="btn" id="map-basemap" aria-pressed="false">Mapa base IGN</button>
+      <button class="btn" id="map-tilt" aria-pressed="false">Vista inclinada</button>
+    </div>
+    <div id="map" class="territory-map" aria-label="Mapa de parcelas"></div>
+    <p id="map-status" role="status"></p>
+    <a id="map-attribution" href="https://www.ign.es/" hidden>© Instituto Geográfico Nacional</a>
+  </section>
+</main>
+<script src="../js/parcel-core.js"></script>
+<script src="../js/orthophoto-core.js"></script>
+<script src="../js/terrain-core.js"></script>
+<script src="../js/geo-provider.js"></script>
+<script src="../js/catastro-parcel-provider.js"></script>
+<script type="module" src="territory-map-lab.mjs"></script>
+</html>

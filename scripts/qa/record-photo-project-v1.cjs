@@ -168,8 +168,10 @@ async function phone(env,jpg,room){
     await page.locator('#tgPanel').tap();await pause(page,800);
     // FOT-01 desde «Entregar» → «Imágenes».
     const before=await K.snapshot(page);
-    await page.locator('#workArea-deliver').tap();await pause(page,900);await page.locator('#photoReformCard').scrollIntoViewIfNeeded();await pause(page,500);
-    await page.locator('#photoReformCard').tap();await page.locator('#photoReformDialog[open]').waitFor();await pause(page);
+    await page.locator('#workArea-deliver').tap();
+    await page.locator('[data-entrega-code="P2"] .perla-card-selector').tap();
+    await page.locator('.perla-panel-open [data-perla-mirror="photoReformCard"]').tap();
+    await page.locator('#photoReformDialog[open]').waitFor();await pause(page);
     R.check('FOT-01: acceso «Reformar desde fotografía» desde Entregar → Imágenes',true,'diálogo abierto');
     await page.locator('#photoReformFile').setInputFiles(K.file('salon.jpg',room,'image/jpeg'));await page.locator('#photoReformOriginal:not([hidden])').waitFor();await pause(page,900);
     R.check('FOT-01: original mostrado sin metadatos',/sin metadatos/.test(await page.locator('#photoReformOriginal').innerText()),'original');

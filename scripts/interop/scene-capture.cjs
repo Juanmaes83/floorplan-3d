@@ -76,7 +76,7 @@ async function capture(input, dest, o = {}) {
     t1 = Date.now();
     if (via === 'ui') {
       await page.locator('#workArea-deliver').click();
-      const card = page.locator('#professionalWorkspace [data-group="documentation"] #sceneExportCard');
+      const card = page.locator('#professionalWorkspace #sceneExportCard');
       if (!await page.evaluate(() => window.View3D.suspended)) throw Error('Entregar did not suspend the background viewer');
       await card.locator('#sceneExportOpen').click();
       await page.locator('#sceneExportDialog #sePrimary').click(); // «Preparar escena»

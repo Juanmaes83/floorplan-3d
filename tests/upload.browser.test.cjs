@@ -47,6 +47,7 @@ for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
   });
   const before=await model(),quick=page.locator('#roomPlanJoinQuick');
   assert.ok(await page.locator('body.guided').count());
+  await openPerlaImport(page);
   assert.ok(await hit('roomPlanJoinQuick'),'join is in the visible toolbar before scrolling');
   const [scan]=await Promise.all([page.waitForEvent('filechooser'),quick.click()]);
   await scan.setFiles(file);
@@ -57,7 +58,7 @@ for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
   assert.deepEqual(await dialog.locator('svg text').allTextContents(),['A','B']);
   await page.keyboard.press('Escape');
   await dialog.waitFor({state:'hidden'});
-  await page.waitForFunction(()=>document.activeElement.id==='roomPlanJoinQuick'&&!document.body.classList.contains('uploading'));
+  await page.waitForFunction(()=>(document.activeElement.id==='roomPlanJoinQuick'||document.activeElement.parentElement?.id==='perlaImport')&&!document.body.classList.contains('uploading'));
   assert.deepEqual(await model(),before);
 
   await page.locator('#actionSearchBtn').click();
@@ -85,7 +86,9 @@ for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
   await receipt.waitFor({state:'hidden'});
   assert.deepEqual(await model(),{...before,depth:[0,1]});
   assert.match(await toastText(page),/Unión deshecha/);
-  await page.locator('#redo').click();
+  const redo=page.locator('#redo');
+  if(!(await redo.isVisible()))await page.locator('#perlaMore > summary').click();
+  await redo.click();
   assert.deepEqual(await model(),joined);
   assert.match(await toastText(page),/Unión rehecha/);
   await page.reload();
@@ -108,12 +111,17 @@ async function reviewPage(t,width,height){
  await require('./editor-fixture.cjs')(page);
  return page;
 }
+async function openPerlaImport(page){
+ const menu=page.locator('#perlaImport');
+ if(await menu.count()&&await menu.getAttribute('open')===null)await menu.locator('summary').click();
+}
 const joinFile=path.join(FX,'roomplan-capturedroom.json');
 const joinSnapshot=page=>page.evaluate(()=>({
  entry:FloorPlanApp.entryId,view:FloorPlanApp.viewMode,project:FloorPlanApp.project,
  history:[undoStack.length,redoStack.length],stored:localStorage.getItem('rubik-sota-project-library-v1')
 }));
 async function openJoin(page){
+ await openPerlaImport(page);
  const quick=page.locator('#roomPlanJoinQuick');
  const [chooser]=await Promise.all([page.waitForEvent('filechooser'),quick.click()]);
  await chooser.setFiles(joinFile);
@@ -231,6 +239,7 @@ test('OP-04 UX keeps the mobile properties dock reachable when opening all tools
    await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
    await page.goto(url);
    await page.locator('#welcomeActionInput').press('Escape');
+   const tasks=page.locator('#perlaTasks');if(await tasks.count()&&await tasks.getAttribute('aria-expanded')==='false')await tasks.click();
    await page.locator('#guideDetails').click();
    await page.locator('#guideAllTools').click();
    const panel=page.locator('#tgPanel');
@@ -282,7 +291,7 @@ test('OP-04 previews a RoomPlan door join without writing, commits once and reop
  const snapshot=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project}));
  const before=await snapshot();
  await page.locator('details.menu summary').click();
- const chooser=page.waitForEvent('filechooser');await page.locator('#joinRoomPlan').click();await (await chooser).setFiles(file);
+ await openPerlaImport(page);const chooser=page.waitForEvent('filechooser');await page.locator('#joinRoomPlan').click();await (await chooser).setFiles(file);
  const dialog=page.locator('#roomPlanJoinDialog[open]');await dialog.waitFor();
  const preview=dialog.locator('#roomPlanJoinPreview');
  assert.ok(await preview.isVisible(),'aligned scan preview is visible');
@@ -309,7 +318,7 @@ test('a single visible "Subir plano" control shares the picker with File, retain
  const {page,errors}=await pageFor(t);
  assert.match(await page.locator('#uploadPlanBtn').textContent(),/Subir plano/);assert.ok(await page.locator('#uploadPlanBtn').isVisible());assert.equal(await page.locator('#uploadPlanBtn').count(),1);
  assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
- await page.locator('details.menu summary').click();assert.match(await page.locator('.menu-pop').innerText(),/Importar proyecto JSON/);assert.match(await page.locator('.menu-pop').innerText(),/Subir plano o proyecto/);
+ const fileMenu=page.locator('details.menu:has(#importJson)');await fileMenu.locator('summary').click();assert.match(await fileMenu.locator('.menu-pop').innerText(),/Importar proyecto JSON/);await fileMenu.locator('summary').click();await openPerlaImport(page);
  const picker=page.waitForEvent('filechooser');await page.locator('#importImage').click();assert.equal(await (await picker).element().getAttribute('id'),'uploadIn');
  assert.match(await page.locator('#uploadPlanHelp').textContent(),/PDF.*HEIC.*DXF/);
  const accept=await page.locator('#uploadIn').getAttribute('accept');for(const ext of ['.pdf','.heic','.tif','.dxf','.json','.zip'])assert.ok(accept.includes(ext),ext);

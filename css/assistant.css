@@ -2,7 +2,7 @@
 .assistant-open-btn,.assistant-open{min-height:40px;font-weight:700;margin-left:auto}
 .assistant-panel{position:fixed;z-index:60;top:var(--professional-nav-bottom,96px);right:8px;bottom:8px;width:min(420px,calc(100vw - 16px));
  display:flex;flex-direction:column;gap:8px;padding:12px 14px;box-sizing:border-box;border:1px solid var(--line,#d8d2c8);border-radius:12px;
- background:var(--surface-panel,#fffdf9);color:var(--ink,#2b2620);box-shadow:0 12px 32px rgba(40,30,20,.18);overflow-y:auto;overscroll-behavior:contain}
+ background:var(--surface-panel,#ffffff);color:var(--ink,#1f2326);box-shadow:0 12px 32px rgba(40,30,20,.18);overflow-y:auto;overscroll-behavior:contain}
 /* Only the conversation shrinks; the heading, the proposal and the input keep their size (the panel scrolls if needed). */
 .assistant-panel>*{flex:0 0 auto}
 .assistant-panel>.assistant-log{flex:1 1 auto;min-height:72px}
@@ -35,7 +35,7 @@
 .assistant-actions .btn,.assistant-form .btn{min-height:44px}
 .assistant-chips{display:flex;flex-wrap:wrap;gap:6px}
 .assistant-chips .chip{min-height:36px;padding:4px 10px;border:1px solid var(--line,#d8d2c8);border-radius:999px;background:#fff;font:inherit;font-size:12px;cursor:pointer}
-.assistant-form{display:flex;gap:6px;align-items:flex-end;position:sticky;bottom:-12px;margin-bottom:-12px;padding:6px 0 12px;background:var(--surface-panel,#fffdf9);z-index:1}
+.assistant-form{display:flex;gap:6px;align-items:flex-end;position:sticky;bottom:-12px;margin-bottom:-12px;padding:6px 0 12px;background:var(--surface-panel,#ffffff);z-index:1}
 .assistant-form textarea{flex:1 1 auto;min-width:0;min-height:44px;font:inherit;padding:6px 8px;box-sizing:border-box;resize:vertical}
 .assistant-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:start;gap:6px}
 .assistant-mcp{flex:1 1 11em;min-width:0}

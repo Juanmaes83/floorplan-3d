@@ -15,9 +15,16 @@ test('Phase B1: client file opens offline, shows the project and returns importa
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanClientShare);
  await page.evaluate(()=>{const p=FloorPlanBrand.saveProfile(localStorage,{name:'Estudio Ejemplo',person:'Profesional de prueba',email:'estudio@example.com'});FloorPlanBrand.setDelivery(localStorage,FloorPlanApp.entryId,{profileId:(p.profile||p).id});});
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),workspace=page.locator('#professionalWorkspace');
- await page.locator('#workArea-deliver').click();const cardText=await workspace.locator('.professional-card[data-module="client-file"]').innerText();
- assert.match(cardText,/Archivo para tu cliente/);assert.match(cardText,/sin vistas: prepáralas en Imágenes/,'missing content is said, not faked');assert.match(cardText,/Rubik no sube nada/);
- const download=page.waitForEvent('download');await workspace.getByRole('button',{name:'Descargar archivo para el cliente',exact:true}).click();const d=await download;
+ await page.locator('#workArea-deliver').click();
+ const card=workspace.locator('.professional-card[data-module="client-file"]');
+ assert.match(await card.innerText(),/Archivo para tu cliente/);
+ // PERLA mueve la lista de comprobación al panel. El archivo y sus garantías se verifican igual.
+ await card.getByRole('button',{name:/Ver detalles/}).click();
+ const panel=workspace.locator('.perla-panel-open');
+ const details=await panel.innerText();
+ assert.match(details,/sin vistas: prepáralas en Imágenes/,'missing content is said, not faked');
+ assert.match(details,/Rubik no sube nada/);
+ const [d]=await Promise.all([page.waitForEvent('download'),panel.getByRole('button',{name:'Descargar archivo para el cliente',exact:true}).click()]);
  assert.equal(d.suggestedFilename(),'rubik-sota-proyecto-de-ejemplo-para-el-cliente.html');const file=path.join(dir,d.suggestedFilename());await d.saveAs(file);
  const html=await fs.readFile(file,'utf8');assert.match(html,/<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:;/);
  assert.doesNotMatch(html,/<(script|link|img)[^>]+(src|href)="(https?:|\/\/|blob:)/i,'no external or blob resource');assert.doesNotMatch(html,/"walls"\s*:/,'no editable project inside');

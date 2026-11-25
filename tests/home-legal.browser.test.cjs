@@ -11,9 +11,10 @@ const project=page=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
 const state=page=>page.evaluate(()=>({welcome:document.querySelector('#welcomeDialog').open,legal:document.querySelectorAll('#legalDialog[open]').length,dialogs:[...document.querySelectorAll('dialog[open]')].map(d=>d.id),hash:location.hash,focus:document.activeElement?.id||null}));
 async function shot(page,name){if(process.env.LEGAL_ARTIFACTS){await fs.mkdir(process.env.LEGAL_ARTIFACTS,{recursive:true});await page.screenshot({path:path.join(process.env.LEGAL_ARTIFACTS,name+'.png')});}}
 // The approved text, as it already is in index.html (#legalDialog), per language.
-const APPROVED={es:{label:'Legal y autoría',title:'Legal y uso',text:'No se autoriza la venta, reventa ni distribución de la plataforma sin autorización expresa del titular.',other:'Sale, resale or distribution'},
- en:{label:'Legal & authorship',title:'Legal & use',text:"Sale, resale or distribution of this platform is not authorized without the owner's express permission.",other:'No se autoriza la venta'},
- zh:{label:'法律与作者',title:'法律与使用',text:'未经权利人明确授权，不得销售、转售或分发本平台。',other:'No se autoriza la venta'}};
+// UX-312 Home (23/11/2026): el texto aprobado es el del borrador legal del propietario, que sustituye al anterior.
+const APPROVED={es:{label:'Legal y autoría',title:'Legal y uso',text:'Se prohíbe la explotación comercial de RUBIK SOTA sin autorización expresa de su titular.',other:'Commercial exploitation of RUBIK SOTA'},
+ en:{label:'Legal & authorship',title:'Legal & use',text:'Commercial exploitation of RUBIK SOTA is prohibited without the express authorisation of its owner.',other:'Se prohíbe la explotación comercial'},
+ zh:{label:'法律与作者',title:'法律与使用',text:'未经权利人明确授权，禁止对 RUBIK SOTA 进行商业利用',other:'Se prohíbe la explotación comercial'}};
 const AUDIENCES=['architecture','real-estate','developer','renovation','interior'];
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`Home «Legal y autoría» for every field, keyboard and touch, back to the Home ${viewport.width}x${viewport.height}`,async t=>{

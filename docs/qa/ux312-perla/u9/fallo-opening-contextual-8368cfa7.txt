@@ -1,0 +1,25 @@
+not ok 1 - contextual door and window editing 1440x900
+  ---
+  duration_ms: 59128.143389
+  type: 'test'
+  location: '/home/user/bpdp-product/tests/opening-contextual.browser.test.cjs:41:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.waitFor: Timeout 30000ms exceeded.
+    Call log:
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    Object.mostrar (/home/user/bpdp-product/tests/helpers-perla-editor.cjs:9:16)
+    press (/home/user/bpdp-product/tests/opening-contextual.browser.test.cjs:46:78)
+    TestContext.<anonymous> (/home/user/bpdp-product/tests/opening-contextual.browser.test.cjs:177:8)
+  ...
+# Subtest: contextual door and window editing 390x844
+ok 2 - contextual door and window editing 390x844
+  ---
+  duration_ms: 35728.057575
+  type: 'test'
+  ...
+# Subtest: contextual door and window editing 844x390
+ok 3 - contextual door and window editing 844x390

@@ -12,7 +12,8 @@ async function present(t,viewport,init){const narrow=viewport.width<=1100,contex
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.locator('#guidePresent:visible, #presentationBtn:visible').first().click(); // UX-312 PERLA: la guía es un panel a demanda; misma entrada que las demás pruebas
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!document.querySelector('#presentationShare').disabled,null,{timeout:200000});
  return {page,errors,before};}
 

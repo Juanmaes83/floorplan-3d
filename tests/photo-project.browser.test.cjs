@@ -1,4 +1,7 @@
 'use strict';
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 /* De fotografía a proyecto V1 (FOT-01 + MUE-01) en el editor REAL, actuando solo con los controles visibles (formularios,
    archivos, clics, arrastre, teclado, menús). Las lecturas de estado interno son comprobaciones POSTERIORES.
    Fotos SINTÉTICAS dibujadas por Chromium (sin personas ni datos reales); la «ubicación» EXIF es inventada. */
@@ -149,7 +152,7 @@ test('MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y co
     await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
     assert.ok(dims>0,'cotas UX-08 en el teléfono');assert.notDeepEqual((await ownObj(page)).position,o.position);
     // FOT-01 desde «Entregar» → «Imágenes».
-    await page.locator('#workArea-deliver').tap();await page.locator('#photoReformCard').tap();await page.locator('#photoReformDialog[open]').waitFor();
+    await page.locator('#workArea-deliver').tap();await (await accion(page,'#photoReformCard')).tap();await page.locator('#photoReformDialog[open]').waitFor();
     await page.locator('#photoReformFile').setInputFiles(K.file('salon.jpg',jpg,'image/jpeg'));await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.locator('#photoReformIntent').selectOption('walls');await page.locator('#photoReformFinish').selectOption('sage');
     assert.equal(await page.locator('#photoReformReal').isDisabled(),true,'proveedor real bloqueado');
@@ -231,7 +234,7 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0);
     // También se llega desde «Entregar» → «Imágenes».
     await page.locator('#workArea-deliver').click();
-    const reformCard=page.locator('#photoReformCard');
+    const reformCard=await accion(page,'#photoReformCard');
     // The card is mounted in the animation frame requested by the workspace observer.
     await reformCard.waitFor({state:'visible'});
     assert.equal(await reformCard.isVisible(),true);

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asesor RUBIK · laboratorio simulado</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<header class="lab-top">
+ <div class="lab-brand"><b>RUBIK</b> · Asesor en vivo</div>
+ <div class="lab-badges">
+  <span class="badge ia" id="badgeIa">IA</span>
+  <span class="badge sim" id="badgeSim">Sesión simulada</span>
+  <span class="badge off" id="badgeOff">Voz real apagada · sin conexión a Nuance</span>
+ </div>
+</header>
+<main class="lab">
+ <section class="advisor" aria-labelledby="advTitle">
+  <h1 id="advTitle">Asesor RUBIK <small>(asistente de IA)</small></h1>
+  <div class="setup">
+   <label>Oficio <select id="profile">
+    <option value="architecture">Estudio de arquitectura</option>
+    <option value="real-estate">Inmobiliaria</option>
+    <option value="developer">Promotora</option>
+    <option value="renovation">Reformas</option>
+    <option value="interior">Decoración e interiorismo</option>
+    <option value="construction">Constructora / jefe de obra</option>
+   </select></label>
+   <label>Conexión <select id="transport">
+    <option value="sim" selected>Simulada (sin servicio externo)</option>
+    <option value="live">Nuance Live (requiere autorización)</option>
+   </select></label>
+   <label class="op" id="opRow" hidden>Código de operador <input id="opCode" type="password" autocomplete="off" placeholder="Código del Preview"></label>
+   <fieldset class="mode"><legend>Modo</legend>
+    <label><input type="radio" name="mode" value="cliente" checked> Cliente (solo consulta)</label>
+    <label><input type="radio" name="mode" value="tecnico"> Técnico</label>
+   </fieldset>
+  </div>
+  <div class="avatar-row">
+   <div class="avatar" id="avatar" role="img" aria-label="Avatar del asesor, una IA"><span>IA</span><video id="avatarVideo" playsinline muted hidden></video><audio id="avatarAudio" hidden></audio></div>
+   <div class="status"><strong id="state" aria-live="polite">Listo para empezar</strong><p class="note">El asesor solo empieza cuando tú lo pulsas. No usa cámara ni micrófono en este laboratorio.</p></div>
+  </div>
+  <p class="subtitle" id="subtitle" aria-live="polite"></p>
+  <div class="actions">
+   <button type="button" class="btn primary" id="start">Iniciar conversación</button>
+   <button type="button" class="btn" id="close" disabled>Terminar</button>
+   <button type="button" class="btn" id="toText">Continuar por texto</button>
+  </div>
+  <div class="error" id="error" role="alert" hidden><p id="errorMsg"></p><div class="row"><button type="button" class="btn" id="retry">Reintentar</button><button type="button" class="btn primary" id="errToText">Continuar por texto</button></div></div>
+  <form class="talk" id="talk" aria-label="Lo que dirías al asesor">
+   <label for="say">Di algo al asesor <small>(simulado: escribe lo que dirías)</small></label>
+   <div class="row"><input id="say" autocomplete="off" disabled placeholder="Por ejemplo: ¿cuántos metros tiene la vivienda?"><button class="btn" id="sayBtn" disabled>Decir</button></div>
+   <div class="chips" id="chips">
+    <button type="button" class="chip" data-say="¿Cuántos metros tiene la vivienda?" disabled>Superficies</button>
+    <button type="button" class="chip" data-say="Enséñame el salón" disabled>Enfocar el salón</button>
+    <button type="button" class="chip" data-say="Prefiero seguir por texto" disabled>Pasar a texto</button>
+    <button type="button" class="chip" data-say="¿Cuánto cuesta la reforma?" disabled>Presupuesto</button>
+    <button type="button" class="chip" data-say="Cambia el suelo del salón" disabled>Cambiar suelo</button>
+   </div>
+  </form>
+  <section class="mentor" aria-labelledby="menT"><h2 id="menT">Asesoría guiada</h2>
+   <p class="muted">Primero te pregunto para entender qué quieres; después resumo y te pido confirmación. Solo uso datos reales de RUBIK.</p>
+   <details class="memo" open><summary>Lo que recuerdo</summary>
+    <div class="row"><label>Nombre <input id="memNombre" autocomplete="off"></label><label>Tarea <input id="memTarea" autocomplete="off"></label></div>
+    <label>Misión final <input id="memMision" autocomplete="off"></label>
+    <div class="row"><button type="button" class="btn" id="memSave">Recordar</button><button type="button" class="btn" id="memForget">Olvidar todo</button></div>
+    <p class="muted" id="memView" aria-live="polite"></p></details>
+   <div class="chips" id="skillChips" role="group" aria-label="Temas">
+    <button type="button" class="chip" data-skill="presupuesto">Presupuesto</button><button type="button" class="chip" data-skill="organizacion">Organización</button>
+    <button type="button" class="chip" data-skill="puntualidad">Puntualidad</button><button type="button" class="chip" data-skill="negocio">Negocio</button></div>
+   <p class="mentor-q" id="mentorQ" aria-live="polite"></p>
+   <form class="row" id="mentorForm" hidden><input id="mentorA" autocomplete="off" aria-label="Tu respuesta"><button class="btn primary">Responder</button></form>
+   <div class="row" id="mentorConfirm" hidden><button type="button" class="btn primary" id="mentorYes">Sí, es eso</button><button type="button" class="btn" id="mentorNo">No, te explico mejor</button></div>
+   <p class="mentor-out" id="mentorOut" aria-live="polite"></p>
+   <ul class="mentor-warn" id="mentorWarn"></ul>
+  </section>
+  <section class="memory" id="memoryPanel" aria-labelledby="memT"><h2 id="memT">Memoria en este dispositivo</h2>
+   <p class="note" id="memScope">Comodidad de este navegador: no es privada ni separa de forma segura a personas que compartan el dispositivo, porque no hay identidad verificada. No se comparte con otros canales ni equipos. Puedes verla, editarla y borrarla.</p>
+   <label class="row"><input type="checkbox" id="memConsent"> Acepto que el asesor recuerde estos datos en este dispositivo</label>
+   <fieldset id="memFields" disabled><legend>Lo que recuerda</legend>
+    <label>Nombre preferido <input id="memPref" autocomplete="off" maxlength="80"></label>
+    <label>Nota personal <input id="memNote" autocomplete="off" maxlength="280" aria-describedby="memHint"></label>
+    <p class="muted" id="memHint">No escribas DNI, IBAN, contraseñas ni datos de tarjeta: se rechazan.</p>
+    <div class="row"><button type="button" class="btn" id="memKeep">Guardar</button><button type="button" class="btn" id="memErase">Borrar todo</button></div>
+    <label class="row"><input type="checkbox" id="memHandoff"> Permitir pasar a texto el resumen y mi nombre preferido</label>
+   </fieldset>
+   <p class="muted" id="memStatus" role="status" aria-live="polite"></p>
+  </section>
+  <section class="results" aria-labelledby="resT"><h2 id="resT">Resultados</h2><div id="results"><p class="muted">Aún no hay resultados.</p></div></section>
+  <details class="qa"><summary>Laboratorio: simular errores del servicio</summary>
+   <div class="row"><select id="failSel">
+    <option value="">Sin error</option><option value="mic_denied">Permiso de micrófono denegado</option><option value="invalid_credential">Credencial inválida (401)</option>
+    <option value="forbidden">Sin acceso (403)</option><option value="concurrency_limit">Concurrencia (409)</option><option value="credits_spent">Saldo agotado (429)</option>
+    <option value="start_limit">Límite de inicios (429)</option><option value="capacity_unavailable">Sin capacidad (429)</option><option value="unavailable">No disponible (503)</option>
+   </select><button type="button" class="btn" id="dropConn">Simular pérdida de conexión</button></div>
+   <p class="muted">El error elegido se aplica al iniciar. La pérdida de conexión se aplica a una sesión en curso.</p>
+  </details>
+  <ol class="log" id="log" aria-label="Registro de la sesión"></ol>
+ </section>
+ <section class="viewer" aria-label="Visor de RUBIK con la vivienda de ejemplo">
+  <iframe id="rubik" title="RUBIK · vivienda de ejemplo" src="../../index.html#inicio"></iframe>
+ </section>
+</main>
+<script src="tools.js"></script>
+<script src="adapter.js"></script>
+<script src="nuance-adapter.js"></script>
+<script src="skills.js"></script>
+<script src="../../js/assistant-unified.js"></script>
+<script src="profiles.js"></script>
+<script src="../../js/asesor-memory-panel.js"></script>
+<script src="home-entry.js"></script>
+<script src="lab.js"></script>
+</body>
+</html>

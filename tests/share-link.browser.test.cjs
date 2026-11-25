@@ -2,6 +2,9 @@
 // code; it uploads only the finished client file (and the tour video when chosen) to /api/share, and the link opens
 // through /api/view with a strict CSP. Both functions run here for real (api/share.js, api/view.js) over a fake Blob
 // store in memory: no network. The opened page plays the video from the store and keeps the observations form.
+// UX-312 PERLA · Entregar (maqueta c96888ac): cada ficha muestra una acción; las demás están en su panel de detalle.
+// Esta prueba abre antes el panel de la ficha (tests/helpers-perla-entregar.cjs). La acción y su efecto no cambian.
+const {abrirFicha,accion}=require('./helpers-perla-entregar.cjs');
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{Readable}=require('node:stream'),{chromium}=require('playwright');
 const Share=require('../api/share.js'),View=require('../api/view.js');
 const root=path.resolve(__dirname,'..'),SHOTS=process.env.QA_SHOTS||'';let server,browser,url;
@@ -37,7 +40,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanShareLink&&window.FloorPlanClientShare);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  const workspace=page.locator('#professionalWorkspace'),dialog=page.locator('#shareLinkDialog');
- await page.locator('#workArea-deliver').click();await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await page.locator('#workArea-deliver').click();await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  // S1: its own code field, empty: the render code is never read nor pre-filled.
  assert.equal(await dialog.locator('#shareLinkToken').inputValue(),'','the render code is not reused');
  assert.match(await dialog.innerText(),/Código de publicación de enlaces[\s\S]*Es distinto del código del Render IA/);
@@ -67,7 +70,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  await client.locator('#shareReview').waitFor();assert.equal(await client.locator('#shareTour').count(),0);
  assert.doesNotMatch(await client.locator('body').innerText(),/Prepáralas en Entregar/,'no professional instructions in the client page');assert.match(await client.locator('.share-top').innerText(),/No necesita conexión ni instalar nada/);await client.close();assert.deepEqual(clientErrors,[]);
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#shareLinkDialog').open);
- assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'client-link','focus returns to the action');
+ await page.waitForFunction(()=>(document.activeElement?.dataset.route||document.activeElement?.dataset.perlaMirror)==='client-link',null,{timeout:5000}); // focus returns to the action (or to its button in the card panel)
 
  // With a recorded tour video: the video goes first, the page links to it and plays it from the store.
  await workspace.getByRole('button',{name:'Preparar presentación'}).click();
@@ -78,7 +81,7 @@ test('Phase B4: publish the client file as a link, with and without the tour vid
  const ext=await page.evaluate(()=>FloorPlanTourVideo.result.extension);await page.keyboard.press('Escape');
  await page.locator('#presentationClose').click({timeout:30000});await page.waitForFunction(()=>!FloorPlanPresentation.active);
  if(!(await workspace.isVisible()))await page.locator('#workArea-deliver').click();
- await workspace.getByRole('button',{name:'Publicar enlace para el cliente'}).click();await dialog.waitFor();
+ await abrirFicha(page,'P7');await page.locator('#professionalWorkspace .perla-panel-open .panel-f').getByRole('button',{name:'Publicar enlace para el cliente'}).click() /* UX-312 PERLA U9: el panel de la ficha abierta (mismo control real) */;await dialog.waitFor();
  assert.equal(await dialog.locator('#shareLinkVideo').isChecked(),true);assert.match(await dialog.innerText(),new RegExp(`Incluir el vídeo del recorrido \\(${ext.toUpperCase()}`));
  assert.equal(await dialog.locator('#shareLinkToken').inputValue(),SHARE,'the publishing code is remembered while this page is open');
  assert.equal(await page.evaluate(s=>Object.keys(localStorage).some(k=>localStorage.getItem(k)===s)||Object.keys(sessionStorage).some(k=>sessionStorage.getItem(k)===s),SHARE),false,'the publishing code is never stored in the browser');

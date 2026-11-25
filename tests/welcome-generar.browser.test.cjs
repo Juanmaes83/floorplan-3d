@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); el ayudante lo abre antes de usar sus controles.
 // «Generar» (welcome → result): the three ways to start come first and are read before the search; the page says what
 // the person will get and its limits; focus lands on the title, not on a field (a phone would open its keyboard over
 // the choices). Each path reaches its result: a blank project with its first room, the example, and the upload chooser
@@ -17,7 +18,7 @@ test(`«Generar»: hierarchy, focus and the three paths ${viewport.width}x${view
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();await page.waitForTimeout(300);
- const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(250);};
+ const press=async sel=>{await page.evaluate(s=>{const n=document.querySelector(s);if(n&&n.closest('#guideBar')&&!document.body.classList.contains('perla-guide-open'))window.FloorPlanPerla?.setGuide?.(true,{focus:false});},sel);const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();await page.waitForTimeout(250);};
  // Hierarchy and focus.
  const w=await page.evaluate(()=>{const entries=document.querySelector('.welcome-entries'),search=document.querySelector('.welcome-search'),first=entries.querySelector('.welcome-entry'),r=first.getBoundingClientRect();
   return {active:document.activeElement?.id,tag:document.activeElement?.tagName,order:!!(entries.compareDocumentPosition(search)&Node.DOCUMENT_POSITION_FOLLOWING),entries:[...entries.querySelectorAll('.welcome-entry strong')].map(e=>e.textContent),

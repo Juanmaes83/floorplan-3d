@@ -18,7 +18,8 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));})
 
 const LANG_KEY='rubik-sota-floorplan-lang',NEXT={es:'en',en:'zh',zh:'es'};
 const AREAS={design:{es:'Diseñar',en:'Design',zh:'设计'},analyze:{es:'Analizar',en:'Analyze',zh:'分析'},budget:{es:'Presupuestar',en:'Budget',zh:'预算'},deliver:{es:'Entregar',en:'Deliver',zh:'交付'},studio:{es:'Mi estudio',en:'My studio',zh:'我的事务所'}};
-const PRESENT={es:'Presentar mi vivienda',en:'Present my home',zh:'展示我的住宅'};
+// UX-312 PERLA · V4: la entrada de la cabecera es «Presentar vivienda» (mismo control #presentationBtn y mismo efecto).
+const PRESENT={es:'Presentar vivienda',en:'Present the home',zh:'展示住宅'};
 // Regions that are the product's global surfaces. The CJK check skips #langBtn: its label belongs to the language selector.
 const REGIONS=['#welcomeDialog','header','#professionalNav','#mobileDock','#guideBar','#traceStatus','#tip','#legalLink'];
 

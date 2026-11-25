@@ -1,0 +1,70 @@
+name: Blueprint and Despiece browser validation
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'bpdp/**'
+      - 'js/**'
+      - 'css/**'
+      - 'index.html'
+      - 'tests/bpdp-*.browser.test.cjs'
+      - '.github/workflows/bpdp-browser.yml'
+permissions:
+  contents: read
+concurrency:
+  group: bpdp-browser-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  suites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [candidate, routes]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install browser and video validation tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps chromium
+          sudo apt-get install -y ffmpeg
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+      - name: Run Blueprint and Despiece ${{ matrix.suite }} suite
+        env:
+          BPDP_SUITE: ${{ matrix.suite }}
+          BPDP_SAVE_DIR: ${{ runner.temp }}/bpdp-deliveries
+          BPDP_REQUIRE_H264: '1'
+        run: |
+          python3 -m http.server 43987 --bind 127.0.0.1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          curl --retry 10 --retry-connrefused --retry-delay 1 --fail --silent http://127.0.0.1:43987/ --output /dev/null
+          mkdir -p "$BPDP_SAVE_DIR"
+          case "$BPDP_SUITE" in
+            candidate) node --test --test-concurrency=1 tests/bpdp-candidate.browser.test.cjs ;;
+            routes) node --test --test-concurrency=1 tests/bpdp-routes.browser.test.cjs ;;
+          esac
+      - name: Archive catalog downloads
+        if: always() && matrix.suite == 'routes'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bpdp-catalog-downloads
+          path: ${{ runner.temp }}/bpdp-deliveries
+          if-no-files-found: ignore
+
+  browser:
+    if: always()
+    needs: suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require both Blueprint and Despiece suites
+        env:
+          SUITE_RESULT: ${{ needs.suites.result }}
+        run: test "$SUITE_RESULT" = success

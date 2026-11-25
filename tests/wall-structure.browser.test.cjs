@@ -1,3 +1,4 @@
+// UX-312 PERLA: la guía es un panel a demanda («Tareas del proyecto», V4); antes de «Cerrar guía» se abre ese panel.
 // Declared wall type from the normal editor flow, on the example project: with «Seleccionar», tap a wall; its panel
 // (on a phone, «Propiedades» in the selection bar) shows «Tipo declarado del muro». The professional declares
 // partition, load-bearing, other and back to unspecified; changes only the origin; everything survives a reload.
@@ -16,7 +17,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`dec
  const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route(/cdn\.jsdelivr\.net|unpkg\.com/,r=>r.abort());
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
- if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();
+ if(await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  const press=async s=>{const l=page.locator(s).first();if(mobile)await l.tap();else await l.click();};
  const wall=id=>page.evaluate(id=>{const p=FloorPlanApp.project,w=p.walls.find(w=>w.id===id);return {structure:w.structure,source:w.structureSource??null,status:w.status,version:p.schemaVersion,fill:document.querySelector(`[data-wall="${id}"]`)?.getAttribute('fill')};},id);
  // Two existing walls of the example: a grey one without a load-bearing label, and a black template load-bearing one.
@@ -36,8 +37,11 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`dec
  // Phone regression from human QA: while the wall properties drawer is open, sticky «Inicio» must have an opaque
  // separation from horizontally scrolled header controls and neither open nor closed state may create page overflow.
  if(mobile){
-  const shell=()=>page.evaluate(()=>{const b=document.querySelector('#welcomeBtn'),s=getComputedStyle(b);return {overflow:document.documentElement.scrollWidth>window.innerWidth+1,marginRight:parseFloat(s.marginRight)||0,shadow:s.boxShadow,drawer:!!document.querySelector('aside.right.open')};});
-  let m=await shell();assert.equal(m.drawer,true);assert.equal(m.overflow,false);assert.ok(m.marginRight>=10,'Inicio keeps a gutter from scrolled controls');assert.notEqual(m.shadow,'none');
+  const shell=()=>page.evaluate(()=>{const b=document.querySelector('#welcomeBtn'),s=getComputedStyle(b),row=b.closest('.perla-left'),rect=b.getBoundingClientRect(),next=[...(row?.children||[])].find(el=>el!==b&&el.checkVisibility());
+   const gap=next?next.getBoundingClientRect().left-rect.right:null;
+   const clear=b.contains(document.elementFromPoint((rect.left+rect.right)/2,(rect.top+rect.bottom)/2));
+   return {perla:!!row,gap,clear,overflow:document.documentElement.scrollWidth>window.innerWidth+1,marginRight:parseFloat(s.marginRight)||0,shadow:s.boxShadow,drawer:!!document.querySelector('aside.right.open')};});
+  let m=await shell();assert.equal(m.drawer,true);assert.equal(m.overflow,false);if(m.perla){assert.ok(m.gap>=3,'Inicio keeps separation from adjacent controls');assert.equal(m.clear,true,'Inicio receives the touch');}else{assert.ok(m.marginRight>=10,'Inicio keeps a gutter from scrolled controls');assert.notEqual(m.shadow,'none');}
   await page.evaluate(()=>closeDrawers());await page.waitForTimeout(150);m=await shell();assert.equal(m.drawer,false);assert.equal(m.overflow,false);
   await press('#fab [data-a=prop]');await page.waitForTimeout(150);assert.equal((await shell()).drawer,true);
  }
@@ -48,7 +52,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`dec
  await page.locator('#wallStructureType').selectOption('partition');await page.waitForTimeout(250);await page.locator('#wallStructureSource').selectOption('pending-review');await page.waitForTimeout(250);
  assert.deepEqual(await wall(pick.grey),{...(await wall(pick.grey)),structure:'partition',source:'pending-review'});
  // 9: reload; the example keeps the declaration and the panel shows it.
- await page.reload();await page.waitForTimeout(800);if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();
+ await page.reload();await page.waitForTimeout(800);if(await page.locator('#guideClose').isVisible())await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());
  const kept=await wall(pick.grey);assert.equal(kept.structure,'partition');assert.equal(kept.source,'pending-review');
  await openPanel(pick.grey);assert.equal(await page.locator('#wallStructureType').inputValue(),'partition');assert.equal(await page.locator('#wallStructureSource').inputValue(),'pending-review');
  if(mobile&&await page.locator('aside.open').count())await page.evaluate(()=>closeDrawers());

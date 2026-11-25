@@ -54,7 +54,7 @@ const startSampler=page=>page.evaluate(()=>{const S=window.__ux={samples:[],on:t
   const buttons=[...card.querySelectorAll('button')].filter(b=>b.getClientRects().length&&!b.closest('[hidden]')&&getComputedStyle(b).visibility!=='hidden');
   S.samples.push({story:s?{kind:s.kind,P:s.P,local:s.local,playing:!!s.playing}:null,ui:q('#presentationOverlay').dataset.story||null,title:card.querySelector('h2').textContent,
    card:rect(card),head:rect(card.querySelector('.presentation-card-top')),play:rect(q('#presentationStoryPlay')),slider:rect(q('#presentationStorySlider')),caption:rect(q('#presentationStoryCaption')),
-   cardScroll:card.scrollHeight>card.clientHeight+1||card.scrollTop>0,docScroll:scrollX||scrollY,ids:buttons.map(b=>b.id||b.closest('.presentation-stops')&&'stop'||b.textContent.trim()),
+   videoDisabled:q("#presentationVideo")?.getAttribute("aria-disabled")==="true",cardScroll:card.scrollHeight>card.clientHeight+1||card.scrollTop>0,docScroll:scrollX||scrollY,ids:buttons.map(b=>b.id||b.closest('.presentation-stops')&&'stop'||b.textContent.trim()),
    out:buttons.filter(b=>{if(b.closest('.presentation-card-body'))return false;const r=b.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left<c.left-1||r.right>c.right+1||r.top<c.top-1||r.bottom>c.bottom+1;}).map(b=>b.id)});
   requestAnimationFrame(tick);};requestAnimationFrame(tick);});
 // A person's prompt pause: the page itself clicks «Pausa» on the first frame where the «Dibujo vivo» scene is past
@@ -76,7 +76,8 @@ function assertStable(samples,label){
  const names={'section-open':'Sección visual','elevation-open':'Fachada visual','axon-open':'Axonometría'};
  for(const [kind,name] of Object.entries(names)){const t=[...new Set(s.filter(x=>x.story.kind===kind&&x.story.local>.05).map(x=>x.title))];if(t.length)assert.deepEqual(t,[name],`${label}: header during ${kind}`);}
  const playing=s.filter(x=>x.story.playing);
- const extra=[...new Set(playing.flatMap(x=>x.ids))].filter(id=>!['presentationClose','presentationStoryPlan','presentationStoryPlay','presentationStoryNext'].includes(id));
+ assert.ok(playing.filter(x=>x.ids.includes('presentationVideo')).every(x=>x.videoDisabled),`${label}: recording is unavailable during playback`);
+ const extra=[...new Set(playing.flatMap(x=>x.ids))].filter(id=>!['presentationClose','presentationStoryPlan','presentationStoryPlay','presentationStoryNext','presentationVideo'].includes(id));
  assert.deepEqual(extra,[],`${label}: while playing only the player is shown`);
  for(const x of s)assert.equal(x.ui,x.story.playing?'playing':x.story.P>=1?'end':'paused',`${label}: UI state follows the story`);
  return s;}
