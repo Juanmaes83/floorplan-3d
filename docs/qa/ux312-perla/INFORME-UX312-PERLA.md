@@ -82,7 +82,26 @@ Huellas SHA-256 en `salidas/SHA256SUMS.txt`.
 
 ## Regresión
 
-<<REGRESION>>
+**Batería final:** 41 suites de navegador con 3D real (Chromium 153, SwiftShader).
+- Ejecutada sobre `0bf3f551d8ea6a5c6f9978eaa2d684eb511a6a72`, en un worktree fijo sin ediciones durante la ejecución.
+- Tabla por suite en `bateria-final-0bf3f551.md`.
+- Resultado: **38 suites en verde y 3 con fallo**, sumando 283 casos correctos y 3 fallidos.
+
+| Suite que falla | Caso | Causa comprobada | Evidencia |
+|---|---|---|---|
+| bpdp-routes | Dos demos y cuatro salidas | El vídeo tarda 184 y 337 s con 3D por software y la prueba espera 90 s. Con más tiempo pasa entera y los MP4 (h264 1080p) se decodifican completos. | `u9/bpdp-routes-video.md` |
+| tour-video | Dron de SCULPT (Codex) | Agota sus 240 s. Falla igual en la rama de Codex sola (`b7af2d99`). | Registro de U8 |
+| presentation | 27 · P16 | Falla también en `master`; no viene de PERLA. | Baterías anteriores |
+
+Ninguno de los tres fallos es una regresión de PERLA. Las aserciones de Codex no se han relajado, y su CI con hardware real es la referencia.
+
+**Evidencias funcionales sobre el código final:**
+- Editor: 47/47 (`resultados/funcional-escritorio.json`).
+- Móvil, teclado y zoom al 200 %: 35/35.
+- Entregar: 35/35.
+- Home: 25/25.
+- Inventario: 263 controles antes y 276 después. No se ha perdido ninguno; cuatro solo cambiaron su nombre accesible para distinguirlos, por ejemplo «Cotas» pasa a «Mostrar u ocultar cotas».
+
 
 ## Decisiones abiertas (propietario y Codex)
 
@@ -116,4 +135,31 @@ Huellas SHA-256 en `salidas/SHA256SUMS.txt`.
 
 ## Publicación
 
-<<PUBLICACION>>
+| Campo | Valor |
+|---|---|
+| Rama | `claude/vibrant-clarke-woev1u` |
+| SHA comprobado | `0bf3f551d8ea6a5c6f9978eaa2d684eb511a6a72` |
+| Preview HTTPS de ese SHA | `https://floorplan-3d-6tr7b7rsx-juanma-espinosas-projects.vercel.app/` (deployment `dpl_j1uXMHiRsHzCfN3Lcsc3W6krTTLD`, READY). Está protegida por Vercel y se abre con un enlace de acceso temporal. |
+| Validación en la Preview | Chromium a 1440 y a 390 px, sin errores de página. Comprobado: puntos del semáforo en el editor, aviso «✓ Guardado», barra de Entregar al 33 %, y Atrás del navegador vuelve al editor. |
+| Production | No se ha tocado. No hay fusión a `master`. |
+
+Este informe se publica en un commit de documentación posterior a `0bf3f551` que no cambia código. La Preview del SHA comprobado es la de la tabla.
+
+### Matriz por requisito (U2–U13)
+
+| Requisito | Estado | Evidencia principal |
+|---|---|---|
+| U2 · Editor PERLA (dos filas, jerarquía, lienzo, móvil, tableta) | CONSEGUIDO | Editor 47/47, móvil 35/35, `premium-shell` 5/5, `journey-orientation` 17/17 |
+| U3 · Entregar (catálogo, rutas directas, fichas de la maqueta, lámina SVG) | CONSEGUIDO | Entregar 35/35, `m2-s4` 14/14, `qa-m2-examen` 20/20 |
+| U4 · Home (tarjetas, portadas, retrato por profesión) | CONSEGUIDO | Home 25/25, `home-demos` |
+| U6 · Presupuestar y páginas interiores | CONSEGUIDO | `budget-ui` y `economic-dossier` |
+| U7 · CI de la PR #322 | PREPARADO PARA CODEX | Ver `ENTREGA-CODEX.md` |
+| U8 · Mapas (`b7af2d99`) | CONSEGUIDO | `parcel` 6/6 y `project-dossier` 3/3; Places apagado (faltan variables) |
+| U9 · «Volver» al origen, Atrás, «Guardado», sin duplicados, Asistente sin solape | CONSEGUIDO | `perla-return` 2/2, `perla-dialog-assistant` 2/2, auditoría «Volver» 48/48, `u9/CIERRE-U9.md` |
+| U10 · Semáforo y barra de porcentaje | CONSEGUIDO | `perla-semaforo` 2/2 |
+| U11 · Botón «hecho» | CONSEGUIDO | `perla-done` 2/2 |
+| U12 · Extensión al resto de páginas | CONSEGUIDO | `u12/CIERRE-U12.md` |
+| U13 · Asesor RUBIK (laboratorio simulado) | ENTREGADO en `claude/asesor-rubik-en-vivo` @ `75291e8d` | `asesor-rubik-lab` 2/2, cero peticiones a Nuance |
+
+**Decisión abierta para el propietario:** el «Recorrido de obra» de Presupuestar repite dos acciones de sus fichas, ordenadas como camino guiado. Lo usa la prueba del usuario novato (`qa-m2-novato`). Se ha conservado y lleva semáforo.
+
