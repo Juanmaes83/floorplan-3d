@@ -9,9 +9,13 @@
 <link rel="stylesheet" href="./asesor.css">
 </head>
 <body data-memory-owner="asesor-demo-preview">
-<main>
+<header class="top"><div><strong>RUBIK SOTA</strong>
 <a id="advBackHome" href="../#inicio">← Volver a la Home</a>
-<h1>Asesor RUBIK</h1>
+</div></header>
+<main>
+<div class="workspace">
+<section class="consultation" aria-labelledby="advisor-title">
+<h1 id="advisor-title">Asesor RUBIK</h1>
 <p id="badgeSim">Sesión simulada</p>
 <p>Consulta la vivienda de ejemplo. La conversación empieza cuando pulsas «Iniciar conversación».</p>
 <label for="profile">Profesión</label>
@@ -20,10 +24,16 @@
 <div class="actions"><button id="start" type="button">Iniciar conversación</button><button id="close" type="button" disabled>Terminar</button></div>
 <p id="state" role="status">Lista para iniciar</p>
 <div id="chips" class="actions"></div>
-<section aria-labelledby="example"><h2 id="example">Vivienda de ejemplo</h2>
-<img src="../assets/welcome/example-3d.webp" alt="Vista general de la vivienda de ejemplo de RUBIK">
-<div id="results" role="status"></div></section>
-<section aria-labelledby="memory"><h2 id="memory">Memoria en este dispositivo</h2>
+<div id="results" class="answer" role="status">Aquí verás la respuesta a tu consulta.</div>
+<section id="text" hidden><h2>Continuar por texto</h2><p id="handoff"></p>
+<form id="textForm"><label for="question">Pregunta sobre superficies del ejemplo</label>
+<div class="actions"><input id="question" maxlength="200" autocomplete="off" required><button type="submit">Consultar</button></div></form>
+<p id="textAnswer" role="status"></p></section>
+</section>
+<section class="example" aria-labelledby="example"><h2 id="example">Vivienda de ejemplo</h2>
+<img src="../assets/welcome/example-3d.webp" alt="Vista general de la vivienda de ejemplo de RUBIK"></section>
+</div>
+<details class="memory"><summary>Memoria en este dispositivo</summary>
 <p>Opcional. Las personas que comparten este navegador pueden ver los datos guardados.</p>
 <label><input type="checkbox" id="memConsent"> Acepto guardar mi nombre y nota en este dispositivo</label>
 <fieldset id="memFields" disabled><legend>Datos guardados</legend>
@@ -32,8 +42,7 @@
 <div class="actions"><button id="memKeep" type="button">Guardar</button><button id="memErase" type="button">Borrar todo</button></div>
 <label><input id="memHandoff" type="checkbox"> Pasar a texto el nombre y el resumen de las consultas</label>
 </fieldset>
-<p id="memStatus" role="status"></p></section>
-<section id="text" hidden><h2 tabindex="-1">Continuar por texto</h2><p id="handoff"></p><p>Elige una consulta de ejemplo de las opciones de arriba.</p></section>
+<p id="memStatus" role="status"></p></details>
 </main>
 <script src="../js/assistant-unified.js"></script>
 <script src="../js/asesor-memory-panel.js"></script>

@@ -54,7 +54,7 @@
       : 'Continuación sin traspaso de datos.';
     text.hidden = false;
     state.textContent = 'Consulta por texto · sesión simulada';
-    text.querySelector('h2').focus();
+    byId('question').focus();
   }
 
   function paint() {
@@ -67,7 +67,10 @@
       button.type = 'button';
       button.className = 'chip';
       button.dataset.profileExample = String(index);
-      button.textContent = question;
+      const room = findRoom(question);
+      button.textContent = index === 1
+        ? (room ? 'Ver ficha: ' + room.name : 'Ver superficies de las estancias')
+        : question;
       button.disabled = !active;
       button.addEventListener('click', () => {
         if (index === 2) continueByText();
@@ -79,6 +82,20 @@
     });
   }
 
+  byId('textForm').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!active || text.hidden) return;
+    const query = byId('question').value.trim();
+    const room = findRoom(query);
+    const asksArea = /\b(superficie|metros|m2|mide|area)\b/.test(plain(query));
+    byId('textAnswer').textContent = asksArea && room
+      ? room.name + ' · ' + format.format(room.area) + ' m² orientativos.'
+      : asksArea && /\b(vivienda|total|planta)\b/.test(plain(query))
+        ? 'Superficie útil de la vivienda: ' + format.format(example.area) + ' m² orientativos.'
+        : 'Esta demo responde sobre superficies. Prueba «¿Cuánto mide la cocina?» o «¿Qué superficie tiene la vivienda?».';
+    byId('question').value = '';
+  });
+
   function setActive(value) {
     active = value;
     profile.disabled = value;
@@ -87,6 +104,8 @@
     text.hidden = true;
     results.replaceChildren();
     byId('handoff').textContent = '';
+    byId('question').value = '';
+    byId('textAnswer').textContent = '';
     summary = '';
     state.textContent = value ? 'Conversación iniciada · sesión simulada' : 'Conversación terminada';
     paint();

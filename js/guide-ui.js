@@ -254,7 +254,7 @@
    // §2 · «Hablar con el Asesor» junto al retrato: abre el Asesor (demo simulada) con esta profesión ya elegida.
    // No inicia ninguna conversación: allí empieza solo si la persona pulsa «Iniciar conversación». La consulta guiada sigue en su entrada.
    const advisorUrl='asesor/?perfil='+encodeURIComponent(audience)+'&desde=home';
-   const talk=btn('welcomeAudienceAdvisor',tx('Hablar con el Asesor','Talk to the Advisor','与顾问交谈'),()=>location.assign(advisorUrl),row);talk.dataset.href=advisorUrl;
+   const talk=btn('welcomeAudienceAdvisor',tx('Probar el Asesor · Demo','Try the Advisor · Demo','试用顾问 · 演示'),()=>location.assign(advisorUrl),row);talk.dataset.href=advisorUrl;
    talk.setAttribute('aria-label',tx('Hablar con el Asesor como ','Talk to the Advisor as ','以此职业与顾问交谈：')+label(audiences.find(a=>a[0]===audience)?.[1]||''));
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();

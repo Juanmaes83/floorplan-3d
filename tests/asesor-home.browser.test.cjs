@@ -40,6 +40,11 @@ test(`Home → Asesor por profesión ${viewport.width}x${viewport.height}`,{time
    assert.match(await page.locator('#results').innerText(),/87,18 m²/);
    await press(page.locator('[data-profile-example="2"]'));
    assert.match(await page.locator('#handoff').innerText(),/sin traspaso/);
+   assert.equal(await page.locator('#question').evaluate(el=>el===document.activeElement),true);
+   await page.locator('#question').fill('¿Cuánto mide la cocina?');
+   await press(page.locator('#textForm button'));
+   assert.match(await page.locator('#textAnswer').innerText(),/Cocina · 6,04 m² orientativos/);
+   await press(page.locator('.memory summary'));
    await page.locator('#memConsent').check();
    await page.locator('#memPref').fill('Luz');
    await press(page.locator('#memKeep'));await page.locator('#memHandoff').check();
