@@ -22,7 +22,13 @@ jobs:
       - name: Playwright 1.63.0 (${{ matrix.engine }})
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.63.0
-          node "$RUNNER_TEMP/pw/node_modules/playwright/cli.js" install --with-deps ${{ matrix.engine }}
+          PW="$RUNNER_TEMP/pw/node_modules/playwright/cli.js"
+          # El navegador se descarga primero (no depende de apt). El run 45849673467 falló entero porque un repositorio apt
+          # ajeno a Playwright (packages.microsoft.com, 403 en ubuntu-26.04) abortó «install --with-deps» antes de descargar
+          # Firefox. Ese repositorio no aporta ninguna dependencia del navegador: se retira antes de instalar las del sistema.
+          node "$PW" install ${{ matrix.engine }}
+          grep -rl 'packages.microsoft.com' /etc/apt/sources.list.d 2>/dev/null | xargs -r sudo rm -f
+          node "$PW" install-deps ${{ matrix.engine }}
       - name: A0 writer fence + residuals (${{ matrix.engine }}, ${{ matrix.size }})
         env:
           A0_ROOT: ${{ github.workspace }}
