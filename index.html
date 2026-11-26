@@ -1747,6 +1747,13 @@ function renderSel(){
         s += `<line x1="${mid.x}" y1="${mid.y}" x2="${m.x}" y2="${m.y}" stroke="#b5653a" stroke-width="1" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" pointer-events="none"/>
           <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${hit}" fill="transparent"/>
           <circle data-handle="curve" cx="${m.x}" cy="${m.y}" r="${7*hs*k}" fill="${bad ? '#b8412c' : '#fff'}" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke"><title>${op07t('Arrastra para curvar el muro; vuelve a la línea para enderezarlo (Mayús: sin ajuste)','Drag to curve the wall; back to the line to straighten it (Shift: no snapping)','拖动使墙弯曲；拖回直线即拉直（Shift：不吸附）')}</title></circle>`;
+        // §7.1 · «Curvo» elegido en un muro recto: curva discontinua de vista previa y el aviso junto al asa (nada se escribe).
+        if (!drag && !pw.curve && ui.wallShapeMode?.id === pw.id && ui.wallShapeMode.kind === 'curve'){
+          const L = Math.hypot(pw.end.x-pw.start.x, pw.end.y-pw.start.y), {n} = wallChord(pw), sg = Math.min(L/8, 600), c = {x:mid.x + n.x*2*sg, y:mid.y + n.y*2*sg};
+          s += `<path data-preview="curve" d="M${pw.start.x} ${pw.start.y} Q${c.x} ${c.y} ${pw.end.x} ${pw.end.y}" fill="none" stroke="#b5653a" stroke-width="2" stroke-dasharray="8 6" vector-effect="non-scaling-stroke" pointer-events="none" opacity=".85"/>
+            <circle class="curve-handle-pulse" cx="${m.x}" cy="${m.y}" r="${13*hs*k}" fill="none" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>
+            <text data-hint="curve" x="${m.x}" y="${m.y - 20*k}" font-size="${13*k}" text-anchor="middle" fill="#b5653a" font-weight="700" stroke="#fff" stroke-width="${3*k}" paint-order="stroke" pointer-events="none">${op07t('Arrastra para curvar','Drag to curve','拖动以弯曲')}</text>`;
+        }
         if (drag?.kind === 'curve') s += `<text x="${m.x}" y="${m.y - 18*k}" font-size="${12*k}" text-anchor="middle" fill="${bad ? '#b8412c' : '#b5653a'}" font-weight="600" stroke="#fff" stroke-width="${3*k}" paint-order="stroke" pointer-events="none">${esc(bad ? drag.refused : (f ? op07t(`flecha ${Math.abs(f)} mm`,`sagitta ${Math.abs(f)} mm`,`矢高 ${Math.abs(f)} mm`) : op07t('recto','straight','直')))}</text>`;
       }
     }
@@ -2014,7 +2021,18 @@ let wallShapeStatus = '';
 function wallShapeBlock(w){
   if (w.status === 'demolished' || !Core.wallFeaturesActive()) return '';   // OP-07 S8: integrated ≠ active
   const f = Math.round(wallSagitta(w)), sloped = w.heightEndMm !== undefined, len = Math.round(Core.wallLength(w));
+  const curvedNow = !!w.curve, mode = curvedNow || (ui.wallShapeMode?.id === w.id && ui.wallShapeMode.kind === 'curve') ? 'curve' : 'straight';
+  const icon = k => k === 'curve' ? '<svg viewBox="0 0 40 20" width="40" height="20" aria-hidden="true"><path d="M3 17 Q20 -5 37 17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>' : '<svg viewBox="0 0 40 20" width="40" height="20" aria-hidden="true"><path d="M3 10 H37" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+  /* §7.1 · Forma del muro descubrible: Recto / Curvo con su dibujo; «Curvo» enseña el asa, «Arrastra para curvar» y una
+     previsualización en el plano SIN tocar el proyecto; el ajuste en milímetros queda como opción secundaria. */
   return `<details class="panel-group wall-shape" data-group="wall-shape" open id="wallShape"><summary>${op07t('Forma del muro','Wall shape','墙体形状')}</summary>
+    <div class="wall-shape-kind" role="radiogroup" aria-label="${op07t('Forma del muro','Wall shape','墙体形状')}">
+      <button type="button" class="btn wall-shape-opt" role="radio" data-shape="straight" aria-checked="${mode === 'straight'}">${icon('straight')}<span>${op07t('Recto','Straight','直墙')}</span></button>
+      <button type="button" class="btn wall-shape-opt" role="radio" data-shape="curve" aria-checked="${mode === 'curve'}">${icon('curve')}<span>${op07t('Curvo','Curved','弧墙')}</span></button></div>
+    ${mode === 'curve' ? `<p class="wall-shape-hint" id="wallShapeHint"><strong>${op07t('Arrastra para curvar','Drag to curve','拖动以弯曲')}</strong> · ${curvedNow ? op07t(`el punto del centro del muro en el plano. Flecha actual: ${Math.abs(f)} mm.`,`the dot at the centre of the wall on the plan. Current sagitta: ${Math.abs(f)} mm.`,`拖动平面图上墙中点。当前矢高：${Math.abs(f)} mm。`) : op07t('el punto del centro del muro en el plano. La línea discontinua es una vista previa: nada cambia hasta que sueltes.','the dot at the centre of the wall on the plan. The dashed line is a preview: nothing changes until you release.','拖动平面图上墙中点。虚线为预览：松开前不会改变。')}</p>` : ''}
+    <div class="actions"><button class="btn" id="wallStraighten" ${w.curve ? '' : 'disabled'}>${op07t('Enderezar','Straighten','拉直')}</button>
+      <button class="btn" id="wallLevel" ${sloped ? '' : 'disabled'}>${op07t('Nivelar','Level','找平')}</button></div>
+    <details class="wall-shape-precise" id="wallShapePrecise" ${ui.wallPrecise === w.id || wallShapeStatus ? 'open' : ''}><summary>${op07t('Ajuste preciso (mm)','Precise adjustment (mm)','精确调整 (mm)')}</summary>
     <div class="form">
       <label class="full" for="wallSagitta">${op07t('Curvatura · flecha en el centro (mm)','Curvature · sagitta at the centre (mm)','弧度 · 中点矢高 (mm)')}</label>
       <input id="wallSagitta" type="number" inputmode="numeric" step="10" value="${f}" aria-describedby="wallShapeHelp">
@@ -2024,9 +2042,7 @@ function wallShapeBlock(w){
       <input id="wallSplitAt" type="number" inputmode="numeric" step="10" min="1" max="${len-1}" value="${Math.round(len/2)}">
     </div>
     <div class="actions"><button class="btn" id="wallApplyShape">${op07t('Aplicar forma','Apply shape','应用形状')}</button>
-      <button class="btn" id="wallStraighten" ${w.curve ? '' : 'disabled'}>${op07t('Enderezar','Straighten','拉直')}</button>
-      <button class="btn" id="wallLevel" ${sloped ? '' : 'disabled'}>${op07t('Nivelar','Level','找平')}</button>
-      <button class="btn" id="wallSplit">${op07t('Dividir','Split','分割')}</button></div>
+      <button class="btn" id="wallSplit">${op07t('Dividir','Split','分割')}</button></div></details>
     ${Core.versionAtLeast(project.schemaVersion, '2.0.0') ? '' : `<p class="muted" id="wallShapeFormat">${op07t('Al curvar o inclinar un muro, el proyecto se guarda en el formato 2.0: las versiones anteriores de RUBIK no podrán abrirlo (no lo modificarán).','Curving or sloping a wall saves the project in format 2.0: earlier RUBIK versions will not open it (and will not change it).','弯曲或倾斜墙体后，项目将以 2.0 格式保存：旧版 RUBIK 无法打开（也不会修改）。')}</p>`}
     <p class="muted" id="wallShapeHelp">${op07t(`Longitud real ${len} mm. 0 = recto. También puedes arrastrar el punto del centro del muro en el plano (Mayús: sin ajuste).`,`Real length ${len} mm. 0 = straight. You can also drag the dot at the centre of the wall on the plan (Shift: no snapping).`,`实际长度 ${len} mm。0 = 直墙。也可在平面图上拖动墙中点（Shift：不吸附）。`)}</p>
     <p class="wall-shape-status" id="wallShapeStatus" role="status" aria-live="polite">${esc(wallShapeStatus)}</p></details>`;
@@ -2050,7 +2066,15 @@ function bindWallShape(id){
       if (!a.ok) return a; const cur = a.project.walls.find(x => x.id === id), b = Core.setWallEndHeight(a.project, id, Math.round(h) === cur.heightMm ? null : Math.round(h));
       return b.ok ? {...b, intent:{...a.intent, ...b.intent}} : b; }, id);
   };
-  $('#wallStraighten').onclick = () => applyWallEdit(p => Core.setWallCurve(p, id, null), id);
+  $('#wallStraighten').onclick = () => { ui.wallShapeMode = null; applyWallEdit(p => Core.setWallCurve(p, id, null), id); };
+  box.querySelectorAll('.wall-shape-opt').forEach(b => b.onclick = () => {
+    const cur = w(); if (!cur) return;
+    if (b.dataset.shape === 'curve'){ ui.wallShapeMode = {id, kind:'curve'}; renderAll(); select({kind:'wall', id}); $('#wallShape .wall-shape-opt[data-shape="curve"]')?.focus(); return; }
+    ui.wallShapeMode = null;
+    if (cur.curve) applyWallEdit(p => Core.setWallCurve(p, id, null), id); else { renderAll(); select({kind:'wall', id}); }
+    $('#wallShape .wall-shape-opt[data-shape="straight"]')?.focus();
+  });
+  const pr = $('#wallShapePrecise'); if (pr) pr.ontoggle = () => { ui.wallPrecise = pr.open ? id : null; };
   $('#wallLevel').onclick = () => applyWallEdit(p => Core.setWallEndHeight(p, id, null), id);
   $('#wallSplit').onclick = () => applyWallEdit(p => Core.splitWall(p, id, num('#wallSplitAt')), id);
 }
@@ -2224,7 +2248,7 @@ function bindFurnPanel(f){
 }
 
 /* ======================= 操作 ======================= */
-function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); window.View3D?.invalidate(); }
+function select(sel){ window.FloorPlanOpeningUI?.selected(sel); if (ui.wallShapeMode && !(sel?.kind === 'wall' && sel.id === ui.wallShapeMode.id)) ui.wallShapeMode = null; ui.sel = sel; renderSel(); renderPanel(); window.View3D?.invalidate(); }
 // On desktop the properties column sits beside the plan, so a tap that selects a room or a piece of furniture shows
 // it even if it was collapsed (the guided mode starts collapsed). On phones the drawer would cover the plan: rooms and
 // furniture keep «Propiedades» in the bottom bar. Not on pointerdown: resizing the plan during a drag would move it.

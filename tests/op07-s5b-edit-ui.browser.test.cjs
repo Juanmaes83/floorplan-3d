@@ -18,6 +18,8 @@ async function setup(viewport){
 }
 async function selectWall(page,w){const mid={x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2},p=await screen(page,mid);await page.mouse.click(p.x,p.y);
  await page.waitForFunction(id=>ui.sel?.kind==='wall'&&ui.sel.id===id,w.id);}
+// §7.1: el ajuste en milímetros es secundario (plegado en «Ajuste preciso»); la persona lo abre antes de escribir.
+async function precise(page){await page.locator('#wallShapePrecise').waitFor({state:'attached'});if(!await page.locator('#wallShapePrecise').evaluate(d=>d.open)){await page.locator('#wallShapePrecise > summary').scrollIntoViewIfNeeded();await page.locator('#wallShapePrecise > summary').click();}}
 const history=page=>page.evaluate(()=>({undo:undoStack.length,writes:window.__writes,version:FloorPlanApp.project.schemaVersion}));
 
 test('S5b · arrastrar el punto: curva con UN paso de historial y UNA escritura; volver a la línea la endereza; deshacer y rehacer con teclado',{timeout:180000},async()=>{
@@ -132,16 +134,16 @@ test('S5b · panel: flecha y altura final, rechazo explicado sin tocar nada, niv
  try{
   const w=F.longest(await page.evaluate(()=>structuredClone(FloorPlanApp.project)));await selectWall(page,w);
   await page.locator('#wallShape').waitFor();assert.match(await page.locator('#wallShapeFormat').innerText(),/formato 2\.0/);
-  await page.fill('#wallSagitta','500');await page.fill('#wallEndHeight','2300');await page.click('#wallApplyShape');
+  await precise(page);await page.fill('#wallSagitta','500');await page.fill('#wallEndHeight','2300');await page.click('#wallApplyShape');
   let x=await wallOf(page,w.id);assert.ok(x.curve);assert.equal(x.heightEndMm,2300);
   assert.equal(Math.round(await page.evaluate(id=>wallSagitta(FloorPlanApp.project.walls.find(x=>x.id===id)),w.id)),500);
   // Rechazo: una curva imposible para el grosor no cambia nada y lo explica.
   const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),undo=(await history(page)).undo;
-  await page.fill('#wallSagitta','90000');await page.click('#wallApplyShape');
+  await precise(page);await page.fill('#wallSagitta','90000');await page.click('#wallApplyShape');
   assert.match(await page.locator('#wallShapeStatus').innerText(),/curve/);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal((await history(page)).undo,undo);
   await page.click('#wallLevel');assert.equal((await wallOf(page,w.id)).heightEndMm,undefined,'nivelado');
   await page.click('#wallStraighten');assert.equal((await wallOf(page,w.id)).curve,undefined,'enderezado');
-  await page.fill('#wallSplitAt','1200');await page.click('#wallSplit');
+  await precise(page);await page.fill('#wallSplitAt','1200');await page.click('#wallSplit');
   const walls=await page.evaluate(()=>FloorPlanApp.project.walls.length);assert.equal(walls,(await page.evaluate(()=>JSON.parse(undoStack.at(-1)).walls.length))+1,'dividido en dos');
   // Botones de 44 px y sin desplazamiento horizontal.
   await selectWall(page,await wallOf(page,w.id));
@@ -157,7 +159,7 @@ test('S5b · dividir sobre una abertura se rechaza y la nombra; móvil 390x844 s
  try{
   const {project,wall}=F.curved(F.base());const r=await page.evaluate(p=>FloorPlanApp.applyExtension(()=>({ok:true,project:p})),project);assert.equal(r.ok,true);
   await page.evaluate(id=>{select({kind:'wall',id});drawer('panel',true);},wall.id);await page.locator('#wallShape').waitFor();
-  const door=project.openings.find(o=>o.id==='opn_op07-door');await page.fill('#wallSplitAt',String(door.offsetMm+400));
+  const door=project.openings.find(o=>o.id==='opn_op07-door');await precise(page);await page.fill('#wallSplitAt',String(door.offsetMm+400));
   const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#wallSplit').scrollIntoViewIfNeeded();await page.locator('#wallSplit').click();
   assert.match(await page.locator('#wallShapeStatus').innerText(),/atraviesa una abertura/);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);

@@ -580,3 +580,12 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
   body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
   body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
 }
+/* §7.1 · Forma del muro descubrible: Recto / Curvo con su dibujo, aviso «Arrastra para curvar» y ajuste preciso plegado */
+.wall-shape-kind{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 8px}
+.wall-shape-opt{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:64px;padding:8px;font-weight:600}
+.wall-shape-opt[aria-checked="true"]{border-color:#b5653a;box-shadow:inset 0 0 0 2px #b5653a;color:#8a4a2a;background:#fbf3ee}
+.wall-shape-hint{margin:4px 0 8px;font-size:13px;line-height:1.5;color:#5b4636}
+.wall-shape-precise{margin-top:6px}.wall-shape-precise>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-size:13px;color:#5b6066}
+.curve-handle-pulse{animation:curvePulse 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes curvePulse{0%,100%{opacity:.25}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.curve-handle-pulse{animation:none}}
