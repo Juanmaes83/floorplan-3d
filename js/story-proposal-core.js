@@ -125,7 +125,8 @@
       hero: chapters[0] ? chapters[0].id : null, labels: { current: t.current, proposal: t.proposal, changes: t.changes, kept: t.kept, where: t.where, note: t.note, notes: t.notes },
       sections: [{ key: 'why', title: t.why, ...or(proposal.why, t.pendingDefine) }, { key: 'how', title: t.how, ...or(proposal.how, t.pendingDefine) },
         { key: 'cost', title: t.cost, lines: c.lines, pending: c.pending, status: c.status }, { key: 'decision', title: t.decision, ...or(proposal.decision, t.pendingDefine) }],
-      generalNotes: notes.filter(n => n.anchor.kind === 'general').map(n => n.text), credit: id.credit, page: t.page, mark };
+      // Una nota de un capítulo que no tiene página propia (p. ej. el resumen, que va en la portada) pasa a las generales: nunca se pierde.
+      generalNotes: notes.filter(n => n.anchor.kind === 'general' || !chapters.some(c => c.id === n.anchor.id)).map(n => n.text), credit: id.credit, page: t.page, mark };
   }
 
   /** Manifiesto que se ENTREGA al cliente: qué contiene cada página, en lenguaje natural. Sin notas internas, sin huellas de
@@ -159,11 +160,15 @@
   function flow(items, pageH) {
     const pages = [[]]; let y = 0;
     const push = it => { pages[pages.length - 1].push({ ...it, y }); y += it.h; };
-    for (const it0 of items) {
+    const hOf = x => x && x.lines ? x.lines.length * x.lh + (x.pad || 0) : x ? x.h : 0;
+    items.forEach((it0, k) => {
       // El alto de un bloque de texto SALE de sus líneas (nunca de un alto declarado que podría no coincidir).
-      const it = it0.lines ? { ...it0, h: it0.lines.length * it0.lh + (it0.pad || 0) } : it0;
-      if (it.pageBreak) { if (pages[pages.length - 1].length) { pages.push([]); y = 0; } continue; }
-      if (y + it.h <= pageH) { push(it); continue; }
+      const it = it0.lines ? { ...it0, h: hOf(it0) } : it0;
+      if (it.pageBreak) { if (pages[pages.length - 1].length) { pages.push([]); y = 0; } return; }
+      // Un título nunca queda solo al pie: va con el comienzo de lo que le sigue (dos líneas o el bloque entero).
+      if (it.keep && pages[pages.length - 1].length) { const nx = items[k + 1], need = it.h + (nx ? (nx.lines ? Math.min(hOf(nx), nx.lh * 2 + (nx.pad || 0)) : nx.h) : 0);
+        if (y + need > pageH) { pages.push([]); y = 0; } }
+      if (y + it.h <= pageH) { push(it); return; }
       if (it.lines && it.lines.length > 1) {
         let rest = it.lines.slice(), first = true;
         while (rest.length) {
@@ -173,11 +178,11 @@
           push({ ...it, lines: part, h: part.length * it.lh + (first ? it.pad || 0 : 0), cont: !first }); first = false;
           if (rest.length) { pages.push([]); y = 0; }
         }
-        continue;
+        return;
       }
       if (pages[pages.length - 1].length) { pages.push([]); y = 0; }
       push(it);
-    }
+    });
     return pages;
   }
   return Object.freeze({ VERSION, LIMITS, CONTACT, normalize, clientNotes, facts, cost, identity, document, clientManifest, wrap, flow, eur, num });

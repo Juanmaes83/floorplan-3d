@@ -28,3 +28,24 @@
    acciones, también fija abajo, y tapaba «Descargar historia vigente». Igual que en scene-export.css: en flujo, tras las
    acciones, con espacio propio. */
 .story-layers-dialog > rubik-assistant-access{position:static;margin:12px 0 0 auto}
+/* §7.3 · Plantilla comercial: pasos, propuesta, identidad de Mi estudio, notas con visibilidad, coste y vista previa. */
+.story-layers-dialog .sl-lead{margin:6px 0 10px;color:#3a3d40}
+.story-layers-dialog .sl-progress{margin:6px 0;font-weight:600;color:#1f6f5c}
+.story-layers-dialog .sl-step{margin:18px 0 6px;font-size:1.05rem}
+.story-layers-dialog .sl-chapter h4{margin:0 0 6px}
+.story-layers-dialog .sl-proposal{display:grid;gap:10px;border:1px solid var(--line,#e3e0da);border-radius:10px;padding:12px}
+.story-layers-dialog .sl-proposal fieldset{border:1px solid #eee;border-radius:8px;padding:8px 10px;margin:0;min-width:0}
+.story-layers-dialog .sl-id-name{margin:2px 0 6px;font-weight:700}
+.story-layers-dialog .sl-check{display:block;margin:2px 0;overflow-wrap:anywhere}
+.story-layers-dialog .sl-field{display:grid;gap:4px;font-weight:600}
+.story-layers-dialog .sl-field input,.story-layers-dialog .sl-field textarea{width:100%;box-sizing:border-box;font:inherit;font-weight:400}
+.story-layers-dialog .sl-cost{background:#f7f5f0;border-radius:8px;padding:8px 10px}
+.story-layers-dialog .sl-cost[data-status="absent"]{color:#8a5a00}
+.story-layers-dialog .sl-note{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto auto;gap:6px;align-items:start;margin:6px 0}
+.story-layers-dialog .sl-note[data-visibility="internal"] textarea{background:#fff8e6}
+.story-layers-dialog .sl-note select{max-width:16em}
+.story-layers-dialog .sl-preview{display:grid;gap:10px}
+.story-layers-dialog .sl-preview img{width:100%;height:auto;border:1px solid #ddd;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.story-layers-dialog .sl-why{color:#8a5a00;font-weight:600}
+.story-layers-dialog .sl-includes{font-size:.85rem;color:#555}
+@media (max-width:600px){.story-layers-dialog .sl-note{grid-template-columns:1fr 1fr}.story-layers-dialog .sl-note textarea{grid-column:1/-1}.story-layers-dialog .sl-note select{max-width:none}}

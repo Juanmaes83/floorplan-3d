@@ -70,10 +70,16 @@ test('P10 · historia de dos revisiones: encuadre común, rótulos anclados con 
   if(process.env.SL_EXPORT){fs.mkdirSync(process.env.SL_EXPORT,{recursive:true});fs.copyFileSync(zipPath,path.join(process.env.SL_EXPORT,dl.suggestedFilename()));}
   // Abrir los archivos descargados: ZIP válido, PNG decodificables con su tamaño, manifiesto con huellas que coinciden.
   execFileSync('python3',['-c','import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',zipPath,dir]);
-  const man=JSON.parse(fs.readFileSync(path.join(dir,'historia/manifiesto.json'),'utf8'));
-  assert.equal(man.chapters[0].text,'Revisado por el estudio: la reforma amplía el salón.','el texto revisado viaja');assert.equal(man.revisions.after.entryId,group[1].id,'referencia durable a la entrada');
-  for(const c of man.chapters){const b=fs.readFileSync(path.join(dir,c.image.file));assert.equal(crypto.createHash('sha256').update(b).digest('hex'),c.image.sha256);
-   assert.equal(b.subarray(1,4).toString(),'PNG');assert.deepEqual([b.readUInt32BE(16),b.readUInt32BE(20)],[1600,1000],'PNG 1600×1000 decodificable');}
+  // Paquete del CLIENTE: páginas PNG decodificables (A4 apaisado a 150 ppp) y su índice; sin huellas de revisión ni rutas de campos.
+  const man=JSON.parse(fs.readFileSync(path.join(dir,'propuesta/manifiesto.json'),'utf8'));assert.equal(man.schema,'rubik-sota.story-client');assert.ok(man.pages.length>=2);
+  for(const pg of man.pages){const b=fs.readFileSync(path.join(dir,pg.file));assert.equal(crypto.createHash('sha256').update(b).digest('hex'),pg.sha256);
+   assert.equal(b.subarray(1,4).toString(),'PNG');assert.deepEqual([b.readUInt32BE(16),b.readUInt32BE(20)],[1754,1240],'página 1754×1240 decodificable');}
+  const fps=await page.evaluate(()=>{const t=JSON.parse(localStorage.getItem('rubik-story-layers-v1'));return Object.values(t).flatMap(s=>[s.revisions.before.fingerprint,s.revisions.after.fingerprint]);});
+  const manTxt=JSON.stringify(man);assert.doesNotMatch(manTxt,/metrics\.|rooms\[|changes\[|floorMaterialId/,'sin rutas de campos');for(const f of fps)assert.ok(!manTxt.includes(f.slice(0,8)),'sin huellas de revisión');
+  assert.deepEqual(fs.readdirSync(path.join(dir,'propuesta')).sort(),[...man.pages.map(p=>path.basename(p.file)),'manifiesto.json'].sort(),'solo páginas e índice');
+  // Trazabilidad técnica (INTERNA, descarga aparte): el texto revisado y la referencia durable a la entrada viajan ahí.
+  const [tdl]=await Promise.all([page.waitForEvent('download'),page.locator('[data-sl="trace"]').click()]);const tp=path.join(dir,'t.json');await tdl.saveAs(tp);const tech=JSON.parse(fs.readFileSync(tp,'utf8'));
+  assert.equal(tech.interno,true);assert.ok(tech.historia.chapters.some(c=>c.text==='Revisado por el estudio: la reforma amplía el salón.'),'el texto revisado viaja en la trazabilidad');assert.equal(tech.historia.revisions.after.entryId,group[1].id,'referencia durable a la entrada');
   assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-sota-project-library-v1')),libBefore,'la biblioteca y los proyectos no cambian');
   // Volver: Escape cierra y Entregar recupera ficha, posición y foco.
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#storyLayersDialog[open]'));
@@ -123,7 +129,7 @@ test(`P10 · ${lang} ${viewport.width}x${viewport.height}: teclado, sin desborde
   assert.equal(estrechas,0,'celdas con anchura útil');assert.deepEqual(partidas,[],'cabeceras visibles sin cortar');
   if(viewport.width<600){const labels=await page.evaluate(()=>[...document.querySelectorAll('#storyLayersDialog tr[data-datum] td')].slice(0,6).map(td=>getComputedStyle(td,'::before').content));
    assert.ok(labels.every(l=>l&&l!=='none'&&l!=='""'),'en el teléfono cada valor lleva su columna');}
-  if(lang==='en')assert.match(await visibleText(page),/Explain the change to the client/);
+  if(lang==='en')assert.match(await visibleText(page),/Story of the change/);
   if(shots)await page.locator('#storyLayersDialog').screenshot({path:`${shots}/p10-${lang}-${viewport.width}.png`});
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#storyLayersDialog[open]'));assert.deepEqual(w.errors,[]);
  }finally{await ctx.close();}

@@ -39,6 +39,9 @@ test('notas: las internas no entran en el documento ni en el manifiesto del clie
   for (const o of [doc, man]) { const s = JSON.stringify(o); assert.ok(!s.includes('INTERNA') && !s.includes('sin visibilidad elegida'), 'ninguna nota interna'); }
   assert.deepEqual(doc.chapters[0].notes, ['Moqueta de lana, color arena']); assert.deepEqual(doc.generalNotes, ['Visita de obra el martes']);
   assert.doesNotMatch(JSON.stringify(man), TECH);
+  // Una nota vinculada al resumen (sin página propia) no se pierde: pasa a las generales.
+  const pr2 = P.normalize({ notes: [{ text: 'Sobre el resumen', visibility: 'client', anchor: { kind: 'chapter', id: 'overview' } }] }, { chapterIds: story.order });
+  assert.deepEqual(P.document({ story, proposal: pr2, identity: P.identity(null), facts: P.facts(story), cost: P.cost(null) }).generalNotes, ['Sobre el resumen']);
 });
 
 test('coste: completo con importes trazables; parcial con lo pendiente; sin presupuesto o incoherente, ausente', () => {
@@ -65,4 +68,7 @@ test('ajuste de texto y paso de página: nada se trunca, ninguna línea ni pági
   assert.ok(pages.length > 2); for (const p of pages) assert.ok(p.reduce((m, it) => Math.max(m, it.y + it.h), 0) <= 1000, 'página dentro del alto');
   assert.equal(pages.flat().filter(it => it.lines).reduce((n, it) => n + it.lines.length, 0), lines.length, 'todas las líneas colocadas');
   assert.ok(pages.flat().some(it => it.cont), 'el texto continúa en la página siguiente');
+  // Un título no queda solo al pie de página: pasa a la siguiente con su contenido.
+  const kp = P.flow([{ h: 900 }, { h: 60, keep: true }, { h: 1, lines: ['a', 'b', 'c'], lh: 30 }], 1000);
+  assert.equal(kp.length, 2); assert.equal(kp[1][0].keep, true, 'el título abre la página siguiente');
 });
