@@ -16,6 +16,11 @@ on:
       - 'index.html'
       - 'js/scene-capture-core.js'
       - 'js/scene-delivery-core.js'
+      - 'js/material-tokens-core.js'
+      - 'scripts/interop/blender-rodaje.py'
+      - 'scripts/interop/rodaje-recursos.json'
+      - 'scripts/interop/blender-kit/**'
+      - 'tests/material-tokens.test.cjs'
       - 'js/scene-export-ui.js'
       - 'css/scene-export.css'
       - 'js/project-package.js'
@@ -44,7 +49,7 @@ jobs:
         with:
           node-version: '22.13.0'
       - name: Core, delivery and comparator
-        run: node --test tests/scene-capture-core.test.mjs tests/scene-delivery.test.cjs tests/scene-roundtrip.test.cjs
+        run: node --test tests/scene-capture-core.test.mjs tests/scene-delivery.test.cjs tests/scene-delivery-kit.test.cjs tests/material-tokens.test.cjs tests/scene-roundtrip.test.cjs
       - name: Playwright browsers
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" --no-save playwright@1.62.1

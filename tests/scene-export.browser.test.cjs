@@ -45,7 +45,7 @@ for (const browser of browsers) {
     const m = J(path.join(out, 'manifest.json')), scene = J(path.join(out, 'scene.json'));
     assert.equal(m.format, 'rubik-sota.scene-delivery');
     assert.match(m.captureId, /^[0-9a-f-]{36}$/, 'each render kit identifies its capture');
-    for (const f of ['rodar.sh', 'RODAR-windows.bat', 'rubik_blender_rodaje.py']) assert.ok(m.files[f]?.sha256, 'rodaje kit in the ZIP from the real UI: ' + f); assert.equal(m.scene.stats.unlinked, 0, 'C2: every mesh identified');
+    for (const f of ['rodar.sh', 'RODAR-windows.bat', 'rubik_blender_rodaje.py', 'rubik-materiales.json']) assert.ok(m.files[f]?.sha256, 'rodaje kit and Material Tokens in the ZIP from the real UI: ' + f); assert.equal(m.scene.stats.unlinked, 0, 'C2: every mesh identified');
     assert.ok(m.scene.view.camera && m.scene.view.light, 'C7: camera and light declared');
     assert.equal(Scene.coincidentFaces(scene).defects.length, 0, 'C3: no visible coincident faces');
     assert.equal(J(path.join(out, 'record.json')).identity.status, 'observed-only', 'C6: no confirmed F0 revision claimed');

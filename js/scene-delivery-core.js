@@ -26,8 +26,8 @@
     licence: 'scripts/interop/blender-kit/LICENCIA-SCRIPTS.txt', copying: 'scripts/interop/blender-kit/COPYING-GPL-3.0.txt',
     rodaje: 'scripts/interop/blender-rodaje.py', recursos: 'scripts/interop/rodaje-recursos.json', rodar: 'scripts/interop/blender-kit/rodar.sh',
     rodarBat: 'scripts/interop/blender-kit/RODAR-windows.bat' });
-  const ROOMS = 'rubik-estancias.json', REFERENCE = 'referencia-rubik.png';
-  const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, ...Object.values(KIT)]);
+  const ROOMS = 'rubik-estancias.json', REFERENCE = 'referencia-rubik.png', MATERIALS = 'rubik-materiales.json'; // MATERIALS: Material Tokens 1.0.0 (opcional)
+  const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, MATERIALS, ...Object.values(KIT)]);
   const enc = new TextEncoder();
   function sortKeys(x) { if (Array.isArray(x)) return x.map(sortKeys); if (x && typeof x === 'object') return Object.fromEntries(Object.keys(x).sort().map(k => [k, sortKeys(x[k])])); return x; }
   const canonical = x => JSON.stringify(sortKeys(x));
@@ -56,7 +56,7 @@
   }
 
   /** Manifiesto de la entrega. `capture` = resultado de View3D.captureScene() ({doc, info}). */
-  async function manifest({ capture, glb, project, digest, app = {}, createdAt = null, prepareScript = null, kit = null, rooms = null, reference = null, captureId = null }) {
+  async function manifest({ capture, glb, project, digest, app = {}, createdAt = null, prepareScript = null, kit = null, rooms = null, reference = null, captureId = null, materials = null }) {
     if (!capture || !capture.doc || !glb || typeof digest !== 'function') throw Error('manifest: capture, glb and digest are required');
     const doc = capture.doc, info = capture.info || {};
     const projectSha = project ? await digest(enc.encode(canonical(project))) : null;
@@ -90,7 +90,7 @@
       // Solo la REGLA de estabilidad: las mediciones (fotogramas, ms) varían entre ejecuciones y romperían el determinismo.
       stability: info.stability ? { rule: 'no asset loading, no camera/door motion, identical scene signature', stableFrames: info.stability.stableFrames } : null,
       files: Object.assign({ 'scene.glb': { bytes: glb.length, sha256: await digest(glb) } }, prepareScript ? { [SCRIPT]: { bytes: prepareScript.length, sha256: await digest(prepareScript) } } : {},
-        await kitFiles({ kit, rooms, reference, digest, prepareScript })),
+        await kitFiles({ kit, rooms, reference, digest, prepareScript, materials })),
       privacy: kit ? 'no photos, textures, URLs or free text from the project are included; geometry, colours, IDs, the displayed room names and one reference image of the 3D view (referencia-rubik.png)'
         : 'no images, photos, textures, URLs or free text from the project are included; geometry, colours and IDs only',
       limitations: ['Visual observation of the 3D view: procedural furniture is the viewer representation, not manufacturer geometry.',
@@ -100,12 +100,13 @@
 
   function kitComplete(kit, rooms, prepareScript) { return !!(kit && prepareScript && rooms && Object.keys(KIT).every(k => kit[k])); }
   /** Huellas del kit, sólo si está completo (un kit a medias no se entrega: el LEEME lo dice y la importación sigue igual). */
-  async function kitFiles({ kit, rooms, reference, digest, prepareScript }) {
+  async function kitFiles({ kit, rooms, reference, digest, prepareScript, materials = null }) {
     if (!kitComplete(kit, rooms, prepareScript)) return {};
     const out = {}, roomsBytes = enc.encode(JSON.stringify(rooms, null, 1) + '\n');
     for (const [k, name] of Object.entries(KIT)) out[name] = { bytes: kit[k].length, sha256: await digest(kit[k]) };
     out[ROOMS] = { bytes: roomsBytes.length, sha256: await digest(roomsBytes) };
     if (reference) out[REFERENCE] = { bytes: reference.length, sha256: await digest(reference) };
+    if (materials) { const mb = enc.encode(JSON.stringify(materials, null, 1) + '\n'); out[MATERIALS] = { bytes: mb.length, sha256: await digest(mb) }; }
     return out;
   }
 
@@ -206,7 +207,7 @@
   }
 
   /** Entradas del ZIP (Map nombre → bytes) y nombre de descarga. `zip` = FloorPlanPackage.zip. */
-  function packageFiles({ manifest: m, glb, lang, zip, prepareScript = null, kit = null, rooms = null, reference = null }) {
+  function packageFiles({ manifest: m, glb, lang, zip, prepareScript = null, kit = null, rooms = null, reference = null, materials = null }) {
     const entries = new Map([['scene.glb', glb], ['manifest.json', enc.encode(JSON.stringify(m, null, 1) + '\n')], ['LEEME.txt', enc.encode(readme(m, lang))]]);
     if (prepareScript && m.files[SCRIPT]) entries.set(SCRIPT, prepareScript); // solo si el manifiesto lo declara (huella incluida)
     // M03 · kit, sólo con las huellas del manifiesto (mismos bytes que se declararon).
@@ -214,11 +215,12 @@
       for (const [k, name] of Object.entries(KIT)) if (m.files[name]) entries.set(name, kit[k]);
       entries.set(ROOMS, enc.encode(JSON.stringify(rooms, null, 1) + '\n'));
       if (reference && m.files[REFERENCE]) entries.set(REFERENCE, reference);
+      if (materials && m.files[MATERIALS]) entries.set(MATERIALS, enc.encode(JSON.stringify(materials, null, 1) + '\n'));
     }
     const name = `rubik-escena-blender-${safeName(m.source.projectId)}.zip`;
     if (typeof zip !== 'function') return { entries, name, bytes: null };
     return { entries, name, bytes: zip(entries, { check: n => { if (!FILES.includes(n)) throw Error('Unexpected file in scene package: ' + n); return n; } }) };
   }
 
-  return Object.freeze({ FORMAT, VERSION, FILES, SCRIPT, KIT, KIT_SOURCES, ROOMS, REFERENCE, TEXT, canonical, safeName, roomsDoc, manifest, record, readme, packageFiles });
+  return Object.freeze({ FORMAT, VERSION, FILES, SCRIPT, KIT, KIT_SOURCES, ROOMS, REFERENCE, MATERIALS, TEXT, canonical, safeName, roomsDoc, manifest, record, readme, packageFiles });
 });

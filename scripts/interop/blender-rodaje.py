@@ -96,6 +96,49 @@ def floor_family(pm, mid, by_use):
         return ("mat_walnut" if lum < .08 else "mat_wood"), "aproximación por color"
     return "mat_tile800", "aproximación por color"
 
+MT = {"doc": None, "estado": None, "byTarget": {}, "rows": [], "objetos": {}}
+TOKEN_USE = (("material.wood.oak", "mat_wood"), ("material.wood.walnut", "mat_walnut"), ("material.ceramic.porcelain.polished", "mat_tile800"),
+             ("material.ceramic.porcelain.matte", "mat_tile600"), ("material.ceramic.porcelain.antislip", "mat_antislip"),
+             ("material.stone.marble", "mat_marble"), ("material.stone.terrazzo", "mat_tile800"), ("material.fabric.wool.carpet", "rug"))
+
+def token_use(token):
+    """Recurso de suelo para un token (prefijo); terrazo → porcelánico pulido es una APROXIMACIÓN y se declara."""
+    for pre, use in TOKEN_USE:
+        if token and (token == pre or token.startswith(pre + ".")):
+            return use, ("aproximación de recurso: terrazo representado con porcelánico pulido" if pre == "material.stone.terrazzo" else None)
+    return None, None
+
+def cargar_materiales(pkg, manifest):
+    """rubik-materiales.json (Material Tokens 1.x) si viaja en el ZIP con la huella del manifiesto. ZIP anterior, huella
+    distinta o versión desconocida → no se usa y el informe explica hasta dónde llega la preparación (tipo y color)."""
+    p = pkg / "rubik-materiales.json"; exp = (manifest.get("files") or {}).get("rubik-materiales.json")
+    if not p.exists() or not exp:
+        MT["estado"] = "ZIP sin rubik-materiales.json (anterior a Material Tokens): identidad de materiales no declarada; suelos por material/familia y mobiliario por tipo, pieza y color (aproximación)"; return
+    if hashlib.sha256(p.read_bytes()).hexdigest() != exp.get("sha256"):
+        MT["estado"] = "rubik-materiales.json con huella distinta a la del manifiesto: se ignora (se aproxima y se declara)"; return
+    d = json.loads(p.read_text(encoding="utf8"))
+    if d.get("format") != "rubik-sota.material-tokens" or str(d.get("version", "")).split(".")[0] != "1":
+        MT["estado"] = f"rubik-materiales.json de formato o versión no soportados ({d.get('format')} {d.get('version')}): se ignora"; return
+    MT["doc"] = d; MT["estado"] = f"Material Tokens {d['version']} (taxonomía {d.get('taxonomyVersion')}): {len(d.get('assignments', []))} asignaciones leídas"
+    for a in d.get("assignments", []):
+        t = a.get("target") or {}
+        MT["byTarget"][(t.get("kind"), t.get("id"))] = a.get("requested") or {}
+
+def huella_geometria():
+    """Huella por objeto de las posiciones de vértices en coordenadas de mundo (0,01 mm): comprueba que el pase de
+    materiales no altera geometría, dimensiones ni posición (salvo las separaciones de contacto declaradas)."""
+    out = {}
+    for o in bpy.data.objects:
+        if o.type == "MESH" and o.get("rubik_role"):
+            mw = o.matrix_world; h = hashlib.sha256()
+            for v in o.data.vertices:
+                w = mw @ v.co; h.update(f"{round(w.x * 1e5)},{round(w.y * 1e5)},{round(w.z * 1e5)};".encode())
+            out[o.name] = h.hexdigest()
+    return out
+
+def _cuenta(oid, t, kind):
+    pz = MT["objetos"].setdefault(oid, {"tipo": t, "piezas": {}})["piezas"]; pz[kind] = pz.get(kind, 0) + 1
+
 def contacto(declared):
     """Separación de contacto (recurso de render, declarado): una pieza de doble cara (el visor la dibuja por ambos lados)
     cuya base coincide con la cara superior de otra que la sostiene comparte plano con ella; en Cycles las dos superficies
@@ -120,7 +163,7 @@ def contacto(declared):
             if b is o or abs(bhi[2] - lo[2]) > 2e-4:
                 continue
             if lo[0] < bhi[0] and hi[0] > blo[0] and lo[1] < bhi[1] and hi[1] > blo[1]:
-                mw = o.matrix_world.copy(); mw.translation.z += .0005; o.matrix_world = mw; moved.append(o.get("rubik_id")); break
+                mw = o.matrix_world.copy(); mw.translation.z += .0005; o.matrix_world = mw; moved.append(o.get("rubik_id")); MT.setdefault("contacto", []).append(o.name); break
     declared.append(f"separación de contacto: {len(moved)} piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm "
                     f"(evita superficies coincidentes; objetos: {sorted(set(moved))[:12]})")
 
@@ -147,6 +190,18 @@ def _proc(name, colour, rough, metallic=0.0, coat=0.0, translucency=0.0, bump=0.
         bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = bump; bp.inputs["Distance"].default_value = .002
         Lk.new(tc.outputs["Object"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
     return m
+
+KNOWN_FAMILIES = ("material.wood", "material.ceramic", "material.stone", "material.plaster", "material.fabric", "material.thread", "material.leather",
+                  "material.metal", "material.plastic", "material.glass", "material.art", "material.paper", "material.plant")
+
+def known_prefix(token):
+    """Token reconocido por familia (las variantes más largas que el kit no conoce se leen por su familia)."""
+    return token if isinstance(token, str) and any(token == f or token.startswith(f + ".") for f in KNOWN_FAMILIES) else None
+
+def _velvet(name, colour):
+    """Terciopelo: pelo corto con brillo en los bordes (sheen alto y rugosidad alta), sin relieve grande."""
+    m = _proc(name, colour, .85, bump=.15, bump_scale=2500); b = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    b.inputs["Sheen Weight"].default_value = 1.0; b.inputs["Sheen Roughness"].default_value = .25; return m
 
 def _brushed(name, colour):
     """Acero cepillado: metálico, rugosidad media y anisotropía; el rayado es un ruido estirado en una dirección (≈0,3 mm)."""
@@ -225,12 +280,48 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
         if not ok(a):
             falt = log.setdefault("_sin_recurso", {}); falt[kind] = (a or {}).get("id", "no listado")
         return get((kind, rot, json.dumps(extra or {})), colour, lambda: pbr(f"rubik:rodaje-{kind}:{colour}", a, colour, "Object", scale, normal=normal, rough_mul=rough_mul, rot=rot, **{**soft.get(kind, {}), **(extra or {})}) if ok(a) else fallback())
+    def receta_token(token, col):
+        """Biblioteca inicial de recetas por token (nivel C). Los valores son PARÁMETROS VISUALES, no datos de fabricante.
+        Lino y cuero adaptan las recetas SOLACE de Astra (ver REUTILIZACION-CINCO-REPOS.md); el resto, recetas RUBIK."""
+        k = known_prefix(token)
+        if not k:
+            return None
+        fs = (fabric or {}).get("dimensionsMm", [270])[0] / 1000
+        R_ = {
+            "material.fabric.linen": lambda: tex_or("tejido", fabric, col, fs, 2.6, 1.05, lambda: _proc("rubik:rodaje-lino:" + col, col, .9, bump=.3, bump_scale=800)),
+            "material.fabric.cotton": lambda: tex_or("tejido", fabric, col, fs * .6, 1.6, 1.0, lambda: _proc("rubik:rodaje-algodon:" + col, col, .85, bump=.2, bump_scale=1200)),
+            "material.fabric.velvet": lambda: get("terciopelo", col, lambda: _velvet("rubik:rodaje-terciopelo:" + col, col)),
+            "material.fabric.wool": lambda: tex_or("alfombra-campo", rug, col, (rug or {}).get("dimensionsMm", [270])[0] / 1000, 2.2, 1.0, lambda: _proc("rubik:rodaje-lana:" + col, col, .95, bump=.5, bump_scale=900)),
+            "material.leather": lambda: get("cuero", col, lambda: _proc("rubik:rodaje-cuero:" + col, col, .48 if "suede" not in token else .9, bump=.08 if "suede" not in token else .2, bump_scale=8 if "suede" not in token else 600, coat=.15 if "synthetic" in token else 0)),
+            "material.wood.walnut": lambda: tex_or("madera-oscura", wd, col, 1.0, .5, .8, lambda: _proc("rubik:rodaje-madera-oscura:" + col, col, .45)),
+            "material.wood": lambda: tex_or("madera-clara", wl, col, 1.0, .4, .7, lambda: _proc("rubik:rodaje-madera-clara:" + col, col, .4)),
+            "material.metal.stainless": lambda: get("inox", col, lambda: _brushed("rubik:rodaje-inox:" + col, col)),
+            "material.metal": lambda: get("aluminio", col, lambda: _proc("rubik:rodaje-aluminio:" + col, col, .35, metallic=.6, coat=.2)),
+            "material.plastic": lambda: get("plastico", col, lambda: _proc("rubik:rodaje-plastico:" + col, col, .4)),
+            "material.ceramic": lambda: get("ceramica", col, lambda: _proc("rubik:rodaje-ceramica:" + col, col, .12, coat=.6)),
+            "material.stone": lambda: get("encimera", col, lambda: _proc("rubik:rodaje-encimera:" + col, col, .28, coat=.35, bump=.04, bump_scale=60, variation=.05)),
+            "material.art.canvas": lambda: get("lienzo", col, lambda: _proc("rubik:rodaje-lienzo:" + col, col, .8, bump=.25, bump_scale=1500)),
+            "material.paper": lambda: get("papel", col, lambda: _proc("rubik:rodaje-papel:" + col, col, .85, bump=.05, bump_scale=300)),
+        }
+        for pre in sorted(R_, key=len, reverse=True):
+            if k == pre or k.startswith(pre + "."):
+                return R_[pre]()
+        return None
     for o in bpy.data.objects:
         if o.type != "MESH" or o.get("rubik_role") != "object" or not o.data.materials:
             continue
         src = o.data.materials[0]; t = types.get(o.get("rubik_id")); col = (src.get("rubik_color") or "#808080").lower()
         if src.name.startswith("rubik:glass") or src.get("rubik_viewer_type") == "MeshPhysicalMaterial":
             continue
+        req = MT["byTarget"].get(("object", o.get("rubik_id"))) or {}
+        if req.get("token") and req.get("source") == "explicit":  # 1) material explícito del profesional: prevalece sobre la regla
+            rm = receta_token(req["token"], col)
+            if rm:
+                if src.get("rubik_backface"): BACKFACE.add(rm.name)
+                o.data.materials[0] = rm; kind = "token:" + req["token"]; log[f"{t} → {kind}"] = log.get(f"{t} → {kind}", 0) + 1
+                _cuenta(o.get("rubik_id"), t, kind)
+                o["rubik_material_applied"] = kind; continue
+            MT.setdefault("tokensSinReceta", set()).add(req["token"])
         n = len(o.data.polygons); bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
         ax = [max(p[i] for p in bb) - min(p[i] for p in bb) for i in range(3)]; dims = sorted(ax); lum = _lum(col)
         long = ax.index(max(ax)); grain = (0, 0, 0) if long == 0 else (0, 0, math.pi / 2) if long == 1 else (0, math.pi / 2, 0)
@@ -291,6 +382,8 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             continue
         if src.get("rubik_backface"): BACKFACE.add(m.name)
         o.data.materials[0] = m; key = f"{t or 'sin-tipo'} → {kind}"; log[key] = log.get(key, 0) + 1
+        _cuenta(o.get("rubik_id"), t, kind)
+        o["rubik_material_applied"] = kind  # diagnóstico en el DERIVADO de Blender (nunca en el proyecto)
     for o in bpy.data.objects:  # carpinterías de puertas y ventanas (marcos, hojas, herrajes): no traen material, se aproximan por color
         if o.type != "MESH" or o.get("rubik_role") not in ("opening", "opening-leaf") or not o.data.materials:
             continue
@@ -411,11 +504,22 @@ def realismo(project, labels, light, sun, tex):
         rid = str(o.get("rubik_id", "")).split(":")[-1]; r = rooms.get(rid) or {}
         # El ZIP trae el color del suelo (floorColor), no el id del material: correspondencia EXACTA con el color de los
         # materiales de suelo de RUBIK (COLOR_USE); con project.json (laboratorio) se usa floorMaterialId.
-        mid = r.get("floorMaterialId"); pm = mats.get(mid)
-        mid, via = floor_family(pm, mid, by_use)  # material declarado → color de catálogo → familia → aproximación por color
+        mid = r.get("floorMaterialId"); pm = mats.get(mid); req = MT["byTarget"].get(("room-floor", rid)) or {}
+        use, nota = token_use(req.get("token"))
+        if use and use in by_use:  # 1) explícito / 2) documentado del catálogo, por token
+            mid, via = use, ("selección explícita del profesional, identidad documentada por el catálogo (token)" if req.get("source") == "explicit" else "familia documentada del catálogo (token)")
+            estado = "declarado aplicado" if not nota else "declarado con recurso aproximado"
+        else:  # 3) aproximación por familia (id/preset/color), declarada
+            mid, via = floor_family(pm, mid, by_use); estado = "aproximación" if "aproximación" in via or "familia" in via else "documentado aplicado"
+            nota = ("token sin recurso de suelo en el kit: " + str(req.get("token"))) if req.get("token") else None
         a = by_use.get(mid)
+        row = {"objetivo": {"tipo": "suelo", "id": rid, "estancia": labels.get(rid, rid)}, "solicitado": {k: req.get(k) for k in ("token", "source", "certainty")},
+               "aplicado": None, "estado": estado, "motivo": nota}
         if not pm or not ok(a):
+            row.update(estado="reserva: color plano", motivo="recurso ausente o con huella distinta"); MT["rows"].append(row)
             subst.append({"estancia": labels.get(rid, rid), "material": mid, "motivo": "recurso ausente o sin verificar: color plano"}); continue
+        row["aplicado"] = {"receta": "suelo-pbr:" + mid, "recurso": a["id"], "licencia": a.get("license", "CC0-1.0"), "escalaM": a["dimensionsMm"][0] / 1000, "orientacion": "proyección por caja en coordenadas del objeto", "como": via}
+        MT["rows"].append(row)
         key = mid
         if key not in cache:
             smooth = mid in ("mat_tile800", "mat_tile600", "mat_marble")  # porcelánico y mármol pulidos: reflejo y menos contraste
@@ -484,7 +588,7 @@ def main():
     a = sys.argv[sys.argv.index("--") + 1:]; pos = []; i = 0
     while i < len(a):
         if a[i].startswith("--"):
-            i += 1 if a[i] in ("--still",) else 2; continue
+            i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales") else 2; continue
         pos.append(a[i]); i += 1
     prep, pkg, out = (Path(p).resolve() for p in pos[:3])
     pname = arg("--profile", "revision"); prof = PROFILES[pname]
@@ -492,7 +596,7 @@ def main():
     shot = arg("--shot", "aereo"); light = arg("--light", "dia"); fps = int(arg("--fps", "24")); secs = float(arg("--seconds", "2"))
     nframes = max(1, int(round(fps * secs)))
     fr = arg("--frames"); f0, f1 = (int(x) for x in fr.split("-")) if fr else (0, nframes - 1)
-    manifest = json.loads((pkg / "manifest.json").read_bytes())
+    manifest = json.loads((pkg / "manifest.json").read_bytes()); cargar_materiales(pkg, manifest)
     project, labels = R.load_rooms(pkg, manifest)
     origin = manifest["scene"]["frame"]["originPlanMm"]; ORIGIN[0] = origin
     bpy.ops.wm.open_mainfile(filepath=str(prep / "scene.blend"))
@@ -543,11 +647,26 @@ def main():
                 so = bpy.data.objects.new(S.name, S); so.location = R.to_blender(min(xs) + t * (max(xs) - min(xs)), c["y"], origin, h - .05)
                 so.rotation_euler = (0, 0, 0); derived.objects.link(so); nf += 1
     declared.append(f"ambiente: un área por estancia contada; focos: {nf} puntos empotrados de 70° (derivados)")
+    geo0 = huella_geometria()
     if arg("--realismo", "on") == "on":
         declared.extend(realismo(project, labels, light, sun, Path(arg("--tex", str(HERE.with_name("rodaje-texturas")))).resolve()))
     else:
         declared.append("realismo desactivado: materiales de color plano del visor (escena «antes»)")
     contacto(declared)
+    geo1 = huella_geometria(); cambiadas = sorted(k for k in geo0 if geo1.get(k) != geo0[k]); esperadas = sorted(MT.get("contacto", []))
+    integridad = {"objetosComprobados": len(geo0), "cambiados": len(cambiadas), "soloContactoDeclarado": cambiadas == esperadas,
+                  "resultado": "geometría, dimensiones y posiciones intactas" if not cambiadas else ("solo las separaciones de contacto declaradas (+0,5 mm)" if cambiadas == esperadas else "CAMBIOS NO DECLARADOS: " + ", ".join(cambiadas[:8]))}
+    for a in (MT["doc"] or {}).get("assignments", []):  # objetos: solicitado frente a aplicado
+        t = a.get("target") or {}
+        if t.get("kind") != "object":
+            continue
+        got = MT["objetos"].get(t.get("id")); req = a.get("requested") or {}
+        piezas = (got or {}).get("piezas", {}); tok = [k for k in piezas if k.startswith("token:")]
+        estado = ("declarado aplicado" if tok else "token sin receta: aproximación" if req.get("token") else "aproximación por tipo y pieza") if piezas else "sin regla: color plano (reserva)"
+        MT["rows"].append({"objetivo": {"tipo": "objeto", "id": t.get("id"), "tipoCatalogo": t.get("type")}, "solicitado": {k: req.get(k) for k in ("token", "source", "certainty")},
+                           "aplicado": {"piezas": piezas} if piezas else None, "estado": estado, "motivo": req.get("reason")})
+    materiales = {"documento": MT["estado"], "orden": ["explícito", "documentado del catálogo", "aproximación por familia y pieza", "reserva visible"],
+                  "asignaciones": MT["rows"], "tokensSinReceta": sorted(MT.get("tokensSinReceta", [])), "integridad": integridad}
     # Cámara animada
     cd = bpy.data.cameras.new("RUBIK_cam_rodaje"); cam = bpy.data.objects.new("RUBIK_cam_rodaje", cd); derived.objects.link(cam); sc.camera = cam
     cd.sensor_width = 36; sc.frame_start, sc.frame_end = 0, nframes - 1; sc.render.fps = fps
@@ -645,11 +764,20 @@ def main():
         loc, look = pose(t); cam.location = loc; cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
         cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f)
     inv = inventario(sc, cam, project)
-    out.mkdir(parents=True, exist_ok=True); fdir = out / "frames"; fdir.mkdir(exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
+    pend = [r for r in inv if r.get("aviso")] + [r for r in materiales["asignaciones"] if r["objetivo"]["tipo"] == "suelo" and r["estado"].startswith("reserva")]
+    pre = {"format": "rubik-sota.blender-preflight", "version": "1.0.0", "profile": pname, "shot": shot, "light": light, "materiales": materiales,
+           "inventario": inv, "veredicto": ("Acabado pendiente de revisión" if pend else "Listo para revisión visual"),
+           "pendientes": [{"id": r.get("id") or r["objetivo"].get("id"), "motivo": r.get("aviso") or r.get("motivo") or r.get("estado")} for r in pend],
+           "nota": "El render de revisión puede continuar con estas limitaciones visibles; la entrega final exige resolverlas o aceptarlas."}
+    (out / "preflight.json").write_text(json.dumps(pre, ensure_ascii=False, indent=1))
+    if flag("--preflight"):
+        print(json.dumps({"preflight": pre["veredicto"], "pendientes": len(pre["pendientes"]), "integridad": materiales["integridad"]["resultado"]}, ensure_ascii=False)); return
+    fdir = out / "frames"; fdir.mkdir(exist_ok=True)
     rep_path = out / "rodaje-report.json"
     rep = json.loads(rep_path.read_text()) if rep_path.exists() else {"frames": {}}
     rep.update({"format": "rubik-sota.blender-rodaje", "version": "1.0.0", "profile": pname, "resolution": res, "samples": samples,
-                "shot": shot, "light": light, "inventario": inv, "fps": fps, "frameCount": nframes, "declared": declared,
+                "shot": shot, "light": light, "inventario": inv, "fps": fps, "frameCount": nframes, "declared": declared, "materiales": materiales,
                 "equipment": {"device": "CPU", "cpu": cpu_model(), "logicalCpus": os.cpu_count(), "ramGb": ram_gb(), "gpu": None,
                               "blender": bpy.app.version_string, "cycles": bpy.app.version_string, "os": platform.platform()},
                 "package": {"manifestSha256": hashlib.sha256((pkg / "manifest.json").read_bytes()).hexdigest()},

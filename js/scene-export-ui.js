@@ -106,8 +106,10 @@
    status.textContent=tx('Empaquetando la escena…','Packaging the scene…','正在打包场景…');await new Promise(r=>setTimeout(r));if(abort.signal.aborted)throw Object.assign(Error('cancelled'),{code:'CANCELLED'});
    const prepareScript=await script(),kitBytes=await kit();ensureCurrent();
    const rooms=D.roomsDoc?D.roomsDoc({project,label:roomLabel}):null,glb=C.toGLB(capture.doc);
-   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
-   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
+   // Material Tokens 1.0.0: vista derivada del proyecto (identidad pedida por superficie y objeto); si el núcleo no cargó, el ZIP sigue como antes.
+   let materials=null;try{materials=window.RubikMaterialTokens?window.RubikMaterialTokens.materialsDoc({project}):null;}catch{materials=null;}
+   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,materials,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
+   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,materials,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
    const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
    result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
    set('ready');primary.focus();
