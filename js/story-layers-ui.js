@@ -100,11 +100,14 @@
       const ta = el('textarea', { rows: '2', 'aria-label': L('Texto del capítulo', 'Chapter text', '章节文字') + ' · ' + ch.title, 'data-sl': 'text' }, li); ta.value = S.textOf(ctx.story, ch);
       ta.onchange = () => { ctx.story = S.edit(ctx.story, { texts: { [ch.id]: ta.value } }); refreshState(); };
       const tb = el('table', { class: 'sl-data' }, li), hr = el('tr', {}, el('thead', {}, tb));
-      for (const h of [L('Nº', 'No.', '序号'), L('Dato', 'Datum', '数据'), L('Valor', 'Value', '数值'), L('Fuente', 'Source', '来源'), L('Revisión', 'Revision', '版本'), L('Estado', 'State', '状态')]) el('th', { scope: 'col' }, hr, h);
+      const heads = [L('Nº', 'No.', '序号'), L('Dato', 'Datum', '数据'), L('Valor', 'Value', '数值'), L('Fuente', 'Source', '来源'), L('Revisión', 'Revision', '版本'), L('Estado', 'State', '状态')];
+      for (const h of heads) el('th', { scope: 'col' }, hr, h);
+      // Cada celda lleva su columna (data-label): en el teléfono la fila se lee como ficha «columna · valor».
+      const td = (tr, i, text) => el('td', { 'data-label': heads[i] }, tr, text);
       const bd = el('tbody', {}, tb);
-      ch.data.forEach((x, i) => { const tr = el('tr', { 'data-datum': x.id, 'data-state': x.state }, bd); el('td', {}, tr, String(i + 1)); el('td', {}, tr, x.label);
-        el('td', {}, tr, x.value === null ? DATA_STATE().absent : `${x.value} ${x.unit}`); el('td', {}, tr, x.source.field);
-        el('td', {}, tr, `${x.revision.side === 'before' ? L('antes', 'before', '之前') : L('después', 'after', '之后')} · ${x.revision.fingerprint.slice(0, 8)}`); el('td', {}, tr, DATA_STATE()[x.state]); });
+      ch.data.forEach((x, i) => { const tr = el('tr', { 'data-datum': x.id, 'data-state': x.state }, bd); td(tr, 0, String(i + 1)); td(tr, 1, x.label);
+        td(tr, 2, x.value === null ? DATA_STATE().absent : `${x.value} ${x.unit}`); td(tr, 3, x.source.field);
+        td(tr, 4, `${x.revision.side === 'before' ? L('antes', 'before', '之前') : L('después', 'after', '之后')} · ${x.revision.fingerprint.slice(0, 8)}`); td(tr, 5, DATA_STATE()[x.state]); });
       const mv = el('div', { class: 'sl-move' }, li);
       const up = el('button', { type: 'button', class: 'btn', 'data-sl': 'up', 'aria-label': L('Subir', 'Move up', '上移') + ' · ' + ch.title }, mv, '↑'); up.disabled = idx === 0;
       const dn = el('button', { type: 'button', class: 'btn', 'data-sl': 'down', 'aria-label': L('Bajar', 'Move down', '下移') + ' · ' + ch.title }, mv, '↓'); dn.disabled = idx === arr.length - 1;

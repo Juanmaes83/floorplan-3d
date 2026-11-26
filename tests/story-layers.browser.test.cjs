@@ -4,7 +4,7 @@
    rótulos anclados a elementos visibles con valor/unidad/fuente/revisión/estado (cifras = FICHA INDEPENDIENTE calculada
    aquí), ordenar y revisar textos, guardar, generar imágenes, descargar y ABRIR los archivos, cerrar con Escape y volver
    a la ficha con su posición y foco, obsolescencia al cambiar el proyecto, cancelación sin escrituras, móvil y teclado,
-   sin chino visible en ES/EN. Evidencia visual opcional: SL_SHOTS=<dir>. */
+   sin chino visible en ES/EN. Evidencia visual opcional: SL_SHOTS=<dir>; ejemplo exportado: SL_EXPORT=<dir>. */
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),{execFileSync}=require('node:child_process'),crypto=require('node:crypto');
 const K=require('./ux07/kit.cjs'),F=require('../labs/ux07-ent04/fixtures.js'),L=require('../js/project-library.js'),{accion}=require('./helpers-perla-entregar.cjs');
 const shots=process.env.SL_SHOTS||null;if(shots)fs.mkdirSync(shots,{recursive:true});
@@ -51,6 +51,10 @@ test('P10 · historia de dos revisiones: encuadre común, rótulos anclados con 
   const roomRows=rows.filter(r=>r.ch.startsWith('room-'));assert.ok(roomRows.length,'hay capítulos de superficie');
   for(const r of roomRows){const id=r.ch.slice(5),src=(r.id==='area-before'?B:A).rooms.find(x=>x.id===id);
    if(!src){assert.equal(r.state,'absent');assert.match(r.cells[2],/Ausente/);}else assert.equal(r.cells[2],`${ficha(src.polygon)} m²`,'cifra = ficha independiente ('+r.id+' '+id+')');}
+  // El Asistente tiene espacio propio: su acceso no se solapa con ninguna acción de la historia (antes tapaba «Descargar»).
+  const solape=await page.evaluate(()=>{const acc=document.getElementById('assistantAccess');if(!acc||!acc.getClientRects().length)return [];const a=acc.getBoundingClientRect();
+   return [...document.querySelectorAll('#storyLayersDialog .sl-actions button')].filter(b=>{const r=b.getBoundingClientRect();return r.right>a.left&&r.left<a.right&&r.bottom>a.top&&r.top<a.bottom;}).map(b=>b.textContent.trim());});
+  assert.deepEqual(solape,[],'el acceso del Asistente no tapa acciones');
   if(shots)await page.locator('#storyLayersDialog').screenshot({path:shots+'/p10-historia-escritorio.png'});
   // Revisión profesional: bajar el primer capítulo, revisar su texto, guardar, generar imágenes → lista.
   const first=await page.evaluate(()=>document.querySelector('#storyLayersDialog .sl-chapter').dataset.chapter);
@@ -62,6 +66,8 @@ test('P10 · historia de dos revisiones: encuadre común, rótulos anclados con 
   await page.waitForFunction(()=>document.querySelector('#storyLayersDialog [data-sl="state"]')?.dataset.state==='READY');
   const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('[data-sl="download"]').click()]);
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'sl-')),zipPath=path.join(dir,'h.zip');await dl.saveAs(zipPath);
+  // Ejemplo exportado opcional (evidencia): SL_EXPORT=<dir> guarda el ZIP tal como se descargó.
+  if(process.env.SL_EXPORT){fs.mkdirSync(process.env.SL_EXPORT,{recursive:true});fs.copyFileSync(zipPath,path.join(process.env.SL_EXPORT,dl.suggestedFilename()));}
   // Abrir los archivos descargados: ZIP válido, PNG decodificables con su tamaño, manifiesto con huellas que coinciden.
   execFileSync('python3',['-c','import zipfile,sys;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',zipPath,dir]);
   const man=JSON.parse(fs.readFileSync(path.join(dir,'historia/manifiesto.json'),'utf8'));
@@ -89,6 +95,8 @@ test('P10 · obsolescencia: si cambia una revisión guardada, la historia queda 
   await launch(page);
   assert.equal(await page.locator('[data-sl="state"]').getAttribute('data-state'),'OBSOLETE');
   for(const b of ['download','save','images'])assert.ok(await page.locator(`[data-sl="${b}"]`).isDisabled(),b+' deshabilitado en una historia obsoleta');
+  // Y se VE deshabilitada: la acción principal no puede conservar su aspecto activo.
+  assert.ok(+(await page.locator('[data-sl="download"]').evaluate(e=>getComputedStyle(e).opacity))<=.6,'«Descargar» se ve deshabilitada');
   assert.match(await page.locator('[data-sl="state"]').innerText(),/Obsoleta/);
   if(shots)await page.locator('#storyLayersDialog').screenshot({path:shots+'/p10-obsoleta.png'});
   // Cancelar (Escape) sin hacer nada no escribe; rehacer crea una historia nueva por revisar (no vigente hasta guardar).
@@ -108,6 +116,13 @@ test(`P10 · ${lang} ${viewport.width}x${viewport.height}: teclado, sin desborde
   assert.ok(over.dlg<=1&&over.doc<=1,'sin desbordamiento horizontal '+JSON.stringify(over));
   for(let i=0;i<6;i++)await page.keyboard.press('Tab');assert.ok(await page.evaluate(()=>!!document.activeElement.closest('#storyLayersDialog')),'el tabulador sigue dentro del diálogo');
   assert.doesNotMatch(await visibleText(page),CJK,'sin chino visible en '+lang);
+  // Cada valor de la tabla se lee en una línea con anchura útil (antes, en 390 px, «Revisión» se partía letra a letra):
+  // ninguna palabra de las cabeceras o etiquetas queda partida y cada celda de valor tiene al menos 150 px.
+  const estrechas=await page.evaluate(()=>[...document.querySelectorAll('#storyLayersDialog tr[data-datum] td')].filter(td=>td.getBoundingClientRect().width<150&&getComputedStyle(td).display!=='table-cell').length);
+  const partidas=await page.evaluate(()=>[...document.querySelectorAll('#storyLayersDialog .sl-data th')].filter(th=>th.getClientRects().length&&th.getBoundingClientRect().width>1&&th.scrollWidth>th.clientWidth+1).map(th=>th.textContent));
+  assert.equal(estrechas,0,'celdas con anchura útil');assert.deepEqual(partidas,[],'cabeceras visibles sin cortar');
+  if(viewport.width<600){const labels=await page.evaluate(()=>[...document.querySelectorAll('#storyLayersDialog tr[data-datum] td')].slice(0,6).map(td=>getComputedStyle(td,'::before').content));
+   assert.ok(labels.every(l=>l&&l!=='none'&&l!=='""'),'en el teléfono cada valor lleva su columna');}
   if(lang==='en')assert.match(await visibleText(page),/Explain the change to the client/);
   if(shots)await page.locator('#storyLayersDialog').screenshot({path:`${shots}/p10-${lang}-${viewport.width}.png`});
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#storyLayersDialog[open]'));assert.deepEqual(w.errors,[]);

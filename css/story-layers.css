@@ -16,4 +16,15 @@
 .story-layers-dialog .sl-move{display:flex;gap:6px;justify-content:flex-end;margin-top:6px}
 .story-layers-dialog .sl-readiness{font-size:.85rem;padding-left:18px}.story-layers-dialog .sl-readiness [data-ok="false"][data-severity="BLOCKING"]{color:#b3261e}
 .story-layers-dialog .sl-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;position:sticky;bottom:-16px;background:var(--bg,#fff);padding:10px 0}
-@media (max-width:600px){.story-layers-dialog{padding:12px}.story-layers-dialog .sl-figure{grid-template-columns:1fr}.story-layers-dialog .sl-data{font-size:.78rem}}
+@media (max-width:600px){.story-layers-dialog{padding:12px}.story-layers-dialog .sl-figure{grid-template-columns:1fr}
+ /* Teléfono: seis columnas no caben (la revisión se partía letra a letra). Cada fila es una ficha «columna · valor». */
+ .story-layers-dialog .sl-data,.story-layers-dialog .sl-data tbody{display:block}.story-layers-dialog .sl-data thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .story-layers-dialog .sl-data tr{display:block;border:1px solid #eee;border-radius:8px;padding:4px 8px;margin:0 0 8px}
+ .story-layers-dialog .sl-data td{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px;border-bottom:0;padding:3px 0}
+ .story-layers-dialog .sl-data td::before{content:attr(data-label);font-weight:600;color:#555}}
+/* Una acción deshabilitada se VE deshabilitada (la principal mantenía su color con la historia obsoleta). */
+.story-layers-dialog .sl-actions button:disabled{opacity:.45;cursor:not-allowed}
+/* El acceso del Asistente se inserta como último elemento de todo modal, fijo abajo (sticky): aquí chocaba con la barra de
+   acciones, también fija abajo, y tapaba «Descargar historia vigente». Igual que en scene-export.css: en flujo, tras las
+   acciones, con espacio propio. */
+.story-layers-dialog > rubik-assistant-access{position:static;margin:12px 0 0 auto}
