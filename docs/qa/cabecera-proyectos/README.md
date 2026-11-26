@@ -52,3 +52,5 @@ proyecto JSON» en la fila 2; deshacer/rehacer en la fila 1. Después: lo indica
 ## Decisiones del propietario
 - Archivo se mantiene en la fila 2 como «salidas del diseño» (imagen, lámina, DXF, superficies, marca, reformar desde foto,
   restablecer): ¿mantener ese nombre o renombrarlo?
+
+**Checkpoint de reanudación:** [CHECKPOINT-REANUDACION.md](CHECKPOINT-REANUDACION.md)
