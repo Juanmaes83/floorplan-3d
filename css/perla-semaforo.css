@@ -37,3 +37,8 @@
 #professionalWorkspace .professional-card[data-sem]{border-inline-start:4px solid var(--sem-req)}
 #professionalWorkspace .professional-card[data-sem="ok"]{border-inline-start-color:var(--sem-ok)}
 #professionalWorkspace .professional-card[data-sem="pend"]{border-inline-start-color:var(--sem-pend)}
+/* §5.3 · plan en borrador: ni «listo» ni «falta»; color de aviso con su texto */
+#professionalWorkspace.perla-pres :is(.perla-pill.draft,.perla-pill-state[data-kind=draft]){color:var(--sem-warn,#8a5a00);background:var(--sem-warn-bg,#fdf2dc)}
+#professionalWorkspace .perla-sem-base{font-weight:500;color:var(--ink-muted,#5b6066);margin-left:2px}
+#professionalWorkspace .perla-sem-tag{display:inline-flex;align-items:center;gap:4px;width:max-content;margin:2px 0 8px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
+#professionalWorkspace .perla-sem-tag.ok{color:var(--sem-ok,#1d6b3a);background:var(--sem-ok-bg,#e3f2e8)}#professionalWorkspace .perla-sem-tag.pend{color:var(--sem-pend,#8a5a00);background:var(--sem-pend-bg,#fdf2dc)}#professionalWorkspace .perla-sem-tag.req{color:var(--sem-req,#a3271f);background:var(--sem-req-bg,#fbe4e1)}

@@ -204,7 +204,7 @@
   if(snap.recordError)return {text:R.human(snap.recordError),tone:'bad'};
   const corr=R.correspondence(snap.record,{subject:snap.subject,revision:snap.revision}),plan=corr.find(c=>c.aspect==='plan');
   const s=snap.record?.schedule;let text=RESULT_TEXT[plan.result];
-  if(s){const b=S.bounds(s);text=`${s.tasks.length} ${s.tasks.length===1?'tarea':'tareas'}${b.startDate?` · ${day(b.startDate)} – ${day(b.endDate)}`:''} · ${s.review.status==='reviewed'?'revisado (declarado)':'borrador'}`;}
+  if(s&&!s.tasks.length)text='Borrador · 0 tareas';else if(s){const b=S.bounds(s);text=`${s.tasks.length} ${s.tasks.length===1?'tarea':'tareas'}${b.startDate?` · ${day(b.startDate)} – ${day(b.endDate)}`:''} · ${s.review.status==='reviewed'?'revisado (declarado)':'borrador'}`;}
   return {text,tone:plan.result==='match'?'ok':plan.result==='absent'?'':'warn',result:plan.result,corr};
  }
  /* Recorrido de obra (novice guide): the five steps of the construction flow in order, each with its real state and ONE
@@ -259,7 +259,7 @@
    const st=planState(snap),c=card(grid,'Plan de obra',st.text);c.dataset.module='construction-plan';c.id='constructionPlanCard';sym(c,'plan');
    if(st.result==='obsolete')detail(c,'El proyecto ha cambiado desde que guardaste el plan: revisa los vínculos y vuelve a guardarlo.');
    detail(c,snap.subject.type==='building'?'Tareas, fechas, dependencias y elementos de las dos plantas. Los importes se consultan por planta: RUBIK todavía no tiene presupuesto de edificio.':'Tareas, fechas, dependencias, elementos del proyecto y reparto de partidas del presupuesto. Nada cambia de fecha sin tu decisión.');
-   route(c,snap.record?.schedule?'Abrir plan de obra':'Crear plan de obra','construction-plan',()=>window.FloorPlanConstructionPlanUI.open(),true);
+   const sch=snap.record?.schedule;route(c,!sch?'Crear plan de obra':sch.tasks.length?'Abrir plan de obra':'Añadir primera tarea','construction-plan',()=>window.FloorPlanConstructionPlanUI.open(),true);
    if(snap.record?.schedule)route(c,'Ver evolución','construction-evolution',()=>openEvolution());
    const managed=window.FloorPlanCostCatalog?.managedStatus?.();
    const p=card(grid,'Precios de referencia',managed?'Bases de precios que aportes y tarifa del estudio':'No disponible');p.dataset.module='reference-prices';p.id='referencePricesCard';sym(p,'prices');
