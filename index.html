@@ -261,6 +261,7 @@ main.animating #hint3d{opacity:0}
   z-index:4;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility 0s linear .2s;max-width:calc(100% - 24px)}
 main.drawer-panel #fab{opacity:0;visibility:hidden}
 #fab.show{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .2s,transform .2s}
+#fab.fab-flip{bottom:auto;top:16px}
 #fab .name{padding:0 8px 0 6px;font-weight:600;max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #fab .btn{border:1px solid transparent}
 #fab .sep{width:1px;align-self:stretch;margin:4px 2px;background:var(--line)}
@@ -1743,8 +1744,27 @@ function bindOverview(){
   };
 }
 
+// La barra de selección nunca tapa los tiradores del elemento seleccionado (OP-07 S5b: el asa de curvatura quedaba bajo
+// #fab y no se podía arrastrar). Si un tirador cae bajo la barra abajo, la barra sube al borde superior del plano, salvo
+// que arriba tape otro tirador. Solo cambia dónde se dibuja la barra: ni la vista, ni la selección, ni el proyecto.
+function fabAvoid(){
+  const fab = $('#fab'); if (!fab) return;
+  const hs = fab.classList.contains('show') ? [...document.querySelectorAll('#gSel [data-handle]')].map(h => h.getBoundingClientRect()).filter(r => r.width || r.height) : [];
+  const hits = r => hs.some(h => h.right > r.left - 12 && h.left < r.right + 12 && h.bottom > r.top - 12 && h.top < r.bottom + 12);
+  const flipped = fab.classList.contains('fab-flip');
+  if (!hs.length){ if (flipped) fab.classList.remove('fab-flip'); return; }
+  const r = fab.getBoundingClientRect(), stage = $('#stage').getBoundingClientRect(), h = r.height;
+  const bottomBox = flipped ? { left: r.left, right: r.right, top: stage.bottom - 16 - h, bottom: stage.bottom - 16 } : r;
+  const topBox = flipped ? r : { left: r.left, right: r.right, top: stage.top + 16, bottom: stage.top + 16 + h };
+  const flip = hits(bottomBox) && !hits(topBox);
+  if (flip !== flipped) fab.classList.toggle('fab-flip', flip);
+}
 // 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
-function renderFab(){
+// Desde applyView (que también corre en la entrega del ResizeObserver del plano) solo se PROGRAMA para el siguiente
+// fotograma: nunca se escribe dentro de una entrega de ResizeObserver (residual A0 de WebKit, #273).
+let fabAvoidFrame = 0; function fabAvoidSoon(){ if (!fabAvoidFrame) fabAvoidFrame = requestAnimationFrame(() => { fabAvoidFrame = 0; fabAvoid(); }); }
+function renderFab(){ renderFabBar(); fabAvoid(); }
+function renderFabBar(){
   const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && geometry.rooms.find(r => r.id === ui.sel.id), o = ui.sel?.kind === 'opening' && project.openings.find(x => x.id === ui.sel.id);
   if (window.FloorPlanOpeningUI?.picking()){ fab.classList.remove('show'); return; }
   const od = ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.ready() && FloorPlanOpeningUI.draft(), on = od && od.project.openings.find(x => x.id === od.id);
@@ -2149,7 +2169,7 @@ function applyView(){
   const ratio = 1/(view.s*PX_MM);
   $('#ratio').textContent = '1:' + Math.round(ratio);
   const nice = [100,200,500,1000,2000,5000].find(v => v*view.s >= 60) || 5000;
-  $('#sbBar').style.width = nice*view.s + 'px';
+  $('#sbBar').style.width = nice*view.s + 'px'; fabAvoidSoon();
   $('#sbText').textContent = nice >= 1000 ? `${nice/1000} m` : `${nice} mm`;
   renderSel(); renderMeasure();
 }
@@ -2387,6 +2407,9 @@ document.addEventListener('keydown', e => {
   else if (k === 'f') fitView();
   else if (k === 'r') rotateSel(e.shiftKey ? -90 : 90);
   else if (k === 'delete' || k === 'backspace'){ e.preventDefault(); deleteSel(); }
+  // Escape durante un arrastre del asa de curvatura lo CANCELA: vuelve la forma de antes, sin historial ni escritura, y la
+  // selección se conserva (como pointercancel). Fuera de un arrastre, Escape sigue haciendo lo de siempre.
+  else if (k === 'escape' && drag?.kind === 'curve'){ e.preventDefault(); endDrag(true); }
   else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancelPick(); toast('Añadir hueco cancelado'); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
   else if (k.startsWith('arrow') && ui.sel?.kind === 'furn'){
     e.preventDefault(); const st = e.shiftKey ? 100 : 10;
