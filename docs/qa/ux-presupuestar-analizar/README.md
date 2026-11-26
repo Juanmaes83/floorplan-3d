@@ -24,3 +24,13 @@ Capturas: `1-presupuestar-plan-vacio.png`, `2-analizar-1440.png`, `2-analizar-39
   **este corte**: Analizar heredaba el margen de Presupuestar y la cuadrícula pasaba de ~1100 a 1328 px.
 - Corregido: Analizar conserva su anchura útil (1100 px) con las tarjetas de Entregar. Tras la corrección: Point9 4/4 y la
   prueba del corte 3/3. Pendiente de revisión humana.
+
+
+## Ampliación de la cola acordada con el propietario · 26/11/2026
+
+- **StoryLayersV1.** Aprobado por el propietario como primera plantilla comercial completa. La aprobación cubre el recorrido P10, la propuesta personalizable y la asistencia demostrada. [Handoff de aprobación](https://github.com/Juanmaes83/floorplan-3d/blob/cd694e88/docs/qa/storylayers-v1/README.md).
+- **Resto de Entregar (§§8.1–8.2).** Pendiente extender el patrón de StoryLayers a las demás plantillas. Ofrecer asistencia contextual para preparar, redactar y revisar. Reutilizar datos y medios de la revisión correcta, identidad de Mi estudio y datos opcionales del cliente, con control de qué aparece en la entrega.
+- **Render AI / Reforma desde fotografía (FOT-01).** En inmobiliaria, «Muestra cómo se vería el salón despejado» para que el comprador aprecie el espacio. En interiorismo y reformas, «Enseña una alternativa sobre la foto real» para que el cliente pueda valorar la propuesta antes de decidir. Mostrar ejemplos propios de antes y después, identificar la alternativa como ilustrativa e indicar el estado de simulación cuando corresponda. Enlazar cada caso con el flujo existente de RUBIK.
+- **Blueprint / rodaje Blender.** Adaptar la secuencia plano → volumen → interior con el ZIP de Entregar de RUBIK. Tomar de Apartment el orden, de Courtyard el montaje por sistemas y de Villa la transición interior. Ensayar una vivienda en un clip corto a 720p y pasar a 1440p tras revisar el montaje. Esta mejora va después del rodaje en curso. [Repositorio y ejemplos](https://github.com/Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-/tree/2d3463e42de902bef64157fdfb0dc1d09790b740).
+
+Estos puntos amplían la cola general. El segundo corte de §5.3 conserva su alcance actual. [Encargo completo, §§8, 10 y 11](https://github.com/Juanmaes83/floorplan-3d/blob/a9d6221de0885711a669b1d4680995d00dd1641a/docs/integration/ENCARGO-REUTILIZACION-CINCO-REPOS-BLENDER-STORYLAYERS.md).
