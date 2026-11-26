@@ -11,7 +11,7 @@
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
  const chip=(text,parent,tone='')=>el('span',text,parent,'cx-chip'+(tone?' '+tone:''));
- const eur=v=>v===null||v===undefined?'desconocido':v.toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+ const eur=v=>v===null||v===undefined?'desconocido':v.toLocaleString('es-ES',{style:'currency',currency:'EUR',useGrouping:'always'});
  const UNIT={m2:'m²',m:'m',unit:'ud',ud:'ud',ml:'m','m²':'m²'},uq=u=>UNIT[u]||u;
  const fmtDate=d=>d?new Date(d+'T00:00:00Z').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):'sin fecha';
  const licenseText=l=>({'not-applicable':'no aplica (datos de prueba)',unknown:'desconocida: responde quien aporta el archivo',verified:'verificada',restricted:'restringida'})[l]||l;
@@ -88,7 +88,7 @@
   const form=el('form',undefined,right,'cx-row');form.id='pricesSearch';form.setAttribute('role','search');
   const lq=el('label',undefined,form,'cx-field');el('span','Código o texto',lq);const q=el('input',undefined,lq);q.type='search';q.id='pricesQuery';q.minLength=2;q.value=state.lastQuery||(it?it.description.replace(/\(.*\)/,'').trim().split(/\s+/).slice(0,2).join(' '):'');
   const lf=el('label',undefined,form,'cx-field');el('span','Familia',lf);const fam=el('select',undefined,lf);fam.id='pricesFamily';el('option','Todas',fam).value='';for(const f of [...new Set(state.sources.flatMap(s=>s.source.families))].sort((a,b)=>a.localeCompare(b,'es')))el('option',f,fam).value=f;
-  const lu=el('label',undefined,form,'cx-check');const su=el('input',undefined,lu);su.type='checkbox';su.id='pricesSameUnit';su.checked=true;el('span','Solo la unidad de la partida',lu);
+  const lu=el('label',undefined,form,'cx-check');const su=el('input',undefined,lu);su.type='checkbox';su.id='pricesSameUnit';su.checked=state.sameUnit!==false;su.onchange=()=>{state.sameUnit=su.checked;};el('span','Solo la unidad de la partida',lu);
   const go=btn('Buscar',form,'btn primary');go.type='submit';
   const ss=el('p',state.searchStatus||'',right,'cx-status');ss.id='pricesSearchStatus';ss.setAttribute('role','status');
   const res=el('div',undefined,right);res.id='pricesResults';if(state.groups)results(res);
@@ -97,7 +97,8 @@
    if(state.lastQuery.length<Cat.LIMITS.queryMinChars){state.searchStatus='Escribe al menos dos caracteres.';draw();return;}
    const r=await Cat.searchAll(state.sources,{text:state.lastQuery,family:fam.value||null});
    // Same unit by NOTATION only (ud ≡ unit, m² ≡ m2): never a conversion.
-   if(su.checked&&it)for(const g of r.groups){if(g.status!=='available')continue;g.items=g.items.filter(x=>Cat.unitCheck(it.quantity.unit,x.unit).ok);g.state=g.items.length?'found':'not-found';}
+   state.hiddenUnits=0;if(su.checked&&it)for(const g of r.groups){if(g.status!=='available')continue;const n0=g.items.length;g.items=g.items.filter(x=>Cat.unitCheck(it.quantity.unit,x.unit).ok);state.hiddenUnits+=n0-g.items.length;g.state=g.items.length?'found':'not-found';}
+   state.sameUnit=su.checked;
    const n=r.groups.reduce((a,g)=>a+g.items.length,0);state.groups=r.groups;state.searchStatus=n?`${n} ${n===1?'referencia encontrada':'referencias encontradas'}.`:'No hay referencias con esos criterios.';draw();};
   if(state.saved){const sv=state.saved,b=el('div',undefined,right,'cx-banner ok');b.id='pricesSaved';b.setAttribute('role','status');
    el('b',sv.as==='price'?'Precio aplicado y guardado':'Referencia guardada',b);el('span',` · «${sv.description}»: ${eur(sv.unitPrice)} / ${uq(sv.unit)}${sv.subtotal!=null?' · importe '+eur(sv.subtotal)+' sin IVA':''}${sv.source?' · '+sv.source:''}. Queda «sin revisar» hasta que lo revises en el presupuesto.`,b);
@@ -110,11 +111,17 @@
   dialog.querySelector('.cx-body').scrollTop=keep;
  }
  function results(res){
+  // §5.2 · El filtro por unidad no esconde nada en silencio: dice cuántas coincidencias oculta y deja verlas.
+  if(state.hiddenUnits>0){const n=el('p',undefined,res,'cx-banner warn');n.id='pricesHiddenUnits';n.setAttribute('role','status');
+   el('span',`${state.hiddenUnits} ${state.hiddenUnits===1?'coincidencia oculta':'coincidencias ocultas'} por estar en otra unidad que la partida. `,n);
+   const show=btn('Mostrar otras unidades',n,'btn');show.id='pricesShowUnits';show.onclick=()=>{const c=dialog.querySelector('#pricesSameUnit');if(c){c.checked=false;c.form?.requestSubmit();}};}
   for(const g of state.groups){const sec=el('section',undefined,res);sec.dataset.group=g.source.id;const h=el('h4',nice(g.source.label),sec);if(g.source.edition)chip('ed. '+g.source.edition,h);if(g.state!=='found')chip(Cat.describe(g.state).title,h,Cat.STATES[g.state]?.tone==='bad'?'bad':'warn');
    const ul=el('ul',undefined,sec);for(const x of g.items){const li=el('li',undefined,ul);el('code',x.code,li);el('span',` ${x.description}${x.family?' · '+x.family:''} · ${uq(x.unit)} `,li);
     const b=btn('Ver precio',li,'cx-link');b.dataset.quote=x.code;b.dataset.src=g.source.id;b.onclick=async()=>{const s=state.sources.find(z=>z.source.id===g.source.id),r=await s.quote(x.code,{column:state.columns[s.source.id]??null});
-     state.quotes=state.quotes.filter(z=>!(z.source.id===s.source.id&&z.code===x.code));state.quotes.push({source:s.source,code:x.code,state:r.state,quote:r.quote||null});state.preview=null;draw();dialog.querySelector('#pricesCompare')?.scrollIntoView({block:'nearest'});};}}
+     state.quotes=state.quotes.filter(z=>!(z.source.id===s.source.id&&z.code===x.code));state.quotes.push({source:s.source,code:x.code,state:r.state,quote:r.quote||null});state.preview=null;draw();focusOption(state.quotes.length-1);};}}
  }
+ // La referencia elegida queda centrada y su acción «Revisar procedencia» enfocada y a la vista.
+ function focusOption(i){const li=dialog.querySelector(`#pricesOptions [data-option="${i}"]`);if(!li)return;li.scrollIntoView({block:'center'});(li.querySelector('[data-detail]')||li).focus?.({preventScroll:true});}
  function compare(parent,it){
   const box=el('section',undefined,parent);box.id='pricesCompare';el('h3','Comparar y decidir',box);
   const latest=state.sources.filter(s=>s.source.providerId==='bcca-es'&&s.source.edition).map(s=>s.source.edition).sort().at(-1)||null;
@@ -124,7 +131,9 @@
   const list=el('ul',undefined,box,'prices-options');list.id='pricesOptions';cmp.options.forEach((o,i)=>{const li=el('li',undefined,list,'prices-option');li.dataset.option=String(i);if(state.detail===i)li.setAttribute('aria-current','true');
    const head=el('div',undefined,li,'prices-option-head');el('b',nice(o.label)+(o.edition?' · ed. '+o.edition:''),head);chip(Cat.describe(o.state).title,head,Cat.STATES[o.state]?.tone==='ok'?'ok':'warn');
    const dl=el('dl',undefined,li,'prices-option-data');for(const [k,v] of [['Código',o.code||state.quotes[i].code],['Precio',o.unitPrice===null||o.unitPrice===undefined?'Desconocido':eur(o.unitPrice)+(o.unit?' / '+uq(o.unit):'')],['Diferencia con el actual',o.delta===null||o.delta===undefined?'—':(o.delta>0?'+':'')+eur(o.delta)]]){const d=el('div',undefined,dl);el('dt',k,d);el('dd',v,d);}
-   if(o.unitPrice!==null&&o.unitPrice!==undefined){const b=btn(state.detail===i?'Procedencia revisada abajo':'Revisar procedencia y decidir',li,state.detail===i?'btn':'btn primary');b.dataset.detail=String(i);b.onclick=()=>{state.detail=i;draw();dialog.querySelector('#pricesProvenance')?.scrollIntoView({block:'nearest'});};}});
+   const blocked=(()=>{const qu=state.quotes[i]?.quote?.unit;return !!qu&&!Cat.unitCheck(it.quantity.unit,qu).ok;})();
+   {const qu=state.quotes[i]?.quote?.unit;if(blocked){const w=el('p',`No se puede aplicar a esta partida: la referencia se mide en ${uq(qu)} y la partida en ${uq(it.quantity.unit)}. RUBIK no convierte unidades; el presupuesto y el historial no cambian.`,li,'cx-banner bad');w.dataset.unitBlock='1';}}
+   if(o.unitPrice!==null&&o.unitPrice!==undefined){const b=btn(state.detail===i?'Procedencia revisada abajo':blocked?'Ver procedencia (no aplicable)':'Revisar procedencia y decidir',li,state.detail===i||blocked?'btn':'btn primary');b.dataset.detail=String(i);b.onclick=()=>{state.detail=i;draw();dialog.querySelector('#pricesProvenance')?.scrollIntoView({block:'nearest'});};}});
   if(state.detail!==undefined&&state.quotes[state.detail]?.quote){const q=state.quotes[state.detail],s=q.quote.source,u=Cat.unitCheck(it.quantity.unit,q.quote.unit),dl=el('dl',undefined,box,'cx-prov');dl.id='pricesProvenance';
    for(const [k,v] of [['Fuente',nice(s.label)],['Tipo',q.source.kindLabel],['Código',q.quote.code],['Descripción',q.quote.description],['Unidad',uq(q.quote.unit)+(u.ok?'':' · distinta de la partida')],['Moneda',q.quote.currency],['Precio',eur(q.quote.unitPrice)+' sin IVA'],['Edición',s.edition||'no indicada'],['Región o columna',s.region||'no indicada'],['Fecha del precio',fmtDate(s.asOf)],['Licencia',q.source.kind==='studio-catalog'?'no aplica (fichas de tu estudio; el origen se indica en «Atribución»)':licenseText(s.licenseStatus)],['Atribución',s.attribution||'no indicada por la fuente']]){el('dt',k,dl);el('dd',v,dl);}
    el('p','Es un precio de referencia: no es una oferta ni un coste de obra ejecutada.',box,'cx-status').style.color='var(--ink-muted)';
@@ -135,11 +144,19 @@
   if(!p.ok){el('h3','No se puede aplicar',pv);el('p',p.blockers.map(b=>BLOCK[b]||b).join(' '),pv);el('p','Tu presupuesto no ha cambiado.',pv,'cx-status');return;}
   el('h3',p.as==='price'?'Vas a usar este precio en la partida':'Vas a guardar esta referencia junto a la partida',pv);
   {const q=p.quote,src=q?.source,dst=item(p.itemId),cat=state.quotes[state.detail]?.source||state.sources.find(z=>z.source.id===src?.id)?.source||src,ci=cat?state.columns[cat.id]:null,col=cat&&cat.columns?.length>1&&ci!=null?cat.columns[ci]:null,sum=el('dl',undefined,pv,'cx-prov');sum.id='pricesTarget';
-   for(const [k,v] of [['Partida destino',dst?.description||p.itemId],['Cantidad de la partida',dst?`${(Math.round(dst.quantity.value*100)/100).toLocaleString('es-ES',{maximumFractionDigits:2})} ${uq(dst.quantity.unit)}`:'—'],['Fuente',src?nice(src.label):'—'],['Columna',col||'única'],['Unidad',q?uq(q.unit):'—'],['Precio',q?eur(q.unitPrice)+' sin IVA':'—']]){el('dt',k,sum);el('dd',v,sum);}}
+   for(const [k,v] of [['Partida destino',dst?.description||p.itemId],['Cantidad de la partida',dst?`${(Math.round(dst.quantity.value*100)/100).toLocaleString('es-ES',{maximumFractionDigits:2})} ${uq(dst.quantity.unit)}`:'—'],['Fuente',src?nice(src.label):'—'],['Columna',col||'única'],['Unidad',q?uq(q.unit):'—'],['Precio',q?eur(q.unitPrice)+' sin IVA':'—']]){el('dt',k,sum);el('dd',v,sum);}
+   // §5.2 · Desglose del importe de ESTA partida: el importe es el que calcula el presupuesto para la vista previa (p.after).
+   if(dst&&p.as==='price'&&q){const wq=dst.quantity.value===null?null:dst.quantity.value*(1+(dst.wastePercent||0)/100),L={budgetQuantity:wq,subtotalNet:p.after.subtotalNet},u=uq(dst.quantity.unit),n2=v=>v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'});
+    const bd=el('section',undefined,pv,'prices-breakdown');bd.id='pricesBreakdown';el('h4','Cómo se calcula el importe de la partida',bd);const t=el('dl',undefined,bd,'cx-prov');
+    for(const [k,v] of [['Superficie medida',`${n2(dst.quantity.value)} ${u}`],['Merma',`${(dst.wastePercent||0).toLocaleString('es-ES')} %`],['Cantidad presupuestada',L.budgetQuantity===null?'—':`${n2(L.budgetQuantity)} ${u} (= ${n2(dst.quantity.value)} × ${(1+(dst.wastePercent||0)/100).toLocaleString('es-ES')})`],['Precio unitario',eur(p.after.unitPrice)+' / '+u+' sin IVA'],['Importe de la partida',L.subtotalNet===null?'desconocido':eur(L.subtotalNet)+' sin IVA']]){const d=el('div',undefined,t);el('dt',k,d);el('dd',v,d);}
+    bd.dataset.subtotal=String(L.subtotalNet);
+    el('p',`Las cantidades se muestran con 2 decimales; el cálculo usa la medida completa (${dst.quantity.value.toLocaleString('es-ES',{maximumFractionDigits:6})} ${u}) y redondea solo el importe final al céntimo. Por eso ${n2(dst.quantity.value)} × ${(1+(dst.wastePercent||0)/100).toLocaleString('es-ES')} × ${n2(p.after.unitPrice)} puede diferir en algún céntimo.`,bd,'cx-status').style.color='var(--ink-muted)';}}
   const ba=el('div',undefined,pv,'cx-ba');for(const [k,v] of [['Ahora',p.before],['Después',p.after]]){const d=el('div',undefined,ba);el('b',k,d);el('span',eur(v.unitPrice),d);el('small',' · importe '+(v.subtotalNet===null?'desconocido':eur(v.subtotalNet)+' sin IVA'),d);}
-  el('p',`${p.as==='price'?'El precio quedará «sin revisar» hasta que lo revises en el presupuesto.':'El precio actual de la partida no cambia.'} Importe conocido después: ${eur(p.after.coverage.netKnown)}${p.after.coverage.netComplete?'':' (presupuesto parcial)'}.`,pv,'cx-status').style.color='var(--ink-muted)';
+  el('p',`${p.as==='price'?'El precio quedará «sin revisar» hasta que lo revises en el presupuesto.':'El precio actual de la partida no cambia.'} Importe conocido de todo el presupuesto después: ${eur(p.after.coverage.netKnown)}${p.after.coverage.netComplete?'':' (presupuesto parcial: hay partidas sin precio)'} — no es el importe de esta partida.`,pv,'cx-status').style.color='var(--ink-muted)';
   let consent=null;if(p.requiresConsent){const l=el('label',undefined,pv,'cx-check');consent=el('input',undefined,l);consent.type='checkbox';consent.id='pricesConsent';el('span','Sustituir el precio que ya había revisado',l);}
-  const acts=el('div',undefined,pv);acts.style.cssText='display:flex;gap:8px';const ok=btn('Confirmar',acts,'btn primary');ok.id='pricesConfirm';btn('Cancelar',acts).onclick=()=>{state.preview=null;draw();};
+  const acts=el('div',undefined,pv,'prices-decide');acts.setAttribute('role','group');acts.setAttribute('aria-label','Decidir');const ok=btn('Confirmar',acts,'btn primary');ok.id='pricesConfirm';const no=btn('Cancelar',acts,'btn');no.id='pricesCancel';
+  no.onclick=()=>{const keepI=state.detail;state.preview=null;state.msg='Cancelado: el presupuesto no ha cambiado. Sigues con la misma partida, búsqueda y referencia.';draw();if(keepI!==undefined)focusOption(keepI);};
+  requestAnimationFrame(()=>acts.scrollIntoView({block:'nearest'}));
   ok.onclick=async()=>{try{const before=Cat.revisionTag(state.budget),out=Cat.apply(state.budget,p,{confirmed:true,replaceReviewed:!!consent?.checked,decidedAt:new Date().toISOString()});commit(out.budget);
     await record({itemId:p.itemId,description:item(p.itemId).description,as:p.as,before:{unitPrice:p.before.unitPrice},after:{unitPrice:p.after.unitPrice},code:p.quote?.code||null,source:p.quote?.source?.label||null,revBefore:before,revAfter:Cat.revisionTag(state.budget)},p.as==='price'?'Precio aplicado':'Referencia guardada');
     const done=item(p.itemId);state.saved={as:p.as,description:done?.description||'',unitPrice:p.after.unitPrice,unit:p.quote?.unit||done?.quantity.unit||'',subtotal:p.after.subtotalNet,source:p.quote?.source?nice(p.quote.source.label):''};

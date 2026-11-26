@@ -34,3 +34,22 @@ Se conservan los filtros por unidad, la confirmación explícita, el consentimie
 
 Capturas: `1-comparar-escritorio.png`, `2-antes-de-confirmar.png`, `3-guardado.png`, `4-presupuesto-tras-recargar.png`,
 `5-movil-comparar.png`.
+
+## Correcciones de la revisión humana de la Preview (26/11/2026, instrucción del propietario en el chat de trabajo)
+Ya comprobado visualmente por el propietario: se puede aplicar ROBLE. El cierre de §5.2 queda pendiente de revisar esto:
+1. **Avanzar sin buscar:** «Ver precio» centra la referencia elegida y enfoca **«Revisar procedencia y decidir»**. En la
+   confirmación, **Confirmar** (principal) y **Cancelar** van juntos al final y a la vista. **Cancelar** conserva partida,
+   búsqueda y referencia («Cancelado: el presupuesto no ha cambiado. Sigues con la misma partida, búsqueda y referencia.»).
+2. **Filtro por unidad que avisa:** se mantiene; junto a los resultados, «N coincidencias ocultas por estar en otra unidad»
+   y **«Mostrar otras unidades»** (la casilla conserva la elección). **ROBLE-UD** en una partida en m²: «No se puede aplicar
+   a esta partida: la referencia se mide en ud y la partida en m². RUBIK no convierte unidades; el presupuesto y el
+   historial no cambian.»; su acción pasa a secundaria «Ver procedencia (no aplicable)». Presupuesto e historial intactos.
+3. **Importe entendible:** «Cómo se calcula el importe de la partida»: superficie medida **32,56 m²**, merma **5 %**,
+   cantidad presupuestada **34,19 m² (= 32,56 × 1,05)**, precio **42,75 €/m²**, importe de la partida **1.461,66 € sin IVA**
+   (el que calcula el presupuesto; se explica que la medida completa es 32,56282 m² y solo se redondea el importe). El
+   importe confirmado = el de la partida guardada (comprobado). El «importe conocido de todo el presupuesto» se rotula
+   aparte («no es el importe de esta partida»). Importes con separador de miles siempre (1.461,66 €).
+4. **Recorrido real** en `tests/bc3-revision-humana.browser.test.cjs` (escritorio 1440×900 y móvil 390×844): cancelar →
+   Mostrar otras unidades → ROBLE-UD bloqueado → aplicar ROBLE → «Revisar en el presupuesto» → recargar (precio 42,75,
+   fuente referencia ROBLE, «sin revisar», historial). Local: 2/2 + prueba anterior 2/2.
+Descarga del BC3 sintético: `docs/qa/ux-bc3/rubik-qa-sintetico.bc3`.

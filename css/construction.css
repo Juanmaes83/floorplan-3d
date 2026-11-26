@@ -187,3 +187,9 @@ tr.cx-ms .cx-dur{background:#f3e3c4;color:#6d4a10}
 .prices-option-data{display:flex;flex-wrap:wrap;gap:4px 18px;margin:8px 0}.prices-option-data dt{font-size:12px;color:var(--ink-muted,#5b6066)}.prices-option-data dd{margin:0;font-weight:600}
 .prices-option>.btn{min-height:44px;white-space:normal;text-align:left}
 #pricesSaved .btn{margin-left:8px}
+/* §5.2 · Decisión: «Confirmar» (principal) y «Cancelar» juntos, siempre a la vista al final de la vista previa. */
+.prices-decide{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0 2px;border-top:1px solid var(--line,#d9d4cb);margin-top:8px}
+.prices-decide .btn{min-height:44px}
+.prices-breakdown{margin:10px 0;padding:10px 12px;border:1px solid var(--line,#d9d4cb);border-radius:10px;background:var(--surface-sunken,#f6f3ee)}
+.prices-breakdown h4{margin:0 0 6px;font-size:14px}
+.prices-option [data-unit-block]{margin:8px 0 0;font-size:13px}
