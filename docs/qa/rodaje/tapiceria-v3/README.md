@@ -1,5 +1,9 @@
 # Tapicería v3 · revisión visual (26/11/2026)
 
+> **Estado (26/11/2026): APROBADA VISUALMENTE POR EL PROPIETARIO** («apruebo visualmente los sofás actualmente») tras revisar
+> los clips en movimiento de abajo. La receta v3 queda como receta de serie del kit. El MP4 completo se rueda con ella (sección
+> «MP4 completo»).
+
 **Motivo:** el propietario rechazó el sofá de `f2-rot30` (v1). Con la ampliación aparecía una trama fina, pero a distancia normal
 los cojines seguían pareciendo lisos y uniformes. **El MP4 completo sigue en espera** hasta la aprobación visual de este corte.
 
@@ -82,4 +86,25 @@ Material Tokens (`rodaje-materiales-check.py`, f3): 14/14.
 - El primer plano automático del sillón (`--shot primerplano --target armchair`) no encontró un punto de vista libre en
   ninguno de los dos proyectos. Por eso el sillón se muestra en recorte 1:1 del plano general (misma cámara, luz y
   exposición).
-- Tramo en movimiento: ver la sección siguiente, cuando termine su render.
+- Tramo en movimiento: ver la sección siguiente.
+
+## Movimiento (misma cámara, luz y exposición que v1) · descargas directas
+
+| Archivo | Qué es |
+|---|---|
+| [`tapiceria-v3_salon_720p_movimiento-1s_x3.mp4`](movimiento/tapiceria-v3_salon_720p_movimiento-1s_x3.mp4) | Salón f2, 24 fotogramas renderizados (1 s, 720p, 16 muestras), repetidos 3 veces |
+| [`sofa_comparativa-v1-arriba-v3-abajo_720p_ampliado2x_x3.mp4`](movimiento/sofa_comparativa-v1-arriba-v3-abajo_720p_ampliado2x_x3.mp4) | Sofá v1 arriba / v3 abajo, 18 fotogramas, recorte ampliado ×2 |
+| [`sofa-v3_recorte-1440p-nativo_12-fotogramas_x3.mp4`](movimiento/sofa-v3_recorte-1440p-nativo_12-fotogramas_x3.mp4) | Sofá a 1440p nativo (perfil de entrega, 32 muestras), recorte 1280×840 sin escalar, 12 fotogramas |
+| [`estabilidad-v1-v3.json`](movimiento/estabilidad-v1-v3.json) · [`residuo-x12_v1-arriba-v3-abajo.png`](movimiento/residuo-x12_v1-arriba-v3-abajo.png) | Residuo temporal compensado en movimiento (flujo óptico) |
+
+**Estabilidad (720p, 16 muestras):** residuo medio en el sofá 1,06 (v1) → 1,36 (v3) sobre 255; sillón 1,58 → 1,76; pared
+(referencia lisa) 0,20 → 0,19. La v3 tiene una granulación fina y uniforme algo mayor, coherente con su trama más fina; no
+forma manchas ni arrastres. Revisada y aprobada por el propietario en vídeo.
+
+**Coste medido:** 720p · 16 muestras ≈ 96 s por fotograma; recorte 1440p (1280×840) · 32 muestras ≈ 4 min por fotograma
+(CPU de 4 núcleos, con otras tareas en paralelo).
+
+## MP4 completo
+
+No son los clips anteriores. Es la toma interior de f2 completa: **2 s (48 fotogramas, 24 fps) a 2560×1440, perfil de
+entrega**, con la receta v3 aprobada. Se publica aquí al terminar, con su coste medido.
