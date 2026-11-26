@@ -70,3 +70,53 @@ Estas tres mejoras provienen de la prueba humana en la aplicación publicada, co
 [Encargo completo de Gesture Labs Floor Plan RUBIK](ENCARGO-SCULPT-GESTURE-LABS-FLOOR-PLAN-RUBIK.md)
 
 El objetivo es que el profesional pueda presentar una vivienda de RUBIK y el comprador pueda desplegar su plano, pasar de 2D a 3D y comparar dos revisiones con datos trazables. La primera prueba SCULPT usa una vivienda, dos gestos como máximo y conserva controles equivalentes por teclado, ratón y táctil. El encargo identifica las piedras de Director de Orquesta, La Batuta y Blueprint, su destino y las pruebas exigidas. El vídeo por capítulos, la navegación libre y el manejo de puertas, ventanas o cajones se evalúan después del ensayo. Lleva a Codex el resultado y la evidencia antes de proponer su integración.
+
+
+## 7. Feedback de la prueba humana · Muros, StoryLayersV1 y tapicería
+
+**Leer al retomar.** La prueba humana de StoryLayers confirma detección y descarga. La calidad de la entrega para cliente queda rechazada. El propietario aprueba el rediseño de interacción de Muros. La tapicería v3 queda pendiente de revisión visual. Registra estas decisiones en los handoffs y encaja cada corrección en el corte de su bloque, coordinando las superficies que comparten Diseñar y Entregar con el §5. El §6 de Gesture Labs conserva sus condiciones de arranque.
+
+### 7.1 Muros · Edición descubrible desde Diseñar
+
+**Hallazgo.** En la revisión humana, «Dibujar muro» solo explica cómo marcar sus extremos. La persona que abre RUBIK por primera vez carece de una vía evidente para personalizar su forma. La [composición Muros + A0 en a5beb0ab](https://github.com/Juanmaes83/floorplan-3d/commit/a5beb0ab62b023076299f380cee20a963e0a77f0) pasó la CI cruzada, pero esa Preview lleva OP-07 en estado integrated. La prueba de edición requiere una Preview aislada con activación autorizada y un proyecto de ejemplo seguro para modificar.
+
+**Resultado y aceptación.** Al seleccionar un muro en Diseñar, mostrar **Forma del muro** con opciones visuales **Recto** y **Curvo**. Al elegir Curvo, mostrar el asa central, el mensaje **«Arrastra para curvar»** y una previsualización. Ofrecer **Enderezar** y dejar el ajuste preciso en milímetros como opción secundaria. Reutilizar el flujo de edición, validación y guardado de OP-07. La barra de selección debe dejar libre el asa, también en móvil. Una persona nueva debe poder dibujar un muro recto desde el plano de ejemplo, curvarlo, verlo en 3D, enderezar, deshacer y rehacer, guardar y reabrir la forma final. Entregar una URL de prueba humana que acredite el SHA y el estado de activación.
+
+### 7.2 StoryLayersV1 · Guiar de la variante a la descarga
+
+**Hallazgo en 0e7aff2d.** P10 invita a «Explicar el cambio» aunque falte la variante. El diálogo exige salir y buscar Proyectos. La creación y el comparador técnico desvían el recorrido y el editor carece de una vuelta contextual. La prueba humana sí llegó a detectar **Baldosa 800 → Moqueta** en el salón, con superficie y distribución conservadas, y descargó dos PNG y su manifiesto. [Candidata revisada](https://github.com/Juanmaes83/floorplan-3d/commit/0e7aff2d4d816b381bb3171524d038abcd319f64)
+
+**Resultado.** Mostrar desde la propia ficha P10 tres pasos visibles **Crear y editar variante → Revisar el cambio → Descargar para el cliente**. Dar a la ficha un título claro, como **Historia del cambio**, y elegir su acción principal por estado:
+
+- Si falta la variante, ofrecer **Crear variante** en P10 y abrirla en Diseñar, identificada en la cabecera, con el original conservado.
+- Si la variante guardada es igual al original, explicar **«Variante creada. Edita algo para mostrar el primer cambio»** y ofrecer **Editar variante**, también desde el comparador si se ha llegado por esa ruta.
+- Tras guardar, mantener **Volver a la historia** visible y recuperar el mismo original, variante y capítulo cuando exista. Si hay diferencias guardadas, el comparador puede ofrecer **Preparar historia para el cliente** con ese mismo par. Mantener allí la holgura y las comprobaciones técnicas.
+- Aplicar un patrón de vuelta contextual a las pantallas internas afectadas. Al salir de Diseñar se recupera la historia y al cerrar la historia se recuperan ficha, posición y foco de Entregar. Usar nombres de proyecto coherentes y mostrar claramente cuál se está editando.
+- En la revisión, indicar el siguiente paso y el progreso de imágenes, por ejemplo **«Revisión guardada · 0 de 2 imágenes listas»**. Dar paso a **Previsualizar como cliente** y **Descargar para el cliente** cuando corresponda. Explicar qué incluye el archivo y el motivo de cualquier acción bloqueada. Una revisión obsoleta indica cómo volver a preparar la entrega.
+
+**Aceptación.** Una persona que usa RUBIK por primera vez completa el recorrido desde P10 y abre la entrega descargada sin instrucciones externas. Probar sin variante, variante idéntica, cambio guardado, cancelación, vuelta contextual, imágenes pendientes y revisión obsoleta, en escritorio y móvil.
+
+### 7.3 StoryLayersV1 · Primera plantilla comercial personalizable
+
+**Hallazgo.** La exportación humana relata la comparación en términos internos y deja sin explicar la propuesta. Los PNG muestran huellas de revisión en el cuerpo de la lámina y una frase termina en «la misma esca». El exportador trunca la narrativa a 120 caracteres y la dibuja en una línea. Conservar los datos verificables, corregir el ajuste de texto y elevar la presentación al estándar de un estudio profesional.
+
+**Mi estudio define la identidad. Cada entrega define la propuesta.** StoryLayers es la primera plantilla completa del sistema común. Reusar la identidad y firma de Mi estudio, con los campos que corresponden al formato y control de qué aparece en cada entrega. El profesional puede configurar nombre, estudio, logotipo, contacto y firma cuando estén disponibles, y revisar su presentación antes de exportar. Llevar después el mismo sistema al resto de Entregar, adaptado al objetivo de cada formato y conservando las funciones existentes.
+
+| Pregunta del cliente | Contenido de la propuesta |
+| --- | --- |
+| **¿Quién propone el cambio?** | Identidad profesional confirmada desde Mi estudio y datos de contacto elegidos. |
+| **¿Qué propone y dónde?** | Título y resumen editables, cambio comprobado por RUBIK y vistas Estado actual / Propuesta que señalen la zona afectada. |
+| **¿Por qué y qué mejora busca?** | Criterio, motivos y objetivo escritos o confirmados por el profesional. Puede explicar opciones consideradas. |
+| **¿Cómo se haría y qué implica?** | Alcance, método, remates, dependencias y decisiones pendientes definidos por el profesional. Incorporar datos de obra solo cuando correspondan a la revisión. |
+| **¿Cuánto cuesta y qué incluye?** | Importes trazables del presupuesto guardado correspondiente y de las partidas vinculadas. Mostrar alcance, IVA, condición parcial y lo pendiente de valorar. Las cifras se mantienen ausentes cuando falte presupuesto o no sea comparable. |
+| **¿Qué debo decidir ahora?** | Cierre editable con la decisión o acción que el profesional propone al cliente. |
+
+**Notas y privacidad.** Permitir una nota general y notas vinculadas a estancia, imagen o capítulo, con edición, reordenación y previsualización. La visibilidad se elige explícitamente **Para el cliente / Interna**. Comprobar que las notas internas quedan fuera de todos los archivos para cliente, incluido cualquier manifiesto entregado. Mantener los identificadores, rutas de campos y huellas en la trazabilidad técnica y presentar al cliente los nombres, hechos y estados con lenguaje natural.
+
+**Aceptación de la plantilla.** Preparar propuesta, previsualizar como cliente, volver a editar y descargar. La previsualización y el archivo final deben coincidir en identidad, texto aprobado, notas visibles, imágenes y cifras. Ajustar texto al ancho y continuar en otra página o bloque cuando haga falta. Probar texto largo, títulos largos, ausencia de identidad o presupuesto, visibilidad de notas y una revisión obsoleta. Usar el caso **Baldosa 800 → Moqueta** como control: la primera lámina explica qué se propone y dónde, y muestra qué conserva el proyecto. El profesional aporta el motivo y la ejecución. Mostrar lo pendiente de definir o valorar con claridad. Entregar una muestra descargable que un cliente pueda entender sin explicación presencial, con una Preview identificada por SHA. Codex audita con el propietario antes de aprobar y antes de extender a las demás plantillas.
+
+### 7.4 Blender · Revisión de tapicería v3
+
+**Estado informado.** [Comparativas publicadas en 74e7da15](https://github.com/Juanmaes83/floorplan-3d/tree/74e7da15b0bee816bb9483be279a731b2eef6547/docs/qa/rodaje/tapiceria-v3) con receta del kit en f63b305e. Claude reporta mejoras de orientación por pieza, respuesta de la tela y sombra de contacto, 9/9 de tapicería y 14/14 de materiales. El tramo en movimiento sigue pendiente de evidencia y la receta requiere aprobación visual. La presentación inicial del sofá quedó rechazada.
+
+**Evidencia que falta para decidir.** Publicar la toma en movimiento y revisar estabilidad de trama, sombras y reflejos. Comparar plano general y detalle 1:1 con cámara, luz y exposición iguales. El tejido debe leerse en el encuadre normal por su acabado, volumen y comportamiento con la luz, además de mostrar detalle al ampliar. f5 es la misma vivienda sin giro y acredita orientación frente a f2 a 30°. Para acreditar reutilización en proyectos distintos, mostrar otra pieza tapizada en una escena realmente distinta a través del ZIP de Entregar, con la misma receta automática. El sillón ya aporta evidencia de una segunda forma dentro de la vivienda. Registrar el coste reportado y las limitaciones del modelo, incluidas costuras y vivos. Si esas limitaciones impiden alcanzar la calidad, acotar el cambio de activo y proponerlo como decisión separada. Mantener el MP4 completo pendiente de aprobación visual del propietario.
