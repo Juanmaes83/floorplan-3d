@@ -97,3 +97,10 @@ Este corte se planifica después del rodaje actual. Su relación con los gestos 
    Contrato U10 actualizado por esta decisión: Exterior detectado = `pend`, barra de Analizar 0 % en el ejemplo.
 Pruebas locales: `presupuestar-analizar-corte2` 2/2 (escritorio y móvil), `presupuestar-analizar-estandar` 3/3,
 `perla-semaforo` 2/2, `professional-workspace` (Point9) 17/17.
+
+
+## Aprobación humana · 27/11/2026
+
+El propietario revisó y aprobó la Preview de §5.3 con las correcciones publicadas del segundo corte. Siguen pendientes las imágenes de fichas, los estados e inventario del segundo corte, su regresión completa y el contraste de Point9 contra la base. La edición manual de altura libre sigue como decisión separada.
+
+[Preview revisada](https://floorplan-3d-54812ljcx-juanma-espinosas-projects.vercel.app/) · SHA de la aplicación: `7a5db569b39bbc339f4dbefaf090fdca65934435`. Esta aprobación corresponde a la revisión humana del corte y no equivale a CI, fusión ni activación.
