@@ -26,7 +26,7 @@
   //    writer confirms a changed 2.x project (saveGate). Integrating the code does NOT activate it.
   //  - 'active': only by changing OP07_RELEASE in this file (an authorized code change). A test origin (Node, 127.0.0.1,
   //    localhost, f0-2b.localhost) may set globalThis.RUBIK_OP07_STATE for tests; a deployed host never can.
-  const OP07_RELEASE = 'integrated';
+  const OP07_RELEASE = 'active'; // SOLO PREVIEW de prueba humana (§7.1): no fusionar; la activación productiva la decide el propietario
   function op07State() {
     const host = root.location?.hostname, testable = !root.location || /^(127\.0\.0\.1|localhost|f0-2b\.localhost)$/.test(host || ''), o = root.RUBIK_OP07_STATE;
     return testable && (o === 'active' || o === 'integrated') ? o : OP07_RELEASE;
