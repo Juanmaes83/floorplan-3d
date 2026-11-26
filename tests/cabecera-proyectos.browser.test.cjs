@@ -39,6 +39,17 @@ test('§9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada
   await menu(page);const [chooser]=await Promise.all([page.waitForEvent('filechooser',{timeout:10000}),page.locator('#pmUpload').click()]);assert.ok(chooser);
   // Descargar proyecto JSON → descarga del archivo editable.
   await menu(page);const [dl]=await Promise.all([page.waitForEvent('download',{timeout:15000}),page.locator('#pmDownloadJson').click()]);assert.match(dl.suggestedFilename(),/\.json$/);
+  // Importar ese mismo JSON: el flujo existente lo abre como proyecto activo.
+  const jsonPath=await dl.path();const before=await active(page);await menu(page);
+  const [fc]=await Promise.all([page.waitForEvent('filechooser',{timeout:10000}),page.locator('#importJson').click()]);await fc.setFiles(jsonPath);
+  await page.waitForFunction(()=>!document.querySelector('dialog[open]')||document.querySelector('dialog[open]').id!=='projectsDialog',null,{timeout:15000});await page.waitForTimeout(800);
+  const after=await active(page);assert.ok(after&&after.id,'tras importar hay un proyecto activo');
+  // «Exportar diseño» = solo salidas; lo demás en «Más», agrupado por tarea.
+  assert.match(await page.locator('#perlaFile > summary').innerText(),/Exportar diseño/);
+  const outs=await page.locator('#perlaFile .menu-pop').evaluate(p=>[...p.querySelectorAll('button')].map(b=>b.id).filter(Boolean));
+  for(const id of ['territoryOpen','solarOpen','reviewNotesBtn','brandManage','clearAll','reset','photoReformMenu','importJson'])assert.ok(!outs.includes(id),id+' no es una salida');
+  for(const id of ['exportPng','openSheet','exportDxf'])assert.ok(outs.includes(id),id+' es una salida');
+  assert.deepEqual(await page.locator('#perlaMore .perla-more-group').evaluateAll(g=>g.map(x=>x.dataset.group)),['ctx','del','des']);
   // Crear copia (del ejemplo) → proyecto propio con id independiente; el nombre de la cabecera cambia.
   const a0=await active(page);await menu(page);await page.locator('#pmCopy').click();await page.waitForFunction(id=>FloorPlanApp.entryInfo()?.id!==id,a0.id,{timeout:15000});
   const a1=await active(page);assert.notEqual(a1.id,a0.id,'id independiente');assert.equal(a1.variantOf,null,'una copia NO es una variante');

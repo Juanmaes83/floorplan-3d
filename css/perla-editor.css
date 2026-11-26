@@ -611,3 +611,8 @@ body.perla .perla-r2:has(#storyReturn:not([hidden])) #viewSeg>span:first-child:n
 body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:150px}
 /* §9 · Duplicados del menú de proyecto: conservan id y manejador, no se muestran dos veces. */
 body.perla .perla-projpop .perla-pm-dup,body.perla .perla-projpop .perla-pm-dup-btn{display:none!important}
+
+/* §9 · Grupos con título en «Más»: acciones junto a la tarea a la que pertenecen. */
+body.perla .perla-more .perla-more-group{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--perla-line);padding-top:4px;margin-top:4px}
+body.perla .perla-more .perla-more-title{margin:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted,#5c544a)}
+body.perla .perla-more .perla-more-group>button{justify-content:flex-start;text-align:start;width:100%;min-height:40px}

@@ -109,7 +109,13 @@
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);
  const fileMenu=$$('header details.menu').find(d=>d.querySelector('#exportPng'));
- if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');}
+ if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');
+  // §9 · «Exportar diseño» = solo salidas (imagen/captura 3D, lámina, ficha de superficies, DXF, JSON). Lo demás va junto a
+  // su tarea: crear proyecto desde foto → menú de proyecto; contexto, entrega y acciones de diseño → «Más», en grupos con título.
+  // Mismos ids y manejadores (las pruebas y atajos que abren su menú siguen funcionando).
+  const photo=$('#photoReformMenu');if(photo)pmMore.append(photo);
+  const groups=[['ctx',tx('Contexto del proyecto','Project context','项目环境'),['territoryOpen','solarOpen']],['del',tx('Entrega','Delivery','交付'),['reviewNotesBtn','brandManage']],['des',tx('Diseño','Design','设计'),['clearAll','reset']]];
+  for(const [k,title,ids] of groups){const g=el('div',{class:'perla-more-group',role:'group','data-group':k},morePop);const h=el('p',{class:'perla-more-title'},g);h.textContent=title;g.setAttribute('aria-label',title);for(const id of ids){const b=$('#'+id);if(b)g.append(b);}if(!g.querySelector('button'))g.remove();}}
  // «Guardar proyecto JSON» es la descarga: su entrada visible es «Descargar proyecto JSON» del menú de proyecto.
  move('#exportJsonQuick',pmMore);$('#exportJsonQuick')?.classList.add('perla-pm-dup-btn');
  const view=move('#viewSeg',r2);
@@ -142,12 +148,14 @@
   bar.setAttribute('aria-valuenow',String(g.pct));bar.querySelector('i').style.width=g.pct+'%';bar.setAttribute('aria-label',tx('Progreso del recorrido','Journey progress','进度'));
   tasks.innerHTML=`${svg('list',16)}<span>${tx('Tareas del proyecto','Project tasks','项目任务')}</span>${svg('chev',14)}`;
   // Acción principal = la acción real de la tarea actual (`guidePrimary`): mismo texto, mismo estado, mismo efecto.
-  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){const t=gp.textContent.trim(),is3d=/^(Abrir 3D|Open 3D|打开 3D)$/.test(t);primary.textContent=is3d?tx('Revisar en 3D (paso)','Review in 3D (step)','在 3D 中检查（步骤）'):t;primary.dataset.task3d=is3d?'1':'';primary.disabled=gp.disabled;primary.title=is3d?tx('Abre la misma escena 3D y marca como hecho el paso «Revisa la distribución en 3D». «Escena 3D» solo cambia la vista, sin marcar el paso.','Opens the same 3D scene and marks the step «Review the layout in 3D» as done. «3D scene» only switches the view, without marking the step.','打开同一 3D 场景并将“在 3D 中检查布局”标记为完成。“3D 场景”仅切换视图。'):(gp.title||'');}
+  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){const t=gp.textContent.trim(),is3d=/^(Abrir 3D|Open 3D|打开 3D|Revisar en 3D|Review in 3D|在 3D 中检查)$/.test(t);primary.textContent=is3d?tx('Revisar en 3D (paso)','Review in 3D (step)','在 3D 中检查（步骤）'):t;primary.dataset.task3d=is3d?'1':'';primary.disabled=gp.disabled;primary.title=is3d?tx('Abre la misma escena 3D y marca como hecho el paso «Revisa la distribución en 3D». «Escena 3D» solo cambia la vista, sin marcar el paso.','Opens the same 3D scene and marks the step «Review the layout in 3D» as done. «3D scene» only switches the view, without marking the step.','打开同一 3D 场景并将“在 3D 中检查布局”标记为完成。“3D 场景”仅切换视图。'):(gp.title||'');}
   if(present){present.textContent=tx('Presentar vivienda','Present the home','展示住宅');present.insertAdjacentHTML('afterbegin',svg('present',16));}
   if(impSum){impSum.innerHTML=svg('chev',16);impSum.setAttribute('aria-label',tx('Más formas de importar o empezar','More ways to import or start','更多导入或开始方式'));impSum.title=impSum.getAttribute('aria-label');}impWrap.setAttribute('aria-label',tx('Importar','Import','导入'));
-  const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Archivo','File','文件')}</span>${svg('chev',14)}`;
+  const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Exportar diseño','Export design','导出设计')}</span>${svg('chev',14)}`;
+  for(const [k,es,en,zh] of [['ctx','Contexto del proyecto','Project context','项目环境'],['del','Entrega','Delivery','交付'],['des','Diseño','Design','设计']]){const t=morePop.querySelector(`[data-group="${k}"] .perla-more-title`);if(t)t.textContent=tx(es,en,zh);}
   help.setAttribute('aria-label',tx('Ayuda y atajos','Help and shortcuts','帮助与快捷键'));help.title=help.getAttribute('aria-label');moreSum.setAttribute('aria-label',tx('Más opciones','More options','更多选项'));
   copyBtn?._perlaLabel?.();paintProject();paintProjectMenu();
+  {const ph=$('#photoReformMenu');if(ph&&!pmMore.contains(ph))pmMore.append(ph);}
  }
  primary.onclick=()=>$('#guidePrimary')?.click();
  function setGuide(open,{focus=true}={}){

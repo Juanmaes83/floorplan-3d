@@ -112,10 +112,10 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  if(!process.env.THREE_LOCAL_DIR)return t.skip('THREE_LOCAL_DIR is required for 3D');
  const c=await open(t,viewport,{three:true}),{page,press,guide}=c;await press('#welcomeExample');
  await press('#tgLib');assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'build','the furnished example does not decide the person wants to furnish');await c.closeDrawers();
- let g=await guide();assert.equal(g.primary,'Abrir 3D');
+ let g=await guide();assert.equal(g.primary,'Revisar en 3D');
  // Opening 3D keeps SwiftShader busy: the press that starts it gets the long 3D timeout.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
- g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi copia');
+ g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Revisar en 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi copia');
  assert.equal(await page.locator('#modes3d').isVisible(),true,'«Vista aérea / Recorrer» visible in the guided header in 3D');await c.shot('t2-example-3d');
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
@@ -125,7 +125,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',null,{timeout:300000});
  await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:300000});await page.waitForTimeout(800);
- g=await guide();assert.notEqual(g.primary,'Abrir 3D','a presented home is not asked to be opened in 3D');assert.notEqual(g.primary,'Ver en 3D');
+ g=await guide();assert.notEqual(g.primary,'Revisar en 3D','a presented home is not asked to be opened in 3D');assert.notEqual(g.primary,'Ver en 3D');
  // Recorded apart from the guide entry, which a presentation restores exactly.
  const ev=await page.evaluate(()=>{const all=JSON.parse(localStorage.getItem('rubik-sota-journey-v1')||'{}'),r=FloorPlanGuide.revision(FloorPlanApp.project);return Object.values(all).some(e=>e.presented===r);});assert.equal(ev,true,'this version is recorded as presented');
  await c.shot('t6-after-presenting');assert.deepEqual(c.errors,[]);

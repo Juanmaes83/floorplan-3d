@@ -54,3 +54,13 @@ proyecto JSON» en la fila 2; deshacer/rehacer en la fila 1. Después: lo indica
   restablecer): ¿mantener ese nombre o renombrarlo?
 
 **Checkpoint de reanudación:** [CHECKPOINT-REANUDACION.md](CHECKPOINT-REANUDACION.md)
+
+## Avance 27/11 (instrucción del propietario: «Exportar diseño», acciones junto a su tarea, «Escena 3D» vs «Revisar en 3D»)
+- Archivo pasa a **«Exportar diseño ▾»** solo con salidas: imagen/captura 3D, lámina, ficha de superficies, DXF y JSON.
+- Lo demás junto a su tarea (mismos ids y manejadores): **Reformar desde fotografía** → menú de proyecto (crea un proyecto);
+  **«Más» (…)** con grupos titulados: *Contexto del proyecto* (contexto territorial, orientación y solar), *Entrega*
+  (observaciones del cliente, tu marca), *Diseño* (vaciar distribución, restablecer). Propuesta: el propietario puede reubicar.
+- El paso del recorrido se llama **«Revisar en 3D»** en su origen (guía) y **«Revisar en 3D (paso)»** en la fila 2: marca hecho
+  el paso; **«Escena 3D»** solo cambia la vista. Contrato `journey-orientation` actualizado por este cambio de nombre.
+- Prueba `cabecera-proyectos` ampliada: importar de verdad el JSON descargado; «Exportar diseño» solo con salidas; grupos de «Más».
+  Local 2/2. Regresión completa: pendiente (tras la del §5.3).
