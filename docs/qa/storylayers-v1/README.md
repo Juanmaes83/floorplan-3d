@@ -49,7 +49,7 @@ Fuera de alcance (posterior, según el encargo): vídeo y narración.
 |---|---|
 | `tests/story-layers-core.test.cjs` | 5/5 (cifras contra ficha independiente, ausentes, revisión profesional, obsolescencia, manifiesto) |
 | `tests/story-layers.browser.test.cjs` | 4/4 (recorrido completo, obsolescencia y cancelar, ES 390×844, EN 1440×900) |
-| Regresión de Entregar y PERLA (`perla-return`, `professional-workspace`, `e2-comparativas`, `no-chinese-display`) | 40/40 en Chromium sobre el árbol de `9aa99a40` (ejecución limpia, sin baterías en paralelo) |
+| Regresión de Entregar y PERLA (`perla-return`, `professional-workspace`, `e2-comparativas`, `no-chinese-display`) | 40/40 en Chromium sobre `9aa99a40` y de nuevo **40/40 sobre `c805dc2f`** (plantilla §7.3 incluida; [TAP](regresion-entregar-perla-c805dc2f.tap)), ejecuciones limpias sin baterías en paralelo |
 
 ## Límites declarados
 
