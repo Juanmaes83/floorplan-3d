@@ -1,5 +1,9 @@
 # StoryLayersV1 · «Explicar el cambio al cliente» (Entregar › P10) · handoff
 
+> **APROBADO por el propietario (revisión humana 26/11/2026)** en la Preview revisada: StoryLayersV1, incluido el recorrido
+> desde P10 y la entrega comercial (§7.2, §7.3, §8.3; rama `claude/storylayers-v1`, `3d0f27b9`). La integración y sus
+> comprobaciones siguen su proceso normal (no implica PR, fusión ni activación).
+
 **Rama:** `claude/storylayers-v1` · **base:** master `dacb5d39` · **encargo:** §8 de
 [`ENCARGO-…-BLENDER-STORYLAYERS.md` @ `121ad35a`/`94f5596a`] y aclaraciones del propietario. El documento externo
 «Auditoría de referencias» **no estaba disponible** en el repositorio ni en la sesión: no se ha usado y queda registrado.
