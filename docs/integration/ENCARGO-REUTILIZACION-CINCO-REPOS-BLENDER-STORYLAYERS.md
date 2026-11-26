@@ -165,9 +165,15 @@ Reutilizar el Asistente IA y los módulos de apoyo ya disponibles en RUBIK. El p
 
 ### 8.3 Primera aceptación en StoryLayers
 
+**Estado al 26/11/2026.** El propietario aprobó StoryLayersV1 como primera plantilla comercial completa de RUBIK, incluido el recorrido desde P10, la propuesta personalizable y la asistencia demostrada en §§7.2, 7.3 y 8.3. La aprobación humana consta en el [handoff de StoryLayersV1](https://github.com/Juanmaes83/floorplan-3d/blob/cd694e88/docs/qa/storylayers-v1/README.md).
+
 Desde P10, con original y variante guardados, preparar una propuesta que reutilice un dato comprobable y una imagen disponible de la revisión correcta. Acreditar el uso de un vídeo existente cuando el formato lo admita. Cargar los datos de un cliente sintético, aplicar la identidad de Mi estudio y usar el asistente para preparar una nota. Demostrar la edición, aceptación y descarte de la sugerencia, la conservación del contexto al cerrar la ayuda y la exclusión de una nota interna del archivo para cliente. Comprobar que los datos y medios obsoletos o ausentes reciben el estado correspondiente. Verificar que el archivo final coincide con lo previsualizado y conserva lo aprobado por el profesional.
 
 Entregar a Codex la ruta desde la interfaz normal, el SHA, una muestra descargable y la evidencia de escritorio y móvil. Documentar qué módulos y componentes se reutilizaron, qué pasos manuales se ahorran y qué queda preparado para extender a las demás plantillas. Los ensayos de servicios externos siguen sus autorizaciones vigentes.
+
+### 8.4 Pendiente transversal en el resto de Entregar
+
+Extender el patrón aprobado en StoryLayers a las demás plantillas y dejarlo identificado como trabajo pendiente de §§8.1 y 8.2. Inventariar cada plantilla y registrar dónde aporta valor la asistencia para preparar, redactar y revisar, qué datos y medios del proyecto puede reutilizar y qué campos del profesional y del cliente admite su formato. Aplicar la identidad y la firma desde **Mi estudio**, permitir al profesional elegir qué información se muestra y mantener privadas las notas internas. Comprobar en la vista previa que los recursos corresponden a la revisión correcta y que el resultado para el cliente coincide con lo revisado. Acordar el orden de extensión antes de abordar las plantillas y acreditar cada recorrido desde su ficha de Entregar.
 
 ## 9. Cola posterior de UI/UX · Cabecera y gestión de proyectos
 
@@ -188,3 +194,14 @@ Entregar a Codex la ruta desde la interfaz normal, el SHA, una muestra descargab
 **Conexiones y navegación.** Inventariar todas las entradas del menú **Archivo** y trasladar o conservar cada una con un destino claro; no perder importación, exportación, proyectos ni controles existentes. El menú no debe ser una lista decorativa: cada entrada acciona el flujo real y vuelve con el contexto correcto, también con teclado. En edición de variante iniciada desde P10, mostrar una vuelta principal **Volver a la historia** que recupere la misma propuesta y capítulo; evitar duplicarla con una vuelta genérica y con el aviso flotante. Si **Escena 3D** y **Abrir 3D** tienen el mismo destino, unificar la entrada; si cumplen tareas distintas, conservarlas y nombrar explícitamente ambas. **Presentar vivienda** debe seguir llevando a su presentación, y **Tareas del proyecto** a las tareas reales. Comprobar los objetivos antes de fusionar controles.
 
 **Aceptación.** Una persona que entra por primera vez puede identificar el proyecto activo, importar un plano, abrir otro proyecto, crear una copia independiente, crear una variante vinculada, descargar JSON y volver desde la variante a P10 sin instrucciones externas. Probar el proyecto de ejemplo, una variante y un proyecto importado; guardado local frente a descarga; pantalla estrecha, teclado, foco y lector de pantalla. Registrar un inventario antes/después de todos los controles de ambas filas y de Archivo, capturas de escritorio y móvil, SHA y recorrido real. El propietario revisa la candidata antes de integrar.
+
+## 10. Render AI · Presentar el valor de la reforma desde fotografía
+
+**Añadido a la cola el 26/11/2026.** Mejorar la presentación comercial y la entrada al flujo existente **Reformar desde fotografía (FOT-01)**. Dar prioridad a inmobiliaria, interiorismo y reformas. Usar Room Declutter como referencia para explicar el beneficio con casos de uso. La implementación parte de las capacidades y recursos de RUBIK.
+
+- **Inmobiliaria.** «Muestra cómo se vería el salón despejado» para que el comprador aprecie el espacio.
+- **Interiorismo y reformas.** «Enseña una alternativa sobre la foto real» para que el cliente pueda valorar la propuesta antes de decidir.
+
+Mostrar cada caso con un ejemplo propio de antes y después. Identificar la foto original, la alternativa ilustrativa y qué puede revisar el profesional con su cliente. Desde cada caso, llevar al flujo existente con una acción clara. Si la experiencia disponible es una simulación, indicarlo junto al ejemplo y al iniciar el flujo. La generación real conserva las condiciones vigentes de FOT-01.
+
+**Aceptación.** En escritorio y móvil, una persona entiende qué trabajo resuelve cada caso, distingue el original de la propuesta e identifica el siguiente paso desde la misma pantalla. Verificar el recorrido con ejemplos propios y textos que describan lo que está disponible en la versión revisada.
