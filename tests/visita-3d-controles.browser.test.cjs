@@ -71,3 +71,88 @@ test('§5.1 · móvil 390×844 táctil: joystick, un miniplano, sin solapes, sin
   assert.doesNotMatch(await pop.evaluate(()=>document.body.innerText),CJK);assert.deepEqual(w.errors,[]);
  }finally{await ctx.close();}
 });
+
+/* §5.1 · Revisión humana 26/11 (b1fc6248): barra utilizable antes de empezar y en pausa, atenuada y sin clics con el ratón
+   capturado; sin avisos solapados; las opciones solo de Vista aérea lo dicen y llevan a ese modo; ningún botón visible sin
+   respuesta; «Fachadas» completo dentro de la ventana (ratón y teclado); pausar/reanudar varias veces sin salto de cámara. */
+const BAR='#stage .perla-canvas-top';
+const barState=p=>p.evaluate(sel=>{const top=document.querySelector(sel);return [...top.querySelectorAll('button,select,input')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden').map(b=>{
+ const r=b.getBoundingClientRect(),cx=Math.min(Math.max(r.x+r.width/2,top.getBoundingClientRect().left+2),top.getBoundingClientRect().right-2),h=document.elementFromPoint(cx,r.y+r.height/2);
+ const reach=getComputedStyle(b).pointerEvents!=='none'&&getComputedStyle(b.closest('.perla-canvas-top>*')||b).pointerEvents!=='none';
+ return {label:(b.textContent.trim()||b.id).replace(/\s+/g,' ').slice(0,40),reach,hit:!!h&&(h===b||b.contains(h)||top.contains(h)),inside:r.top>=0&&r.bottom<=innerHeight,note:b.dataset.modeNote||null,modes:!!b.closest('#modes3d'),dim:+getComputedStyle(b.closest('.perla-canvas-top>*')||b).opacity<.5};});},BAR);
+const hintsOverlap=p=>p.evaluate(()=>{const vis=[...document.querySelectorAll('#hint3d,#walkLockHint')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&!e.hidden&&getComputedStyle(e).opacity!=='0');
+ const boxes=vis.map(e=>e.getBoundingClientRect()),map=document.querySelector('#deliveryMap')?.getBoundingClientRect(),hit=(a,b)=>a&&b&&a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
+ return {visible:vis.map(e=>e.id),overlap:boxes.length>1&&hit(boxes[0],boxes[1]),underMap:boxes.some(b=>hit(b,map))};});
+for(const viewport of [{width:1440,height:900},{width:1024,height:560}])
+test(`§5.1 · barra en Recorrer: antes, capturada, en pausa; opciones de Vista aérea; Fachadas; pausar ×3 (${viewport.width}x${viewport.height})`,{timeout:300000},async()=>{
+ const {ctx,pop,w}=await visit({viewport});const tag=`${viewport.width}`;
+ try{
+  // Antes de empezar: toda la barra visible y alcanzable; la tarjeta no queda tapada.
+  let bar=await barState(pop);assert.ok(bar.length>=12,'la barra entera se ve: '+bar.length);
+  for(const b of bar){assert.ok(b.reach&&b.hit,'alcanzable antes de empezar: '+b.label);assert.ok(b.inside,'dentro de la ventana: '+b.label);}
+  const startHit=await pop.evaluate(()=>{const r=document.getElementById('walkStart').getBoundingClientRect(),h=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return h?.id==='walkStart'||!!h?.closest?.('#walkStart');});
+  assert.ok(startHit,'«Activar mirada con el ratón» no queda tapado por la barra');
+  const notes=bar.filter(b=>b.note).map(b=>b.label);
+  for(const n of ['Muros completos','Muros seccionados','Exterior','Detalle arquitectónico','Nombres'])assert.ok(notes.some(l=>l.startsWith(n)),'«'+n+'» indica que es de Vista aérea');
+  assert.ok(notes.every(()=>true)&&bar.filter(b=>b.note).every(b=>b.note==='Vista aérea'));
+  // Capturado: la barra se atenúa y no recibe clics; un solo aviso, sin solapes.
+  await pop.click('#walkStart');await pop.waitForFunction(()=>!!document.pointerLockElement&&document.body.dataset.walkLock==='on');
+  bar=await barState(pop);for(const b of bar.filter(b=>!b.modes))assert.ok(!b.reach&&b.dim,'con el ratón capturado no aparenta poder pulsarse: '+b.label);
+  let h=await hintsOverlap(pop);assert.deepEqual(h.visible,['walkLockHint'],'un único aviso con el ratón capturado');assert.equal(h.underMap,false);
+  if(shots)await pop.screenshot({path:`${shots}/5-capturado-${tag}.png`});
+  // Pausar y reanudar tres veces: misma cámara.
+  let p=await pose(pop);
+  for(let i=0;i<3;i++){
+   await pop.keyboard.press('Escape');await pop.waitForFunction(()=>!document.pointerLockElement&&document.getElementById('walkOverlay').classList.contains('paused'));
+   assert.equal(await pose(pop),p,'pausa '+(i+1)+' conserva la cámara');
+   assert.equal(await pop.evaluate(()=>getComputedStyle(document.getElementById('walkOverlay')).backgroundColor),'rgba(0, 0, 0, 0)','la pausa no oscurece la escena');
+   bar=await barState(pop);for(const b of bar)assert.ok(b.reach&&b.hit&&b.inside,'en pausa se puede usar: '+b.label);
+   h=await hintsOverlap(pop);assert.equal(h.overlap,false);assert.equal(h.underMap,false,'el aviso no queda bajo el miniplano');
+   if(i===0){
+    // Controles del recorrido, directos en pausa y sin recapturar: Noche, Muebles, luz, entorno, plano, Asistente.
+    for(const sel of ['[data-t="night"]','[data-t="furn"]']){const b=pop.locator(sel);const on=await b.evaluate(e=>e.classList.contains('on'));await b.click();await pop.waitForTimeout(150);
+     assert.notEqual(await b.evaluate(e=>e.classList.contains('on')),on,sel+' responde en Recorrer');await b.click();assert.equal(await locked(pop),false);}
+    await pop.locator('#sun').fill('15');assert.equal(await pop.locator('#sunT').innerText(),'15:00','la luz responde');
+    const env=pop.locator('#env3d');const v0=await env.inputValue();const opts=await env.evaluate(s=>[...s.options].map(o=>o.value));await env.selectOption(opts.find(o=>o!==v0));await env.selectOption(v0);
+    assert.equal(await pose(pop),p,'usar los controles del recorrido no mueve la cámara');assert.equal(await locked(pop),false);
+    const fab=pop.locator('#assistantFab');await fab.click();await pop.waitForTimeout(400);assert.equal(await locked(pop),false,'el Asistente se abre sin recapturar');await pop.keyboard.press('Escape');await pop.waitForTimeout(300);
+    if(shots)await pop.screenshot({path:`${shots}/6-pausa-barra-${tag}.png`});
+   }
+   await pop.click('#walkStart');await pop.waitForFunction(()=>!!document.pointerLockElement);assert.equal(await pose(pop),p,'reanudar '+(i+1)+' sin salto de cámara');
+  }
+  await pop.keyboard.press('Escape');await pop.waitForFunction(()=>!document.pointerLockElement);
+  // Opción de Vista aérea pulsada en Recorrer: pasa a Vista aérea y se aplica (ningún botón visible sin respuesta).
+  await pop.locator('[data-cut="1.2"]').click();await pop.waitForFunction(()=>document.body.dataset.mode3d==='orbit',null,{timeout:15000});
+  await pop.waitForFunction(()=>document.querySelector('[data-cut="1.2"]').classList.contains('on'));
+  assert.equal(await pop.locator('[data-cut="1.2"]').evaluate(b=>b.dataset.modeNote||null),null,'en Vista aérea ya no lleva la nota');
+  await pop.locator('[data-cut="2.8"]').click();await pop.waitForFunction(()=>document.querySelector('[data-cut="2.8"]').classList.contains('on'));
+  // Fachadas: completo dentro de la ventana, con teclado y con ratón; se cierra con Esc y devuelve el foco.
+  await pop.locator('#architecturalQuality').click();await pop.waitForFunction(()=>{const m=document.getElementById('facadeV2Menu');return m&&!m.hidden;},null,{timeout:30000});
+  const menu=pop.locator('#facadeV2Menu');await menu.focus();await pop.keyboard.press('Enter');await pop.waitForFunction(()=>!document.getElementById('facadeV2Pop').hidden);
+  const fp=await pop.evaluate(()=>{const p=document.getElementById('facadeV2Pop'),r=p.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,vh:innerHeight,vw:innerWidth,clip:p.scrollHeight-p.clientHeight};});
+  assert.ok(fp.top>=0&&fp.bottom<=fp.vh&&fp.left>=0&&fp.right<=fp.vw,'Fachadas entero dentro de la ventana: '+JSON.stringify(fp));assert.ok(fp.clip<=1,'todas sus opciones a la vista');
+  const sw=pop.locator('#facadeV2Toggle');await sw.focus();assert.equal(await pop.evaluate(()=>document.activeElement.id),'facadeV2Toggle','su opción se alcanza con teclado');
+  if(shots)await pop.screenshot({path:`${shots}/7-fachadas-${tag}.png`});
+  await pop.keyboard.press('Escape');await pop.waitForFunction(()=>document.getElementById('facadeV2Pop').hidden);assert.equal(await pop.evaluate(()=>document.activeElement.id),'facadeV2Menu');
+  await menu.click();await pop.waitForFunction(()=>!document.getElementById('facadeV2Pop').hidden);await menu.click();await pop.waitForFunction(()=>document.getElementById('facadeV2Pop').hidden);
+  // Volver a Recorrer y salir de la visita.
+  await pop.getByRole('button',{name:'Recorrer',exact:true}).click();await pop.waitForFunction(()=>document.body.dataset.mode3d==='walk');
+  await pop.click('#deliveryExit');await pop.waitForFunction(()=>!document.documentElement.classList.contains('delivery-in-visit'));
+  assert.doesNotMatch(await pop.evaluate(()=>document.body.innerText),CJK);assert.deepEqual(w.errors,[]);
+ }finally{await ctx.close();}
+});
+
+test('§5.1 · móvil 390×844: Fachadas en Vista aérea entero dentro de la pantalla; opciones de Vista aérea señaladas en Recorrer',{timeout:240000},async()=>{
+ const {ctx,pop,w}=await visit({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ try{
+  assert.equal(await pop.evaluate(()=>document.body.dataset.mode3d),'walk');
+  await pop.getByRole('button',{name:'Vista aérea',exact:true}).first().tap();await pop.waitForFunction(()=>document.body.dataset.mode3d==='orbit',null,{timeout:15000});
+  await pop.locator('#architecturalQuality').scrollIntoViewIfNeeded();await pop.locator('#architecturalQuality').tap();
+  await pop.waitForFunction(()=>{const m=document.getElementById('facadeV2Menu');return m&&!m.hidden;},null,{timeout:30000});
+  await pop.locator('#facadeV2Menu').scrollIntoViewIfNeeded();await pop.locator('#facadeV2Menu').tap();await pop.waitForFunction(()=>!document.getElementById('facadeV2Pop').hidden);
+  const fp=await pop.evaluate(()=>{const p=document.getElementById('facadeV2Pop'),r=p.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,vh:innerHeight,vw:innerWidth};});
+  assert.ok(fp.top>=0&&fp.bottom<=fp.vh&&fp.left>=0&&fp.right<=fp.vw,'Fachadas dentro de la pantalla: '+JSON.stringify(fp));
+  if(shots)await pop.screenshot({path:shots+'/8-movil-fachadas.png'});
+  assert.ok(await pop.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=1));assert.deepEqual(w.errors,[]);
+ }finally{await ctx.close();}
+});

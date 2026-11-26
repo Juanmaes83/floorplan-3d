@@ -3106,10 +3106,10 @@ function init(){
   // Three.js publishes "lock" before its isLocked flag. Check held input on the queued frame.
   walkCtl.addEventListener('lock', () => {
     if (!walkLockRequested || !active || opt.mode !== 'walk'){ walkCtl.unlock(); return; }
-    $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; $('#walkLockHint').hidden = false;
+    $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; $('#walkLockHint').hidden = false; document.body.dataset.walkLock = 'on';
     walkClock.start(performance.now()); requestFrame();
   });
-  walkCtl.addEventListener('unlock', () => { walkLockRequested = false; resetWalkInput(); $('#walkLockHint').hidden = true;
+  walkCtl.addEventListener('unlock', () => { walkLockRequested = false; resetWalkInput(); $('#walkLockHint').hidden = true; delete document.body.dataset.walkLock;
     // §5.1: en pausa, los controles quedan libres al instante; la cámara conserva posición y orientación.
     if (opt.mode === 'walk'){ walkPaused = true; syncWalkTexts(); $('#walkOverlay').classList.add('paused'); $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
 
@@ -4857,7 +4857,10 @@ addEventListener('blur', resetWalkInput);
 document.addEventListener('visibilitychange', () => { if (document.hidden) resetWalkInput(); });
 
 /* ======================= 工具栏 ======================= */
-function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b => b.classList.toggle('on', b.dataset.mode === opt.mode)); }
+function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b => b.classList.toggle('on', b.dataset.mode === opt.mode)); syncAerialOnly(); }
+const AERIAL_ONLY = '[data-cut], #roofToggle, #architecturalQuality, #facadeV2Menu, [data-t="labels"]';
+function syncAerialOnly(){ document.body.dataset.mode3d = opt.mode; const note = L3('Vista aérea', 'Aerial view', '鸟瞰'), tip = L3('Solo en Vista aérea: al pulsarlo pasa a Vista aérea', 'Aerial view only: pressing it switches to Aerial view', '仅限鸟瞰：点击后切换到鸟瞰');
+  document.querySelectorAll(AERIAL_ONLY).forEach(b => { if (opt.mode === 'walk'){ b.dataset.modeNote = note; b.setAttribute('aria-description', tip); b.title = tip; } else if (b.dataset.modeNote){ delete b.dataset.modeNote; b.removeAttribute('aria-description'); b.removeAttribute('title'); } }); }
 function syncCutBtns(){ document.querySelectorAll('[data-cut]').forEach(b => b.classList.toggle('on', +b.dataset.cut === opt.cut)); }
 // The entry card must fit the scene it covers (a short laptop window leaves little room under the toolbars).
 function fitWalkCard(){ const o = $('#walkOverlay'), card = o.querySelector('.walk-card'); if (!o.offsetHeight) return; o.classList.remove('tight'); if (card.offsetHeight > o.clientHeight - 8) o.classList.add('tight'); }
@@ -4886,6 +4889,8 @@ function bindUI(){
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
   // §5.1: solo el botón explícito captura el ratón; pulsar la escena o la interfaz nunca lo recaptura.
   $('#walkStart').onclick = e => { e.stopPropagation(); startWalkInput(); };
+  // §5.1 · Opciones que solo actúan en Vista aérea: en Recorrer lo dicen y, al pulsarlas, pasan a Vista aérea y se aplican.
+  document.addEventListener('click', e => { const b = e.target.closest?.(AERIAL_ONLY); if (!b || opt.mode !== 'walk' || !active) return; setMode('orbit'); }, true);
   // Antes de empezar, toda la capa arranca el recorrido (contrato P08); en pausa solo la tarjeta recibe el clic y el cursor queda libre.
   $('#walkOverlay').onclick = () => { if (!walkPaused) startWalkInput(); };
   document.addEventListener('pointerlockerror', () => {
@@ -4896,7 +4901,7 @@ function bindUI(){
   syncWalkTexts();
   $('#vIso').onclick = () => { if (opt.mode === 'walk') setMode('orbit'); else flyTo(isoWhole()); };
   $('#vTop').onclick = () => { if (opt.mode === 'walk') setMode('orbit'); flyTo(topWhole()); };
-  document.querySelectorAll('[data-cut]').forEach(b => b.onclick = () => { if (opt.mode === 'walk') return; opt.cut = +b.dataset.cut; syncCutBtns(); sync(); });
+  document.querySelectorAll('[data-cut]').forEach(b => b.onclick = () => { opt.cut = +b.dataset.cut; syncCutBtns(); sync(); });
   document.querySelectorAll('#toggles3d .btn').forEach(b => b.onclick = () => {
     const k = b.dataset.t; opt[k] = !opt[k]; b.classList.toggle('on', opt[k]);
     if (k === 'furn'){ furnG.visible = opt.furn; levelsG?.traverse(o=>{if(o.userData.levelFurniture)o.visible=opt.furn;}); if (!opt.furn && ui.sel?.kind === 'furn') window.select(null); }
@@ -5141,7 +5146,7 @@ function renderDelivery(cam, w, h, corners){
   return {width:w, height:h, dataUrl:url, fill,attribution:territoryCapture?.attribution||[]};
 }
 
-function relang(){ syncWalkTexts(); if (inited) { buildLabels(); requestFrame(); } }
+function relang(){ syncWalkTexts(); syncAerialOnly(); if (inited) { buildLabels(); requestFrame(); } }
 
 // Product API for a reversible presentation. Diagnostic getters below remain read-only.
 function presentationCapture(){

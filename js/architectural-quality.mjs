@@ -44,7 +44,11 @@ export function mountArchitecturalQuality(view){
  pop.append(switchLabel,status,list);
  group.append(button,menu,output);document.body.append(pop);
  pop.setAttribute('aria-labelledby','facadeV2Menu');
- const place=()=>{const r=menu.getBoundingClientRect(),w=Math.min(380,innerWidth-24);pop.style.left=Math.max(12,Math.min(r.left,innerWidth-w-12))+'px';pop.style.top=(r.bottom+6)+'px';pop.style.width=w+'px';};
+ // §5.1 · Se abre hacia donde cabe (hacia arriba desde la barra inferior) y nunca sale de la ventana.
+ const place=()=>{const r=menu.getBoundingClientRect(),w=Math.min(380,innerWidth-24);pop.style.left=Math.max(12,Math.min(r.left,innerWidth-w-12))+'px';pop.style.width=w+'px';
+  const below=innerHeight-r.bottom-18,above=r.top-18;pop.style.maxHeight='none';const need=pop.scrollHeight;
+  if(need<=below||below>=above){pop.style.bottom='auto';pop.style.top=(r.bottom+6)+'px';pop.style.maxHeight=Math.max(120,below)+'px';}
+  else{pop.style.top='auto';pop.style.bottom=(innerHeight-r.top+6)+'px';pop.style.maxHeight=Math.max(120,above)+'px';}};
  const setOpen=open=>{pop.hidden=!open;menu.setAttribute('aria-expanded',String(open));if(open){place();update();}};
  menu.addEventListener('click',()=>setOpen(pop.hidden));
  pop.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();setOpen(false);menu.focus();}});

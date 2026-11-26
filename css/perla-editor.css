@@ -340,10 +340,18 @@ body.perla .perla-r1{grid-template-columns:minmax(max-content,1fr) auto minmax(m
 }
 
 /* La confirmación de entrada al paseo queda encima de la barra del lienzo. */
-body.perla #stage:has(#walkOverlay[style*="display: flex"]) .perla-canvas-top>:not(#modes3d){visibility:hidden}
+/* §5.1 · Antes de empezar y en pausa la barra sigue visible y utilizable (encima de la capa). Con el ratón capturado se
+   atenúa y no recibe clics: el aviso «Esc · Pausar y mostrar controles» dice cómo recuperarla. */
+body.perla[data-walk-lock="on"] #stage .perla-canvas-top>:not(#modes3d){opacity:.38!important;pointer-events:none!important}
+body.perla[data-walk-lock="on"] #stage #hint3d{visibility:hidden}
+/* Opciones solo de Vista aérea, en Recorrer: lo indican y al pulsarlas cambian de modo. */
+body.perla[data-mode3d="walk"] [data-mode-note]::after{content:" · " attr(data-mode-note);font-size:11px;font-weight:500;opacity:.75}
 /* …pero los modos 3D («Vista aérea» / «Recorrer») siguen a mano por encima del panel: con el paseo en pausa se puede
    volver a la vista aérea con el mismo botón de siempre (como en master, donde estaban en la cabecera). */
 body.perla #stage:has(#walkOverlay[style*="display: flex"]) .perla-canvas-top{z-index:60}
+body.perla #stage #walkOverlay.paused{background:transparent}
+/* En ventana baja la tarjeta del recorrido sube arriba: la barra, siempre completa (en varias filas), no la cruza. */
+@media (min-width:761px) and (max-height:700px){body.perla #stage #walkOverlay{align-items:flex-start;padding-top:64px}}
 
 /* El visor utiliza el alto del escenario, que PERLA calcula con su propia cabecera. */
 body.perla #stage #view3d{height:auto}

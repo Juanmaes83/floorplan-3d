@@ -140,3 +140,11 @@ html.delivery-client .delivery-map svg{height:210px;cursor:default;touch-action:
    Asistente en su propio espacio, encima de la barra de exploración y lejos de los controles. */
 html.delivery-in-visit #nav3d,html.delivery-in-visit #nav3dMap,html.delivery-in-visit #tgLib,html.delivery-in-visit #tgPanel,html.delivery-in-visit #mobileDock,html.delivery-in-visit body.perla #stage>#mobileDock{display:none!important}
 html.delivery-in-visit #stage #walkExit{bottom:calc(84px + env(safe-area-inset-bottom))}
+/* §5.1 · Los avisos de teclas usan el espacio libre a la derecha del miniplano: nunca quedan debajo de él. */
+@media (min-width:761px){
+  html.delivery-in-visit #stage:has(#deliveryMap:not([hidden])) :is(#hint3d,#walkLockHint){left:336px;right:12px;transform:none;margin:0 auto;width:fit-content;max-width:calc(100% - 348px)}
+}
+/* §5.1 · En la visita el panel de navegación del editor no se muestra: la barra no se desplaza por él y deja sitio al Asistente. */
+@media (min-width:761px){
+  html.delivery-in-visit body.perla.m3d #stage .perla-canvas-top{left:12px!important;max-width:calc(100% - 330px)!important}
+}
