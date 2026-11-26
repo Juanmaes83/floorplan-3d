@@ -1,0 +1,360 @@
+{
+ "frames": {
+  "0": {
+   "seconds": 605.8,
+   "sha256": "75283b3393b5abae4be54efa5b2f3df016c1716c86bc0fd76b08f9e165fe0cc9",
+   "peakRssBytes": 3790213120
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "entrega1440",
+ "resolution": [
+  2560,
+  1440
+ ],
+ "samples": 32,
+ "shot": "interior",
+ "light": "dia",
+ "inventario": [
+  {
+   "id": "obj_fixture-sofa",
+   "rol": "object",
+   "tipoExportado": "sofa",
+   "piezas": 14,
+   "distanciaM": 1.87,
+   "plano": "primer plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  }
+ ],
+ "fps": 24,
+ "frameCount": 48,
+ "declared": [
+  "Cycles CPU, 32 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 4 puntos empotrados de 70° (derivados)",
+  "suelos: 2 estancias con PBR CC0 a escala real y color medio = color del material del proyecto; sustituciones: [{\"estancia\": \"Cocina\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Estar\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}]",
+  "muros: solo relieve y rugosidad (color plano del proyecto) de «painted_plaster_wall» (CC0) en 24 piezas; el color es el del proyecto (sin cambio de tono)",
+  "vidrio físico: 0 materiales (IOR 1,45, liso); los rayos de sombra lo atraviesan para que entre el sol (recurso de visualización)",
+  "luz de ventana: 0 portales de luz en los huecos acristalados (recurso de visualización; guían el muestreo del cielo, no añaden energía)",
+  "mobiliario (APROXIMACIÓN VISUAL por tipo y pieza; el proyecto no identifica el material): {\"opening → carpinteria-lacada\": 1, \"opening-leaf → carpinteria-lacada\": 2, \"sofa → madera-oscura\": 4, \"sofa → tapiceria-tejido\": 10}",
+  "cara trasera oculta como en el visor en 12 materiales generados",
+  "cielo: HDRI CC0 «kloofendal_48d_partly_cloudy_puresky» 0,6, girado al azimut del sol capturado; el sol del visor se conserva",
+  "separación de contacto: 0 piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm; descartes: {\"cerradas_cara_trasera_oculta\": 10, \"mismo_plano_sin_solape_en_planta\": 0, \"solape_en_planta_sin_contacto\": 0} (detalle en materiales.contacto)",
+  "plano interior: travelling de 0.58 m hacia el centro de «Estar» a 1,35 m; holgura inicial 0.12 m"
+ ],
+ "materiales": {
+  "documento": "Material Tokens 1.0.0 (taxonomía 1.0.0): 3 asignaciones leídas",
+  "tapiceria": {
+   "piezas": [
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:31",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:32",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:33",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:34",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:35",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:36",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:37",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:38",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:39",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 14.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_fixture-sofa",
+     "tipo": "sofa",
+     "pieza": "object:obj_fixture-sofa:40",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -14.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    }
+   ],
+   "resumen": {
+    "tapiceria-tejido": 10
+   },
+   "objetos": [
+    "obj_fixture-sofa"
+   ]
+  },
+  "orden": [
+   "explícito",
+   "documentado del catálogo",
+   "aproximación por familia y pieza",
+   "reserva visible"
+  ],
+  "asignaciones": [
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_op10-008",
+     "estancia": "Cocina"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_op10-009",
+     "estancia": "Estar"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_fixture-sofa",
+     "tipoCatalogo": "sofa"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido": 10,
+      "madera-oscura": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   }
+  ],
+  "tokensSinReceta": [],
+  "integridad": {
+   "objetosComprobados": 61,
+   "cambiados": 0,
+   "soloContactoDeclarado": true,
+   "resultado": "geometría, dimensiones y posiciones intactas"
+  },
+  "contacto": {
+   "movidas": [],
+   "descartes": {
+    "cerradas_cara_trasera_oculta": 10,
+    "mismo_plano_sin_solape_en_planta": 0,
+    "solape_en_planta_sin_contacto": 0
+   },
+   "ejemplosDescarte": {
+    "cerradas_cara_trasera_oculta": [
+     {
+      "pieza": "object:obj_fixture-sofa:31",
+      "objeto": "obj_fixture-sofa",
+      "otro": "object:obj_fixture-sofa:41"
+     },
+     {
+      "pieza": "object:obj_fixture-sofa:32",
+      "objeto": "obj_fixture-sofa",
+      "otro": "object:obj_fixture-sofa:41"
+     },
+     {
+      "pieza": "object:obj_fixture-sofa:33",
+      "objeto": "obj_fixture-sofa",
+      "otro": "object:obj_fixture-sofa:41"
+     },
+     {
+      "pieza": "object:obj_fixture-sofa:34",
+      "objeto": "obj_fixture-sofa",
+      "otro": "object:obj_fixture-sofa:42"
+     },
+     {
+      "pieza": "object:obj_fixture-sofa:35",
+      "objeto": "obj_fixture-sofa",
+      "otro": "object:obj_fixture-sofa:31"
+     }
+    ],
+    "mismo_plano_sin_solape_en_planta": [],
+    "solape_en_planta_sin_contacto": []
+   },
+   "elevacionMm": 0.5,
+   "toleranciaMm": 0.2
+  }
+ },
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "c42403c479a9a768e71cd398b9bc3c69fbe14c3b73a754e42aafd16da56949da"
+ },
+ "script": {
+  "sha256": "8bfc80f4b0408f59495036014b524417ae57b664d0643e54f4b9341ddd0680c3"
+ }
+}
