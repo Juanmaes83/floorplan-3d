@@ -232,7 +232,7 @@
    {k:'precios',t:'Pon precio a las partidas',done:isBuilding||total>0&&priced===total,
     s:isBuilding?'En un edificio, cada planta tiene su presupuesto: ábrelo desde la planta.':total?`${priced} de ${total} partidas con precio${priced<total?' · las que no tienen precio no suman':''}`:'Todavía no hay partidas: dibuja estancias y huecos en Diseñar.',
     a:isBuilding||!total?null:budgetAction},
-   {k:'plan',t:'Crea el plan de obra',done:!!sch&&tasks.length>0,s:sch?`${tasks.length} ${tasks.length===1?'tarea':'tareas'} guardadas${sch.review?.status==='reviewed'?' · revisado':' · en borrador: cuando lo compruebes, márcalo como revisado en el plan'}`:'Añade las tareas con sus fechas y dependencias.',
+   {k:'plan',t:'Crea el plan de obra',done:!!sch&&tasks.length>0,s:sch?`${tasks.length} ${tasks.length===1?'tarea guardada':'tareas guardadas'}${sch.review?.status==='reviewed'?' · revisado':' · en borrador: cuando lo compruebes, márcalo como revisado en el plan'}`:'Añade las tareas con sus fechas y dependencias.',
     a:planAction},
    {k:'vinculos',t:'Vincula cada tarea con lo que construye',done:works.length>0&&withEl===works.length&&(isBuilding||withIt>0),
     s:tasks.length?`${withEl} de ${works.length} ${works.length===1?'trabajo':'trabajos'} con elementos del proyecto${isBuilding?'':` · ${withIt} con partidas del presupuesto`}`:'Primero crea el plan de obra.',

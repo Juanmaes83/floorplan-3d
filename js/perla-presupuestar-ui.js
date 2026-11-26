@@ -32,6 +32,15 @@
  const PILL={draft:()=>tx('Borrador','Draft','草稿'),ok:()=>tx('Listo','Ready','就绪'),pend:()=>tx('Al pulsar','On demand','点击时'),req:()=>tx('Falta','Missing','缺少')};
  function pill(k,text,parent){return el('span','perla-pill '+k,parent,text);}
  // Tarjetas: estado en color y la primera acción como enlace con flecha; el resto de botones igual que siempre
+ // §5.3 corte 2 · Imagen del PROYECTO donde ayuda a reconocer lo que trata la ficha (plano o esquema real, no decorativa).
+ function thumb(c,kind,caption){if(c.querySelector(':scope>.pres-thumb'))return;const P=window.FloorPlanProjectPreview;if(!P)return;
+  const f=document.createElement('figure');f.className='pres-thumb';f.dataset.thumb=kind;const ok=kind==='axo'?P.axonometric(f,{label:caption}):P.plan(f,{label:caption});if(!ok)return;
+  const cap=document.createElement('figcaption');cap.textContent=caption;f.append(cap);(c.querySelector(':scope>.professional-state')||c.querySelector('h2,h3'))?.after(f);}
+ function thumbs(){const head=c=>(c.querySelector('h2,h3')?.textContent||'').trim();
+  for(const c of $$('#professionalWorkspace .professional-grid > .professional-card')){const h=head(c);
+   // (Medidas y superficies no lleva miniatura: el plano ya encabeza Analizar.)
+   if(area()==='analyze'&&/^(Exterior|外部)/.test(h))thumb(c,'axo',tx('Esquema del modelo: fachadas que se revisan','Model scheme: facades to review','模型示意：待检查立面'));
+   else if(area()==='budget'&&c.dataset.module==='quantities')thumb(c,'plan',tx('Plano del que salen las cantidades','Plan the quantities come from','数量来源平面'));}}
  function cards(){for(const c of $$(area()==='analyze'?'#professionalWorkspace .professional-grid > .professional-card':'#professionalWorkspace .professional-grid > .professional-card[data-module]')){
   c.classList.add('pres-card');if(area()==='analyze'){const acts=$$(':scope>button,:scope>.professional-actions>button',c);acts.forEach((b,i)=>b.classList.toggle('pres-go',i===0));continue;}const m=c.dataset.module,k=kind(m);c.dataset.presPill=k;
   const st=c.querySelector(':scope>.professional-state');if(st&&!st.classList.contains('perla-pill-state')){st.classList.add('perla-pill-state');}
@@ -62,7 +71,7 @@
   if(j&&last.nextElementSibling!==j)last.after(j);const after=j||last;if(leg&&after.nextElementSibling!==leg)after.after(leg);}
  let busy=false;
  function apply(){busy=false;const w=ws();if(!open()){w?.classList.remove('perla-pres');return;}
-  mo.disconnect();try{w.classList.add('perla-pres');cards();if(area()==='budget'){order();hero();}}finally{mo.observe(document.body,{childList:true,subtree:true,characterData:true});}}
+  mo.disconnect();try{w.classList.add('perla-pres');cards();thumbs();if(area()==='budget'){order();hero();}}finally{mo.observe(document.body,{childList:true,subtree:true,characterData:true});}}
  const mo=new MutationObserver(()=>{if(!busy&&(open()||ws()?.classList.contains('perla-pres'))){busy=true;requestAnimationFrame(apply);}});
  mo.observe(document.body,{childList:true,subtree:true,characterData:true});
  new MutationObserver(()=>{if(open()){const h=ws().querySelector(':scope>.pres-hero');if(h)h.dataset.sig='';busy=true;requestAnimationFrame(apply);}}).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});

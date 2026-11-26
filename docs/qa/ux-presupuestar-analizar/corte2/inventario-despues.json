@@ -1,0 +1,100 @@
+{
+ "budget": {
+  "summary": [
+   "1 de 4 piezas del presupuesto listas",
+   "Listo Cantidades del proyecto",
+   "Al pulsar Precios de referencia de tus bases BC3",
+   "Falta Precios de las partidas (11 sin precio · 0 sin revisar)",
+   "Falta Plan de obra"
+  ],
+  "cards": [
+   {
+    "ficha": "Cantidades del proyecto",
+    "estado": "87,18 m² útiles · 86,83 m de muro · 22 carpinterías",
+    "etiqueta": null,
+    "imagen": "plan",
+    "acciones": [
+     "Ver cantidades"
+    ]
+   },
+   {
+    "ficha": "Presupuesto",
+    "estado": "11 partidas desde las cantidades · 11 sin precio · 0 sin revisar",
+    "etiqueta": null,
+    "imagen": null,
+    "acciones": [
+     "Abrir presupuesto",
+     "Consultar superficies del proyecto"
+    ]
+   },
+   {
+    "ficha": "Plan de obra",
+    "estado": "Sin plan de obra",
+    "etiqueta": null,
+    "imagen": null,
+    "acciones": [
+     "Crear plan de obra"
+    ]
+   },
+   {
+    "ficha": "Precios de referencia",
+    "estado": "Bases de precios que aportes y tarifa del estudio",
+    "etiqueta": null,
+    "imagen": null,
+    "acciones": [
+     "Buscar precios de referencia"
+    ]
+   }
+  ]
+ },
+ "analyze": {
+  "summary": [
+   "0 de 4 comprobaciones hechas"
+  ],
+  "cards": [
+   {
+    "ficha": "Medidas y superficies",
+    "estado": "87,18 m² · Estimado",
+    "etiqueta": "Empezado, sin terminar",
+    "imagen": null,
+    "acciones": [
+     "Revisar superficies",
+     "Estancias y pavimentos",
+     "Abrir herramientas de calibración",
+     "Comprobar el plano"
+    ]
+   },
+   {
+    "ficha": "Orientación y sol",
+    "estado": "Norte sin configurar",
+    "etiqueta": "Sin hacer",
+    "imagen": "figura previa",
+    "acciones": [
+     "Configurar orientación",
+     "Ver estudio solar",
+     "Sol directo por estancia"
+    ]
+   },
+   {
+    "ficha": "Emplazamiento",
+    "estado": "Parcela sin configurar",
+    "etiqueta": "Sin hacer",
+    "imagen": null,
+    "acciones": [
+     "Configurar emplazamiento"
+    ]
+   },
+   {
+    "ficha": "Exterior",
+    "estado": "Revisión pendiente",
+    "etiqueta": "Empezado, sin terminar",
+    "imagen": "axo",
+    "acciones": [
+     "Revisar exterior 3D",
+     "Revisar petos y propiedades",
+     "Marcar revisión completada"
+    ]
+   }
+  ]
+ }
+}
