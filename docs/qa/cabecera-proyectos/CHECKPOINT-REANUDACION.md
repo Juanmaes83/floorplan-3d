@@ -5,14 +5,15 @@ Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude
 ## Ramas y worktrees (todo publicado: SHA local = remoto, comprobado con `git fetch` antes de escribir esto)
 | Bloque | Rama | SHA | Worktree local | Estado |
 |---|---|---|---|---|
-| §9 Cabecera y proyectos (**rama activa**) | `claude/cabecera-proyectos` | `29e4b188` (+ este checkpoint) | `/home/user/hdr` | candidata; falta regresión |
+| §9 Cabecera y proyectos (**rama activa**) | `claude/cabecera-proyectos` | `cf54b169` (+ checkpoint) | `/home/user/hdr` | candidata: Exportar diseño, acciones junto a su tarea, «Revisar en 3D»; local 2/2; falta regresión |
+| §§8.1–8.2 y §10 (análisis y propuestas) | `claude/entregar-asistencia` | `d32c53ae` | `/home/user/ent` | inventario de Entregar + primer caso D3; §10 FOT-01 propuesta; esperan decisión |
 | §5.3 Presupuestar y Analizar | `claude/ux-presupuestar-analizar` | `852e0f44` | `/home/user/p53` | corte 2 publicado; regresión EN CURSO |
 | §5.2 BC3 | `claude/ux-bc3` | `a9bac718` | `/home/user/bc3` | cerrado y aprobado |
 | §5.1 Visita 3D | `claude/ux-visita-3d` | `e20644b9` | `/home/user/ux` | cerrado y aprobado (36 capturas regeneradas por pruebas sin publicar: no son trabajo) |
 | §7.1 Muros (producto) | `claude/muros-forma-descubrible` | `94f5b981` | `/home/user/geo` | aprobado |
 | Preview Muros OP-07 activo (NO fusionar) | `claude/preview-muros-op07-activo` | `d4e2a733` | — | Preview revisada |
 | StoryLayersV1 §7.2·§7.3·§8.3 | `claude/storylayers-v1` | `cd694e88` | `/home/user/story` | aprobado |
-| Rodaje / tapicería v3 | `claude/rodaje-cierre-1440` | `bb78fca0` | `/home/user/rodaje` | sofá aprobado; MP4 en pausa |
+| Rodaje / tapicería v3 · §11 Blueprint (análisis) | `claude/rodaje-cierre-1440` | `cace5fc0` | `/home/user/rodaje` | sofá aprobado; MP4 en pausa; storyboard §11 propuesto |
 Worktree auxiliar sin rama: `/home/user/base53` = base `dacb5d39` (contraste Point9; se puede retirar).
 
 ## Pruebas en curso
@@ -29,7 +30,7 @@ Worktree auxiliar sin rama: `/home/user/base53` = base `dacb5d39` (contraste Poi
 - §5.1 Visita 3D · `8136afe0` · https://floorplan-3d-jfy2tfmwp-juanma-espinosas-projects.vercel.app/
 - §7.1 Muros (control y cota) · `d4e2a733` · https://floorplan-3d-mbg1rdc4f-juanma-espinosas-projects.vercel.app/
 - StoryLayersV1 · `cd694e88` · tapicería v3 (sofá) · `bb78fca0`
-Previews pendientes de revisión: §5.3 corte 2 `852e0f44` https://floorplan-3d-ea48zyp68-juanma-espinosas-projects.vercel.app/ ·
+Previews pendientes de revisión (la de §9 se regenera para cada SHA nuevo): §5.3 corte 2 `852e0f44` https://floorplan-3d-ea48zyp68-juanma-espinosas-projects.vercel.app/ ·
 §9 candidata `29e4b188` https://floorplan-3d-kcgqptkvo-juanma-espinosas-projects.vercel.app/
 
 ## Rodaje (MP4 completo 2 s · 48 fotogramas · 1440p) — EN PAUSA por decisión del propietario
@@ -51,6 +52,9 @@ Previews pendientes de revisión: §5.3 corte 2 `852e0f44` https://floorplan-3d-
 - **Primera tarea al reanudar:** consultar `p53-regr2.log`; si terminó, publicar su resultado en el handoff del §5.3.
 
 ## Handoffs
+- §§8.1–8.2: https://github.com/Juanmaes83/floorplan-3d/blob/claude/entregar-asistencia/docs/qa/entregar-asistencia/README.md
+- §10 Render AI: https://github.com/Juanmaes83/floorplan-3d/blob/claude/entregar-asistencia/docs/qa/render-ai/README.md
+- §11 Blueprint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/rodaje-cierre-1440/docs/qa/blueprint/README.md
 - BC3: https://github.com/Juanmaes83/floorplan-3d/blob/claude/ux-bc3/docs/qa/ux-bc3/README.md
 - Visita 3D: https://github.com/Juanmaes83/floorplan-3d/blob/claude/ux-visita-3d/docs/qa/ux-visita-3d/README.md
 - §5.3: https://github.com/Juanmaes83/floorplan-3d/blob/claude/ux-presupuestar-analizar/docs/qa/ux-presupuestar-analizar/README.md
