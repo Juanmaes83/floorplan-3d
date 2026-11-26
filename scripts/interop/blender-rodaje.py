@@ -294,6 +294,11 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
     soft = {"tejido": dict(sheen=.6, ao=.6, edge=.12), "tejido-exterior": dict(sheen=.2, ao=.5),
             "alfombra-campo": dict(sheen=.7, ao=.5, weave=.22, pile=.35, abrash=.07), "alfombra-cenefa": dict(sheen=.7, ao=.5, weave=.26, pile=.35, abrash=.05),
             "alfombra-canto": dict(sheen=.5, ao=.9, weave=.18, pile=.2, abrash=.04)}
+    if arg("--recetas", "v1") == "v2":  # v2 (Astra SOLACE: microarrugas + slub) EVALUADA Y DESCARTADA en A/B 1440p: emborrona la trama y mancha; se conserva solo para reproducir la comparativa
+        soft["tejido"] = dict(sheen=.6, ao=.6, edge=.12, wrinkle=.18, abrash=.045, abrash_scale=(6.0, 18.0, 6.0))
+        soft["tejido-exterior"] = dict(sheen=.25, ao=.5, wrinkle=.12, abrash=.03, abrash_scale=(6.0, 18.0, 6.0))
+        soft["alfombra-campo"] = dict(sheen=.75, ao=.6, weave=.22, pile=.35, abrash=.10)
+        soft["alfombra-cenefa"] = dict(sheen=.75, ao=.6, weave=.26, pile=.35, abrash=.07)
     def tex_or(kind, a, colour, scale, normal, rough_mul, fallback, rot=(0, 0, 0), extra=None):
         if not ok(a):
             falt = log.setdefault("_sin_recurso", {}); falt[kind] = (a or {}).get("id", "no listado")
@@ -462,7 +467,7 @@ def realismo(project, labels, light, sun, tex):
         px = np.empty(len(im.pixels), dtype=np.float32); im.pixels.foreach_get(px); px = px.reshape(-1, 4)[::7, :3]
         lin = np.where(px <= .04045, px / 12.92, ((px + .055) / 1.055) ** 2.4)  # imágenes de 8 bits: valores sRGB codificados
         return lin.mean(axis=0)
-    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0, weave=0.0, pile=0.0, abrash=0.0):
+    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0, weave=0.0, pile=0.0, abrash=0.0, wrinkle=0.0, abrash_scale=(2.5, 7.0, 2.5)):
         m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; Lk = nt.links
         b = next(n for n in N if n.type == "BSDF_PRINCIPLED")
         tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / scale_m, 1 / scale_m, 1 / scale_m)
@@ -494,7 +499,7 @@ def realismo(project, labels, light, sun, tex):
             wm = N.new("ShaderNodeVectorMath"); wm.operation = "SCALE"; Lk.new(col_out, wm.inputs[0]); Lk.new(wr.outputs["Result"], wm.inputs["Scale"]); col_out = wm.outputs["Vector"]
         if abrash:  # «abrash»: variación tonal de lote de la lana en franjas a lo largo de la urdimbre (5–25 cm), visible a distancia
             tc3 = N.new("ShaderNodeTexCoord"); mp3 = N.new("ShaderNodeMapping"); mp3.inputs["Rotation"].default_value = rot
-            mp3.inputs["Scale"].default_value = (2.5, 7.0, 2.5); Lk.new(tc3.outputs["Object"], mp3.inputs["Vector"])
+            mp3.inputs["Scale"].default_value = abrash_scale; Lk.new(tc3.outputs["Object"], mp3.inputs["Vector"])
             nz3 = N.new("ShaderNodeTexNoise"); nz3.inputs["Detail"].default_value = 3; nz3.inputs["Roughness"].default_value = .55; Lk.new(mp3.outputs["Vector"], nz3.inputs["Vector"])
             ar = N.new("ShaderNodeMapRange"); ar.inputs["From Min"].default_value = .3; ar.inputs["From Max"].default_value = .7; ar.clamp = True
             ar.inputs["To Min"].default_value = 1 - abrash; ar.inputs["To Max"].default_value = 1 + abrash; Lk.new(nz3.outputs["Fac"], ar.inputs["Value"])
@@ -506,13 +511,17 @@ def realismo(project, labels, light, sun, tex):
         else:  # muros: color plano DEL PROYECTO; del recurso solo relieve y rugosidad
             b.inputs["Base Color"].default_value = (*target, 1)
         rm = N.new("ShaderNodeMath"); rm.operation = "MULTIPLY"; rm.inputs[1].default_value = rough_mul; Lk.new(r.outputs["Color"], rm.inputs[0]); Lk.new(rm.outputs[0], b.inputs["Roughness"])
-        nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"])
+        nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"]); nrm = nm.outputs["Normal"]
+        if wrinkle:  # microarrugas y tensión del tapizado (escala de centímetros, legible a 2–3 m): receta de lino de Astra (SOLACE)
+            tc4 = N.new("ShaderNodeTexCoord"); nz4 = N.new("ShaderNodeTexNoise"); nz4.inputs["Scale"].default_value = 28; nz4.inputs["Detail"].default_value = 4; nz4.inputs["Roughness"].default_value = .72
+            bp4 = N.new("ShaderNodeBump"); bp4.inputs["Strength"].default_value = wrinkle; bp4.inputs["Distance"].default_value = .004
+            Lk.new(tc4.outputs["Object"], nz4.inputs["Vector"]); Lk.new(nz4.outputs["Fac"], bp4.inputs["Height"]); Lk.new(nrm, bp4.inputs["Normal"]); nrm = bp4.outputs["Normal"]
         if pile:  # pelo fino (≈2,5 mm, del tamaño de la fibra, no mayor) sobre el relieve de la trama
             tc2 = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 400; nz.inputs["Detail"].default_value = 4
             bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = pile; bp.inputs["Distance"].default_value = .0015
-            Lk.new(tc2.outputs["Object"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(nm.outputs["Normal"], bp.inputs["Normal"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
+            Lk.new(tc2.outputs["Object"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(nrm, bp.inputs["Normal"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
         else:
-            Lk.new(nm.outputs["Normal"], b.inputs["Normal"])
+            Lk.new(nrm, b.inputs["Normal"])
         return m
     mats = {m["id"]: m for m in project.get("materials", [])}; rooms = {r["id"]: r for r in project["rooms"]}; cache = {}; floors = []; subst = []
     solo_luz = flag("--sin-materiales")  # comparativa controlada: misma luz, cielo, vidrio y portales; materiales del visor

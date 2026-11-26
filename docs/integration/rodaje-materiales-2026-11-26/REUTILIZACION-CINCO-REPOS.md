@@ -15,3 +15,11 @@ uso que da el propietario en el encargo, y cada recurso de terceros se vuelve a 
 | **PROJECT-PELU** · `spatial-package/solace-v01/*` @ `408f7e9b` | Recibo del paquete espacial; el GLB derivado conserva menos materiales (54) que el `.blend` (72) | **Aplazar**: solo aplica si StoryLayers incluye un medio 3D. El MVP web se cierra con imágenes fijas. Se registra como referencia para comprobar procedencia origen → derivado | (posterior) | — |
 
 **Descartes útiles para otras cuentas:** la alfombra de SOLACE no tiene trama (BSDF plano); los resolvedores de Costa Blanca y Vecinia son el mismo archivo; ningún donante trae una receta de terciopelo, algodón o cuadro: se diseñan en la carta de materiales y se declaran como recetas propias de RUBIK.
+
+## Resultado del contraste Astra → RUBIK (26/11/2026)
+
+| Pieza | Prueba | Resultado | Decisión |
+|---|---|---|---|
+| Lino SOLACE (microarrugas por ruido a ~3,5 cm + variación *slub*) frente a lino RUBIK (escaneo *Rough Linen* a escala real) | Mismo encuadre «detalle» de `f2-rot30`, recorte nativo 1440p, misma luz y exposición (`--recetas v1/v2`) · [`ab-astra/ab-sofa.png`](../../qa/rodaje/cierre-1440/ab-astra/ab-sofa.png) | La v2 emborrona la trama vertical del lino y añade manchas que se leen como suciedad | **Descartada**; queda como opción reproducible `--recetas v2` |
+| Más variación de lote en la alfombra (v2) | Recorte nativo 1440p del plano interior · [`ab-astra/ab-alfombra.png`](../../qa/rodaje/cierre-1440/ab-astra/ab-alfombra.png) | Diferencia apenas perceptible | **Sin cambio** (no hay mejora demostrable) |
+| Cuero `PHERO_Cognac saddle leather` | Receta adaptada en `receta_token` para `material.leather.*` (rugosidad 0,48, microrrelieve) | Solo se aplica con token declarado; sin caso visual todavía | Pendiente de la carta de materiales |
