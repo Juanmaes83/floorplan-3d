@@ -60,3 +60,12 @@ Descarga del BC3 sintético: `docs/qa/ux-bc3/rubik-qa-sintetico.bc3`.
 El propietario revisó y aprobó la Preview de §5.2 BC3. Queda registrada la aprobación humana de las correcciones de comparación, confirmación y guardado de precios del corte publicado.
 
 [Preview revisada](https://floorplan-3d-pbmh51p45-juanma-espinosas-projects.vercel.app/) · SHA de la aplicación: `cb51c9a11a0742a44a2c21b7acd8e2914a56be0d`. Esta aprobación corresponde a la revisión humana del corte y no equivale a CI, fusión ni activación.
+
+## Evidencia de cierre (correcciones de la revisión humana, SHA de la aplicación `cb51c9a1`)
+Capturas de `tests/bc3-revision-humana.browser.test.cjs` en `revision-humana/`: `r1-ver-precio` (referencia centrada y
+«Revisar procedencia» enfocada), `r2-desglose` (cálculo del importe con Confirmar/Cancelar juntos), `r3-roble-ud` (bloqueo
+explicado por unidad), `r4-revisar-presupuesto-1440` (tras aplicar ROBLE). Escritorio 1440×900 y móvil 390×844.
+- Pruebas locales: `bc3-revision-humana` 2/2 y `bc3-comparar-aplicar` 2/2; regresión del corte anterior 87/87.
+- CI: no ejecutada (los workflows no se disparan en ramas `claude/…`).
+- Aprobación humana: sí (ver arriba). Fusión, activación y producción: decisión aparte.
+- Hecho: §5.2 completo. Falta: nada en este corte. Decisión del propietario: integración.
