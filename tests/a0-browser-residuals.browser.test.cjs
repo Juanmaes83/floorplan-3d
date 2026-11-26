@@ -79,3 +79,30 @@ test(`ResizeObserver · ${route} · ${label} · ${viewport.width}x${viewport.hei
   assert.deepEqual(errors,[]);
  }finally{await context.close();}
 });
+
+// Causa del residual de WebKit (#310): un callback de ResizeObserver que ESCRIBE en el DOM dentro de su entrega puede
+// redimensionar, tras el reflujo, un elemento observado ya entregado (p. ej. el plano escribe la escala del pie y el pie
+// cambia de alto; la vista 3D redimensiona el lienzo). La comprobación del tamaño inmediatamente después del callback no
+// lo ve: el reflujo llega después. Esta prueba es determinista: registra TODA mutación del DOM hecha dentro de cada
+// entrega de los observadores del producto, en 2D y en 3D, al cargar y al cambiar el tamaño de la ventana.
+function writesProbe(){window.__roWrites=[];const RO=window.ResizeObserver;
+ window.ResizeObserver=class extends RO{constructor(cb){const label=cb.toString().replace(/\s+/g,' ').slice(0,90);
+  super((entries,o)=>{const mo=new MutationObserver(()=>{});mo.observe(document,{subtree:true,attributes:true,childList:true,characterData:true});
+   try{return cb(entries,o);}finally{const recs=mo.takeRecords();mo.disconnect();
+    if(recs.length)window.__roWrites.push({label,writes:[...new Set(recs.map(r=>r.type+':'+(r.target.id||r.target.nodeName)+(r.attributeName?'@'+r.attributeName:'')))].slice(0,8)});}});}};}
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])
+test(`ResizeObserver · ${viewport.width}x${viewport.height}: ningún callback del producto escribe en el DOM dentro de su entrega (2D y 3D)`,{timeout:180000},async()=>{
+ const e=at('127.0.0.1'),context=await e.browser.newContext({viewport}),page=await context.newPage(),errors=[];
+ page.on('pageerror',x=>errors.push(x.message));
+ try{
+  await context.addInitScript(writesProbe);await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+  await page.goto(e.base);await require('./editor-fixture.cjs')(page);await frames(page,6);
+  await page.setViewportSize({width:viewport.width-41,height:viewport.height-27});await settle(page);await frames(page,6);
+  await page.evaluate(()=>setView('3d'));await page.waitForFunction(()=>viewMode==='3d');await settle(page);await frames(page,6);
+  await page.setViewportSize(viewport);await settle(page);await frames(page,6);
+  await page.evaluate(()=>setView('2d'));await page.waitForFunction(()=>viewMode==='2d');await settle(page);await frames(page,6);
+  const writes=await page.evaluate(()=>window.__roWrites);
+  assert.deepEqual(writes,[],'escrituras dentro de la entrega: '+JSON.stringify(writes).slice(0,600));
+  assert.deepEqual(errors,[]);
+ }finally{await context.close();}
+});

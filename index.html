@@ -2558,13 +2558,17 @@ async function importProjectFile(file,{fromUpload=false,transaction}={}){
 $('#reset').onclick = () => { if (confirm(tr('恢复为默认设计方案？（可撤销）', 'Reset to the default design? (undoable)'))){ const b = snap(); project = defaultState(); ui.sel = null; commit(b); renderAll(); } };
 // 横竖屏切换、表头换行等都会改变画布尺寸；尺寸从 0 恢复（如首次布局）时重新适应窗口
 // 其余尺寸变化（收起 / 展开面板等）保持画面中心不动
-let lastW = 0, lastH = 0;
-new ResizeObserver(() => {
+// A0 (#310, WebKit): el callback solo PROGRAMA el ajuste para el siguiente fotograma. applyView escribe el viewBox, la
+// escala del pie (#ratio) y la barra de escala; si se escribe dentro de la entrega, el pie puede cambiar de alto tras el
+// reflujo, el plano observado cambia de tamaño en la misma entrega y WebKit lo notifica como «ResizeObserver loop
+// completed with undelivered notifications». Se mide y se escribe en el fotograma: una vez por fotograma.
+let lastW = 0, lastH = 0, planFitFrame = 0;
+new ResizeObserver(() => { if (!planFitFrame) planFitFrame = requestAnimationFrame(() => { planFitFrame = 0;
   const w = svg.clientWidth, h = svg.clientHeight; if (!w) return;
   if (!lastW) fitView();
   else if (w !== lastW || h !== lastH) { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
   lastW = w; lastH = h;
-}).observe(svg);
+}); }).observe(svg);
 
 function setLang(l){
   LANG = l; try { localStorage.setItem(LANG_KEY, l); } catch(e) {}
@@ -2988,12 +2992,15 @@ function init(){
   });
   // A stage of 0 px (a layout being rebuilt, e.g. leaving the presentation) never becomes the camera's aspect: the
   // camera keeps its last valid projection until the stage has a real size again.
-  new ResizeObserver(() => {
+  // A0 (#310): setSize reescribe el tamaño del lienzo y de la capa de etiquetas DENTRO del escenario observado; se hace
+  // en el siguiente fotograma, nunca dentro de la entrega del ResizeObserver (ver el observador del plano).
+  let stageFitFrame = 0;
+  new ResizeObserver(() => { if (!stageFitFrame) stageFitFrame = requestAnimationFrame(() => { stageFitFrame = 0;
     if (!SW() || !SH()) return;
     renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH());
     camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
     requestFrame();
-  }).observe(stage);
+  }); }).observe(stage);
   bindUI();
 }
 
