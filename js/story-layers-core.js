@@ -63,7 +63,7 @@
       .sort((x, y) => Math.abs((y.after ?? 0) - (y.before ?? 0)) - Math.abs((x.after ?? 0) - (x.before ?? 0)) || x.c.entityId.localeCompare(y.c.entityId)).slice(0, 3);
     for (const x of rooms) {
       const shown = x.a || x.b, side = x.a ? 'after' : 'before', anchor = { side, kind: 'room', id: x.c.entityId, ...centroid(shown.polygon) };
-      chapters.push({ id: 'room-' + x.c.entityId, kind: 'room-area', title: `${t.area} ${name(shown)}`, text: t.textArea(name(shown)),
+      chapters.push({ id: 'room-' + x.c.entityId, kind: 'room-area', subject: name(shown), title: `${t.area} ${name(shown)}`, text: t.textArea(name(shown)),
         data: [datum('area-before', t.area + ' ' + name(shown), x.before, 'm²', `rooms[${x.c.entityId}].polygon → área`, 'before', x.b ? { side: 'before', kind: 'room', id: x.c.entityId, ...centroid(x.b.polygon) } : null),
           datum('area-after', t.area + ' ' + name(shown), x.after, 'm²', `rooms[${x.c.entityId}].polygon → área`, 'after', x.a ? anchor : null)] });
     }
@@ -86,7 +86,7 @@
     for (const f of finish) {
       const r = A.get(f.entityId) || B.get(f.entityId), an = r ? { side: A.get(f.entityId) ? 'after' : 'before', kind: 'room', id: f.entityId, ...centroid(r.polygon) } : null;
       const mname = v => v ? (v.missing ? null : material({ id: v.id, name: v.name })) : null;
-      chapters.push({ id: 'finish-' + f.entityId, kind: 'finish', title: `${t.floor} ${name(r)}`, text: t.textFinish(name(r)),
+      chapters.push({ id: 'finish-' + f.entityId, kind: 'finish', subject: name(r), title: `${t.floor} ${name(r)}`, text: t.textFinish(name(r)),
         data: [datum('floor-before', t.floor + ' ' + name(r), mname(f.before), 'acabado', `rooms[${f.entityId}].floorMaterialId`, 'before', null),
           datum('floor-after', t.floor + ' ' + name(r), mname(f.after), 'acabado', `rooms[${f.entityId}].floorMaterialId`, 'after', an)] });
     }
