@@ -49,6 +49,7 @@ comprobaciones siguen su proceso normal (no implica PR, fusión ni activación).
 «3699.0858725761773» y se solapaba. Ahora el texto de las cotas se redondea a mm enteros; la cota se dibuja con el valor exacto
 y la geometría no cambia. Prueba bloqueante `tests/op07-s11-cotas-muro-curvo.browser.test.cjs` (1440×900 y 390×844): sin la
 corrección falla con ese mismo texto; con ella pasa 2/2.
+**Cota corregida APROBADA por el propietario (26/11/2026)** en la Preview `d4e2a733`.
 
 **Decisión del propietario:** se aprueba el rediseño de interacción de Muros. La composición `a5beb0ab` pasó la CI cruzada,
 pero la Preview revisada lleva OP-07 en estado *integrated*. La prueba de edición necesita una Preview aislada con
