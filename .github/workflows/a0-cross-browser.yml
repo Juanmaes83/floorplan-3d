@@ -3,7 +3,7 @@
 name: A0 cross-browser (candidata 2c7e7739 y corrección de ResizeObserver)
 on:
   push:
-    branches: [claude/a0-cruzado-2c7e7739, claude/a0-resizeobserver-causa]
+    branches: [claude/a0-cruzado-2c7e7739, claude/a0-resizeobserver-causa, claude/geometria-composicion]
   workflow_dispatch:
 jobs:
   a0:
