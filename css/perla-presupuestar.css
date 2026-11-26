@@ -128,3 +128,5 @@
 }
 @media (prefers-reduced-motion:reduce){#professionalWorkspace.perla-pres .pres-card{transition:none}}
 #budgetDialog .budget-bar::before,#budgetDialog .budget-bar::after{display:none!important}
+/* §5.3 · Analizar adopta las tarjetas de Presupuestar/Entregar pero conserva su anchura útil (contrato Point9: 1050–1150 px). */
+#professionalWorkspace.perla-pres[data-area="analyze"]{padding-inline:max(16px,calc((100vw - 1100px)/2))}

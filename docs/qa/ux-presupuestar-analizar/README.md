@@ -18,3 +18,9 @@ guardado sin tareas, y Analizar en 1440×900 y 390×844, sin desplazamiento hori
 - Inventario completo de entradas antes/después y comparativa visual con Entregar en móvil.
 
 Capturas: `1-presupuestar-plan-vacio.png`, `2-analizar-1440.png`, `2-analizar-390.png`.
+
+## Regresión (21 archivos: perla*, professional-workspace, no-chinese, m2-s4, qa-m2*, ux07*, obr02/03, bpdp, m13, welcome)
+- Primera tanda: 147/149. Los 2 fallos (`Point9 human review 2` 1440×900 y 1280×800, «desktop useful width 1328») los causaba
+  **este corte**: Analizar heredaba el margen de Presupuestar y la cuadrícula pasaba de ~1100 a 1328 px.
+- Corregido: Analizar conserva su anchura útil (1100 px) con las tarjetas de Entregar. Tras la corrección: Point9 4/4 y la
+  prueba del corte 3/3. Pendiente de revisión humana.
