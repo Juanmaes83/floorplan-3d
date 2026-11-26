@@ -72,3 +72,19 @@ test('ajuste de texto y paso de página: nada se trunca, ninguna línea ni pági
   const kp = P.flow([{ h: 900 }, { h: 60, keep: true }, { h: 1, lines: ['a', 'b', 'c'], lh: 30 }], 1000);
   assert.equal(kp.length, 2); assert.equal(kp[1][0].keep, true, 'el título abre la página siguiente');
 });
+
+test('§7.2 · ningún cambio guardado se calla: quitar un mueble es un cambio con su capítulo; lo no detallado se cuenta como «otros ajustes»', async () => {
+  const before = Core.clone(Reference); before.id = 'prj_sl-mueble';
+  const after = Core.clone(before); const gone = after.objects.shift(); after.walls[0].thicknessMm = (after.walls[0].thicknessMm || 100) + 50;
+  const refs = { before: { entryId: 'e1', fingerprint: await S.fingerprint(before, digest) }, after: { entryId: 'e2', fingerprint: await S.fingerprint(after, digest) } };
+  const story = S.build({ before, after, refs, name, material }), f = P.facts(story, 'es');
+  assert.deepEqual(story.order, ['overview', 'furniture', 'other']);
+  const fur = story.chapters.find(c => c.id === 'furniture'), d = fur.data.find(x => x.id === 'objects-gone');
+  assert.equal(d.value, 1); assert.deepEqual([d.anchor.kind, d.anchor.id, d.anchor.side], ['object', gone.id, 'before'], 'anclado al mueble quitado, en «antes»');
+  assert.deepEqual(f.changes, ['Mobiliario: 0 mueble(s) nuevo(s), 1 quitado(s) y 0 movido(s) o cambiado(s).', 'Otros ajustes en los datos del proyecto: 1.']);
+  const doc = P.document({ story, proposal: P.normalize({}), identity: P.identity(null), facts: f, cost: P.cost(null) });
+  assert.doesNotMatch(doc.summary, /No hay cambios/, 'el resumen nunca dice «sin cambios» si los hay'); assert.doesNotMatch(JSON.stringify(doc, (k, v) => (k === 'id' || k === 'hero' ? undefined : v)), TECH);
+  // Idénticas: sin capítulos de cambio.
+  const same = S.build({ before, after: Core.clone(before), refs: { before: refs.before, after: refs.before } });
+  assert.deepEqual(same.order, ['overview']); assert.deepEqual(P.facts(same).changes, []);
+});

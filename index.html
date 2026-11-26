@@ -823,7 +823,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/project-variants.js"></script>
 <!-- UX-07 · el editor solo necesita el adaptador para construir la dirección del comparador (comparar/); el resto vive allí -->
 <script src="js/revision-compare-core.js"></script>
-<script src="js/variants-compare-adapter.js"></script><script src="js/story-layers-core.js"></script><script src="js/story-proposal-core.js"></script><script src="js/story-layers-ui.js" defer></script>
+<script src="js/variants-compare-adapter.js"></script><script src="js/story-layers-core.js"></script><script src="js/story-proposal-core.js"></script><script src="js/story-assist-core.js"></script><script src="js/story-layers-ui.js" defer></script>
 <!-- R02-A · techos y elementos altos (EXPERIMENTAL, integración pendiente de GO): núcleo #193/#203, contrato candidato x-r02a-ceiling, puente #217 y su panel -->
 <script src="js/r02a-donor-extracts.js"></script>
 <script src="js/r02a-ceiling-core.js"></script>
@@ -2930,6 +2930,16 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     let group;try{group=library.group(library.activeId());}catch{return {state:'not-eligible',pairs:[]};}
     const root=group[0],byId=new Map(group.map(g=>[g.id,g]));
     return {state:'ready',pairs:t.pairs.map(p=>{const g=byId.get(p.id);return {id:p.id,before:{id:root.id,name:root.name,project:root.project},after:{id:g.id,name:g.name,project:g.project}};})};
+  },
+  /* §7.2 · del P10 a Diseñar y vuelta: crear la variante del proyecto abierto (el mismo paso que «Proyectos → Crear variante
+     del proyecto abierto», con el original conservado) y abrir una entrada concreta de la biblioteca. Nada más se escribe. */
+  async createVariant(userEvent){
+    if(!library)throw Error(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'));
+    switchProject(library.variant(project));await persistence.requireSaved(userEvent);
+    const e=library.list().find(x=>x.id===library.activeId());return {id:e.id,name:e.name,variantOf:e.variantOf};
+  },
+  openEntry(id){if(!library)return false;if(library.activeId()!==id)switchProject(library.open(id));return library.activeId()===id;},
+  entryInfo(id){const e=library?.list().find(x=>x.id===(id||library.activeId()));return e?{id:e.id,name:e.name,variantOf:e.variantOf||null}:null;
   },get viewMode(){return viewMode;},
   // A failed identity migration leaves old shared project ids in storage. Economic writers must fail closed.
   get identityMigration(){return library?.migration?.()||null;},

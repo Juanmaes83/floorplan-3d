@@ -49,3 +49,33 @@
 .story-layers-dialog .sl-why{color:#8a5a00;font-weight:600}
 .story-layers-dialog .sl-includes{font-size:.85rem;color:#555}
 @media (max-width:600px){.story-layers-dialog .sl-note{grid-template-columns:1fr 1fr}.story-layers-dialog .sl-note textarea{grid-column:1/-1}.story-layers-dialog .sl-note select{max-width:none}}
+/* §7.2 · pasos visibles (ficha P10 y diálogo) y barra «Volver a la historia» en Diseñar */
+.sl-card-steps,.story-layers-dialog .sl-steps{list-style:none;counter-reset:slstep;display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 10px;padding:0;font-size:13px;line-height:1.4}
+.sl-card-steps li,.story-layers-dialog .sl-steps li{counter-increment:slstep;display:flex;align-items:center;gap:6px;color:var(--muted,#5b6066)}
+.sl-card-steps li::before,.story-layers-dialog .sl-steps li::before{content:counter(slstep);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid currentColor;font-weight:700;font-size:12px;flex:none}
+.sl-card-steps li[data-done]::before,.story-layers-dialog .sl-steps li[data-done]::before{content:'✓'}
+.sl-card-steps li[aria-current],.story-layers-dialog .sl-steps li[aria-current]{color:var(--ink,#1f2326);font-weight:700}
+.sl-card-steps li[aria-current]::before,.story-layers-dialog .sl-steps li[aria-current]::before{background:var(--ink,#1f2326);color:#fff;border-color:var(--ink,#1f2326)}
+.story-layers-dialog .sl-steps .btn{min-height:36px;padding:4px 10px;font-weight:600}
+.story-layers-dialog .sl-pairname,.story-layers-dialog .sl-how{margin:4px 0 10px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.sl-return{position:fixed;z-index:58;left:50%;transform:translateX(-50%);top:calc(var(--shell-header-bottom,58px) + 52px);display:flex;align-items:center;gap:10px;max-width:min(760px,calc(100vw - 16px));padding:8px 8px 8px 14px;border-radius:12px;background:var(--surface,#fff);border:1px solid var(--line-strong,#c9c3b8);box-shadow:0 6px 20px rgba(0,0,0,.14);font-size:14px;line-height:1.35}
+.sl-return[hidden]{display:none}
+.sl-return-txt{min-width:0;overflow-wrap:anywhere}
+.sl-return .btn{min-height:44px;flex:none}
+@media (max-width:600px){.sl-return{left:8px;right:8px;transform:none;max-width:none;flex-wrap:wrap;font-size:13px}.sl-return-txt{flex:1 1 100%}}
+/* §8 · cliente, medios y ayuda de redacción */
+.story-layers-dialog .sl-client,.story-layers-dialog .sl-media{border:1px solid var(--line,#d9d4cb);border-radius:10px;padding:10px 14px;margin:12px 0;min-width:0}
+.story-layers-dialog .sl-client-row{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:flex-end;margin-bottom:8px}
+.story-layers-dialog .sl-client-row .sl-field{flex:1 1 220px;min-width:0}
+.story-layers-dialog .sl-hint{font-size:13px;line-height:1.5;color:var(--muted,#5b6066);margin:4px 0 8px;overflow-wrap:anywhere}
+.story-layers-dialog .sl-file{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;position:relative}
+.story-layers-dialog .sl-file input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.story-layers-dialog .sl-media-row{margin:8px 0;line-height:1.5;overflow-wrap:anywhere}
+.story-layers-dialog .sl-thumb{display:inline-flex;align-items:center;gap:6px;margin:6px 12px 6px 0}
+.story-layers-dialog .sl-thumb img{width:96px;height:auto;border-radius:6px;border:1px solid var(--line,#d9d4cb)}
+.story-layers-dialog .sl-assist{border-left:3px solid var(--accent,#1e5a5e);background:var(--surface-2,#f6f4ef);border-radius:8px;padding:8px 12px;margin:10px 0}
+.story-layers-dialog .sl-asks{margin:6px 0 8px 18px;padding:0;font-size:13px;line-height:1.5}
+.story-layers-dialog .sl-actions-inline{display:flex;flex-wrap:wrap;gap:8px}
+.story-layers-dialog .sl-actions-inline .btn,.story-layers-dialog [data-sl="assist"]{min-height:44px}
+.story-layers-dialog [data-sl="preview"] video{display:block;max-width:100%;margin:8px 0;border-radius:8px}
+.story-layers-dialog{overflow-anchor:none}

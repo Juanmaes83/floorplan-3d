@@ -33,13 +33,13 @@
   const T = {
     es: { finishes: 'Acabados', floor: 'Suelo de', openings: 'Puertas y ventanas', openingsAdded: 'Huecos nuevos', openingsGone: 'Huecos quitados', textFinish: n => `Cambia el acabado del suelo de «${n}».`, textOpenings: (add, del) => `${add} hueco(s) nuevo(s) y ${del} quitado(s).`, overview: 'Qué cambia', area: 'Superficie de', layout: 'Distribución', netArea: 'Superficie útil total', rooms: 'Estancias', walls: 'Muros añadidos o quitados',
       absent: 'Ausente', calc: 'Calculado del proyecto', same: 'Sin cambios entre las dos revisiones', textOverview: (b, a) => `Comparamos «${b}» con «${a}» con la misma planta, el mismo encuadre y la misma escala.`,
-      textArea: n => `La estancia «${n}» cambia de superficie.`, textLayout: (add, del) => `Cambia la distribución: ${add} muro(s) nuevo(s) y ${del} quitado(s) o a demoler.` },
+      textArea: n => `La estancia «${n}» cambia de superficie.`, furniture: 'Mobiliario', objAdded: 'Muebles nuevos', objGone: 'Muebles quitados', objChanged: 'Muebles movidos o cambiados', textFurniture: (a, g, m) => `Cambia el mobiliario: ${a} mueble(s) nuevo(s), ${g} quitado(s) y ${m} movido(s) o cambiado(s).`, other: 'Otros cambios', otherCount: 'Otros cambios guardados', textOther: n => `Hay ${n} ajuste(s) más en los datos del proyecto, como propiedades de muros o definiciones de materiales.`, textLayout: (add, del) => `Cambia la distribución: ${add} muro(s) nuevo(s) y ${del} quitado(s) o a demoler.` },
     en: { finishes: 'Finishes', floor: 'Floor of', openings: 'Doors and windows', openingsAdded: 'New openings', openingsGone: 'Removed openings', textFinish: n => `The floor finish of «${n}» changes.`, textOpenings: (add, del) => `${add} new opening(s) and ${del} removed.`, overview: 'What changes', area: 'Area of', layout: 'Layout', netArea: 'Total usable area', rooms: 'Rooms', walls: 'Walls added or removed',
       absent: 'Absent', calc: 'Calculated from the project', same: 'No changes between the two revisions', textOverview: (b, a) => `We compare «${b}» with «${a}» on the same plan, framing and scale.`,
-      textArea: n => `The room «${n}» changes its area.`, textLayout: (add, del) => `The layout changes: ${add} new wall(s) and ${del} removed or to be demolished.` },
+      textArea: n => `The room «${n}» changes its area.`, furniture: 'Furniture', objAdded: 'New furniture', objGone: 'Removed furniture', objChanged: 'Moved or changed furniture', textFurniture: (a, g, m) => `The furniture changes: ${a} new piece(s), ${g} removed and ${m} moved or changed.`, other: 'Other changes', otherCount: 'Other saved changes', textOther: n => `There are ${n} more adjustment(s) in the project data, such as wall properties or material definitions.`, textLayout: (add, del) => `The layout changes: ${add} new wall(s) and ${del} removed or to be demolished.` },
     zh: { finishes: '饰面', floor: '地面：', openings: '门窗', openingsAdded: '新增洞口', openingsGone: '移除的洞口', textFinish: n => `「${n}」的地面饰面发生变化。`, textOpenings: (add, del) => `新增 ${add} 个洞口，移除 ${del} 个。`, overview: '变化概览', area: '面积：', layout: '布局', netArea: '总使用面积', rooms: '房间', walls: '新增或移除的墙体',
       absent: '缺失', calc: '根据项目计算', same: '两个版本之间没有变化', textOverview: (b, a) => `在相同平面、相同取景和相同比例下比较「${b}」与「${a}」。`,
-      textArea: n => `房间「${n}」的面积发生变化。`, textLayout: (add, del) => `布局变化：新增 ${add} 面墙，移除或拆除 ${del} 面墙。` },
+      textArea: n => `房间「${n}」的面积发生变化。`, furniture: '家具', objAdded: '新增家具', objGone: '移除的家具', objChanged: '移动或更改的家具', textFurniture: (a, g, m) => `家具变化：新增 ${a} 件，移除 ${g} 件，移动或更改 ${m} 件。`, other: '其他变化', otherCount: '其他已保存的变化', textOther: n => `项目数据中还有 ${n} 处调整，例如墙体属性或材料定义。`, textLayout: (add, del) => `布局变化：新增 ${add} 面墙，移除或拆除 ${del} 面墙。` },
   };
 
   /** Construye la historia. refs: {before:{entryId, fingerprint}, after:{entryId, fingerprint}}; name(room) → nombre VISIBLE
@@ -101,6 +101,23 @@
         data: [datum('openings-added', t.openingsAdded, opAdded.length, 'u', 'changes[entity=opening, change=added]', 'after', aA ? { side: 'after', kind: 'opening', id: opAdded[0].id, ...aA } : null),
           datum('openings-gone', t.openingsGone, opGone.length, 'u', 'changes[entity=opening, change=removed]', 'before', gA ? { side: 'before', kind: 'opening', id: opGone[0].id, ...gA } : null)] });
     }
+    // Mobiliario (§7.2: el primer cambio de una persona suele ser un mueble): nuevos, quitados y movidos o cambiados.
+    const objs = k => cmp.changes.filter(c => c.entity === 'object' && c.change === k).map(c => c.entityId);
+    const oAdd = objs('added'), oGone = objs('removed'), oMod = objs('modified');
+    if (oAdd.length || oGone.length || oMod.length) {
+      const at = (p, id, side) => { const o = (p.objects || []).find(x => x.id === id); return o && o.position ? { side, kind: 'object', id, x: Math.round(o.position.x), y: Math.round(o.position.y) } : null; };
+      chapters.push({ id: 'furniture', kind: 'furniture', title: t.furniture, text: t.textFurniture(oAdd.length, oGone.length, oMod.length),
+        data: [datum('objects-added', t.objAdded, oAdd.length, 'u', 'changes[entity=object, change=added]', 'after', oAdd[0] ? at(after, oAdd[0], 'after') : null),
+          datum('objects-gone', t.objGone, oGone.length, 'u', 'changes[entity=object, change=removed]', 'before', oGone[0] ? at(before, oGone[0], 'before') : null),
+          datum('objects-changed', t.objChanged, oMod.length, 'u', 'changes[entity=object, change=modified]', 'after', oMod[0] ? at(after, oMod[0], 'after') : null)] });
+    }
+    // Ningún cambio guardado se calla: lo que ningún capítulo explica se cuenta y se nombra como «otros cambios».
+    const roomIds = new Set(rooms.map(x => x.c.entityId)), finIds = new Set(finish.map(f => f.entityId)), wallIds = new Set([...wallsAdded, ...wallsGone]);
+    const covered = c => c.entity === 'object' || (c.entity === 'opening' && c.change !== 'modified') || (c.entity === 'wall' && wallIds.has(c.entityId))
+      || (c.entity === 'room' && (roomIds.has(c.entityId) || (c.change === 'modified' && finIds.has(c.entityId) && c.fields.every(f => f.field === 'floorMaterialId' || (f.field === 'polygon' && roomIds.has(c.entityId))))));
+    const rest = cmp.changes.filter(c => !covered(c)).length;
+    if (rest && !cmp.identical) chapters.push({ id: 'other', kind: 'other', title: t.other, text: t.textOther(rest),
+      data: [datum('other-count', t.otherCount, rest, 'u', 'changes − capítulos', 'after', null)] });
     return { schema: SCHEMA, version: VERSION, lang, relation: cmp.relation, revisions: { before: rev('before'), after: rev('after') },
       frame: { viewBox: cmp.perspective.viewBox, statement: cmp.perspective.statement }, limits: cmp.limits, order: chapters.map(c => c.id), chapters, edits: {} };
   }

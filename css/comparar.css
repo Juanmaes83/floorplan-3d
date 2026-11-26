@@ -52,3 +52,4 @@ details{margin-top:12px}summary{cursor:pointer;min-height:44px;display:flex;alig
 .form input:focus-visible,.form textarea:focus-visible,.btn:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 #orderPreview{width:100%;min-height:520px;border:1px solid currentColor;border-radius:6px;background:#fff}
 .withheld{font-style:normal}
+.story-next{align-items:center;padding:10px 12px;border:1px solid #d9d4cb;border-radius:10px;background:#faf8f4}.story-next p{margin:0;flex:1 1 260px}

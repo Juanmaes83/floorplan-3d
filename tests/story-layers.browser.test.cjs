@@ -85,7 +85,7 @@ test('P10 · historia de dos revisiones: encuadre común, rótulos anclados con 
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#storyLayersDialog[open]'));
   await page.waitForFunction(()=>document.activeElement?.dataset?.route==='story-layers'||document.activeElement?.closest?.('.perla-panel-open'));
   const back=await page.evaluate(()=>{const s=document.getElementById('professionalWorkspace');return {area:FloorPlanProfessionalUI.area,top:s.scrollTop,max:s.scrollHeight-s.clientHeight,focus:document.activeElement?.textContent?.trim()};});
-  assert.equal(back.area,'deliver');assert.match(back.focus,/Explicar el cambio/);assert.ok(Math.abs(back.top-scroller)<=120,'posición conservada: '+JSON.stringify(back)+' vs '+scroller);
+  assert.equal(back.area,'deliver');assert.match(back.focus,/^Continuar la historia$/,"tras guardar, la acción de P10 es continuar la historia");assert.ok(Math.abs(back.top-scroller)<=120,'posición conservada: '+JSON.stringify(back)+' vs '+scroller);
   assert.doesNotMatch(await page.evaluate(()=>document.body.innerText),CJK);assert.deepEqual(w.errors,[]);assert.deepEqual(w.external,[]);
  }finally{await ctx.close();}
 });

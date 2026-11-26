@@ -109,11 +109,13 @@ el nombre visible del producto.
 
 | Suite | Resultado |
 |---|---|
-| `tests/story-proposal-core.test.cjs` | 5/5 |
+| `tests/story-proposal-core.test.cjs` | 6/6 (incluye §7.2: mueble y otros ajustes) |
 | `tests/story-proposal.browser.test.cjs` | 3/3 |
 | `tests/story-layers-core.test.cjs` | 5/5 |
 | `tests/story-layers.browser.test.cjs` | 4/4 |
-| Regresión de Entregar y PERLA | Ver el informe del corte |
+| `tests/story-flow.browser.test.cjs` (§7.2, nueva) | 2/2 |
+| `tests/story-assist.browser.test.cjs` (§8.3, nueva) | 1/1 |
+| Regresión de Entregar, PERLA y vídeo del recorrido (`perla-return`, `professional-workspace`, `e2-comparativas`, `no-chinese-display`, `tour-video`) | Ver el informe del corte (TAP adjunto) |
 
 Las pruebas `story-proposal` cubren:
 - el caso de control, la identidad con los campos elegidos y la vista previa igual al archivo;
@@ -128,16 +130,114 @@ Las pruebas `story-proposal` cubren:
 - **Preview humana identificada por SHA:** requiere el despliegue de Preview de Codex o del propietario; desde esta sesión no
   despliego.
 
-### §7.2 · Guiar de la variante a la descarga (siguiente en este bloque)
+### §7.2 · Guiar de la variante a la descarga (hecho en este corte)
 
-Pendiente:
-- Ficha P10 con tres pasos y acción principal por estado: sin variante, variante idéntica, cambio guardado.
-- Crear y editar la variante desde P10.
-- «Volver a la historia» desde Diseñar y desde el comparador.
-- Progreso visible y motivos de bloqueo.
+**Obstáculo eliminado.** En `0e7aff2d` la persona tenía que salir de P10, buscar «Proyectos → Crear variante», volver a
+Entregar sin saber cuál de los dos proyectos editaba y adivinar por qué «Descargar» no se activaba. Ahora el recorrido entero
+empieza y acaba en P10, sin instrucciones externas.
 
-Ya entra en este corte:
-- Título «Historia del cambio».
-- Pasos numerados en el diálogo.
-- Progreso «Revisión guardada · N de N páginas listas».
-- Motivo de cualquier acción bloqueada, y cómo rehacer una historia obsoleta.
+| Estado | Ficha P10 «Historia del cambio» (pasos 1 → 2 → 3) | Acción principal |
+|---|---|---|
+| Sin variante | «Primer paso: crear una variante», con el original nombrado | **Crear variante**: el mismo paso que «Proyectos → Crear variante del proyecto abierto». Abre la variante en Diseñar con el original intacto |
+| Variante idéntica | «Variante creada. Edita algo para mostrar el primer cambio.» | **Editar variante** (también desde el comparador) |
+| Cambio guardado | «Cambios guardados en «variante» frente a «original»» | **Revisar el cambio** |
+| Revisión guardada | «Revisión guardada: falta previsualizar y descargar» | **Continuar la historia** |
+| Sin biblioteca o selección no comparable | Explicación | **Abrir proyectos** |
+
+**Vuelta contextual**
+- **En Diseñar:** barra «Editando la variante «…» · el original «…» se conserva» con **Volver a la historia**. Va bajo los
+  controles del lienzo y no tapa ninguna acción pulsable, tanto en escritorio como a 390 px (lo comprueba la prueba).
+- **Al volver:** RUBIK guarda primero y reabre la historia con el **mismo par y el mismo capítulo**, con el texto escrito.
+- **Al cerrar la historia:** Entregar recupera la ficha P10 y el foco.
+- **Desde la historia:** «Editar variante» guarda antes lo escrito, para no perderlo.
+- **Cabecera:** con una variante abierta muestra su nombre. Antes decía «Proyecto de ejemplo» también en la variante.
+
+**Comparador (`comparar/`):**
+- Con el mismo par, ofrece **Editar variante** si la variante es idéntica.
+- Si hay diferencias guardadas, ofrece **Preparar historia para el cliente**.
+- Abre RUBIK en Entregar con esa historia y limpia la dirección. El comparador sigue sin escribir nada, y la holgura y sus
+  comprobaciones técnicas no cambian.
+
+**Revisión**
+- Progreso **«Revisión sin guardar · 0 de 2 imágenes listas» → «Revisión guardada · 2 de 2 imágenes listas»**. El total se
+  calcula antes de dibujar, con el mismo reparto en páginas que el archivo.
+- Motivo de cada bloqueo y qué incluye el archivo.
+- Una revisión obsoleta explica que **«Rehacer»** vuelve a comprobar el cambio y **conserva la propuesta**: título, textos y
+  notas. Antes se perdía.
+
+**Fallo encontrado y corregido en este corte:** quitar un mueble (el primer cambio típico de una persona) producía una
+historia que decía «No hay cambios entre las dos revisiones». El núcleo solo explicaba superficies, muros, suelos y huecos.
+Cambios:
+- Nuevo capítulo **Mobiliario** (nuevos, quitados, movidos o cambiados), anclado al mueble.
+- Capítulo **Otros cambios**, que cuenta lo que ningún capítulo detalla. Ningún cambio guardado se calla.
+
+**Pruebas §7.2**
+- **Nueva prueba bloqueante:** `tests/story-flow.browser.test.cjs`, 2/2, con perfil nuevo y el proyecto inicial. Recorre:
+  - sin variante, crear, idéntica y editar;
+  - un cambio real hecho como la persona (seleccionar un mueble y pulsar Suprimir);
+  - la vuelta al mismo capítulo con su texto, y la cancelación sin escrituras;
+  - guardar, previsualizar, descargar y abrir;
+  - la obsoleta, rehecha con la propuesta conservada;
+  - el comparador en sus dos estados.
+
+  Todo en escritorio 1440×900 y móvil 390×844.
+- **Núcleo:** `story-proposal-core` 6/6 (caso nuevo de mueble y otros ajustes).
+
+Capturas en [`flujo-7-2/`](flujo-7-2/).
+
+### §8.3 · Primera aceptación de la asistencia en StoryLayers (hecho en este corte)
+
+**«Anounce».** En el repositorio no existe ningún módulo, ruta ni adaptador con ese nombre. Lo más parecido es **Nuance**:
+- `labs/asesor-rubik/nuance-adapter.js`, `api/advisor-session.js` y `docs/qa/asistente-unificado/PREVIEW-NUANCE.md`.
+- Es un asesor de **voz y avatar** para el cliente, con salida real **apagada**. Solo la activa el propietario en una Preview
+  privada, con código de operador.
+- No redacta textos para el profesional. Por eso no lo conecto ni lo anuncio en StoryLayers.
+
+Como permite el encargo, la primera prueba usa un **adaptador de texto local**:
+- Es `js/story-assist-core.js`, sin red ni modelo de lenguaje.
+- Cada frase sale de un dato de la historia o del cliente, y la ayuda dice cuáles usó.
+- Un adaptador autorizado futuro, como el Asistente IA con redacción, recibiría **exactamente** el contexto de
+  `FloorPlanStoryAssist.context()`.
+
+**Qué se ahorra el profesional**
+- No reescribe en una nota los hechos ya comprobados, como el cambio de suelo o lo que se conserva.
+- No busca imágenes ni vídeo fuera de RUBIK: las vistas preparadas y el vídeo del recorrido se eligen en la historia, con su
+  estado.
+- No vuelve a teclear los datos del cliente: carga una ficha JSON.
+- No repite la identidad: sale de Mi estudio.
+
+| Requisito §8.3 | Cómo se cumple (prueba `tests/story-assist.browser.test.cjs`, 1/1, desde P10 con original y variante guardados) |
+|---|---|
+| Dato comprobable | «Suelo de Salón: Baldosa 80×80 → Moqueta» sale de la historia comprobada |
+| Imagen de la revisión correcta | Las **vistas preparadas** se preparan desde la propia historia con la variante abierta. Una elegida entra como página «Vistas de la propuesta» |
+| Vídeo existente | El vídeo del recorrido se graba con **Presentación 3D → Grabar vídeo** y viaja como adjunto `propuesta/video-recorrido.mp4\|webm`, con su huella. La vista previa reproduce los mismos bytes |
+| Cliente sintético | Ficha JSON cargada (los campos desconocidos se nombran y se ignoran), con dos casillas por campo: **Usar para redactar** y **Mostrar en la entrega**. En la entrega solo aparece lo marcado («Para: Sra. …», «Lo que nos indicó») |
+| Identidad | La de «Mi estudio» (§7.3), con los campos elegidos |
+| Asistente en una nota de capítulo | «Ayuda para redactar una nota» muestra la fuente («sin conexión»), **qué datos usa**, un borrador **editable** y las preguntas que solo el profesional responde: motivo, método, decisión, y que beneficios, plazos y costes los valida él. Se puede **aceptar** (elige la visibilidad), **descartar** o **cerrar**. Al cerrar, el borrador, la posición en pantalla y el foco se conservan, sin perder otros textos |
+| Contexto limitado | La ayuda recibe solo el capítulo, lo que se conserva, si ya hay motivo/método/decisión (sí o no) y los campos del cliente marcados «usar». La prueba comprueba que no recibe ni el nombre ni los requisitos no marcados |
+| Nota interna excluida | Ninguna nota interna aparece en ningún archivo del ZIP (`INTERNA-ZX9`). Las preferencias del cliente no salen como dato del cliente, solo dentro de la nota que el profesional aceptó |
+| Medios ausentes u obsoletos | Ausente: «Ausente · grábalo en…» o «Preparar vistas». Un cambio posterior en la variante marca vista y vídeo como **obsoletos** y bloquea la descarga con su motivo |
+| Archivo = vista previa | Las huellas de las páginas y el vídeo del ZIP coinciden con las de la vista previa |
+
+**Muestra descargable (datos sintéticos):**
+- [`asistencia-8-3/propuesta-asistida-8-3.zip`](asistencia-8-3/propuesta-asistida-8-3.zip): 3 páginas y el vídeo.
+- [`manifiesto-8-3.json`](asistencia-8-3/manifiesto-8-3.json).
+- Páginas: [`8-3-pagina-1.png`](asistencia-8-3/8-3-pagina-1.png), [`8-3-pagina-2.png`](asistencia-8-3/8-3-pagina-2.png) y
+  [`8-3-pagina-3.png`](asistencia-8-3/8-3-pagina-3.png).
+- Capturas de la ayuda: [`8-3-ayuda-borrador.png`](asistencia-8-3/8-3-ayuda-borrador.png) y
+  [`8-3-historia-lista.png`](asistencia-8-3/8-3-historia-lista.png).
+
+**Preparado para extender a las demás plantillas:**
+- Los núcleos son puros y reutilizables: `normClient`/`clientFromFile`/`clientForAssist`, `mediaState`, `context()` y el
+  adaptador.
+- La regla es común: solo lo **vigente** entra, lo elegido que deja de serlo **bloquea** la entrega con su motivo, y la vista
+  previa da los mismos bytes que el archivo.
+
+**Límites de §8.3:**
+- Las vistas preparadas viven en la sesión del editor. Tras recargar, la historia las da por ausentes y ofrece prepararlas.
+- El vídeo solo se puede elegir si se grabó con la variante abierta y en su revisión actual.
+- El adaptador local no reformula estilo libre, solo convierte hechos. Un modelo de lenguaje requiere su activación
+  autorizada.
+- La ficha de cliente se guarda con la propuesta, en este navegador.
+
+La prueba humana sobre una Preview identificada por SHA requiere el despliegue de Codex o del propietario.

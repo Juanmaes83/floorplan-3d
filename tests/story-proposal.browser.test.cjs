@@ -56,7 +56,7 @@ test('§7.3 · caso Baldosa 800 → Moqueta: propuesta del estudio, notas con vi
   assert.ok(await page.locator('[data-sl="download"]').isDisabled());assert.match(await page.locator('[data-sl="why"]').innerText(),/Guarda la revisión/);
   await page.locator('[data-sl="save"]').click();assert.match(await page.locator('[data-sl="why"]').innerText(),/Previsualiza como cliente/);
   await page.locator('[data-sl="images"]').click();await page.waitForSelector('#storyLayersDialog [data-sl="preview"] img');
-  const prog=await page.locator('[data-sl="progress"]').innerText();assert.match(prog,/^Revisión guardada · (\d+) de \1 páginas listas$/);
+  const prog=await page.locator('[data-sl="progress"]').innerText();assert.match(prog,/^Revisión guardada · (\d+) de \1 imágenes listas$/);
   const pv=await previewBytes(page);assert.ok(pv.length>=3,'portada, capítulo y propuesta: '+pv.length);
   const ui=await page.evaluate(()=>FloorPlanStoryLayersUI.pages);assert.deepEqual(pv,ui.map(p=>p.sha256),'la vista previa muestra las páginas que se descargarán');
   assert.ok(ui.some(p=>p.cont),'el texto largo continúa en la página siguiente (no se trunca)');

@@ -10,7 +10,8 @@
    - wrap()/flow(): ajuste de línea por anchura medida y paso de página; ningún texto se trunca. */
 (function (root, factory) { const api = factory(); if (typeof module === 'object' && module.exports) module.exports = api; else root.FloorPlanStoryProposal = api; })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
-  const VERSION = 1, LIMITS = { title: 140, summary: 1200, why: 2000, how: 2000, decision: 600, note: 800 }, MAX_NOTES = 40;
+  const VERSION = 1, LIMITS = { title: 140, summary: 1200, why: 2000, how: 2000, decision: 600, note: 800, clientName: 120, treatment: 40, preferences: 600, requirements: 600 }, MAX_NOTES = 40;
+  const CLIENT = ['name', 'preferences', 'requirements'];
   const CONTACT = ['person', 'phone', 'email', 'web'], VIS = ['client', 'internal'];
   // Texto del profesional: se conservan los saltos de línea; se quitan controles y espacios repetidos.
   const clean = (v, max) => String(v ?? '').replace(/\r\n?/g, '\n').replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, ' ').replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
@@ -23,6 +24,7 @@
       netKept: v => `La superficie útil se conserva: ${v} m².`, netChange: (b, a) => `La superficie útil pasa de ${b} m² a ${a} m².`,
       roomsKept: n => `Se conservan las ${n} estancias.`, roomsChange: (b, a) => `Las estancias pasan de ${b} a ${a}.`,
       layoutKept: 'La distribución se conserva: no se añade ni se quita ningún muro.', layoutChange: (a, g) => `Distribución: ${a} muro(s) nuevo(s) y ${g} quitado(s) o a demoler.`,
+      furnitureChange: (a, g, m) => `Mobiliario: ${a} mueble(s) nuevo(s), ${g} quitado(s) y ${m} movido(s) o cambiado(s).`, otherChange: n => `Otros ajustes en los datos del proyecto: ${n}.`,
       openingsKept: 'Puertas y ventanas se conservan.', openingsChange: (a, g) => `Puertas y ventanas: ${a} hueco(s) nuevo(s) y ${g} quitado(s).`,
       areaChange: (n, b, a) => `${n}: la superficie pasa de ${b} m² a ${a} m².`, roomNew: (n, a) => `${n}: estancia nueva de ${a} m².`, roomGone: (n, b) => `${n}: se elimina (tenía ${b} m²).`,
       floorChange: (n, b, a) => `Suelo de ${n}: ${b} → ${a}.`, absent: 'no existe', notDeclared: 'sin acabado declarado',
@@ -39,6 +41,7 @@
       netKept: v => `The usable area is kept: ${v} m².`, netChange: (b, a) => `The usable area goes from ${b} m² to ${a} m².`,
       roomsKept: n => `All ${n} rooms are kept.`, roomsChange: (b, a) => `Rooms go from ${b} to ${a}.`,
       layoutKept: 'The layout is kept: no wall is added or removed.', layoutChange: (a, g) => `Layout: ${a} new wall(s) and ${g} removed or to be demolished.`,
+      furnitureChange: (a, g, m) => `Furniture: ${a} new piece(s), ${g} removed and ${m} moved or changed.`, otherChange: n => `Other adjustments in the project data: ${n}.`,
       openingsKept: 'Doors and windows are kept.', openingsChange: (a, g) => `Doors and windows: ${a} new opening(s) and ${g} removed.`,
       areaChange: (n, b, a) => `${n}: the area goes from ${b} m² to ${a} m².`, roomNew: (n, a) => `${n}: new room of ${a} m².`, roomGone: (n, b) => `${n}: removed (it had ${b} m²).`,
       floorChange: (n, b, a) => `Floor of ${n}: ${b} → ${a}.`, absent: 'does not exist', notDeclared: 'no declared finish',
@@ -64,7 +67,31 @@
     }).filter(n => n.text);
     const fields = Array.isArray(p.contact && p.contact.fields) ? CONTACT.filter(f => p.contact.fields.includes(f)) : [];
     return { version: VERSION, title: clean(p.title, LIMITS.title), summary: clean(p.summary, LIMITS.summary), why: clean(p.why, LIMITS.why), how: clean(p.how, LIMITS.how),
-      decision: clean(p.decision, LIMITS.decision), contact: { fields, logo: !(p.contact && p.contact.logo === false) }, notes };
+      decision: clean(p.decision, LIMITS.decision), contact: { fields, logo: !(p.contact && p.contact.logo === false) }, notes, client: normClient(p.client), media: normMedia(p.media) };
+  }
+  /* §8.2 · Cliente: datos que el profesional introduce o carga (opcional). Cada campo dice si se USA para personalizar (lo que
+     recibe la ayuda de redacción) y si APARECE en la entrega. Por defecto, nada se usa ni se muestra hasta que se marca. */
+  function normClient(c) {
+    c = c && typeof c === 'object' ? c : {};
+    const flags = o => Object.fromEntries(CLIENT.map(k => [k, !!(o && o[k] === true)]));
+    return { name: clean(c.name, LIMITS.clientName), treatment: clean(c.treatment, LIMITS.treatment), preferences: clean(c.preferences, LIMITS.preferences), requirements: clean(c.requirements, LIMITS.requirements), use: flags(c.use), show: flags(c.show) };
+  }
+  /** Ficha cargada desde un archivo (JSON): solo los campos conocidos; lo demás se ignora y se dice. */
+  function clientFromFile(json) {
+    const o = typeof json === 'string' ? JSON.parse(json) : json; if (!o || typeof o !== 'object' || Array.isArray(o)) throw Error('La ficha no es un objeto JSON.');
+    const pick = k => typeof o[k] === 'string' ? o[k] : Array.isArray(o[k]) ? o[k].filter(x => typeof x === 'string').join('; ') : '';
+    const known = ['name', 'nombre', 'treatment', 'tratamiento', 'preferences', 'preferencias', 'requirements', 'requisitos'];
+    return { client: normClient({ name: pick('name') || pick('nombre'), treatment: pick('treatment') || pick('tratamiento'), preferences: pick('preferences') || pick('preferencias'), requirements: pick('requirements') || pick('requisitos') }),
+      ignored: Object.keys(o).filter(k => !known.includes(k)) };
+  }
+  /** Lo que la ayuda puede leer del cliente: SOLO los campos marcados «usar». */
+  const clientForAssist = c => Object.fromEntries(CLIENT.filter(k => c && c.use && c.use[k] && c[k]).map(k => [k, k === 'name' && c.treatment ? c.treatment + ' ' + c.name : c[k]]));
+  /* §8.2 · Medios elegidos del proyecto (vistas preparadas y vídeo del recorrido): ids, nunca bytes. */
+  function normMedia(m) { m = m && typeof m === 'object' ? m : {}; return { views: (Array.isArray(m.views) ? m.views : []).filter(x => typeof x === 'string' && /^[\w:.-]{1,80}$/.test(x)).slice(0, 6), video: m.video === true }; }
+  /** Estado de un medio respecto a la revisión de la propuesta: vigente, obsoleto (otra revisión de la variante), de otro
+   *  proyecto (p. ej. el original) o ausente. Solo un medio VIGENTE puede entrar en la entrega. */
+  function mediaState({ exists, entryId, afterId, current, storyObsolete }) {
+    if (!exists) return 'absent'; if (entryId !== afterId) return 'other-entry'; if (!current || storyObsolete) return 'stale'; return 'current';
   }
   // «Internas» nunca: el filtro es el ÚNICO camino del texto de una nota hacia cualquier archivo para el cliente.
   const clientNotes = proposal => (proposal.notes || []).filter(n => n.visibility === 'client');
@@ -79,6 +106,8 @@
         changes.push(b === null ? t.roomNew(n, num(a, lang)) : a === null ? t.roomGone(n, num(b, lang)) : t.areaChange(n, num(b, lang), num(a, lang))); }
       else if (c.kind === 'layout') changes.push(t.layoutChange(val(c, 'walls-added'), val(c, 'walls-gone')));
       else if (c.kind === 'openings') changes.push(t.openingsChange(val(c, 'openings-added'), val(c, 'openings-gone')));
+      else if (c.kind === 'furniture') changes.push(t.furnitureChange(val(c, 'objects-added'), val(c, 'objects-gone'), val(c, 'objects-changed')));
+      else if (c.kind === 'other') changes.push(t.otherChange(val(c, 'other-count')));
     }
     if (nb !== null && na !== null && nb !== undefined) (Math.abs(nb - na) < .005 ? kept.push(t.netKept(num(na, lang))) : changes.push(t.netChange(num(nb, lang), num(na, lang))));
     if (rb !== null && ra !== null && rb !== undefined) (rb === ra ? kept.push(t.roomsKept(ra)) : changes.push(t.roomsChange(rb, ra)));
@@ -121,7 +150,9 @@
       data: ch.data.map((d, i) => ({ n: i + 1, marked: !!d.anchor, text: `${side(d.revision.side)} · ${d.label}: ${d.value === null ? t.absent : (typeof d.value === 'number' && d.unit !== 'u' ? num(d.value, lang) + ' ' + d.unit : d.unit === 'u' ? d.value : d.value)}` })),
       notes: notes.filter(n => n.anchor.kind === 'chapter' && n.anchor.id === ch.id).map(n => n.text) }));
     const or = (v, p) => v ? { text: v, pending: false } : { text: p, pending: true };
-    return { lang, identity: id, title: proposal.title || t.title(projectName || '—'), summary: proposal.summary || t.summary(f.changes), facts: f, chapters,
+    const cl = proposal.client || normClient(null), show = k => cl.show[k] && cl[k];
+    const client = { addressee: show('name') ? (cl.treatment ? cl.treatment + ' ' + cl.name : cl.name) : null, requests: [show('preferences') ? cl.preferences : null, show('requirements') ? cl.requirements : null].filter(Boolean) };
+    return { lang, identity: id, client, title: proposal.title || t.title(projectName || '—'), summary: proposal.summary || t.summary(f.changes), facts: f, chapters,
       hero: chapters[0] ? chapters[0].id : null, labels: { current: t.current, proposal: t.proposal, changes: t.changes, kept: t.kept, where: t.where, note: t.note, notes: t.notes },
       sections: [{ key: 'why', title: t.why, ...or(proposal.why, t.pendingDefine) }, { key: 'how', title: t.how, ...or(proposal.how, t.pendingDefine) },
         { key: 'cost', title: t.cost, lines: c.lines, pending: c.pending, status: c.status }, { key: 'decision', title: t.decision, ...or(proposal.decision, t.pendingDefine) }],
@@ -133,9 +164,10 @@
    *  revisión ni rutas de campos (la trazabilidad técnica vive en el archivo interno). Solo la huella de cada imagen, para
    *  poder comprobar que el archivo no se alteró. */
   function clientManifest(doc, pages, { date } = {}) {
-    return { schema: 'rubik-sota.story-client', version: '1.0.0', title: doc.title, preparedBy: doc.identity.present ? doc.identity.name : null, date: date || null,
+    return { schema: 'rubik-sota.story-client', version: '1.0.0', title: doc.title, preparedBy: doc.identity.present ? doc.identity.name : null, preparedFor: doc.client ? doc.client.addressee : null, requests: doc.client ? doc.client.requests : [], date: date || null,
       summary: doc.summary, changes: doc.facts.changes, kept: doc.facts.kept, sections: doc.sections.map(s => ({ title: s.title, text: s.text ?? null, lines: s.lines || null, pending: s.pending === true || (Array.isArray(s.pending) ? s.pending : false) })),
-      notes: [...doc.generalNotes, ...doc.chapters.flatMap(c => c.notes)], pages: pages.map(p => ({ file: p.file, sha256: p.sha256, bytes: p.bytes, content: p.content })) };
+      notes: [...doc.generalNotes, ...doc.chapters.flatMap(c => c.notes)], pages: pages.filter(p => !p.attachment).map(p => ({ file: p.file, sha256: p.sha256, bytes: p.bytes, content: p.content })),
+      attachments: pages.filter(p => p.attachment).map(p => ({ file: p.file, sha256: p.sha256, bytes: p.bytes, content: p.content })) };
   }
 
   /** Ajuste de línea: respeta los saltos del texto, parte por palabras y, si una palabra no cabe, por caracteres. Nunca trunca. */
@@ -185,5 +217,5 @@
     });
     return pages;
   }
-  return Object.freeze({ VERSION, LIMITS, CONTACT, normalize, clientNotes, facts, cost, identity, document, clientManifest, wrap, flow, eur, num });
+  return Object.freeze({ VERSION, LIMITS, CONTACT, normalize, clientNotes, facts, cost, identity, document, clientManifest, clientFromFile, clientForAssist, mediaState, CLIENT, wrap, flow, eur, num });
 });

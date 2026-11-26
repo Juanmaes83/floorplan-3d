@@ -101,6 +101,11 @@ function render(pr,budgetError){
     :'Dos distribuciones del mismo grupo de «Variantes»: el original y una variante.';
   $('relation').textContent=`Original y variante enlazadas en la biblioteca de este navegador. «${c.before.label}» → «${c.after.label}».`;
   $('notes').innerHTML=pr.notes.map(n=>`<li>${esc(n)}</li>`).join('');
+  /* §7.2 · Siguiente paso hacia el cliente con ESTE mismo par: si la variante guardada es igual, editarla; si hay diferencias
+     guardadas, preparar su historia en Entregar (P10). Abre RUBIK en esta pestaña; el comparador no escribe nada. */
+  {const pair=encodeURIComponent(state.ids.before)+'~'+encodeURIComponent(state.ids.after),box=$('storyNext');
+   $('storyNextText').textContent=c.identical?'Variante creada. Edita algo para mostrar el primer cambio.':'Hay diferencias guardadas: puedes convertirlas en una historia para el cliente, con este mismo original y esta variante.';
+   const a=$('storyNextBtn');a.textContent=c.identical?'Editar variante':'Preparar historia para el cliente';a.href='../?'+(c.identical?'editar=':'historia=')+pair;a.dataset.storyNext=c.identical?'edit':'story';box.hidden=false;}
   const sb=R.planSvg(c,'before',pr.before,{title:`Planta «${c.before.label}»`}),sa=R.planSvg(c,'after',pr.after,{title:`Planta «${c.after.label}»`});
   $('layerBefore').innerHTML=sb;$('layerAfter').innerHTML=sa;$('sideBefore').innerHTML=sb;$('sideAfter').innerHTML=sa;
   $('tagBefore').textContent=c.before.label;$('tagAfter').textContent=c.after.label;$('capBefore').textContent=c.before.label;$('capAfter').textContent=c.after.label;
