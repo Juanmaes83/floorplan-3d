@@ -9,6 +9,8 @@
    Nothing here edits, saves or uploads: the editor is hidden, storage is memory, and the project never leaves the page. */
 (function(){
  'use strict';
+ // Regla del idioma visible: el título que se MUESTRA pasa por el embudo nm() (un nombre guardado en chino nunca se ve en ES/EN).
+ const shownTitle=()=>{const t=snap?.title||'';try{return (typeof nm==='function'?nm(t):t)||t;}catch{return t;}};
  const D=window.RUBIK_DELIVERY,app=window.FloorPlanApp,Delivery=window.FloorPlanClientDelivery;
  if(!D||!app||!Delivery)return;
  let snap=null,lang='es',mode='gate';
@@ -54,7 +56,7 @@
   else if(!window.FloorPlanProjectPreview?.axonometric(fig,{label:tx('Esquema de la vivienda entregada','Scheme of the delivered home','交付住宅示意图')})){fig.classList.add('is-empty');el('span',snap.title,fig);}
   else fig.classList.add('is-scheme');
   el('p',tx('Descubre tu vivienda en 3D','Discover your home in 3D','以三维方式探索您的住宅'),card,'delivery-eyebrow');
-  el('h1',snap.title,card,'delivery-title').id='deliveryTitle';
+  el('h1',shownTitle(),card,'delivery-title').id='deliveryTitle';
   const caps=snap.capabilities;
   el('p',caps.guided?tx('Explora los espacios a tu ritmo o sigue la presentación que tu profesional ha preparado para ti.','Explore the spaces at your own pace or follow the presentation your professional prepared for you.','按自己的节奏探索空间，或观看专业人员为您准备的展示。')
    :tx('Explora los espacios a tu ritmo, como si caminaras por ellos.','Explore the spaces at your own pace, as if walking through them.','按自己的节奏探索空间，如同身临其境。'),card,'delivery-lead');
@@ -82,7 +84,7 @@
  }
  // ── Visit: Rubik's own 3D view, walk mode and presentation ───────────────────────────────────────────────────────
  function showBar(label){
-  bar.replaceChildren();bar.hidden=false;el('strong',snap.title,bar,'delivery-bar-title');el('span',label,bar,'delivery-bar-mode');
+  bar.replaceChildren();bar.hidden=false;el('strong',shownTitle(),bar,'delivery-bar-title');el('span',label,bar,'delivery-bar-mode');
   const x=btn(tx('Salir de la visita','Leave the visit','退出参观'),bar,'btn delivery-bar-exit');x.id='deliveryExit';x.onclick=leave;
  }
  let watch=0;
@@ -188,7 +190,7 @@
   try{
    const raw=await receive();snap=Delivery.validate(raw);lang=snap.lang;
    if(typeof setLang==='function'&&typeof LANG==='string'&&LANG!==lang){try{setLang(lang);}catch{}}
-   document.title=`${snap.title} · ${tx('Visita 3D','3D visit','三维参观')}`;
+   document.title=`${shownTitle()} · ${tx('Visita 3D','3D visit','三维参观')}`;
    const content=snap.content.building||snap.content.project;
    const file=new File([JSON.stringify(content)],'entrega.json',{type:'application/json'});
    if(!await app.importProjectFile(file))throw Error('import');

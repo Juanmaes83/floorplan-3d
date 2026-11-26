@@ -274,6 +274,11 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
 #joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,253,249,.92);
   box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
 #walkExit{position:absolute;right:16px;bottom:28px;z-index:3;display:none}
+/* §5.1 · El aviso del recorrido no bloquea la interfaz: solo su tarjeta recibe clics; en pausa, compacta y arriba. */
+#walkOverlay{pointer-events:none}#walkOverlay .walk-card{pointer-events:auto}
+#walkOverlay.paused{align-items:flex-start;padding-top:64px}#walkOverlay.paused .walk-card p{display:none}
+#walkLockHint{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:4;margin:0;padding:6px 12px;border-radius:999px;background:rgba(20,24,28,.78);color:#fff;font:600 13px/1.3 system-ui,sans-serif;pointer-events:none}
+#walkLockHint[hidden]{display:none}
 /* ---------- 触屏：加大点击区域 ---------- */
 @media (pointer:coarse){
   body{font-size:14px}
@@ -695,7 +700,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
         <p id="wo3" class="walk-keys"></p>
         <button class="btn primary" id="walkStart" type="button" data-en="Start the walk">开始漫游</button>
         <p id="wo4" class="walk-note"></p></div></div>
-      <div id="cross"></div>
+      <div id="cross"></div><p id="walkLockHint" role="status" hidden></p>
       <div id="joy"><i></i></div>
       <button class="btn primary" id="walkExit" data-en="Exit walk">退出漫游</button>
       <div id="hint3d"></div>
@@ -3101,10 +3106,12 @@ function init(){
   // Three.js publishes "lock" before its isLocked flag. Check held input on the queued frame.
   walkCtl.addEventListener('lock', () => {
     if (!walkLockRequested || !active || opt.mode !== 'walk'){ walkCtl.unlock(); return; }
-    $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block';
+    $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'block'; $('#walkLockHint').hidden = false;
     walkClock.start(performance.now()); requestFrame();
   });
-  walkCtl.addEventListener('unlock', () => { walkLockRequested = false; resetWalkInput(); if (opt.mode === 'walk'){ $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
+  walkCtl.addEventListener('unlock', () => { walkLockRequested = false; resetWalkInput(); $('#walkLockHint').hidden = true;
+    // §5.1: en pausa, los controles quedan libres al instante; la cámara conserva posición y orientación.
+    if (opt.mode === 'walk'){ walkPaused = true; syncWalkTexts(); $('#walkOverlay').classList.add('paused'); $('#walkOverlay').style.display = 'flex'; $('#cross').style.display = 'none'; } });
 
   hemi = new THREE.HemisphereLight(0xfff8ee, 0xb9a88f, 1.1);
   sun = new THREE.DirectionalLight(0xfff1dd, 2.6);
@@ -4595,7 +4602,7 @@ async function exit(){
   presentationAmbienceEnd();presentationLivingDrawingEnd();
   if(architecturalQualityProject){resetArchitecturalQuality();opt.surfaceQuality='base';}
   heldEntry=null;
-  if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
+  if (opt.mode === 'walk'){ walkPaused = false; $('#walkOverlay').classList.remove('paused'); walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
     const dir = new THREE.Vector3(); camera.getWorldDirection(dir); orbit.target.copy(camera.position).addScaledVector(dir, 3).setY(0); opt.mode = 'orbit'; syncModeBtns(); }
   if(fly?.res)fly.res(false);fly = null; orbit.enabled = false; showLabels(false); stage.classList.add('animating');
   const A = curPose(), B = planPose();
@@ -4665,7 +4672,7 @@ const HINT_ORBIT = () => COARSE ? tr('单指旋转 · 双指缩放 / 平移 · �
 const HINT_TOUCHWALK = () => tr('左下摇杆移动 · 拖动画面转向 · 点门开关', 'Joystick moves · drag to look · tap a door to open or close it');
 const HINT_WALK = () => tr('WASD 移动 · 鼠标转向 · Shift 快走 · E 开关门 · Esc 暂停', 'WASD moves · mouse looks · Shift runs · E opens or closes a door · Esc pauses');
 function syncHint3d(){ if (viewMode === '3d') $('#tip').textContent = TIPS()['3d']; $('#hint3d').textContent = opt.mode === 'orbit' ? HINT_ORBIT() : touchWalk || COARSE ? HINT_TOUCHWALK() : HINT_WALK(); }
-let touchWalk = false, walkLockRequested = false;
+let touchWalk = false, walkLockRequested = false, walkPaused = false;
 const joy = {x:0, y:0, id:null}, eul = new THREE.Euler(0, 0, 0, 'YXZ');
 function lookBy(dx, dy){
   eul.setFromQuaternion(camera.quaternion);
@@ -4866,6 +4873,10 @@ function syncWalkTexts(){
        tr('<kbd>E</kbd> 开关正前方的门 · <kbd>Esc</kbd> 暂停', '<kbd>E</kbd> opens or closes the door ahead · <kbd>Esc</kbd> pauses')];
   t.push(tr('向客户分站展示，请用「展示我的住宅」。', 'To show it to a client with stops, use «Present my home».'));
   t.forEach((h, i) => SafeDOM.markup($('#wo' + (i + 1)), h));
+  // §5.1: el cursor empieza libre; la mirada con el ratón se activa con un botón explícito y se reanuda igual tras Esc.
+  if (!COARSE){ $('#walkStart').textContent = walkPaused ? L3('Reanudar recorrido','Resume the walk','继续漫游') : L3('Activar mirada con el ratón','Turn on mouse look','启用鼠标视角');
+    $('#walkTitle').textContent = walkPaused ? L3('Recorrido en pausa','Walk paused','漫游已暂停') : L3('Recorre la vivienda','Walk through the home','漫游住宅'); }
+  $('#walkLockHint').textContent = L3('Esc · Pausar y mostrar controles','Esc · Pause and show controls','Esc · 暂停并显示控件');
   syncHint3d();
 }
 function bindUI(){
@@ -4873,7 +4884,7 @@ function bindUI(){
   $('#roofToggle').onclick=()=>{if(!opt.roof&&roofResult?.status!=='available'){toast(L3('Cubierta no disponible: ','Roof not available: ','屋顶不可用：')+(roofResult?.reason||L3('geometría insuficiente','insufficient geometry','几何信息不足')));return;}opt.roof=!opt.roof;syncRoofVisibility();
     const chosen=opt.roof;const frame=()=>{if(!active||opt.roof!==chosen||opt.mode!=='orbit')return;if(anim){requestAnimationFrame(frame);return;}flyTo(chosen?roofWhole():isoWhole());};frame();};
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
-  $('#walkOverlay').onclick = startWalkInput;
+  // §5.1: solo el botón explícito captura el ratón; pulsar la escena o la interfaz nunca lo recaptura.
   $('#walkStart').onclick = e => { e.stopPropagation(); startWalkInput(); };
   document.addEventListener('pointerlockerror', () => {
     if (walkLockRequested && active && opt.mode === 'walk'){ walkLockRequested = false; startTouchWalk(); }

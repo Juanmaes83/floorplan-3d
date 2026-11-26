@@ -136,3 +136,7 @@ html.delivery-client .delivery-map svg{height:210px;cursor:default;touch-action:
 .delivery-map.is-collapsed{width:auto;max-width:calc(100% - 24px)}
 @media (max-width:520px){html.delivery-client .delivery-map{width:min(200px,calc(100% - 24px))}html.delivery-client .delivery-map svg{height:132px}}
 @media (max-height:520px) and (orientation:landscape){html.delivery-client .delivery-map{width:210px}html.delivery-client .delivery-map svg{height:118px}}
+/* §5.1 · Visita 3D del cliente: un solo miniplano (el de la visita), sin los conmutadores de paneles del editor, y el
+   Asistente en su propio espacio, encima de la barra de exploración y lejos de los controles. */
+html.delivery-in-visit #nav3d,html.delivery-in-visit #nav3dMap,html.delivery-in-visit #tgLib,html.delivery-in-visit #tgPanel,html.delivery-in-visit #mobileDock,html.delivery-in-visit body.perla #stage>#mobileDock{display:none!important}
+html.delivery-in-visit #stage #walkExit{bottom:calc(84px + env(safe-area-inset-bottom))}
