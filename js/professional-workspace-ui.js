@@ -13,7 +13,8 @@
  function button(text,parent,fn,primary=false){const b=el('button',text,parent,'btn'+(primary?' primary':''));b.type='button';b.onclick=fn;return b;}
  for(const key of Object.keys(titles())){const b=button(titles()[key],nav,()=>open(key));b.id='workArea-'+key;b.setAttribute('aria-label',titles()[key]);if(key==='studio')b.title=studioTitle();b.setAttribute('aria-controls','professionalWorkspace');buttons[key]=b;}
  function position(){/* PERLA: con la barra de áreas integrada en la cabecera, el área se ancla bajo la cabecera */const anchor=nav.getClientRects().length?nav:document.querySelector('header');const bottom=anchor.getBoundingClientRect().bottom;section.style.top=bottom+'px';document.documentElement.style.setProperty('--professional-nav-bottom',bottom+'px');}
- const resize=new ResizeObserver(position);resize.observe(nav);resize.observe(document.querySelector('header'));addEventListener('resize',position);
+ // Written in the next frame, never inside the ResizeObserver delivery (see js/app-shell.js, A0 residual #273).
+ let positionFrame=0;const resize=new ResizeObserver(()=>{if(!positionFrame)positionFrame=requestAnimationFrame(()=>{positionFrame=0;position();});});resize.observe(nav);resize.observe(document.querySelector('header'));addEventListener('resize',position);
  // Global header controls keep their original handlers. Only the editor behind the workspace is inert.
  const globalControls=['welcomeBtn','projectsBtn','langBtn','fullscreen'];for(const id of globalControls)document.getElementById(id)?.classList.add('professional-global-control');
  // The editor behind a work area is inert and its 3D view stops drawing until the area closes.
