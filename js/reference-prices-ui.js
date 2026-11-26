@@ -59,14 +59,14 @@
    if(it.id===state.selected)b.style.background='var(--action-soft)';el('strong',it.description,b).style.display='block';
    const ref=it.priceReference,src=it.priceSource?.type==='provider-reference'?'Precio de referencia · '+(ref?.code||''):it.priceSource?.type==='manual'?it.priceSource.label||'Precio propio':'Sin precio';
    el('small',`${it.unitPrice===null?'Sin precio':eur(it.unitPrice)+' / '+uq(it.quantity.unit)} · ${src} · importe ${lines.get(it.id).subtotalNet===null?'desconocido':eur(lines.get(it.id).subtotalNet)}${it.unitPrice!==null&&it.review.status!=='reviewed'?' · sin revisar':''}`,b).style.display='block';
-   b.onclick=()=>{state.selected=it.id;state.quotes=[];state.preview=null;state.detail=undefined;catalogQuote();draw();};}
+   b.onclick=()=>{state.selected=it.id;state.saved=null;state.quotes=[];state.preview=null;state.detail=undefined;catalogQuote();draw();};}
   // Sources
   el('h3','Fuentes de precios',right);
   const srow=el('div',undefined,right);srow.style.cssText='display:flex;flex-wrap:wrap;gap:8px';
   const fileBtn=(label,id,make,what)=>{const l=el('label',label,srow,'btn');const i=el('input',undefined,l);i.type='file';i.accept='.bc3,.BC3';i.hidden=true;i.id=id;
    i.onchange=async()=>{const f=i.files[0];i.value='';if(!f)return;if(f.size>Cat.LIMITS.fileBytes){state.err=`${what}: el archivo supera ${Cat.LIMITS.fileBytes/1048576} MB.`;draw();return;}
     const made=make(new Uint8Array(await f.arrayBuffer()),f.name);if(made.status!=='available'){const d=Cat.describe(made.state||'catalog-unavailable');state.err=`${what}: ${d.title}. ${d.detail}`;draw();return;}
-    state.err='';state.sources.push(made);if(made.source.column!==null)state.columns[made.source.id]=made.source.column;state.msg=`${what} cargado: ${made.source.count} partidas con precio.`;draw();};};
+    state.err='';state.sources.push(made);if(made.source.column!==null)state.columns[made.source.id]=made.source.column;state.msg=`Catálogo leído: «${nice(made.source.label)}» · ${made.source.count} ${made.source.count===1?'referencia disponible':'referencias disponibles'} para buscar. Todavía no se ha aplicado ningún precio al proyecto.`;draw();};};
   fileBtn('BC3 de la BCCA aportado por ti','pricesBcca',(bytes,name)=>Cat.bccaSource({bytes,fileName:name,datasetMode:'user-supplied',source:{label:`BCCA · ${name}`,sourceName:'Base de Costes de la Construcción de Andalucía (BC3 aportado por el profesional)',sourceUrl:null,edition:null,attribution:null,licenseName:null,licenseUrl:null}}),'BC3 de la BCCA');
   fileBtn('Otro BC3','pricesBc3',(bytes,name)=>Cat.bc3Source({bytes,fileName:name,kind:'bc3'}),'BC3');
   fileBtn('Tarifa del estudio (BC3)','pricesTariff',(bytes,name)=>Cat.bc3Source({bytes,fileName:name,kind:'tariff'}),'Tarifa');
@@ -76,10 +76,15 @@
   if(state.sources.length){const sl=el('ul',undefined,right);sl.id='pricesSources';
    for(const s of state.sources){const src=s.source,li=el('li',undefined,sl);li.dataset.source=src.id;chip(src.kind==='bcca'?'BCCA':src.kind==='tariff'?'Tarifa propia':src.kind==='studio-catalog'?'Mi catálogo':'BC3',li,'info');el('b',' '+nice(src.label),li);
     el('small',` · ${src.edition?'edición '+src.edition+' · ':''}precios a ${fmtDate(src.asOf)} · ${src.count} partidas · licencia ${src.kind==='studio-catalog'?'no aplica (fichas de tu estudio)':licenseText(src.license.status)}`,li);
-    if(src.columns.length>1){const l=el('label',undefined,li,'cx-field');el('span','Columna de precios',l);const sel=el('select',undefined,l);sel.dataset.col=src.id;el('option','Elige una columna…',sel).value='';src.columns.forEach((c,i)=>{const o=el('option',c,sel);o.value=String(i);});sel.value=state.columns[src.id]===undefined||state.columns[src.id]===null?'':String(state.columns[src.id]);sel.onchange=()=>{state.columns[src.id]=sel.value===''?null:Number(sel.value);};}
+    if(src.columns.length>1&&(state.columns[src.id]===undefined||state.columns[src.id]===null)){const w=el('p','Falta elegir la columna de precios de este catálogo (por ejemplo, la zona) antes de ver precios.',li,'cx-status');w.dataset.needsColumn=src.id;w.style.color='var(--warn,#8a5a00)';}
+    if(src.columns.length>1){const l=el('label',undefined,li,'cx-field');el('span','Columna de precios',l);const sel=el('select',undefined,l);sel.dataset.col=src.id;el('option','Elige una columna…',sel).value='';src.columns.forEach((c,i)=>{const o=el('option',c,sel);o.value=String(i);});sel.value=state.columns[src.id]===undefined||state.columns[src.id]===null?'':String(state.columns[src.id]);sel.onchange=()=>{state.columns[src.id]=sel.value===''?null:Number(sel.value);draw();dialog.querySelector(`[data-col="${src.id}"]`)?.focus();};}
     if(src.edition){const u=btn('Comprobar actualización con esta edición',li,'cx-link');u.dataset.update=src.id;u.onclick=async()=>{state.proposal=await Cat.proposeEditionUpdate(state.budget,s);draw();dialog.querySelector('#pricesUpdates')?.scrollIntoView({block:'nearest'});};}}}
   // Search for the selected item
-  const it=item(state.selected);el('h3',it?`Buscar referencia para «${it.description}»`:'Buscar referencia',right);
+  const it=item(state.selected);
+  // §5.2 · El recorrido completo, visible: dónde estás y qué falta.
+  {const step=state.preview?4:state.detail!==undefined?3:state.quotes.length?2:1,ol=el('ol',undefined,right,'prices-steps');ol.id='pricesSteps';ol.setAttribute('aria-label','Pasos para aplicar un precio');
+   ['Buscar','Comparar','Revisar procedencia','Aplicar y confirmar'].forEach((t,i)=>{const li=el('li',t,ol);if(i+1===step)li.setAttribute('aria-current','step');else if(i+1<step)li.dataset.done='true';});}
+  el('h3',it?`Buscar referencia para «${it.description}»`:'Buscar referencia',right);
   const form=el('form',undefined,right,'cx-row');form.id='pricesSearch';form.setAttribute('role','search');
   const lq=el('label',undefined,form,'cx-field');el('span','Código o texto',lq);const q=el('input',undefined,lq);q.type='search';q.id='pricesQuery';q.minLength=2;q.value=state.lastQuery||(it?it.description.replace(/\(.*\)/,'').trim().split(/\s+/).slice(0,2).join(' '):'');
   const lf=el('label',undefined,form,'cx-field');el('span','Familia',lf);const fam=el('select',undefined,lf);fam.id='pricesFamily';el('option','Todas',fam).value='';for(const f of [...new Set(state.sources.flatMap(s=>s.source.families))].sort((a,b)=>a.localeCompare(b,'es')))el('option',f,fam).value=f;
@@ -94,6 +99,9 @@
    // Same unit by NOTATION only (ud ≡ unit, m² ≡ m2): never a conversion.
    if(su.checked&&it)for(const g of r.groups){if(g.status!=='available')continue;g.items=g.items.filter(x=>Cat.unitCheck(it.quantity.unit,x.unit).ok);g.state=g.items.length?'found':'not-found';}
    const n=r.groups.reduce((a,g)=>a+g.items.length,0);state.groups=r.groups;state.searchStatus=n?`${n} ${n===1?'referencia encontrada':'referencias encontradas'}.`:'No hay referencias con esos criterios.';draw();};
+  if(state.saved){const sv=state.saved,b=el('div',undefined,right,'cx-banner ok');b.id='pricesSaved';b.setAttribute('role','status');
+   el('b',sv.as==='price'?'Precio aplicado y guardado':'Referencia guardada',b);el('span',` · «${sv.description}»: ${eur(sv.unitPrice)} / ${uq(sv.unit)}${sv.subtotal!=null?' · importe '+eur(sv.subtotal)+' sin IVA':''}${sv.source?' · '+sv.source:''}. Queda «sin revisar» hasta que lo revises en el presupuesto.`,b);
+   const go=btn('Revisar en el presupuesto',b,'btn');go.onclick=()=>{dialog.close();UI.open();};}
   if(state.quotes.length&&it)compare(right,it);
   if(state.proposal)updates(right);
   history(body);
@@ -112,11 +120,11 @@
   const latest=state.sources.filter(s=>s.source.providerId==='bcca-es'&&s.source.edition).map(s=>s.source.edition).sort().at(-1)||null;
   const cmp=Cat.compare(state.budget,it.id,state.quotes.map(q=>({source:q.source,quote:q.quote,state:q.state})),{today:new Date().toISOString().slice(0,10),latestEdition:latest});
   el('p',`Precio actual: ${eur(cmp.current.unitPrice)}${cmp.current.label?' ('+cmp.current.label+')':''}. Comparar no cambia nada.`,box,'cx-status').style.color='var(--ink-muted)';
-  const t=el('table',undefined,el('div',undefined,box,'cx-scroll'),'cx-table');const hr=el('tr',undefined,el('thead',undefined,t));for(const x of ['Fuente','Código','Precio','Diferencia','Estado',''])el('th',x,hr);
-  const tb=el('tbody',undefined,t);cmp.options.forEach((o,i)=>{const tr=el('tr',undefined,tb);el('td',nice(o.label)+(o.edition?' · ed. '+o.edition:''),tr);el('td',o.code||state.quotes[i].code,tr);
-   el('td',o.unitPrice===null||o.unitPrice===undefined?'Desconocido':eur(o.unitPrice)+(o.unit?' / '+uq(o.unit):''),tr,'num');el('td',o.delta===null||o.delta===undefined?'—':(o.delta>0?'+':'')+eur(o.delta),tr,'num');
-   const sc=el('td',undefined,tr);chip(Cat.describe(o.state).title,sc,Cat.STATES[o.state]?.tone==='ok'?'ok':'warn');const ac=el('td',undefined,tr);
-   if(o.unitPrice!==null&&o.unitPrice!==undefined){const b=btn('Procedencia y decisión',ac,'cx-link');b.dataset.detail=String(i);b.onclick=()=>{state.detail=i;draw();};}});
+  // §5.2 · Cada referencia en su tarjeta: fuente, código, precio, diferencia, estado y la acción completa, sin desplazar.
+  const list=el('ul',undefined,box,'prices-options');list.id='pricesOptions';cmp.options.forEach((o,i)=>{const li=el('li',undefined,list,'prices-option');li.dataset.option=String(i);if(state.detail===i)li.setAttribute('aria-current','true');
+   const head=el('div',undefined,li,'prices-option-head');el('b',nice(o.label)+(o.edition?' · ed. '+o.edition:''),head);chip(Cat.describe(o.state).title,head,Cat.STATES[o.state]?.tone==='ok'?'ok':'warn');
+   const dl=el('dl',undefined,li,'prices-option-data');for(const [k,v] of [['Código',o.code||state.quotes[i].code],['Precio',o.unitPrice===null||o.unitPrice===undefined?'Desconocido':eur(o.unitPrice)+(o.unit?' / '+uq(o.unit):'')],['Diferencia con el actual',o.delta===null||o.delta===undefined?'—':(o.delta>0?'+':'')+eur(o.delta)]]){const d=el('div',undefined,dl);el('dt',k,d);el('dd',v,d);}
+   if(o.unitPrice!==null&&o.unitPrice!==undefined){const b=btn(state.detail===i?'Procedencia revisada abajo':'Revisar procedencia y decidir',li,state.detail===i?'btn':'btn primary');b.dataset.detail=String(i);b.onclick=()=>{state.detail=i;draw();dialog.querySelector('#pricesProvenance')?.scrollIntoView({block:'nearest'});};}});
   if(state.detail!==undefined&&state.quotes[state.detail]?.quote){const q=state.quotes[state.detail],s=q.quote.source,u=Cat.unitCheck(it.quantity.unit,q.quote.unit),dl=el('dl',undefined,box,'cx-prov');dl.id='pricesProvenance';
    for(const [k,v] of [['Fuente',nice(s.label)],['Tipo',q.source.kindLabel],['Código',q.quote.code],['Descripción',q.quote.description],['Unidad',uq(q.quote.unit)+(u.ok?'':' · distinta de la partida')],['Moneda',q.quote.currency],['Precio',eur(q.quote.unitPrice)+' sin IVA'],['Edición',s.edition||'no indicada'],['Región o columna',s.region||'no indicada'],['Fecha del precio',fmtDate(s.asOf)],['Licencia',q.source.kind==='studio-catalog'?'no aplica (fichas de tu estudio; el origen se indica en «Atribución»)':licenseText(s.licenseStatus)],['Atribución',s.attribution||'no indicada por la fuente']]){el('dt',k,dl);el('dd',v,dl);}
    el('p','Es un precio de referencia: no es una oferta ni un coste de obra ejecutada.',box,'cx-status').style.color='var(--ink-muted)';
@@ -126,13 +134,16 @@
   const p=state.preview;if(!p)return;const pv=el('div',undefined,box,'cx-form');pv.id='pricesPreview';
   if(!p.ok){el('h3','No se puede aplicar',pv);el('p',p.blockers.map(b=>BLOCK[b]||b).join(' '),pv);el('p','Tu presupuesto no ha cambiado.',pv,'cx-status');return;}
   el('h3',p.as==='price'?'Vas a usar este precio en la partida':'Vas a guardar esta referencia junto a la partida',pv);
+  {const q=p.quote,src=q?.source,dst=item(p.itemId),cat=state.quotes[state.detail]?.source||state.sources.find(z=>z.source.id===src?.id)?.source||src,ci=cat?state.columns[cat.id]:null,col=cat&&cat.columns?.length>1&&ci!=null?cat.columns[ci]:null,sum=el('dl',undefined,pv,'cx-prov');sum.id='pricesTarget';
+   for(const [k,v] of [['Partida destino',dst?.description||p.itemId],['Cantidad de la partida',dst?`${(Math.round(dst.quantity.value*100)/100).toLocaleString('es-ES',{maximumFractionDigits:2})} ${uq(dst.quantity.unit)}`:'—'],['Fuente',src?nice(src.label):'—'],['Columna',col||'única'],['Unidad',q?uq(q.unit):'—'],['Precio',q?eur(q.unitPrice)+' sin IVA':'—']]){el('dt',k,sum);el('dd',v,sum);}}
   const ba=el('div',undefined,pv,'cx-ba');for(const [k,v] of [['Ahora',p.before],['Después',p.after]]){const d=el('div',undefined,ba);el('b',k,d);el('span',eur(v.unitPrice),d);el('small',' · importe '+(v.subtotalNet===null?'desconocido':eur(v.subtotalNet)+' sin IVA'),d);}
   el('p',`${p.as==='price'?'El precio quedará «sin revisar» hasta que lo revises en el presupuesto.':'El precio actual de la partida no cambia.'} Importe conocido después: ${eur(p.after.coverage.netKnown)}${p.after.coverage.netComplete?'':' (presupuesto parcial)'}.`,pv,'cx-status').style.color='var(--ink-muted)';
   let consent=null;if(p.requiresConsent){const l=el('label',undefined,pv,'cx-check');consent=el('input',undefined,l);consent.type='checkbox';consent.id='pricesConsent';el('span','Sustituir el precio que ya había revisado',l);}
   const acts=el('div',undefined,pv);acts.style.cssText='display:flex;gap:8px';const ok=btn('Confirmar',acts,'btn primary');ok.id='pricesConfirm';btn('Cancelar',acts).onclick=()=>{state.preview=null;draw();};
   ok.onclick=async()=>{try{const before=Cat.revisionTag(state.budget),out=Cat.apply(state.budget,p,{confirmed:true,replaceReviewed:!!consent?.checked,decidedAt:new Date().toISOString()});commit(out.budget);
     await record({itemId:p.itemId,description:item(p.itemId).description,as:p.as,before:{unitPrice:p.before.unitPrice},after:{unitPrice:p.after.unitPrice},code:p.quote?.code||null,source:p.quote?.source?.label||null,revBefore:before,revAfter:Cat.revisionTag(state.budget)},p.as==='price'?'Precio aplicado':'Referencia guardada');
-    state.preview=null;state.quotes=[];state.detail=undefined;state.msg='Cambio aplicado al presupuesto del proyecto. La versión anterior queda en el historial.';draw();}
+    const done=item(p.itemId);state.saved={as:p.as,description:done?.description||'',unitPrice:p.after.unitPrice,unit:p.quote?.unit||done?.quantity.unit||'',subtotal:p.after.subtotalNet,source:p.quote?.source?nice(p.quote.source.label):''};
+    state.preview=null;state.quotes=[];state.detail=undefined;state.msg='Cambio aplicado y guardado en el presupuesto del proyecto. La versión anterior queda en el historial.';draw();dialog.querySelector('#pricesSaved')?.scrollIntoView({block:'nearest'});}
    catch(err){state.err=/explicit consent/.test(err.message)?'Marca la casilla para sustituir un precio revisado.':/changed since/.test(err.message)?'El presupuesto cambió mientras tanto: prepara de nuevo la decisión.':err.message;draw();}};
  }
  function updates(parent){

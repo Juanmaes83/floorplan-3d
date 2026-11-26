@@ -580,3 +580,5 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
   body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
   body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
 }
+/* §5.2 · En la ficha Presupuesto, el Asistente va en su propia fila al final, nunca sobre encabezados, celdas ni «Revisado». */
+#budgetDialog>#assistantAccess{position:static!important;display:flex!important;justify-content:flex-end;width:auto!important;max-width:none!important;margin:12px 0 0!important;inset:auto!important;transform:none!important}
