@@ -53,3 +53,10 @@ Ya comprobado visualmente por el propietario: se puede aplicar ROBLE. El cierre 
    Mostrar otras unidades → ROBLE-UD bloqueado → aplicar ROBLE → «Revisar en el presupuesto» → recargar (precio 42,75,
    fuente referencia ROBLE, «sin revisar», historial). Local: 2/2 + prueba anterior 2/2.
 Descarga del BC3 sintético: `docs/qa/ux-bc3/rubik-qa-sintetico.bc3`.
+
+
+## Aprobación humana · 27/11/2026
+
+El propietario revisó y aprobó la Preview de §5.2 BC3. Queda registrada la aprobación humana de las correcciones de comparación, confirmación y guardado de precios del corte publicado.
+
+[Preview revisada](https://floorplan-3d-pbmh51p45-juanma-espinosas-projects.vercel.app/) · SHA de la aplicación: `cb51c9a11a0742a44a2c21b7acd8e2914a56be0d`. Esta aprobación corresponde a la revisión humana del corte y no equivale a CI, fusión ni activación.
