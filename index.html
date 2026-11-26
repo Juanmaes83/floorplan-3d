@@ -275,7 +275,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
 #walkExit{position:absolute;right:16px;bottom:28px;z-index:3;display:none}
 /* §5.1 · El aviso del recorrido no bloquea la interfaz: solo su tarjeta recibe clics; en pausa, compacta y arriba. */
-#walkOverlay{pointer-events:none}#walkOverlay .walk-card{pointer-events:auto}
+#walkOverlay.paused{pointer-events:none}#walkOverlay.paused .walk-card{pointer-events:auto}
 #walkOverlay.paused{align-items:flex-start;padding-top:64px}#walkOverlay.paused .walk-card p{display:none}
 #walkLockHint{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:4;margin:0;padding:6px 12px;border-radius:999px;background:rgba(20,24,28,.78);color:#fff;font:600 13px/1.3 system-ui,sans-serif;pointer-events:none}
 #walkLockHint[hidden]{display:none}
@@ -4886,6 +4886,8 @@ function bindUI(){
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
   // §5.1: solo el botón explícito captura el ratón; pulsar la escena o la interfaz nunca lo recaptura.
   $('#walkStart').onclick = e => { e.stopPropagation(); startWalkInput(); };
+  // Antes de empezar, toda la capa arranca el recorrido (contrato P08); en pausa solo la tarjeta recibe el clic y el cursor queda libre.
+  $('#walkOverlay').onclick = () => { if (!walkPaused) startWalkInput(); };
   document.addEventListener('pointerlockerror', () => {
     if (walkLockRequested && active && opt.mode === 'walk'){ walkLockRequested = false; startTouchWalk(); }
   });
