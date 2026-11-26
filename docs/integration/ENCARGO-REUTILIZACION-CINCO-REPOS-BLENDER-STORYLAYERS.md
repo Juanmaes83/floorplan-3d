@@ -3,6 +3,19 @@
 **Destinatario:** Claude Code, en la sesión que ya está trabajando en Blender, Geometría/A0 y StoryLayersV1.  
 **Decisión que sustituye al mensaje anterior:** usa las fuentes de abajo para reforzar las tareas ya asignadas. Conserva tu avance y decide en qué corte encaja cada pieza. Este encargo fija el resultado y la evidencia de aceptación.
 
+## 0. Misión y visión de RUBIK · Toda la plataforma
+
+**Eliminar cuellos de botella, agilizar procesos, automatizar y profesionalizar el trabajo del profesional hacia el usuario final.** Este es el criterio permanente para todo RUBIK. Se aplica al revisar lo que ya existe y al diseñar, implementar y validar cada mejora futura, desde un botón hasta un recorrido completo. El §8 desarrolla su aplicación en Entregar.
+
+| Módulo | Cómo se traduce en la experiencia |
+| --- | --- |
+| **Diseñar** | Mostrar las acciones cuando son útiles y facilitar la primera vez. Al seleccionar un muro, hacer visible cómo cambiar su forma, previsualizar el resultado y corregirlo. Conservar el contexto al pasar del plano al 3D o al volver de otra tarea. |
+| **Analizar** | Calcular a partir del proyecto guardado y explicar cada resultado junto a su fuente, su estado y el elemento al que pertenece. Si falta algo, explicar cómo completarlo y permitir retomar el análisis desde el mismo punto. |
+| **Presupuestar** | Aprovechar las mediciones existentes, conectar partidas con referencias como BC3 y guiar de comparar a aplicar y guardar. Mostrar procedencia, unidad, importes parciales y estado de revisión. El profesional valida precios y alcance. |
+| **Entregar** | Reutilizar datos, planos, imágenes y vídeos vigentes, junto a la identidad de Mi estudio y el contexto del cliente que el profesional elija incorporar. Ayudar a redactar y revisar, y hacer que la previsualización corresponda a la entrega final. |
+
+**Criterio de aceptación para todos los cortes.** Identificar el obstáculo del recorrido actual y demostrar qué paso se elimina, se simplifica o se automatiza, o cómo mejora la calidad del resultado. Reutilizar datos, componentes y acciones existentes cuando sean adecuados. Ofrecer ayuda contextual en el punto de trabajo, explicar qué falta y dejar accesible la acción siguiente y la vuelta a la tarea anterior. Conservar la trazabilidad y las decisiones del profesional, especialmente al cambiar el proyecto, aplicar precios o compartir una entrega. Acreditar el beneficio desde la interfaz normal, incluyendo los traspasos entre módulos que afecte el cambio.
+
 ## 1. Punto de partida y objetivo
 
 El proyecto receptor es [Juanmaes83/floorplan-3d](https://github.com/Juanmaes83/floorplan-3d). En la última comprobación, `master` está en [`dacb5d3`](https://github.com/Juanmaes83/floorplan-3d/commit/dacb5d395abf32449102d73ffd03200e6c09c019), con PERLA, Render IA, Asistente simulado, MSPDI y BC3 integrados. Estos recorridos deben seguir funcionando. Verifica tu HEAD antes de adoptar cualquier delta. Conserva el [encargo madre](https://github.com/Juanmaes83/floorplan-3d/blob/73252084/docs/integration/ENCARGO-CLAUDE-CIERRE-PERLA-VISUALIZACION-2026-11-25.md) y la [evidencia del rodaje anterior](https://github.com/Juanmaes83/floorplan-3d/tree/00d0fe59797fefbe76b3fbc7ac23ad1e0d0a150a/docs/qa/rodaje/terminadas). Las resoluciones acordadas después son 720p para revisión, **1440p nativo para entrega** y 4K opcional.
