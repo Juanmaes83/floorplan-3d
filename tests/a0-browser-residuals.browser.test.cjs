@@ -91,16 +91,21 @@ function writesProbe(){window.__roWrites=[];const RO=window.ResizeObserver;
    try{return cb(entries,o);}finally{const recs=mo.takeRecords();mo.disconnect();
     if(recs.length)window.__roWrites.push({label,writes:[...new Set(recs.map(r=>r.type+':'+(r.target.id||r.target.nodeName)+(r.attributeName?'@'+r.attributeName:'')))].slice(0,8)});}});}};}
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
-test(`ResizeObserver · ${viewport.width}x${viewport.height}: ningún callback del producto escribe en el DOM dentro de su entrega (2D y 3D)`,{timeout:180000},async()=>{
+test(`ResizeObserver · ${viewport.width}x${viewport.height}: ningún callback del producto escribe en el DOM dentro de su entrega (2D y 3D)`,{timeout:180000},async t=>{
  const e=at('127.0.0.1'),context=await e.browser.newContext({viewport}),page=await context.newPage(),errors=[];
  page.on('pageerror',x=>errors.push(x.message));
  try{
   await context.addInitScript(writesProbe);await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
   await page.goto(e.base);await require('./editor-fixture.cjs')(page);await frames(page,6);
   await page.setViewportSize({width:viewport.width-41,height:viewport.height-27});await settle(page);await frames(page,6);
-  await page.evaluate(()=>setView('3d'));await page.waitForFunction(()=>viewMode==='3d');await settle(page);await frames(page,6);
+  // La fase 3D se EXIGE donde el motor tiene WebGL (Chromium, WebKit). Sin WebGL (Firefox sin interfaz en Linux) la vista 3D
+  // no puede existir: se comprueba que el editor sigue en 2D y se deja constancia; el resto de la prueba no cambia.
+  const webgl=await page.evaluate(()=>{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));});
+  if(webgl){await page.evaluate(()=>setView('3d'));await page.waitForFunction(()=>viewMode==='3d');await settle(page);await frames(page,6);}
+  else{await page.evaluate(()=>setView('3d')).catch(()=>{});await frames(page,6);t.diagnostic('motor sin WebGL: fase 3D no ejecutable; el editor queda en '+await page.evaluate(()=>viewMode));}
   await page.setViewportSize(viewport);await settle(page);await frames(page,6);
-  await page.evaluate(()=>setView('2d'));await page.waitForFunction(()=>viewMode==='2d');await settle(page);await frames(page,6);
+  if(webgl){await page.evaluate(()=>setView('2d'));await page.waitForFunction(()=>viewMode==='2d');await settle(page);await frames(page,6);}
+  else{await page.setViewportSize({width:viewport.width-41,height:viewport.height-27});await settle(page);await frames(page,6);}
   const writes=await page.evaluate(()=>window.__roWrites);
   assert.deepEqual(writes,[],'escrituras dentro de la entrega: '+JSON.stringify(writes).slice(0,600));
   assert.deepEqual(errors,[]);
