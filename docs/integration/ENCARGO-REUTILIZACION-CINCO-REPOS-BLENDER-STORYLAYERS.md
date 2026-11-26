@@ -61,3 +61,12 @@ Estas tres mejoras provienen de la prueba humana en la aplicación publicada, co
 **Resultado aprobado.** Aplicar a **Presupuestar** primero y **Analizar** después los componentes y criterios que ya funcionan en Entregar. Reutilizar cabeceras, tarjetas y bloques, jerarquía de botones, alineación, espaciado, tipografía, tratamiento de imágenes y semántica del color. Mostrar imágenes del proyecto cuando ayuden a reconocer una vista, estancia o resultado. Acompañar cada semáforo con texto y explicar qué cuenta cada porcentaje y su denominador. Un plan vacío indica **Borrador · 0 tareas** y conduce a **Añadir primera tarea**. En Presupuestar, priorizar cantidades, precios, plan y la siguiente acción. En Analizar, priorizar resultados, comprobaciones y cómo llegar a su detalle. Diseñar comparte el lenguaje de sus paneles y controles, con el lienzo como superficie principal. Conservar todas las funciones y entradas existentes.
 
 **Validación y entrega.** Publicar una candidata integrable con el SHA base y final, recorridos desde la interfaz normal, comparativas de escritorio y móvil con Entregar como referencia, y evidencia de navegación por teclado, foco y lectura de acciones completas. Inventariar las entradas y comprobar que siguen disponibles, incluidas las de mediciones, presupuesto, precios BC3, plan y exportaciones existentes. Demostrar los estados vacío, parcial y completado con datos sintéticos y capturas identificadas por entorno y SHA. Codex audita el corte y el propietario decide la integración.
+
+
+## 6. Misión posterior · SCULPT Gesture Labs Floor Plan RUBIK
+
+**Estado: en cola, separado de Blender, Geometría/A0, StoryLayersV1 y las mejoras UX del §5.** Mantén el trabajo activo y toma este bloque cuando la entrega normal de StoryLayers esté acreditada y haya un corte compatible de Presentación o Entregar.
+
+[Encargo completo de Gesture Labs Floor Plan RUBIK](ENCARGO-SCULPT-GESTURE-LABS-FLOOR-PLAN-RUBIK.md)
+
+El objetivo es que el profesional pueda presentar una vivienda de RUBIK y el comprador pueda desplegar su plano, pasar de 2D a 3D y comparar dos revisiones con datos trazables. La primera prueba SCULPT usa una vivienda, dos gestos como máximo y conserva controles equivalentes por teclado, ratón y táctil. El encargo identifica las piedras de Director de Orquesta, La Batuta y Blueprint, su destino y las pruebas exigidas. El vídeo por capítulos, la navegación libre y el manejo de puertas, ventanas o cajones se evalúan después del ensayo. Lleva a Codex el resultado y la evidencia antes de proponer su integración.

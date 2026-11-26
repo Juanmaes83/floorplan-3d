@@ -1,0 +1,53 @@
+# SCULPT · Gesture Labs Floor Plan RUBIK
+
+**Encargo para Claude Code · 26/11/2026**
+
+**Estado:** misión en cola para un corte independiente. El primer ensayo tiene un máximo de una jornada y se realiza en laboratorio.
+
+## 1. Contexto, prioridad y meta
+
+RUBIK ya tiene un visor 3D con visita, un flujo de Entregar y un kit de rodaje Blender en desarrollo. StoryLayersV1 incorpora en su candidata la ficha P10 «Explicar el cambio», con dos revisiones, encuadre común, rótulos trazables, PNG con manifiesto y aviso de obsolescencia. Pasar a producción exige verificar el corte efectivo. Al arrancar esta misión consulta master, la integración de StoryLayers y las ramas de trabajo vigentes. [Candidata StoryLayersV1](https://github.com/Juanmaes83/floorplan-3d/commit/db6aef0f66340d0ab4b80b7503cf57c4021d7853)
+
+La meta es que un profesional pueda **presentar una vivienda real de su proyecto** y que su cliente pueda desplegar el plano, ver cómo pasa a 3D y comparar el antes y el después con datos comprobables. La webcam es una entrada opcional para las mismas acciones que ofrecen los controles visibles. El valor está en que el cliente entienda el cambio y lo pueda relacionar con su vivienda, incluso desde un enlace con ratón, teclado o táctil. La referencia de interacción es Minority Report y el encuadre comercial inicial es una presentación guiada de reforma o promoción.
+
+Mantén el trabajo activo de Blender, Geometría/A0 y StoryLayersV1. Abre el ensayo cuando el flujo normal de StoryLayers esté acreditado y exista un corte compatible de Presentación o Entregar. Coordina cualquier intervención en el visor con el §5.1 del encargo de continuidad. El examen de cinco proyectos mantiene su posición final en la cola vigente. El ensayo puede quedar como candidato separado si hacerlo entrar retrasaría la validación base.
+
+## 2. Piedras SCULPT y destino
+
+| Donante y ubicación | Qué recuperar y por qué | Destino en RUBIK |
+| --- | --- | --- |
+| **Director de Orquesta · Antes y después de reforma**, [prototipo v2.1.2](https://github.com/Juanmaes83/Rubik-Sota-Director-de-Orquesta/blob/dcf4b7ac9cd3b52008667effe47b47748b7dd4da/gesture-lab/before-after-reforma/rubik-sota-before-after-reforma-v2-1-2.html) | Donante principal. Revisar clasificación temporal, detección de deslizamiento, respuesta visible y ciclo de arranque y parada de cámara. Es el ejemplo más cercano a comparar revisiones con la mano. | Adaptador de entrada opcional en laboratorio SCULPT. Invoca las mismas acciones que los controles visibles de presentación. |
+| **Director de Orquesta · Bola Imagen**, [prototipo v1.3](https://github.com/Juanmaes83/Rubik-Sota-Director-de-Orquesta/blob/dcf4b7ac9cd3b52008667effe47b47748b7dd4da/gesture-lab/bola-imagen/rubik-sota-gesture-lab-bola-imagen-v1-3.html) | Estudiar cómo un gesto estabilizado anima y deforma una imagen y cómo el deslizador permite ejecutar la misma acción manualmente. Trasladar el principio visual a desenrollar el plano. | Capa visual de presentación. La animación usa una imagen o captura de la revisión seleccionada y conserva el plano y el modelo guardados. |
+| **Director de Orquesta · Air Guitar V2**, [código y procedencia](https://github.com/Juanmaes83/Rubik-Sota-Director-de-Orquesta/tree/dcf4b7ac9cd3b52008667effe47b47748b7dd4da/gesture-lab/camera-fx-cum-laude/air-guitar-camera-pro-v2) | Extraer patrones si mejoran la fiabilidad: distinguir funciones por mano, medir intención de movimiento y detectar pérdida de seguimiento. Sirve para resolver selecciones accidentales y para evaluar controles continuos en un corte posterior. | Referencia de entrada y confirmación en el laboratorio. El juego y sus recursos quedan fuera del alcance del ensayo. |
+| **map-gesture-controls · La Batuta**, [ejemplo v0.2](https://github.com/Juanmaes83/map-gesture-controls/tree/6939d43a651745fdfaf5f1e70c2096c9203ae169/examples/batuta-torrevieja) | Aprovechar tutorial corto, indicador de cámara, alternativa táctil y suavizado en movimiento continuo. OpenLayers es el consumidor que demuestra el ejemplo. | Referencia de experiencia. Si se prueba territorio después, adaptar las acciones al MapLibre que ya usa RUBIK. |
+| **Blueprint**, [Apartment](https://github.com/Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-/tree/2d3463e42de902bef64157fdfb0dc1d09790b740/houses/apartment), [Courtyard](https://github.com/Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-/tree/2d3463e42de902bef64157fdfb0dc1d09790b740/houses/courtyard) y [Villa](https://github.com/Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-/tree/2d3463e42de902bef64157fdfb0dc1d09790b740/houses/villa) | Estudiar las entradas build.py y film.py. Apartment guía la secuencia plano → volumen → interior. Courtyard aporta el montaje sobre papel y la aparición por sistemas. Villa aporta la transición al interior. | Capa audiovisual. Cuando proceda, aplicar las ideas de cámara y montaje al kit Blender y a los objetos exportados por RUBIK. Revisar primero en 720p y producir 1440p tras validar el montaje. |
+| **floorplan-3d-house**, [drone-video](https://github.com/Juanmaes83/floorplan-to-3d-house/tree/HEAD/plugins/floorplan-to-3d-house/skills/drone-video) | Referencia secundaria para el vuelo y movimiento de cámara si falta una solución en el kit actual. | Rodaje local sobre la escena exportada por RUBIK. Fijar el SHA del donante si finalmente se adopta una pieza. |
+
+Los donantes se inspeccionaron en código y documentación. La prueba con webcam real queda por ejecutar. El [índice Gesture Interface Core](https://github.com/Juanmaes83/Rubik-Sota-Director-de-Orquesta/tree/dcf4b7ac9cd3b52008667effe47b47748b7dd4da/gesture-lab/gesture-interface-core) describe patrones y referencias. El [GestureLab separado](https://github.com/Juanmaes83/GestureLab) usa Flutter y componentes nativos y tiene un coste mayor de adaptación al frontend web. Prioriza los prototipos web. Por cada pieza adoptada registra ruta, SHA, dependencias, licencia, titularidad y permisos efectivos. GitHub no devolvió una licencia de repositorio para Director de Orquesta. Verifica cada pieza y sus recursos de terceros antes de copiar o distribuir. Si solo se acredita el patrón, aplica el patrón en limpio.
+
+## 3. Funciones que debe demostrar el ensayo
+
+Usa **una vivienda de prueba, dos revisiones reales guardadas en RUBIK y dos gestos como máximo**. Claude elige el gesto y el mapeo más estable. Un mismo gesto puede avanzar la presentación por estados siempre que el siguiente paso esté claro en pantalla.
+
+| Función | Resultado observable |
+| --- | --- |
+| **Desplegar el plano** | El comprador activa una transición corta y reconoce el plano de la vivienda. Al concluir puede leerlo. Hay un control equivalente por teclado, ratón y táctil. |
+| **Pasar del plano a la vista 3D** | El siguiente paso muestra la geometría o una vista 3D de esa misma revisión. La transición ayuda a identificar al menos una estancia o hueco en ambas vistas. La presentación deja claro si se está mostrando una imagen, vídeo o un visor interactivo. |
+| **Comparar antes y después** | El usuario cambia de revisión o capítulo con el segundo gesto y con el control visible. Se mantiene un encuadre comparable, se identifican las dos revisiones y aparecen al menos dos llamadas con valor, unidad, fuente, revisión y estado. Contrastarlas con datos independientes del proyecto. Un dato ausente se muestra como ausente. |
+| **Volver al control normal** | Si se pierde la mano o se retira el permiso, cesan las acciones gestuales y se conserva la vista. Se puede seguir con controles normales desde el mismo punto. La cámara solo se activa por decisión explícita y sus pistas se detienen al salir, cancelar o desactivar. |
+
+## 4. Evolución condicionada al ensayo
+
+| Capacidad posterior | Primer resultado acreditable y condición |
+| --- | --- |
+| **Vídeo y timelapse** | Sobre un clip autorizado de la misma revisión, reproducir, pausar y volver al capítulo anterior con gestos y botones equivalentes. Después valorar avance y retroceso temporal si aporta control. Distinguir evolución prevista, comparación de revisiones y captura de ejecución real. |
+| **Avanzar, retroceder y girar** | Primero dos puntos de visita y un giro corto en el visor real. Probar la parada al perder seguimiento. Requiere validar antes la pausa y recuperación de controles del visor. Movimiento continuo se decide con evidencia de comodidad, colisiones y estabilidad. |
+| **Abrir y cerrar elementos** | Primero una puerta identificada con una interacción existente del visor. Después ventanas o cajones si el modelo y el visor exponen esa acción y la selección es inequívoca. Son acciones de presentación. |
+| **Abrir contenido desde la presentación** | Usar los mismos comandos visibles para mostrar planos, fichas, fotos o vídeos preparados. Las operaciones que escriben el proyecto, publican, generan un render o consumen cuota exigen confirmación explícita por su vía normal. |
+
+## 5. Validación, entrega y decisión
+
+- **Usabilidad.** Una persona que desconozca la demo completa el recorrido tras un tutorial breve. Registrar acciones correctas, disparos involuntarios y comportamiento al perder la mano, repetir un gesto o cambiar de modo. Acreditar la prueba con webcam real de un equipo, y los controles sin cámara en escritorio y móvil. Incluir permiso denegado y salida desde la presentación.
+- **Integridad.** Mostrar que el plano, render y rótulos remiten a sus revisiones y que la sesión conserva el proyecto guardado. Confirmar que una historia obsoleta queda identificada y que perder el seguimiento no activa una acción. Verificar solicitudes de red y ciclo de la webcam, incluidos los recursos y destinos de MediaPipe. Si se usan capturas de evidencia, recortar datos personales y respetar ES/EN sin texto chino visible.
+- **Entrega.** En rama propia desde el SHA efectivo, publicar el laboratorio, instrucciones reproducibles, inventario de piedras elegidas y descartadas, matriz de capacidades ejecutadas y pendientes, y un clip breve de la prueba. Dar SHA base y final, entorno, equipo, navegador, y resultado. Si el ensayo supera la revisión, proponer el delta de integración en Entregar y sus regresiones con StoryLayers y el visor. Codex audita la candidata y el propietario decide su fusión, despliegue y alcance de clientes.
+- **Límite práctico.** Si en una jornada no se demuestra el recorrido básico con entrada fiable, conservar el aprendizaje y declarar la prueba parcial. Priorizar el formato normal de StoryLayers con plano, transición y datos. Una demo controlada con gestos simulados puede ayudar a reproducir estados y no acredita la webcam real.
