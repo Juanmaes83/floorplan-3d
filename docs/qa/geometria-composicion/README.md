@@ -41,6 +41,15 @@ CI cruzada: workflow `a0-cross-browser.yml` (A0 + writer fence en 12 trabajos; M
 
 ## §7.1 del encargo (`c14bd07a`) · Muros: edición descubrible desde Diseñar
 
+**APROBADO por el propietario (revisión humana 26/11/2026)** en la Preview aislada `cf91b655` con OP-07 activo: la interacción
+Recto/Curvo, el asa y Enderezar (implementación `8537ccca`, rama `claude/muros-forma-descubrible`). La integración y sus
+comprobaciones siguen su proceso normal (no implica PR, fusión ni activación).
+
+**Defecto aparte, corregido sin tocar el control aprobado:** tras curvar un muro exterior, la cota vertical izquierda mostraba
+«3699.0858725761773» y se solapaba. Ahora el texto de las cotas se redondea a mm enteros; la cota se dibuja con el valor exacto
+y la geometría no cambia. Prueba bloqueante `tests/op07-s11-cotas-muro-curvo.browser.test.cjs` (1440×900 y 390×844): sin la
+corrección falla con ese mismo texto; con ella pasa 2/2.
+
 **Decisión del propietario:** se aprueba el rediseño de interacción de Muros. La composición `a5beb0ab` pasó la CI cruzada,
 pero la Preview revisada lleva OP-07 en estado *integrated*. La prueba de edición necesita una Preview aislada con
 activación autorizada y un proyecto de ejemplo seguro de modificar.

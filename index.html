@@ -1656,7 +1656,8 @@ function renderLabels(){
 
 function renderDims(){
   const DC = '#7d7160', LS = `stroke="${DC}" stroke-width="1" vector-effect="non-scaling-stroke"`, TK = `stroke="${DC}" stroke-width="2" vector-effect="non-scaling-stroke"`;
-  const txt = (x,y,v,rot) => `<text x="${x}" y="${y}" font-size="${v<400?140:200}" text-anchor="middle" fill="${DC}" ${rot?`transform="rotate(-90 ${x} ${y})"`:''}>${v}</text>`;
+  // Solo el texto se redondea a mm enteros (un muro curvo da tramos con decimales); la cota se dibuja con el valor exacto.
+  const txt = (x,y,v,rot) => { const mm = Math.round(v); return `<text x="${x}" y="${y}" font-size="${mm<400?140:200}" text-anchor="middle" fill="${DC}" data-dim-mm="${mm}" ${rot?`transform="rotate(-90 ${x} ${y})"`:''}>${mm}</text>`; };
   const chain = (horiz, at, start, segs) => {
     const pts = [start]; segs.forEach(v => pts.push(pts[pts.length-1]+v));
     let s = horiz ? `<line x1="${pts[0]}" y1="${at}" x2="${pts.at(-1)}" y2="${at}" ${LS}/>` : `<line x1="${at}" y1="${pts[0]}" x2="${at}" y2="${pts.at(-1)}" ${LS}/>`;
