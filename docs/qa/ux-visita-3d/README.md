@@ -1,5 +1,9 @@
 # §5.1 · Visita 3D: recuperar los controles durante el recorrido
 
+> **APROBADO por el propietario (revisión humana 26/11/2026)** en la Preview de `8136afe0`: barra utilizable en pausa, Fachadas
+> dentro de la ventana, opciones de Vista aérea explícitas y sin solapes. Pendiente: regresión completa tras `8136afe0`.
+> La integración sigue su proceso normal.
+
 **Rama:** `claude/ux-visita-3d` · **base:** `master` `dacb5d39`. **Ruta:** Entregar → «Revisar como cliente» → Explorar la vivienda.
 
 ## Reproducido en la interfaz normal (antes)
