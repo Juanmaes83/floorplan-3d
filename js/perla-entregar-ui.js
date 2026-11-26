@@ -251,7 +251,8 @@
  function velo(){const mesa=$('#professionalWorkspace .mesa');if(!mesa)return null;let v=mesa.querySelector(':scope>.perla-velo');if(!v){v=el('div','perla-velo',mesa);v.hidden=true;v.onclick=()=>closePanel(true);}return v;}
  function emptyPanel(p){p.replaceChildren();const h=el('h3','vacio-panel',p,tx('Elige un entregable','Choose a deliverable','选择交付物'));el('p','perla-vacio-txt',h,tx('Verás aquí qué recibirá tu cliente, su estado y sus opciones, sin salir de Entregar.','Here you will see what your client will receive, its status and its options, without leaving Deliver.','在此查看客户将收到的内容、其状态和选项，无需离开交付。'));p.removeAttribute('aria-labelledby');}
  function pressed(){for(const s of $$('#professionalWorkspace .perla-ref .perla-card-selector'))s.setAttribute('aria-pressed',String(s.closest('.perla-ref')===selCard));}
- function openPanel(card){const p=deskPanel();if(!p||!card)return;selCard=card;pressed();const code=card.dataset.entregaCode,r=REF[code]||[];
+ // restore=true: la ficha vuelve a abrirse tras repintar Entregar (volver de un diálogo): se conserva la posición, sin desplazar.
+ function openPanel(card,restore=false){const p=deskPanel();if(!p||!card)return;selCard=card;pressed();const code=card.dataset.entregaCode,r=REF[code]||[];
   const head=el('div','panel-h');el('span','code perla-panel-code',head,code);const h=el('h2',undefined,head,card.querySelector('h3')?.textContent||'');h.id='perlaPanelT';
   const x=el('button','panel-x',head,'✕');x.type='button';x.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));x.onclick=()=>closePanel(true);
   const b=el('div','panel-b');const th=card.querySelector(':scope>.thumb');if(th){const prev=el('div','prev',b),c=th.cloneNode(true);c.querySelector('.code')?.remove();c.querySelectorAll('img').forEach(i=>i.loading='eager');prev.append(c);}
@@ -271,7 +272,7 @@
    try{a.click();}finally{delete a.perlaActionOrigin;}
   };}
   p.replaceChildren(head,b,f);p.setAttribute('aria-labelledby','perlaPanelT');p.tabIndex=-1;p.hidden=false;p.classList.add('perla-panel-open');
-  const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow())p.scrollIntoView({block:'nearest'});}
+  const v=velo();if(v)v.hidden=!narrow();p.focus({preventScroll:true});if(!narrow()&&!restore)p.scrollIntoView({block:'nearest'});}
  function closePanel(focus){const p=deskPanel(),c=selCard;selCard=null;lastMirror=null;pressed();if(p){emptyPanel(p);p.classList.remove('perla-panel-open');}const v=velo();if(v)v.hidden=true;
   if(focus&&c?.isConnected)c.querySelector('.perla-card-selector')?.focus({preventScroll:true});}
  document.addEventListener('rubik:leave-deliver',()=>{closePanel(false);returnCard=null;catFocus=null;});
@@ -287,7 +288,7 @@
   // Entregar se repinta al cerrar algunos generadores (y lleva el foco a su título): se recupera la ficha por su código.
   if(!selCard.isConnected){const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${selCard.dataset.entregaCode}"]`);if(n)selCard=n;}
   const a=document.activeElement;if(a&&a!==document.body&&a.id!=='professionalTitle'&&a!==deskPanel()&&a.offsetParent!==null&&a.isConnected)return;const t=lastMirror;
-  if(selCard.isConnected)openPanel(selCard);const bs=[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])],mb=t&&(bs.find(b=>t.route&&b.dataset.perlaMirror===t.route)||bs.find(b=>b.textContent===t.text));(mb||deskPanel())?.focus({preventScroll:true});},60),true);
+  if(selCard.isConnected)openPanel(selCard,true);const bs=[...(deskPanel()?.querySelectorAll('.panel-f .btn')||[])],mb=t&&(bs.find(b=>t.route&&b.dataset.perlaMirror===t.route)||bs.find(b=>b.textContent===t.text));(mb||deskPanel())?.focus({preventScroll:true});},60),true);
  // Barra inferior del teléfono: el producto ya tiene la suya (.professional-dock, mismo atajo de P7); solo cambia su color.
  function maqueta(index){
   for(const c of $$('#professionalWorkspace .professional-index .professional-card[data-entrega-code]'))if(c.querySelector(':scope>.thumb'))tile(c);
@@ -297,7 +298,7 @@
   const p=deskPanel();if(p&&!selCard&&!p.querySelector('.perla-vacio-txt'))emptyPanel(p);
   if(selCard&&!selCard.isConnected){const code=selCard.dataset.entregaCode;const n=$(`#professionalWorkspace .professional-index [data-entrega-code="${code}"]`);selCard=n||null;if(!n)closePanel(false);else pressed();}
   // Si Entregar se repintó con el panel abierto, el panel vuelve con su ficha (mismo contenido actualizado).
-  if(selCard&&p&&!p.querySelector('.perla-panel-code'))openPanel(selCard);}
+  if(selCard&&p&&!p.querySelector('.perla-panel-code'))openPanel(selCard,true);}
 
  // ── Aplicar al pintar Entregar (idempotente; no reordena lo que ya está en su sitio) ──
  let pending=false;

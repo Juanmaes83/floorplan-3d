@@ -1,0 +1,19 @@
+/* StoryLayersV1 · «Explicar el cambio» (Entregar › P10). Diálogo modal; en móvil las dos plantas se apilan. */
+.story-layers-dialog{width:min(1180px,calc(100vw - 24px));max-height:calc(100dvh - 24px);box-sizing:border-box;padding:16px 18px;border:1px solid var(--line,#ddd);border-radius:12px;overflow:auto;overflow-x:hidden}
+.story-layers-dialog .sl-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.story-layers-dialog h2{margin:0;font-size:1.2rem}
+.story-layers-dialog .sl-state{padding:8px 12px;border-radius:8px;font-weight:600;background:#f4efe6}
+.story-layers-dialog .sl-ready{background:#e6f2ec;color:#1f6f5c}.story-layers-dialog .sl-obsolete{background:#fbe9e7;color:#b3261e}
+.story-layers-dialog .sl-chapters{list-style:none;padding:0;margin:12px 0;display:grid;gap:16px}
+.story-layers-dialog .sl-chapter{border:1px solid var(--line,#e3e0da);border-radius:10px;padding:12px;min-width:0}
+.story-layers-dialog .sl-figure{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.story-layers-dialog figure{margin:0;min-width:0}.story-layers-dialog figure svg{width:100%;height:auto;max-height:320px;background:#fbfaf7;border-radius:6px}
+.story-layers-dialog figcaption{font-size:.85rem;color:#555;text-align:center}
+.story-layers-dialog textarea{width:100%;box-sizing:border-box;margin:8px 0;font:inherit}
+.story-layers-dialog .sl-data{width:100%;border-collapse:collapse;font-size:.85rem;table-layout:fixed}
+.story-layers-dialog .sl-data th,.story-layers-dialog .sl-data td{border-bottom:1px solid #eee;padding:4px 6px;text-align:left;overflow-wrap:anywhere}
+.story-layers-dialog tr[data-state="absent"] td{color:#8a5a00;font-style:italic}
+.story-layers-dialog .sl-move{display:flex;gap:6px;justify-content:flex-end;margin-top:6px}
+.story-layers-dialog .sl-readiness{font-size:.85rem;padding-left:18px}.story-layers-dialog .sl-readiness [data-ok="false"][data-severity="BLOCKING"]{color:#b3261e}
+.story-layers-dialog .sl-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;position:sticky;bottom:-16px;background:var(--bg,#fff);padding:10px 0}
+@media (max-width:600px){.story-layers-dialog{padding:12px}.story-layers-dialog .sl-figure{grid-template-columns:1fr}.story-layers-dialog .sl-data{font-size:.78rem}}

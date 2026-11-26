@@ -823,7 +823,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/project-variants.js"></script>
 <!-- UX-07 · el editor solo necesita el adaptador para construir la dirección del comparador (comparar/); el resto vive allí -->
 <script src="js/revision-compare-core.js"></script>
-<script src="js/variants-compare-adapter.js"></script>
+<script src="js/variants-compare-adapter.js"></script><script src="js/story-layers-core.js"></script><script src="js/story-layers-ui.js" defer></script>
 <!-- R02-A · techos y elementos altos (EXPERIMENTAL, integración pendiente de GO): núcleo #193/#203, contrato candidato x-r02a-ceiling, puente #217 y su panel -->
 <script src="js/r02a-donor-extracts.js"></script>
 <script src="js/r02a-ceiling-core.js"></script>
@@ -2922,6 +2922,14 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     const href=g=>'comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:root.id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId());
     const ordered=active&&active.variantOf?[active,...variants.filter(g=>g!==active)]:variants;
     return {state:'ready',original:{id:root.id,name:root.name},activeIsVariant:!!active?.variantOf,pairs:ordered.map(g=>({id:g.id,name:g.name,href:href(g)}))};
+  },
+  /* StoryLayersV1 · los mismos pares que compareTargets, con los proyectos de cada entrada (solo lectura, clonados por
+     library.group). La historia se construye sobre ellos en js/story-layers-ui.js. */
+  storyTargets(){
+    const t=this.compareTargets();if(t.state!=='ready')return {state:t.state,pairs:[]};
+    let group;try{group=library.group(library.activeId());}catch{return {state:'not-eligible',pairs:[]};}
+    const root=group[0],byId=new Map(group.map(g=>[g.id,g]));
+    return {state:'ready',pairs:t.pairs.map(p=>{const g=byId.get(p.id);return {id:p.id,before:{id:root.id,name:root.name,project:root.project},after:{id:g.id,name:g.name,project:g.project}};})};
   },get viewMode(){return viewMode;},
   // A failed identity migration leaves old shared project ids in storage. Economic writers must fail closed.
   get identityMigration(){return library?.migration?.()||null;},
@@ -6172,7 +6180,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 }});
 </script>
 <link rel="stylesheet" href="css/professional-workspace.css">
-<link rel="stylesheet" href="css/perla-entregar.css">
+<link rel="stylesheet" href="css/perla-entregar.css"><link rel="stylesheet" href="css/story-layers.css">
 <link rel="stylesheet" href="css/perla-semaforo.css">
 <link rel="stylesheet" href="css/perla-presupuestar.css">
 <link rel="stylesheet" href="css/project-first.css">
