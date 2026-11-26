@@ -66,7 +66,8 @@ def load_rooms(cap, manifest):
         e = json.loads(ej.read_text(encoding="utf8"))
         if e.get("format") != "rubik-sota.scene-rooms":
             fail("ROOMS_FORMAT", "rubik-estancias.json no es un archivo de estancias de RUBIK")
-        mats = [{"id": "floor:" + r["id"], "appearance": {"color": r["floorColor"]}} for r in e["rooms"] if r.get("floorColor")]
+        mats = [{"id": "floor:" + r["id"], "appearance": {"color": r["floorColor"]}, "sourceId": r.get("floorMaterialId"), "preset": r.get("floorPreset")}
+                for r in e["rooms"] if r.get("floorColor")]  # sourceId/preset: rubik-estancias 1.2.0 (aditivo)
         rooms = [{"id": r["id"], "polygon": r["polygon"], "counted": r.get("counted", True), "levelId": r.get("levelId"),
                   "floorMaterialId": ("floor:" + r["id"]) if r.get("floorColor") else None} for r in e["rooms"]]
         return {"rooms": rooms, "materials": mats, "objects": e.get("objects", []), "defaults": {"wallHeightMm": e.get("wallHeightMm", 2800)}}, {r["id"]: r.get("label") or r["id"] for r in e["rooms"]}

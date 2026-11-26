@@ -20,11 +20,12 @@
   const SCRIPT = 'rubik_blender_prepare.py'; // copia exacta de scripts/interop/blender-scene-import.py (preparación completa)
   // M03 · kit: nombre en el ZIP ← origen en el repositorio (copias exactas, huella en el manifiesto).
   const KIT = Object.freeze({ render: 'rubik_blender_render.py', verify: 'rubik_blender_verify.py', profiles: 'rubik_render_profiles.json', sh: 'renderizar.sh', bat: 'RENDERIZAR-windows.bat', licence: 'LICENCIA-SCRIPTS.txt', copying: 'COPYING-GPL-3.0.txt',
-    rodaje: 'rubik_blender_rodaje.py', recursos: 'rubik_rodaje_recursos.json', rodar: 'rodar.sh' });
+    rodaje: 'rubik_blender_rodaje.py', recursos: 'rubik_rodaje_recursos.json', rodar: 'rodar.sh', rodarBat: 'RODAR-windows.bat' });
   const KIT_SOURCES = Object.freeze({ render: 'scripts/interop/blender-scene-render.py', verify: 'scripts/interop/blender-scene-reopen.py', profiles: 'scripts/interop/blender-render-profiles.json',
     sh: 'scripts/interop/blender-kit/renderizar.sh', bat: 'scripts/interop/blender-kit/RENDERIZAR-windows.bat',
     licence: 'scripts/interop/blender-kit/LICENCIA-SCRIPTS.txt', copying: 'scripts/interop/blender-kit/COPYING-GPL-3.0.txt',
-    rodaje: 'scripts/interop/blender-rodaje.py', recursos: 'scripts/interop/rodaje-recursos.json', rodar: 'scripts/interop/blender-kit/rodar.sh' });
+    rodaje: 'scripts/interop/blender-rodaje.py', recursos: 'scripts/interop/rodaje-recursos.json', rodar: 'scripts/interop/blender-kit/rodar.sh',
+    rodarBat: 'scripts/interop/blender-kit/RODAR-windows.bat' });
   const ROOMS = 'rubik-estancias.json', REFERENCE = 'referencia-rubik.png';
   const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, ...Object.values(KIT)]);
   const enc = new TextEncoder();
@@ -39,15 +40,19 @@
     if (!project || !Array.isArray(project.rooms)) throw Error('roomsDoc: project is required');
     const mats = new Map((project.materials || []).map(m => [m.id, m]));
     const rooms = project.rooms.filter(r => Array.isArray(r.polygon) && r.polygon.length >= 3).map(r => {
-      const color = (mats.get(r.floorMaterialId) || {}).appearance?.color;
+      const fm = mats.get(r.floorMaterialId) || {}, color = fm.appearance?.color;
+      // 1.2.0 (aditivo) · clave del material de suelo y de su familia de catálogo (identificadores ASCII del sistema, nunca
+      // texto libre): el rodaje elige el acabado por material y familia, no solo por coincidencia exacta de color.
+      const key = v => typeof v === 'string' && /^[A-Za-z0-9_:.-]{1,60}$/.test(v) ? v : null;
       return { id: r.id, label: String(typeof label === 'function' ? label(r) : r.id).slice(0, 80), polygon: r.polygon.map(p => ({ x: p.x, y: p.y })),
-        counted: r.counted !== false, levelId: r.levelId ?? null, floorColor: /^#[0-9a-f]{6}$/i.test(color || '') ? color : null };
+        counted: r.counted !== false, levelId: r.levelId ?? null, floorColor: /^#[0-9a-f]{6}$/i.test(color || '') ? color : null,
+        floorMaterialId: key(r.floorMaterialId), floorPreset: key(fm.appearance?.preset) };
     });
     // §4 (1.1.0, aditivo) · tipo de catálogo de cada objeto (clave ASCII, nunca el nombre guardado): el render local da a
     // cada pieza el acabado de su tipo (tejido, madera, vegetación…) en lugar de adivinarlo por el color.
     const objects = (Array.isArray(project.objects) ? project.objects : []).filter(o => o && typeof o.id === 'string')
       .map(o => ({ id: o.id, type: /^[a-z0-9_-]{1,40}$/.test(o.type || '') ? o.type : null }));
-    return { format: 'rubik-sota.scene-rooms', version: '1.1.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms, objects };
+    return { format: 'rubik-sota.scene-rooms', version: '1.2.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms, objects };
   }
 
   /** Manifiesto de la entrega. `capture` = resultado de View3D.captureScene() ({doc, info}). */
@@ -141,7 +146,8 @@
       c6: "   5) Vuelve a RUBIK › Entregar › Escena para Blender › «Revisar render…» y elige manifest.json del ZIP original. Después elige la carpeta resultados/<perfil>: RUBIK comprueba que es tu proyecto, lo compara con la vista 3D y prepara la entrega (originales limpios y copias con tu marca).",
       c7: "   Lo añadido para el render (cámaras interiores, luz de relleno por estancia, exposición, fondo de la axonometría) se declara en render-report.json: no es un dato del proyecto.",
       c8: "   Licencia: los tres scripts .py de Blender se distribuyen bajo GPL-3.0-or-later (LICENCIA-SCRIPTS.txt, COPYING-GPL-3.0.txt). No afecta a RUBIK ni a tu proyecto, imágenes, renders o archivos .blend, que son tuyos.",
-      cMissing: "C · Render y entrega: algunos archivos del kit no se pudieron incluir esta vez; usa la preparación B y renderiza desde Blender." },
+      cMissing: "C · Render y entrega: algunos archivos del kit no se pudieron incluir esta vez; usa la preparación B y renderiza desde Blender.",
+      d: "D · Rodaje en vídeo (entrega recomendada 2560×1440): Windows, doble clic en RODAR-windows.bat; macOS / Linux, «sh rodar.sh entrega1440 interior dia». Revisión rápida a 720p: «revision». 4K opcional: «entrega4k». Reanudable; el informe rodaje-report.json declara acabados, aproximaciones y piezas pendientes." },
     en: { title: 'RUBIK SOTA · Scene for Blender', two: 'There are two ways to open this scene. They do NOT produce the same render:',
       a: 'A · Direct import (quick): Blender › File › Import › glTF 2.0 › scene.glb, default options.',
       aGives: '   Brings geometry in metres, base colours, the rubik_* identifiers and the RUBIK_camera.',
@@ -164,7 +170,8 @@
       c6: "   5) Back in RUBIK › Deliver › Scene for Blender › “Review render…”, choose manifest.json from the original ZIP. Then choose the folder resultados/<profile>: RUBIK checks it is your project, compares it with the 3D view and prepares the delivery (clean originals and branded copies).",
       c7: "   What the render adds (interior cameras, per-room fill light, exposure, axonometry background) is declared in render-report.json: it is not project data.",
       c8: "   Licence: the three Blender .py scripts are distributed under GPL-3.0-or-later (LICENCIA-SCRIPTS.txt, COPYING-GPL-3.0.txt). It does not cover RUBIK or your project, images, renders or .blend files, which are yours.",
-      cMissing: "C · Render and delivery: some kit files could not be included this time; use preparation B and render from Blender." },
+      cMissing: "C · Render and delivery: some kit files could not be included this time; use preparation B and render from Blender.",
+      d: "D · Video shoot (recommended delivery 2560×1440): Windows, double-click RODAR-windows.bat; macOS / Linux, “sh rodar.sh entrega1440 interior dia”. Quick 720p review: “revision”. Optional 4K: “entrega4k”. Resumable; rodaje-report.json declares finishes, approximations and pending pieces." },
     zh: { title: 'RUBIK SOTA · Blender 场景', two: '打开此场景有两种方式，两者的渲染结果并不相同：',
       a: 'A · 直接导入（快速）：Blender › 文件 › 导入 › glTF 2.0 › scene.glb，使用默认选项。',
       aGives: '   包含以米为单位的几何体、基础颜色、rubik_* 标识和 RUBIK_camera 相机。',
@@ -187,12 +194,13 @@
       c6: "   5) 回到 RUBIK › 交付 › Blender 场景 › “审阅渲染…”，先选择原始 ZIP 中的 manifest.json，再选择 resultados/<配置> 文件夹：RUBIK 会核对是否为您的项目，与 3D 视图对比并准备交付（干净原图和带品牌的副本）。",
       c7: "   为渲染添加的内容（室内相机、各房间补光、曝光、轴测背景）已在 render-report.json 中声明，并非项目数据。",
       c8: "   许可：三个 Blender .py 脚本按 GPL-3.0-or-later 分发（LICENCIA-SCRIPTS.txt、COPYING-GPL-3.0.txt）。不涉及 RUBIK 或您的项目、图像、渲染和 .blend 文件，它们归您所有。",
-      cMissing: "C · 渲染与交付：本次未能包含部分工具文件；请使用准备方式 B 并在 Blender 中渲染。" },
+      cMissing: "C · 渲染与交付：本次未能包含部分工具文件；请使用准备方式 B 并在 Blender 中渲染。",
+      d: "D · 视频拍摄（推荐交付 2560×1440）：Windows 双击 RODAR-windows.bat；macOS / Linux 运行“sh rodar.sh entrega1440 interior dia”。720p 快速审阅：“revision”。可选 4K：“entrega4k”。可续传；rodaje-report.json 列出材质、近似处理和待处理部件。" },
   };
   function readme(m, lang) {
     const t = TEXT[lang] || TEXT.es, s = m.scene.stats, p = (m.blender.paths || {}).prepared || {};
     const r = (m.blender.paths || {}).render;
-    return [t.title, '', ...(r ? (r.launchers ? [t.c, t.c1, t.c2, t.c3, t.c4, t.c5, t.c6, t.c7, t.c8, ''] : [t.cMissing, '']) : []),
+    return [t.title, '', ...(r ? (r.launchers ? [t.c, t.c1, t.c2, t.c3, t.c4, t.c5, t.c6, t.c7, t.c8, '', t.d, ''] : [t.cMissing, '']) : []),
       t.two, '', t.a, t.aGives, t.aMiss, '', ...(p.script ? [t.b, '   ' + p.command, t.bGives, t.bNote] : [t.bMissing]), '',
       t.props, m.blender.camera !== 'none' ? t.cam : t.nocam, '', t.content(s), t.limits, t.manifest].join('\n') + '\n';
   }

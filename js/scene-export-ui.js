@@ -80,7 +80,7 @@
  // Camino B: el script de preparación completa, leído del mismo origen (sin red externa). Se cachea; si falla, null.
  // M03 · Kit de render: copias exactas del repositorio leídas del mismo origen. Cada una se reconoce por su cabecera: nunca
  // se empaqueta una página de error en su lugar. Si alguna falta, el kit no se entrega a medias (el LEEME lo explica).
- const SPDX='# SPDX-License-Identifier: GPL-3.0-or-later';const KIT_HEAD={render:SPDX,verify:SPDX,profiles:'{',sh:'#!/bin/sh',bat:'@echo off',licence:'RUBIK SOTA · Licencia',copying:'                    GNU GENERAL PUBLIC LICENSE',rodaje:SPDX,recursos:'{',rodar:'#!/bin/sh'};
+ const SPDX='# SPDX-License-Identifier: GPL-3.0-or-later';const KIT_HEAD={render:SPDX,verify:SPDX,profiles:'{',sh:'#!/bin/sh',bat:'@echo off',licence:'RUBIK SOTA · Licencia',copying:'                    GNU GENERAL PUBLIC LICENSE',rodaje:SPDX,recursos:'{',rodar:'#!/bin/sh',rodarBat:'@echo off'};
  let kitCache;async function kit(){
   if(kitCache!==undefined)return kitCache;const out={};
   for(const [k,src] of Object.entries(D.KIT_SOURCES||{})){try{const r=await fetch(src,{cache:'no-store'});if(!r.ok){kitCache=null;return null;}const b=new Uint8Array(await r.arrayBuffer());

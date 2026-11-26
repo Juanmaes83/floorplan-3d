@@ -28,3 +28,4 @@ tmp/
 
 # CAT-04 local evidence (videos/screens/manifest are CI artifacts, never committed)
 qa-results/cat04/
+__pycache__/

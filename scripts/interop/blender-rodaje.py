@@ -60,6 +60,69 @@ ORIGIN = [None]
 BACKFACE = set()  # materiales generados que sustituyen a uno del visor con la cara trasera oculta
 UPHOLSTERED = {"sofa", "armchair", "baycushion", "bed", "chair"}
 WOODEN = {"table", "dining-table", "bench", "sidetable", "dresser", "coffeetable", "tvstand", "cabinet", "desk", "bookshelf", "nightstand", "wardrobe", "roundtable", "shoecab", "vanity"}
+SANITARY = {"toilet", "shower", "bathtub", "basin", "bidet"}
+APPLIANCE = {"fridge", "washer", "stove", "oven", "dishwasher", "dryer", "hood"}
+KITCHEN = {"counter", "ksink", "island"}
+
+def _hsv(h):
+    import colorsys
+    h = h.lstrip("#"); return colorsys.rgb_to_hsv(*(int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)))
+
+def floor_family(pm, mid, by_use):
+    """Recurso de suelo para el material de la estancia, de más a menos fiable, y cómo se decidió (se declara):
+    1) el identificador del material del proyecto coincide con uno del manifiesto de recursos («material declarado»);
+    2) el color coincide EXACTAMENTE con un material de suelo de RUBIK («material de catálogo por color»);
+    3) la familia se deduce del identificador o del preset del material (madera, mármol, baldosa…) («familia del material»);
+    4) si nada lo identifica, el tono decide entre madera y baldosa neutra («aproximación por color»)."""
+    pm = pm or {}; col = str((pm.get("appearance") or {}).get("color", "")).lower(); src = pm.get("sourceId")
+    for k in (mid, src):
+        if k in by_use and k.startswith("mat_"):
+            return k, "material declarado"
+    if col in COLOR_USE:
+        return COLOR_USE[col], "material de catálogo por color"
+    words = " ".join(str(x or "").lower() for x in (src, pm.get("preset")))
+    lum = _lum(col) if col.startswith("#") else .5
+    for keys, fam in ((("walnut", "nogal"), "mat_walnut"), (("wood", "oak", "parquet", "plank", "madera", "roble"), "mat_wood"),
+                      (("marble", "marmol"), "mat_marble"), (("antislip", "antidesl"), "mat_antislip"),
+                      (("tile", "porcel", "ceram", "stone", "slate", "granite", "terrazzo", "piedra", "baldosa"), "mat_tile800")):
+        if any(w in words for w in keys):
+            if fam == "mat_wood" and lum < .08:
+                fam = "mat_walnut"
+            return fam, "familia del material"
+    if not col.startswith("#"):
+        return None, "sin color"
+    h, s, v = _hsv(col)
+    if s > .22 and .03 < h < .14:  # tonos cálidos saturados (marrones, miel): madera
+        return ("mat_walnut" if lum < .08 else "mat_wood"), "aproximación por color"
+    return "mat_tile800", "aproximación por color"
+
+def contacto(declared):
+    """Separación de contacto (recurso de render, declarado): una pieza de doble cara (el visor la dibuja por ambos lados)
+    cuya base coincide con la cara superior de otra que la sostiene comparte plano con ella; en Cycles las dos superficies
+    se disputan cada píxel y aparecen manchas (vajilla sobre la mesa). Se eleva esa pieza 0,5 mm. Nada más se mueve."""
+    from mathutils import Vector
+    boxes = []
+    for o in bpy.data.objects:
+        if o.type != "MESH" or o.get("rubik_role") not in ("object", "fixture", "room", "room-slab"):
+            continue
+        bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
+        boxes.append((o, [min(p[i] for p in bb) for i in range(3)], [max(p[i] for p in bb) for i in range(3)]))
+    tops = {}
+    for o, lo, hi in boxes:
+        tops.setdefault(round(hi[2] * 5000), []).append((o, lo, hi))  # cubetas de 0,2 mm
+    moved = []
+    for o, lo, hi in boxes:
+        m = o.data.materials[0] if o.data.materials else None
+        if o.get("rubik_role") != "object" or not m or m.get("rubik_backface"):
+            continue
+        k = round(lo[2] * 5000)
+        for b, blo, bhi in tops.get(k, []) + tops.get(k - 1, []) + tops.get(k + 1, []):
+            if b is o or abs(bhi[2] - lo[2]) > 2e-4:
+                continue
+            if lo[0] < bhi[0] and hi[0] > blo[0] and lo[1] < bhi[1] and hi[1] > blo[1]:
+                mw = o.matrix_world.copy(); mw.translation.z += .0005; o.matrix_world = mw; moved.append(o.get("rubik_id")); break
+    declared.append(f"separación de contacto: {len(moved)} piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm "
+                    f"(evita superficies coincidentes; objetos: {sorted(set(moved))[:12]})")
 
 def _lum(h):
     r, g, b = _hex_lin(h); return .2126 * r + .7152 * g + .0722 * b
@@ -85,6 +148,15 @@ def _proc(name, colour, rough, metallic=0.0, coat=0.0, translucency=0.0, bump=0.
         Lk.new(tc.outputs["Object"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
     return m
 
+def _brushed(name, colour):
+    """Acero cepillado: metálico, rugosidad media y anisotropía; el rayado es un ruido estirado en una dirección (≈0,3 mm)."""
+    m = _proc(name, colour, .32, metallic=1.0); N = m.node_tree.nodes; Lk = m.node_tree.links; b = next(n for n in N if n.type == "BSDF_PRINCIPLED")
+    b.inputs["Anisotropic"].default_value = .6
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (3000, 30, 30); nz = N.new("ShaderNodeTexNoise"); nz.inputs["Detail"].default_value = 2
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = .08; bp.inputs["Distance"].default_value = .0003
+    Lk.new(tc.outputs["Object"], mp.inputs["Vector"]); Lk.new(mp.outputs["Vector"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+
 def inventario(sc, cam, project):
     """Qué aparece en la toma (fotograma 0): primer plano (< 2,5 m), segundo plano o A TRAVÉS DEL VIDRIO (el primer
     impacto hacia su centro es un vidrio). Por objeto: tipo exportado, piezas y acabado aplicado a cada una."""
@@ -104,9 +176,17 @@ def inventario(sc, cam, project):
         d = ctr - eye; hit, _, _, _, ho, _ = sc.ray_cast(dg, eye, d.normalized(), distance=d.length)
         through = bool(hit and ho and ho.data.materials and ho.data.materials[0].get("rubik_viewer_type") == "MeshPhysicalMaterial" and ho.get("rubik_id") != rid)
         plano = "a través del vidrio" if through else ("primer plano" if d.length < 2.5 else "segundo plano")
-        fin = sorted({o.data.materials[0].name.split(":")[1] if o.data.materials and o.data.materials[0].name.startswith("rubik:rodaje") else "color plano del visor" for o in objs})
+        def fin_of(o):
+            m = o.data.materials[0] if o.data.materials else None
+            if m and m.name.startswith("rubik:rodaje"):
+                return m.name.split(":")[1]
+            return "vidrio físico" if m and m.get("rubik_viewer_type") == "MeshPhysicalMaterial" else "color plano del visor"
+        fin = sorted({fin_of(o) for o in objs})
+        flat = "color plano del visor" in fin
+        estado = ("sin regla: color plano" if flat and len(fin) == 1 else "aproximación con piezas sin regla" if flat else "aproximación por tipo y pieza")
         rows.append({"id": rid, "rol": role, "tipoExportado": types.get(rid) if role == "object" else role, "piezas": len(objs), "distanciaM": round(d.length, 2), "plano": plano, "acabados": fin,
-                     "fuente": "tipo y color (aproximación visual)" if role == "object" else "geometría del hueco"})
+                     "fuente": "tipo y color (aproximación visual)" if role == "object" else "geometría del hueco", "estado": estado,
+                     **({"aviso": "Acabado pendiente de revisión"} if flat and plano == "primer plano" else {})})
     return sorted(rows, key=lambda r: r["distanciaM"])
 
 def acabados(project, by_use, ok, img, mean_lin, pbr):
@@ -122,18 +202,25 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
     def is_outdoor(o):
         c = o.matrix_world.translation; x, y = c.x * 1000 + origin["x"], -c.y * 1000 + origin["y"]
         return any(R.inside(r["polygon"], x, y) for r in outdoor)
-    cache = {}; log = {}; rug_max = {}
-    for o in bpy.data.objects:
+    cache = {}; log = {}; rug_layers = {}
+    for o in bpy.data.objects:  # alfombra por capas: la mayor y más baja es la base (canto y remate); la menor, el campo; el resto, cenefas
         if o.type == "MESH" and types.get(o.get("rubik_id")) == "rug":
             bb = [o.matrix_world @ Vector(c) for c in o.bound_box]; a2 = (max(p.x for p in bb) - min(p.x for p in bb)) * (max(p.y for p in bb) - min(p.y for p in bb))
-            rug_max[o.get("rubik_id")] = max(rug_max.get(o.get("rubik_id"), 0), a2)
+            rug_layers.setdefault(o.get("rubik_id"), []).append((a2, o.name))
+    rug_role = {}
+    for rid, ls in rug_layers.items():
+        ls.sort(reverse=True)
+        for i, (_, name) in enumerate(ls):
+            rug_role[name] = "campo" if (i == len(ls) - 1) else "canto" if i == 0 else "cenefa"
     def get(kind, colour, make):
         k = (kind, colour)
         if k not in cache:
             cache[k] = make()
         return cache[k]
     fabric, rug, wl, wd = (by_use.get(u) for u in ("fabric", "rug", "wood-light", "wood-dark"))
-    soft = {"tejido": dict(sheen=.6, ao=.6, edge=.12), "alfombra": dict(sheen=.4, ao=.6), "tejido-exterior": dict(sheen=.2, ao=.5)}
+    soft = {"tejido": dict(sheen=.6, ao=.6, edge=.12), "tejido-exterior": dict(sheen=.2, ao=.5),
+            "alfombra-campo": dict(sheen=.7, ao=.5, weave=.22, pile=.35, abrash=.07), "alfombra-cenefa": dict(sheen=.7, ao=.5, weave=.26, pile=.35, abrash=.05),
+            "alfombra-canto": dict(sheen=.5, ao=.9, weave=.18, pile=.2, abrash=.04)}
     def tex_or(kind, a, colour, scale, normal, rough_mul, fallback, rot=(0, 0, 0), extra=None):
         if not ok(a):
             falt = log.setdefault("_sin_recurso", {}); falt[kind] = (a or {}).get("id", "no listado")
@@ -160,11 +247,12 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
         elif n == 168:
             kind, m = "flor", get("flor", col, lambda: _proc("rubik:rodaje-flor:" + col, col, .5, translucency=.3, variation=.1))
         elif t == "rug":
-            border = ax[0] * ax[1] >= rug_max.get(o.get("rubik_id"), 0) - 1e-6
-            if border:  # borde: la pieza más grande de la alfombra (el ribete que asoma), trama girada 90° y más contacto
-                kind, m = "alfombra-borde", tex_or("alfombra-borde", rug, col, (rug or {}).get("dimensionsMm", [270])[0] / 1000, 2.0, 1.0, lambda: _proc("rubik:rodaje-alfombra-borde:" + col, col, .95, bump=.6, bump_scale=900), rot=(0, 0, math.pi / 2), extra=dict(ao=.9, sheen=.5))
-            else:
-             kind, m = "alfombra-tejida", tex_or("alfombra", rug, col, (rug or {}).get("dimensionsMm", [270])[0] / 1000, 2.0, 1.0, lambda: _proc("rubik:rodaje-alfombra:" + col, col, .95, bump=.5, bump_scale=900))
+            role = rug_role.get(o.name, "campo"); sc = (rug or {}).get("dimensionsMm", [270])[0] / 1000
+            # campo: trama a escala real; cenefa: la misma lana a escala real girada 90° (cambio de dirección de los hilos);
+            # canto: remate de la base con más sombra de contacto. Color medio = color del proyecto en las tres.
+            rot = {"campo": (0, 0, 0), "cenefa": (0, 0, math.pi / 2), "canto": (0, 0, math.pi / 2)}[role]
+            kind = "alfombra-" + role
+            m = tex_or(kind, rug, col, sc, 2.2, 1.0, lambda: _proc(f"rubik:rodaje-{kind}:" + col, col, .95, bump=.5, bump_scale=900), rot=rot)
         elif t == "armchair" and is_outdoor(o) and lum < .12:
             # sillón exterior: la ESTRUCTURA (patas) es metal lacado; la tapicería, tejido de exterior (más mate)
             kind, m = "exterior-estructura-metal-lacado", get("metal-ext", col, lambda: _proc("rubik:rodaje-metal-exterior:" + col, col, .35, metallic=.6, coat=.3))
@@ -172,6 +260,20 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             kind, m = "exterior-tapiceria-lona", tex_or("tejido-exterior", fabric, col, (fabric or {}).get("dimensionsMm", [270])[0] / 1000, 1.2, 1.15, lambda: _proc("rubik:rodaje-lona:" + col, col, .95))
         elif t in UPHOLSTERED and n >= 500 and lum > .08:
             kind, m = "tapiceria-tejido", tex_or("tejido", fabric, col, (fabric or {}).get("dimensionsMm", [270])[0] / 1000, 2.6, 1.05, lambda: _proc("rubik:rodaje-tejido:" + col, col, .9, bump=.3, bump_scale=800))
+        elif t in SANITARY and lum > .35:  # loza sanitaria vitrificada
+            kind, m = "ceramica-sanitaria", get("sanitaria", col, lambda: _proc("rubik:rodaje-sanitaria:" + col, col, .06, coat=.9))
+        elif t in SANITARY | APPLIANCE | KITCHEN and .02 <= lum <= .35 and abs(r - b) < .04 and abs(r - g) < .04:  # gris neutro: acero
+            kind, m = "acero-inoxidable-cepillado", get("inox", col, lambda: _brushed("rubik:rodaje-inox:" + col, col))
+        elif t in SANITARY | APPLIANCE | KITCHEN and .02 <= lum < .12:  # piezas oscuras (zócalos, mandos, perfiles): metal oscuro satinado
+            kind, m = "metal-oscuro-satinado", get("metal-oscuro", col, lambda: _proc("rubik:rodaje-metal-oscuro:" + col, col, .38, metallic=.7))
+        elif t in APPLIANCE and lum > .35:  # carcasa esmaltada/lacada de electrodoméstico
+            kind, m = "electrodomestico-esmaltado", get("esmalte", col, lambda: _proc("rubik:rodaje-esmalte:" + col, col, .22, coat=.6))
+        elif t in KITCHEN and lum > .02 and dims[2] < .06 and dims[0] > .3:  # encimera: losa horizontal fina
+            kind, m = "encimera-piedra-compacta", get("encimera", col, lambda: _proc("rubik:rodaje-encimera:" + col, col, .28, coat=.35, bump=.04, bump_scale=60, variation=.05))
+        elif t in KITCHEN and lum > .12:  # frentes de mueble de cocina
+            kind, m = "frente-lacado-satinado", get("lacado", col, lambda: _proc("rubik:rodaje-lacado:" + col, col, .32, coat=.4))
+        elif t in UPHOLSTERED and n < 500 and lum > .08 and not green:  # piezas tapizadas sencillas (cojines de banco)
+            kind, m = "tapiceria-tejido-simple", tex_or("tejido", fabric, col, (fabric or {}).get("dimensionsMm", [270])[0] / 1000, 2.6, 1.05, lambda: _proc("rubik:rodaje-tejido:" + col, col, .9, bump=.3, bump_scale=800))
         elif lum < .02 and n <= 12 and dims[1] > .5:
             kind, m = "pantalla-vidrio-negro", get("pantalla", col, lambda: _proc("rubik:rodaje-pantalla:" + col, col, .05, coat=1.0))
         elif lum < .02:
@@ -189,6 +291,21 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             continue
         if src.get("rubik_backface"): BACKFACE.add(m.name)
         o.data.materials[0] = m; key = f"{t or 'sin-tipo'} → {kind}"; log[key] = log.get(key, 0) + 1
+    for o in bpy.data.objects:  # carpinterías de puertas y ventanas (marcos, hojas, herrajes): no traen material, se aproximan por color
+        if o.type != "MESH" or o.get("rubik_role") not in ("opening", "opening-leaf") or not o.data.materials:
+            continue
+        src = o.data.materials[0]; col = (src.get("rubik_color") or "#808080").lower()
+        if src.name.startswith("rubik:glass") or src.get("rubik_viewer_type") == "MeshPhysicalMaterial" or src.name.startswith("rubik:rodaje"):
+            continue
+        lum = _lum(col); h, sat, v = _hsv(col)
+        if sat > .22 and .03 < h < .14:
+            kind, m = "carpinteria-madera", tex_or("madera-clara", wl, col, 1.0, .4, .7, lambda: _proc("rubik:rodaje-madera-clara:" + col, col, .4))
+        elif lum < .35:
+            kind, m = "carpinteria-aluminio-lacado", get("aluminio", col, lambda: _proc("rubik:rodaje-aluminio:" + col, col, .35, metallic=.6, coat=.2))
+        else:
+            kind, m = "carpinteria-lacada", get("lacado", col, lambda: _proc("rubik:rodaje-lacado:" + col, col, .32, coat=.4))
+        if src.get("rubik_backface"): BACKFACE.add(m.name)
+        o.data.materials[0] = m; key = f"{o.get('rubik_role')} → {kind}"; log[key] = log.get(key, 0) + 1
     sin = log.pop("_sin_regla", {}); falt = log.pop("_sin_recurso", {})
     res = ["mobiliario (APROXIMACIÓN VISUAL por tipo y pieza; el proyecto no identifica el material): " + json.dumps(dict(sorted(log.items())), ensure_ascii=False)]
     if falt:
@@ -234,7 +351,7 @@ def realismo(project, labels, light, sun, tex):
         px = np.empty(len(im.pixels), dtype=np.float32); im.pixels.foreach_get(px); px = px.reshape(-1, 4)[::7, :3]
         lin = np.where(px <= .04045, px / 12.92, ((px + .055) / 1.055) ** 2.4)  # imágenes de 8 bits: valores sRGB codificados
         return lin.mean(axis=0)
-    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0):
+    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0, weave=0.0, pile=0.0, abrash=0.0):
         m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; Lk = nt.links
         b = next(n for n in N if n.type == "BSDF_PRINCIPLED")
         tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / scale_m, 1 / scale_m, 1 / scale_m)
@@ -256,6 +373,21 @@ def realismo(project, labels, light, sun, tex):
             gm = N.new("ShaderNodeNewGeometry"); cr = N.new("ShaderNodeMapRange"); cr.inputs["From Min"].default_value = .5; cr.inputs["From Max"].default_value = .58
             cr.inputs["To Min"].default_value = 1.0; cr.inputs["To Max"].default_value = 1.0 + edge; Lk.new(gm.outputs["Pointiness"], cr.inputs["Value"])
             em = N.new("ShaderNodeVectorMath"); em.operation = "SCALE"; Lk.new(col_out, em.inputs[0]); Lk.new(cr.outputs["Result"], em.inputs["Scale"]); col_out = em.outputs["Vector"]
+        if weave:  # trama legible: el dibujo del tejido vive en el relieve; se lleva al color con su propio contraste medido
+            px = np.empty(len(d.image.pixels), dtype=np.float32); d.image.pixels.foreach_get(px); px = px.reshape(-1, 4)[::5, :3]
+            lum = (np.where(px <= .04045, px / 12.92, ((px + .055) / 1.055) ** 2.4) * (.2126, .7152, .0722)).sum(axis=1)
+            mu, sd = float(lum.mean()), max(1e-4, float(lum.std()))
+            bw = N.new("ShaderNodeRGBToBW"); Lk.new(d.outputs["Color"], bw.inputs["Color"]); wr = N.new("ShaderNodeMapRange"); wr.clamp = True
+            wr.inputs["From Min"].default_value = mu - 2.5 * sd; wr.inputs["From Max"].default_value = mu + 2.5 * sd
+            wr.inputs["To Min"].default_value = 1 - weave; wr.inputs["To Max"].default_value = 1 + weave; Lk.new(bw.outputs["Val"], wr.inputs["Value"])
+            wm = N.new("ShaderNodeVectorMath"); wm.operation = "SCALE"; Lk.new(col_out, wm.inputs[0]); Lk.new(wr.outputs["Result"], wm.inputs["Scale"]); col_out = wm.outputs["Vector"]
+        if abrash:  # «abrash»: variación tonal de lote de la lana en franjas a lo largo de la urdimbre (5–25 cm), visible a distancia
+            tc3 = N.new("ShaderNodeTexCoord"); mp3 = N.new("ShaderNodeMapping"); mp3.inputs["Rotation"].default_value = rot
+            mp3.inputs["Scale"].default_value = (2.5, 7.0, 2.5); Lk.new(tc3.outputs["Object"], mp3.inputs["Vector"])
+            nz3 = N.new("ShaderNodeTexNoise"); nz3.inputs["Detail"].default_value = 3; nz3.inputs["Roughness"].default_value = .55; Lk.new(mp3.outputs["Vector"], nz3.inputs["Vector"])
+            ar = N.new("ShaderNodeMapRange"); ar.inputs["From Min"].default_value = .3; ar.inputs["From Max"].default_value = .7; ar.clamp = True
+            ar.inputs["To Min"].default_value = 1 - abrash; ar.inputs["To Max"].default_value = 1 + abrash; Lk.new(nz3.outputs["Fac"], ar.inputs["Value"])
+            am3 = N.new("ShaderNodeVectorMath"); am3.operation = "SCALE"; Lk.new(col_out, am3.inputs[0]); Lk.new(ar.outputs["Result"], am3.inputs["Scale"]); col_out = am3.outputs["Vector"]
         if sheen:
             b.inputs["Sheen Weight"].default_value = sheen; b.inputs["Sheen Roughness"].default_value = .4
         if albedo:
@@ -263,7 +395,13 @@ def realismo(project, labels, light, sun, tex):
         else:  # muros: color plano DEL PROYECTO; del recurso solo relieve y rugosidad
             b.inputs["Base Color"].default_value = (*target, 1)
         rm = N.new("ShaderNodeMath"); rm.operation = "MULTIPLY"; rm.inputs[1].default_value = rough_mul; Lk.new(r.outputs["Color"], rm.inputs[0]); Lk.new(rm.outputs[0], b.inputs["Roughness"])
-        nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"]); Lk.new(nm.outputs["Normal"], b.inputs["Normal"])
+        nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"])
+        if pile:  # pelo fino (≈2,5 mm, del tamaño de la fibra, no mayor) sobre el relieve de la trama
+            tc2 = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 400; nz.inputs["Detail"].default_value = 4
+            bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = pile; bp.inputs["Distance"].default_value = .0015
+            Lk.new(tc2.outputs["Object"], nz.inputs["Vector"]); Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(nm.outputs["Normal"], bp.inputs["Normal"]); Lk.new(bp.outputs["Normal"], b.inputs["Normal"])
+        else:
+            Lk.new(nm.outputs["Normal"], b.inputs["Normal"])
         return m
     mats = {m["id"]: m for m in project.get("materials", [])}; rooms = {r["id"]: r for r in project["rooms"]}; cache = {}; floors = []; subst = []
     solo_luz = flag("--sin-materiales")  # comparativa controlada: misma luz, cielo, vidrio y portales; materiales del visor
@@ -274,17 +412,16 @@ def realismo(project, labels, light, sun, tex):
         # El ZIP trae el color del suelo (floorColor), no el id del material: correspondencia EXACTA con el color de los
         # materiales de suelo de RUBIK (COLOR_USE); con project.json (laboratorio) se usa floorMaterialId.
         mid = r.get("floorMaterialId"); pm = mats.get(mid)
-        if mid not in by_use:  # ZIP: «floor:<estancia>» con su color → material de suelo de RUBIK por color exacto
-            mid = COLOR_USE.get(str(((pm or {}).get("appearance") or {}).get("color", "")).lower(), mid)
+        mid, via = floor_family(pm, mid, by_use)  # material declarado → color de catálogo → familia → aproximación por color
         a = by_use.get(mid)
         if not pm or not ok(a):
-            subst.append({"estancia": labels.get(rid, rid), "material": mid, "motivo": "sin recurso verificado: color plano"}); continue
+            subst.append({"estancia": labels.get(rid, rid), "material": mid, "motivo": "recurso ausente o sin verificar: color plano"}); continue
         key = mid
         if key not in cache:
             smooth = mid in ("mat_tile800", "mat_tile600", "mat_marble")  # porcelánico y mármol pulidos: reflejo y menos contraste
             cache[key] = pbr("rubik:rodaje-suelo:" + mid, a, (pm.get("appearance") or {}).get("color", "#cccccc"), "Object", a["dimensionsMm"][0] / 1000, rough_mul=.45 if smooth else 1.0, flatten=.55 if smooth else 0.0)
         if o.data.materials[0].get("rubik_backface"): BACKFACE.add(cache[key].name)
-        o.data.materials[0] = cache[key]; floors.append({"estancia": labels.get(rid, rid), "materialProyecto": mid, "recurso": a["id"], "escalaM": a["dimensionsMm"][0] / 1000})
+        o.data.materials[0] = cache[key]; floors.append({"estancia": labels.get(rid, rid), "materialProyecto": mid, "recurso": a["id"], "escalaM": a["dimensionsMm"][0] / 1000, "como": via})
     out.append(f"suelos: {len(floors)} estancias con PBR CC0 a escala real y color medio = color del material del proyecto; sustituciones: " + json.dumps(floors, ensure_ascii=False))
     if subst:
         out.append("suelos sin recurso (color plano conservado): " + json.dumps(subst, ensure_ascii=False))
@@ -369,6 +506,11 @@ def main():
     sc.cycles.max_bounces = 6; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transparent_max_bounces = 8
     sc.cycles.sample_clamp_indirect = 8.0
     sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = res[0], res[1], 100
+    crop = arg("--crop")  # x0,y0,x1,y1 en píxeles del fotograma completo (origen arriba a la izquierda): recorte nativo 1:1
+    if crop:
+        x0, y0, x1, y1 = (int(v) for v in crop.split(",")); sc.render.use_border = True; sc.render.use_crop_to_border = True
+        sc.render.border_min_x, sc.render.border_max_x = x0 / res[0], x1 / res[0]; sc.render.border_min_y, sc.render.border_max_y = 1 - y1 / res[1], 1 - y0 / res[1]
+        declared.append(f"RECORTE NATIVO {x1 - x0}×{y1 - y0} px en ({x0},{y0}) del fotograma {res[0]}×{res[1]}: misma cámara, luz y exposición que el fotograma completo")
     sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_depth = "8"
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
     declared.append(f"Cycles CPU, {samples} muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento")
@@ -405,6 +547,7 @@ def main():
         declared.extend(realismo(project, labels, light, sun, Path(arg("--tex", str(HERE.with_name("rodaje-texturas")))).resolve()))
     else:
         declared.append("realismo desactivado: materiales de color plano del visor (escena «antes»)")
+    contacto(declared)
     # Cámara animada
     cd = bpy.data.cameras.new("RUBIK_cam_rodaje"); cam = bpy.data.objects.new("RUBIK_cam_rodaje", cd); derived.objects.link(cam); sc.camera = cam
     cd.sensor_width = 36; sc.frame_start, sc.frame_end = 0, nframes - 1; sc.render.fps = fps
@@ -418,6 +561,46 @@ def main():
             az = math.radians(-50 + 30 * t); el = math.radians(42 - 6 * t); dist = diag * (1.25 - .12 * t)
             return ctr + Vector((math.cos(el) * math.sin(az), -math.cos(el) * math.cos(az), math.sin(el))) * dist, ctr
         declared.append("plano aéreo: arco de 30° y acercamiento del 10 % sobre la vivienda; techos ocultos en este plano (declarado)")
+    elif shot == "primerplano":  # plano cercano genérico de un tipo de objeto (--target rug|sofa|…): canto, remate y trama a escala útil
+        if ceilings: ceilings.hide_render = False
+        if fixtures: fixtures.hide_render = False
+        types = {o["id"]: o.get("type") for o in project.get("objects", []) if isinstance(o, dict)}
+        tgt_t = arg("--target", "rug"); ids = [i for i, t in types.items() if t == tgt_t]
+        pts = [o.matrix_world @ Vector(c) for o in bpy.data.objects if o.type == "MESH" and o.get("rubik_id") in ids[:1] for c in o.bound_box]
+        if not pts:
+            raise SystemExit(json.dumps({"status": "NO_SHOT", "reason": f"no hay ningún objeto de tipo {tgt_t}"}, ensure_ascii=False))
+        lo = Vector([min(p[i] for p in pts) for i in range(3)]); hi = Vector([max(p[i] for p in pts) for i in range(3)]); ctr = (lo + hi) / 2
+        rc = [R.centroid(r["polygon"]) for r in project["rooms"] if r.get("counted", True)]
+        room_c = min((R.to_blender(c["x"], c["y"], origin, 0) for c in rc), key=lambda v: (v.x - ctr.x) ** 2 + (v.y - ctr.y) ** 2)
+        d0 = ctr - room_c; d0.z = 0; d0 = d0.normalized() if d0.length > .05 else Vector((0, -1, 0))
+        h0 = max(.45, (hi.z - lo.z) + .45); dg = bpy.context.evaluated_depsgraph_get(); best = None
+        for k in range(8):  # ocho direcciones desde la del centro de la estancia: la primera con vista libre del canto
+            d = d0.copy(); d.rotate(__import__("mathutils").Euler((0, 0, k * math.pi / 4)))
+            edge = ctr.copy(); step = 0.0
+            while step < 6:  # canto REAL (no la caja alineada): último punto, hacia la estancia, donde un rayo vertical toca el objeto
+                q = ctr - d * step  # el rayo parte justo encima del objeto: los muebles que tenga encima no lo interrumpen
+                h_, _, _, _, ho_, _ = sc.ray_cast(dg, Vector((q.x, q.y, hi.z + .004)), Vector((0, 0, -1)), distance=hi.z - lo.z + .01)
+                if h_ and ho_ and ho_.get("rubik_id") in ids[:1]:
+                    edge = Vector((q.x, q.y, ctr.z))
+                elif step > .05:
+                    break
+                step += .02
+            a0 = edge - d * .55 + Vector((0, 0, h0)); tgt = Vector((edge.x, edge.y, hi.z - .002)) + d * .25  # justo bajo la cara superior: el rayo debe tocar el objeto
+            ok_view = True
+            for t in (0, .5, 1):  # el centro y los dos lados del encuadre deben ver el objeto
+                side = d.cross(Vector((0, 0, 1))) * (t - .5) * .5; q = tgt + side; v = q - a0
+                hit, _, _, _, ho, _ = sc.ray_cast(dg, a0, v.normalized(), distance=v.length + .05)
+                ok_view &= bool(hit and ho and ho.get("rubik_id") in ids[:1])
+            up, _, _, _, _, _ = sc.ray_cast(dg, a0, Vector((0, 0, 1)), distance=.3)  # cámara no metida bajo un mueble
+            if ok_view and not up:
+                best = (d, edge, a0, tgt, k); break
+        if not best:
+            raise SystemExit(json.dumps({"status": "NO_SHOT", "reason": f"ningún punto de vista libre hacia «{tgt_t}»"}, ensure_ascii=False))
+        d, edge, a0, tgt, kdir = best; a1 = a0 + d * .05 + Vector((0, 0, -.03))
+        cd.lens = 50
+        declared.append(f"primer plano de «{tgt_t}»: primer canto con vista libre (dirección {kdir}/8 desde el centro de la estancia) a ~0,6 m, objetivo de 50 mm (lectura de trama, remate y apoyo)")
+        def pose(t):
+            return a0.lerp(a1, t), tgt
     elif shot in ("detalle", "balcon"):
         if ceilings: ceilings.hide_render = False
         if fixtures: fixtures.hide_render = False
