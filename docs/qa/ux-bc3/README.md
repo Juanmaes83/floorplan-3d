@@ -28,5 +28,9 @@ Se conservan los filtros por unidad, la confirmación explícita, el consentimie
 - Cancelar no cambia el presupuesto. La referencia en unidades (ud) no se aplica a una partida en m²: bloqueada y explicada.
 - Móvil 390×844: sin desplazamiento horizontal; cada acción entera dentro del diálogo.
 
+## Regresión
+- 87/87. `M2-QA-08 · MP4 of the same plan` agotó su tiempo en la primera tanda con la CPU ocupada por un render;
+  repetida aislada con el render pausado: pasa (1/1).
+
 Capturas: `1-comparar-escritorio.png`, `2-antes-de-confirmar.png`, `3-guardado.png`, `4-presupuesto-tras-recargar.png`,
 `5-movil-comparar.png`.
