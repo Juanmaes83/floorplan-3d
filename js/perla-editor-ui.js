@@ -46,6 +46,35 @@
   const isExample=()=>$('#guideBar')?.getAttribute('data-project-kind')==='example';
   const sync=()=>{copyBtn.hidden=!isExample();paintProject();};
   const gb=$('#guideBar');if(gb)new MutationObserver(sync).observe(gb,{attributes:true,attributeFilter:['data-project-kind']});sync();copyBtn._perlaLabel=lbl;copyBtn._perlaExample=isExample;}
+ // §9 · Un único control de proyecto: el nombre real (abre la biblioteca, como siempre) y su menú ▾ con las acciones de
+ // proyecto, cada una con el efecto en su etiqueta. Cada entrada acciona el flujo existente (mismos ids y manejadores).
+ const projWrap=el('div',{class:'perla-projwrap',role:'group'},left);projWrap.append(proj);
+ const pmenu=el('details',{class:'perla-dd perla-menu perla-projmenu',id:'perlaProjectMenu'},projWrap),pmSum=el('summary',{class:'btn perla-icon'},pmenu),pmPop=el('div',{class:'menu-pop perla-pop perla-projpop',role:'menu'},pmenu);
+ const pmItem=(id,run)=>{const b=el('button',{type:'button',class:'btn perla-pm-item',id,role:'menuitem'},pmPop);b.onclick=async ev=>{pmenu.open=false;try{await run(ev);}catch(e){window.toast?.(e.message,6000);}};return b;};
+ const pmOpen=pmItem('pmOpenOther',()=>$('#projectsBtn').click());
+ const pmUpload=pmItem('pmUpload',()=>$('#importImage').click());
+ const pmCopy=pmItem('pmCopy',()=>{if($('#guideBar')?.getAttribute('data-project-kind')==='example'&&$('#guideCopyExample'))return $('#guideCopyExample').click();return window.FloorPlanApp.duplicateActive();});
+ const pmVariant=pmItem('pmVariant',ev=>window.FloorPlanStoryLayersUI?.createVariant?window.FloorPlanStoryLayersUI.createVariant(ev):window.FloorPlanApp.createVariant(ev));
+ const pmJson=pmItem('pmDownloadJson',()=>$('#exportJsonQuick').click());
+ el('hr',{class:'perla-pm-sep','aria-hidden':'true'},pmPop);
+ const pmMore=el('div',{class:'perla-pm-more',role:'group'},pmPop);
+ for(const id of ['newProjectBtn','importJson','joinRoomPlan'])move('#'+id,pmMore);
+ const pmSave=el('p',{class:'perla-pm-note',id:'pmSaveNote'},pmPop);
+ const paintProjectMenu=()=>{const ex=$('#guideBar')?.getAttribute('data-project-kind')==='example';
+  const set=(b,t,d)=>{b.innerHTML=`<b>${t}</b><small>${d}</small>`;b.setAttribute('aria-label',t+'. '+d);};
+  set(pmOpen,tx('Abrir otro proyecto…','Open another project…','打开其他项目…'),tx('Biblioteca de este navegador: cambia el proyecto activo','This browser’s library: switches the active project','本浏览器项目库：切换当前项目'));
+  set(pmUpload,tx('Subir plano o proyecto…','Upload plan or project…','上传平面图或项目…'),tx('Imagen, PDF o proyecto: crea un proyecto nuevo; el abierto no cambia','Image, PDF or project: creates a new project; the open one is unchanged','图片、PDF 或项目：新建项目；当前项目不变'));
+  set(pmCopy,tx('Crear copia','Create copy','创建副本'),ex?tx('Copia independiente del ejemplo para editarla','Independent copy of the example to edit','可编辑的示例独立副本'):tx('Proyecto independiente con id propio; el original no cambia','Independent project with its own id; the original is unchanged','独立项目（新 ID）；原项目不变'));
+  set(pmVariant,tx('Crear variante','Create variant','创建变体'),tx('Vinculada al original para comparar y contar el cambio','Linked to the original to compare and tell the change','与原项目关联，用于比较与说明'));
+  set(pmJson,tx('Descargar proyecto JSON','Download project JSON','下载项目 JSON'),tx('Archivo editable a tu equipo','Editable file to your computer','可编辑文件下载到电脑'));
+  pmSave.textContent=tx('«Guardado local» = se guarda solo en este navegador. Para llevarlo a otro equipo, descarga el JSON.','«Saved locally» = kept only in this browser. To take it to another computer, download the JSON.','“本地保存”仅保存在此浏览器。要带到其他电脑，请下载 JSON。');
+  pmSum.innerHTML=svg('chev',14);pmSum.setAttribute('aria-label',tx('Acciones del proyecto','Project actions','项目操作'));pmSum.title=pmSum.getAttribute('aria-label');projWrap.setAttribute('aria-label',tx('Proyecto','Project','项目'));};
+ pmenu.addEventListener('toggle',()=>{if(pmenu.open){paintProjectMenu();pmOpen.focus({preventScroll:true});}});
+ pmPop.addEventListener('keydown',e=>{const items=[...pmPop.querySelectorAll('button:not([hidden])')],i=items.indexOf(document.activeElement);
+  if(e.key==='Escape'){e.preventDefault();pmenu.open=false;pmSum.focus();}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();items[(i+(e.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus();}});
+ document.addEventListener('pointerdown',e=>{if(pmenu.open&&!pmenu.contains(e.target))pmenu.open=false;});
+ // «Crear copia» vive en el menú: el botón de la guía conserva id y manejador, dentro del menú (oculto en la fila).
+ if(copyBtn){copyBtn.classList.add('perla-copy-moved');pmPop.append(copyBtn);}
  // Áreas: los mismos botones de la barra de áreas, centrados y con más peso.
  for(const id of ['workArea-design','workArea-analyze','workArea-budget','workArea-deliver'])move('#'+id,center);
  center.setAttribute('role','navigation');center.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区域'));
@@ -60,7 +89,7 @@
  for(const id of ['fullscreen'])move('#'+id,morePop);
  if(hist){
   const compactHistory=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
-  const placeHistory=()=>{if(compactHistory.matches)morePop.prepend(hist);else right.insertBefore(hist,studio);};
+  const placeHistory=()=>{if(compactHistory.matches)morePop.prepend(hist);else{const v=$('.perla-r2 #viewSeg');if(v)v.after(hist);else right.insertBefore(hist,studio);}};
   placeHistory();compactHistory.addEventListener('change',placeHistory);
  }
  const legal=$('#legalLink');if(legal){const b=el('button',{type:'button',id:'perlaLegal',class:'btn'},morePop);b.onclick=()=>{more.open=false;legal.click();};b._t=()=>b.textContent=tx('Legal y uso','Legal and use','法律与使用');b._t();}
@@ -68,7 +97,8 @@
  help.onclick=()=>{const k=$('#panel [data-group="keys"] summary,#panel [data-group="keys"]');if(k){openTab('informe');const d=k.closest('details');if(d)d.open=true;k.scrollIntoView({block:'nearest'});(d?.querySelector('summary')||k).focus?.({preventScroll:true});}};
 
  // ── Fila 2 · Importar · Archivo · vista · paso · tareas · Presentar · acción principal ──
- const impWrap=el('div',{class:'perla-split',role:'group'},r2);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
+ // §9 · «Subir plano» y sus variantes pasan al menú de proyecto (mismo id y manejador); la fila 2 queda para la tarea actual.
+ const impWrap=el('div',{class:'perla-split perla-pm-import',role:'group'},pmPop);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
  const imp=el('details',{class:'perla-dd perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
  // «Importar proyecto JSON» sigue en «Archivo» (junto a «Guardar»), como en la app; aquí, plano, RoomPlan, nuevo, imagen y unir.
  for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importImage','joinRoomPlan'])move('#'+id,impPop);
@@ -77,7 +107,8 @@
  move('#uploadCancel',r2);
  const fileMenu=$$('header details.menu').find(d=>d.querySelector('#exportPng'));
  if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');}
- move('#exportJsonQuick',r2);
+ // «Guardar proyecto JSON» es la descarga: su entrada visible es «Descargar proyecto JSON» del menú de proyecto.
+ move('#exportJsonQuick',pmMore);
  const view=move('#viewSeg',r2);
  move('#levelBar',r2);move('#levelStatus',r2);
  el('span',{class:'perla-break','aria-hidden':'true'},r2);
@@ -106,12 +137,12 @@
   bar.setAttribute('aria-valuenow',String(g.pct));bar.querySelector('i').style.width=g.pct+'%';bar.setAttribute('aria-label',tx('Progreso del recorrido','Journey progress','进度'));
   tasks.innerHTML=`${svg('list',16)}<span>${tx('Tareas del proyecto','Project tasks','项目任务')}</span>${svg('chev',14)}`;
   // Acción principal = la acción real de la tarea actual (`guidePrimary`): mismo texto, mismo estado, mismo efecto.
-  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){primary.textContent=gp.textContent;primary.disabled=gp.disabled;primary.title=gp.title||'';}
+  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){const t=gp.textContent.trim(),is3d=/^(Abrir 3D|Open 3D|打开 3D)$/.test(t);primary.textContent=is3d?tx('Revisar en 3D (paso)','Review in 3D (step)','在 3D 中检查（步骤）'):t;primary.dataset.task3d=is3d?'1':'';primary.disabled=gp.disabled;primary.title=is3d?tx('Siguiente paso del recorrido: revisa la distribución en 3D y queda registrado. «Escena 3D» solo cambia la vista.','Next step: review the layout in 3D and it is recorded. «3D scene» only switches the view.','下一步：在 3D 中检查布局并记录。“3D 场景”仅切换视图。'):(gp.title||'');}
   if(present){present.textContent=tx('Presentar vivienda','Present the home','展示住宅');present.insertAdjacentHTML('afterbegin',svg('present',16));}
   if(impSum){impSum.innerHTML=svg('chev',16);impSum.setAttribute('aria-label',tx('Más formas de importar o empezar','More ways to import or start','更多导入或开始方式'));impSum.title=impSum.getAttribute('aria-label');}impWrap.setAttribute('aria-label',tx('Importar','Import','导入'));
   const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Archivo','File','文件')}</span>${svg('chev',14)}`;
   help.setAttribute('aria-label',tx('Ayuda y atajos','Help and shortcuts','帮助与快捷键'));help.title=help.getAttribute('aria-label');moreSum.setAttribute('aria-label',tx('Más opciones','More options','更多选项'));
-  copyBtn?._perlaLabel?.();paintProject();
+  copyBtn?._perlaLabel?.();paintProject();paintProjectMenu();
  }
  primary.onclick=()=>$('#guidePrimary')?.click();
  function setGuide(open,{focus=true}={}){
