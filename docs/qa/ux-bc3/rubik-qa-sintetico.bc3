@@ -1,0 +1,9 @@
+~V|RUBIK QA|FIEBDC-3/2016|Generador de prueba|Precios\Zona A\Zona B|ANSI||||||
+~C|QA##||RUBIK QA BC3 SINTETICO|||0|
+~C|QA01#||Pavimentos de prueba|||0|
+~C|ROBLE|m2|Pavimento de parqué de roble natural barnizado, colocado flotante sobre lámina de polietileno|39.9\42.75|01112026\|0|
+~C|ROBLE-UD|ud|Tabla suelta de roble para reposición (unidad, no superficie)|4.1\4.4|01112026\|0|
+~C|PORCEL|m2|Pavimento porcelánico rectificado 60×60|31.2\33.6|01112026\|0|
+~D|QA|QA01#\1\1\||
+~D|QA01#|ROBLE\1\1\ROBLE-UD\1\1\PORCEL\1\1\||
+
