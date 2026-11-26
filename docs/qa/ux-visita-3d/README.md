@@ -31,3 +31,12 @@
 - Límite: la tanda 2 completa no se ha repetido tras b1fc6248 (solo P08, P16 y la prueba nueva).
 
 Capturas: `1-inicio-cursor-libre.png`, `2-mirada-capturada.png`, `3-pausa-controles-libres.png`, `4-movil.png`.
+
+## Regresión completa del corte aprobado (`8136afe0`)
+- Estabilidad: `visita-3d-controles` 5/5 en tres ejecuciones seguidas.
+- Suites de recorrido, navegación 3D, presentación, territorio, idioma, entrega y asistente (48 archivos): 461 pruebas ·
+  439 superadas · 21 omitidas por diseño (requieren `THREE_LOCAL_DIR`, el 3D local; no cubiertas en este entorno) · **1 fallo**:
+  `R2 P16 long HTML-like room name … 1440x900`, que **se reproduce igual en la base `dacb5d39`** (la última parada sobresale
+  12 px de la tarjeta de presentación): defecto previo, ajeno a este corte.
+- CI: no ejecutada (los workflows no se disparan en ramas `claude/…`). Aprobación humana: sí (Preview `8136afe0`).
+- Hecho: §5.1 completo. Falta: nada del corte; P16 queda como defecto previo para otra tarea. Decisión del propietario: integración.
