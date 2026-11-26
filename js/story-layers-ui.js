@@ -72,13 +72,16 @@
     if (!show) { if (b) b.hidden = true; return; }
     const orig = a.entryInfo(r.before);
     if (!b) { b = el('div', { id: 'storyReturn', class: 'sl-return', role: 'region' }, document.body); }
+    // §9 · Con la cabecera PERLA, la vuelta a la historia es LA vuelta contextual de la fila 2: no flota sobre el plano.
+    const r2 = document.querySelector('.perla-r2');
+    if (r2) { if (b.parentElement !== r2) r2.prepend(b); b.classList.add('sl-return-inline'); b.style.top = ''; b.style.left = ''; b.style.maxWidth = ''; }
     // Bajo los controles superiores del lienzo (cotas, norte): nunca encima de una acción.
-    const tops = [...document.querySelectorAll('#stage > .perla-canvas-top, #stage > #solarNorth, #stage > .canvas-top')].filter(n => n.getClientRects().length).map(n => n.getBoundingClientRect().bottom);
-    const st = document.getElementById('stage')?.getBoundingClientRect(); b.style.top = Math.round(Math.max(st ? st.top : 0, ...tops) + 8) + 'px';
-    if (st && innerWidth > 600) { b.style.left = Math.round(st.left + st.width / 2) + 'px'; b.style.maxWidth = Math.round(Math.min(760, st.width - 16)) + 'px'; } else { b.style.left = ''; b.style.maxWidth = ''; }
+    const tops = r2 ? [] : [...document.querySelectorAll('#stage > .perla-canvas-top, #stage > #solarNorth, #stage > .canvas-top')].filter(n => n.getClientRects().length).map(n => n.getBoundingClientRect().bottom);
+    const st = r2 ? null : document.getElementById('stage')?.getBoundingClientRect(); if (!r2) b.style.top = Math.round(Math.max(st ? st.top : 0, ...tops) + 8) + 'px';
+    if (r2) {} else if (st && innerWidth > 600) { b.style.left = Math.round(st.left + st.width / 2) + 'px'; b.style.maxWidth = Math.round(Math.min(760, st.width - 16)) + 'px'; } else { b.style.left = ''; b.style.maxWidth = ''; }
     const sig = [lang(), cur.id, cur.name, orig?.name].join('|'); b.hidden = false; if (b.dataset.sig === sig) { const bk = b.querySelector('[data-sl-return="back"]'); if (bk) bk.disabled = false; return; } b.dataset.sig = sig;
     b.setAttribute('aria-label', L('Historia del cambio', 'Story of the change', '变更说明')); b.replaceChildren();
-    el('span', { class: 'sl-return-txt', 'data-sl-return': 'text' }, b, L(`Editando la variante «${projName(cur.name)}» · el original «${projName(orig?.name || '')}» se conserva`, `Editing the variant «${projName(cur.name)}» · the original «${projName(orig?.name || '')}» is kept`, `正在编辑变体「${projName(cur.name)}」· 原始方案「${projName(orig?.name || '')}」保持不变`));
+    const full = L(`Editando la variante «${projName(cur.name)}» · el original «${projName(orig?.name || '')}» se conserva`, `Editing the variant «${projName(cur.name)}» · the original «${projName(orig?.name || '')}» is kept`, `正在编辑变体「${projName(cur.name)}」· 原始方案「${projName(orig?.name || '')}」保持不变`); const tx2 = el('span', { class: 'sl-return-txt', 'data-sl-return': 'text', title: full }, b, r2 ? L(`Variante «${projName(cur.name)}»`, `Variant «${projName(cur.name)}»`, `变体「${projName(cur.name)}」`) : full);
     const back = el('button', { type: 'button', class: 'btn primary', 'data-sl-return': 'back' }, b, L('Volver a la historia', 'Back to the story', '返回说明'));
     back.onclick = async ev => { back.disabled = true; try { await a.persistence.requireSaved(ev); } catch (e) { back.disabled = false; window.toast?.(e.message, 6000); return; }
       const r2 = ret.get(); ret.clear(); window.FloorPlanProfessionalUI?.open('deliver');
@@ -494,6 +497,6 @@
     const ch = opts.chapter && dlg.querySelector(`[data-chapter="${CSS.escape(opts.chapter)}"] textarea`);
     if (ch) { ctx.chapter = opts.chapter; ch.focus(); ch.scrollIntoView({ block: 'center' }); } else dlg.querySelector(ctx.identical ? '[data-sl="edit-variant"]' : '[data-sl="close"]')?.focus();
   }
-  window.FloorPlanStoryLayersUI = Object.freeze({ open, cardModel, get returnContext() { return ret.get(); }, get state() { return ctx && status().r; }, get manifest() { return ctx?.lastManifest || null; }, get trace() { return ctx?.lastTrace || null; },
+  window.FloorPlanStoryLayersUI = Object.freeze({ open, cardModel, createVariant, get returnContext() { return ret.get(); }, get state() { return ctx && status().r; }, get manifest() { return ctx?.lastManifest || null; }, get trace() { return ctx?.lastTrace || null; },
     get pages() { return ctx ? ctx.pages.map(p => ({ file: p.file, sha256: p.sha256, cont: p.cont })) : []; } });
 })();

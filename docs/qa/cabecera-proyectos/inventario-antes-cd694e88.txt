@@ -1,0 +1,125 @@
+# === 1440
+# R1|V|y=9|BUTTON\#welcomeBtn|Ir a Inicio
+# R1|V|y=10|BUTTON\#projectsBtn|Proyecto activo: Proyecto de ejemplo. Abrir la bib
+# R1|V|y=10|BUTTON\#guideCopyExample|Crear una copia local del ejemplo
+# R1|V|y=8|BUTTON\#workArea-design|Diseñar
+# R1|V|y=8|BUTTON\#workArea-analyze|Analizar
+# R1|V|y=8|BUTTON\#workArea-budget|Presupuestar
+# R1|V|y=8|BUTTON\#workArea-deliver|Entregar
+# R1|V|y=10|BUTTON\#actionSearchBtn|Buscar una acción
+# R1|V|y=10|BUTTON\#undo|Deshacer
+# R1|V|y=10|BUTTON\#redo|Rehacer
+# R1|V|y=8|BUTTON\#workArea-studio|Mi estudio
+# R1|V|y=10|BUTTON\#perlaHelp|Ayuda y atajos
+# R1|V|y=10|BUTTON\#langBtn|Idioma: español. Cambiar a inglés
+# R1|V|y=10|SUMMARY\#|Más opciones
+# R1|V|y=97|BUTTON\#fullscreen|⛶ Pantalla completa
+# R1|V|y=55|BUTTON\#perlaLegal|Legal y uso
+# R2|V|y=65|BUTTON\#uploadPlanBtn|Subir plano
+# R2|V|y=65|SUMMARY\#|Más formas de importar o empezar
+# R2|V|y=112|BUTTON\#roomPlanJoinQuick|Unir escaneo
+# R2|V|y=242|BUTTON\#newProjectBtn|Nuevo proyecto
+# R2|V|y=158|BUTTON\#importImage|Subir plano o proyecto
+# R2|V|y=200|BUTTON\#joinRoomPlan|Unir escaneo RoomPlan…
+# R2|V|y=65|SUMMARY\#|Archivo
+# R2|V|y=116|BUTTON\#territoryOpen|Contexto territorial
+# R2|V|y=158|BUTTON\#solarOpen|Orientación y solar
+# R2|V|y=200|BUTTON\#exportPng|Exportar imagen
+# R2|V|y=242|BUTTON\#openSheet|Abrir lámina
+# R2|V|y=284|BUTTON\#reviewNotesBtn|Observaciones del cliente…
+# R2|V|y=326|BUTTON\#openSurfaceSheet|Ficha de superficies
+# R2|V|y=368|BUTTON\#brandManage|Tu marca profesional…
+# R2|V|y=410|BUTTON\#exportJson|Exportar plano JSON
+# R2|V|y=452|BUTTON\#exportDxf|Exportar planta activa en DXF
+# R2|V|y=494|BUTTON\#importJson|Importar proyecto JSON
+# R2|V|y=596|BUTTON\#reset|Restablecer diseño inicial
+# R2|V|y=638|BUTTON\#photoReformMenu|Reformar desde fotografía
+# R2|V|y=69|BUTTON\#exportJsonQuick|Guardar proyecto JSON
+# R2|V|y=69|BUTTON\#|Plano 2D
+# R2|V|y=69|BUTTON\#|Escena 3D
+# R2|V|y=73|BUTTON\#|Prepara tu proyecto: hecho
+# R2|V|y=73|BUTTON\#|Crea o revisa las estancias: hecho
+# R2|V|y=73|BUTTON\#|Revisa la distribución en 3D: empezado, sin termin
+# R2|V|y=65|BUTTON\#perlaTasks|Tareas del proyecto
+# R2|V|y=64|BUTTON\#presentationBtn|Presentar vivienda
+# R2|V|y=63|BUTTON\#perlaPrimary|Abrir 3D
+# MENUS [
+#  {
+#   "sum": "",
+#   "items": [
+#    "BUTTON\#roomPlanJoinQuick:Unir escaneo",
+#    "BUTTON\#newProjectBtn:Nuevo proyecto",
+#    "BUTTON\#importImage:Subir plano o proyecto",
+#    "BUTTON\#joinRoomPlan:Unir escaneo RoomPlan…"
+#   ]
+#  },
+#  {
+#   "sum": "Archivo",
+#   "items": [
+#    "BUTTON\#territoryOpen:Contexto territorial",
+#    "BUTTON\#solarOpen:Orientación y solar",
+#    "BUTTON\#exportPng:Exportar imagen",
+#    "BUTTON\#openSheet:Abrir lámina",
+#    "BUTTON\#reviewNotesBtn:Observaciones del cliente…",
+#    "BUTTON\#openSurfaceSheet:Ficha de superficies",
+#    "BUTTON\#brandManage:Tu marca profesional…",
+#    "LABEL\#:Tamaño",
+#    "LABEL\#:Proporción",
+#    "BUTTON\#exportJson:Exportar plano JSON",
+#    "BUTTON\#exportDxf:Exportar planta activa en DXF",
+#    "BUTTON\#importJson:Importar proyecto JSON",
+#    "BUTTON\#clearAll:Vaciar distribución",
+#    "BUTTON\#reset:Restablecer diseño inicial",
+#    "BUTTON\#photoReformMenu:Reformar desde fotografía"
+#   ]
+#  }
+# ]
+# Subtest: inv 1440
+# === 390
+# R1|V|y=4|BUTTON\#welcomeBtn|Ir a Inicio
+# R1|V|y=6|BUTTON\#projectsBtn|Proyecto activo: Proyecto de ejemplo. Abrir la bib
+# R1|V|y=6|BUTTON\#guideCopyExample|Crear una copia local del ejemplo
+# R1|V|y=50|BUTTON\#workArea-design|Diseñar
+# R1|V|y=50|BUTTON\#workArea-analyze|Analizar
+# R1|V|y=50|BUTTON\#workArea-budget|Presupuestar
+# R1|V|y=50|BUTTON\#workArea-deliver|Entregar
+# R1|V|y=6|BUTTON\#actionSearchBtn|Buscar una acción
+# R1|V|y=4|BUTTON\#workArea-studio|Mi estudio
+# R1|V|y=6|BUTTON\#langBtn|Idioma: español. Cambiar a inglés
+# R1|V|y=6|SUMMARY\#|Más opciones
+# R1|V|y=-600|BUTTON\#fullscreen|⛶ Pantalla completa
+# R1|V|y=-254|BUTTON\#perlaLegal|Legal y uso
+# R2|V|y=101|BUTTON\#uploadPlanBtn|Subir plano
+# R2|V|y=101|SUMMARY\#|Más formas de importar o empezar
+# R2|V|y=-652|BUTTON\#roomPlanJoinQuick|Unir escaneo
+# R2|V|y=-528|BUTTON\#newProjectBtn|Nuevo proyecto
+# R2|V|y=-385|BUTTON\#importImage|Subir plano o proyecto
+# R2|V|y=-183|BUTTON\#joinRoomPlan|Unir escaneo RoomPlan…
+# R2|V|y=101|SUMMARY\#|Archivo
+# R2|V|y=-648|BUTTON\#territoryOpen|Contexto territorial
+# R2|V|y=-606|BUTTON\#solarOpen|Orientación y solar
+# R2|V|y=-564|BUTTON\#exportPng|Exportar imagen
+# R2|V|y=-522|BUTTON\#openSheet|Abrir lámina
+# R2|V|y=-480|BUTTON\#reviewNotesBtn|Observaciones del cliente…
+# R2|V|y=-438|BUTTON\#openSurfaceSheet|Ficha de superficies
+# R2|V|y=-396|BUTTON\#brandManage|Tu marca profesional…
+# R2|V|y=-354|BUTTON\#exportJson|Exportar plano JSON
+# R2|V|y=-312|BUTTON\#exportDxf|Exportar planta activa en DXF
+# R2|V|y=-270|BUTTON\#importJson|Importar proyecto JSON
+# R2|V|y=403|BUTTON\#reset|Restablecer diseño inicial
+# R2|V|y=445|BUTTON\#photoReformMenu|Reformar desde fotografía
+# R2|V|y=101|BUTTON\#exportJsonQuick|Guardar proyecto JSON
+# R2|V|y=149|BUTTON\#|Plano 2D
+# R2|V|y=149|BUTTON\#|Escena 3D
+# R2|V|y=101|BUTTON\#perlaTasks|Tareas del proyecto
+# R2|V|y=149|BUTTON\#presentationBtn|Presentar vivienda
+# R2|V|y=148|BUTTON\#perlaPrimary|Abrir 3D
+# Subtest: inv 390
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5453.214862
