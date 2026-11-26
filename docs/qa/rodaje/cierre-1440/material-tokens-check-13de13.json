@@ -1,0 +1,73 @@
+{
+ "format": "rubik-sota.rodaje-materiales-check",
+ "version": "1.0.0",
+ "kit": "/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad/rodaje/kit4-f3",
+ "ok": true,
+ "comprobaciones": [
+  {
+   "comprobacion": "A · se lee el contrato",
+   "ok": true,
+   "detalle": "Material Tokens 1.0.0 (taxonomía 1.0.0): 7 asignaciones leídas"
+  },
+  {
+   "comprobacion": "A · suelo del salón: selección explícita del catálogo aplicada",
+   "ok": true,
+   "detalle": "declarado aplicado"
+  },
+  {
+   "comprobacion": "A · suelo del estudio sin identidad: aproximación declarada",
+   "ok": true,
+   "detalle": "aproximación"
+  },
+  {
+   "comprobacion": "A · objetos sin material declarado: aproximación por tipo y pieza",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "A · geometría y posiciones intactas (salvo contacto declarado)",
+   "ok": true,
+   "detalle": "solo las separaciones de contacto declaradas (+0,5 mm)"
+  },
+  {
+   "comprobacion": "B · ZIP anterior: abre y explica hasta dónde llega",
+   "ok": true,
+   "detalle": "ZIP sin rubik-materiales.json (anterior a Material Tokens): identidad de materiales no declarada; suelos por material/familia y mobiliario por tipo, pieza y color (aproximación)"
+  },
+  {
+   "comprobacion": "B · ZIP anterior: los suelos siguen resolviéndose por material/familia",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "C · huella distinta: se ignora el documento y se dice",
+   "ok": true,
+   "detalle": "rubik-materiales.json con huella distinta a la del manifiesto: se ignora (se aproxima y se declara)"
+  },
+  {
+   "comprobacion": "D · token explícito prevalece sobre la regla (mesa → nogal)",
+   "ok": true,
+   "detalle": "{\"piezas\": {\"token:material.wood.walnut.satin\": 1}}"
+  },
+  {
+   "comprobacion": "D · objeto de varias piezas: todas las piezas no vidrio reciben el token",
+   "ok": true,
+   "detalle": "{\"piezas\": {\"token:material.leather.natural.aniline\": 41}}"
+  },
+  {
+   "comprobacion": "D · token desconocido: aproximación declarada, nunca un material inventado",
+   "ok": true,
+   "detalle": "token sin receta: aproximación"
+  },
+  {
+   "comprobacion": "D · integridad también con tokens",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "E · textura ausente: reserva visible (color plano) y veredicto pendiente",
+   "ok": true,
+   "detalle": "reserva: color plano · Acabado pendiente de revisión"
+  }
+ ]
+}

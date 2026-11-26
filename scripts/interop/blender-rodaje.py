@@ -142,7 +142,9 @@ def _cuenta(oid, t, kind):
 def contacto(declared):
     """Separación de contacto (recurso de render, declarado): una pieza de doble cara (el visor la dibuja por ambos lados)
     cuya base coincide con la cara superior de otra que la sostiene comparte plano con ella; en Cycles las dos superficies
-    se disputan cada píxel y aparecen manchas (vajilla sobre la mesa). Se eleva esa pieza 0,5 mm. Nada más se mueve."""
+    se disputan cada píxel y aparecen manchas (vajilla sobre la mesa). Se eleva esa pieza 0,5 mm. Nada más se mueve.
+    Se registra cada pieza movida (soporte, cota, área de contacto) y cada descarte, para acreditar que la regla no toca
+    piezas que solo se solapan en planta sin tocarse, ni piezas cerradas (cara trasera oculta), ni planos sin solape."""
     from mathutils import Vector
     boxes = []
     for o in bpy.data.objects:
@@ -153,19 +155,35 @@ def contacto(declared):
     tops = {}
     for o, lo, hi in boxes:
         tops.setdefault(round(hi[2] * 5000), []).append((o, lo, hi))  # cubetas de 0,2 mm
-    moved = []
+    moved, desc = [], {"cerradas_cara_trasera_oculta": 0, "mismo_plano_sin_solape_en_planta": 0, "solape_en_planta_sin_contacto": 0}
+    ejemplos = {k: [] for k in desc}
+    def ej(k, o, b=None):
+        desc[k] += 1
+        if len(ejemplos[k]) < 5: ejemplos[k].append({"pieza": o.name, "objeto": o.get("rubik_id"), **({"otro": b.name} if b else {})})
     for o, lo, hi in boxes:
         m = o.data.materials[0] if o.data.materials else None
-        if o.get("rubik_role") != "object" or not m or m.get("rubik_backface"):
+        if o.get("rubik_role") != "object" or not m:
             continue
-        k = round(lo[2] * 5000)
-        for b, blo, bhi in tops.get(k, []) + tops.get(k - 1, []) + tops.get(k + 1, []):
-            if b is o or abs(bhi[2] - lo[2]) > 2e-4:
-                continue
-            if lo[0] < bhi[0] and hi[0] > blo[0] and lo[1] < bhi[1] and hi[1] > blo[1]:
-                mw = o.matrix_world.copy(); mw.translation.z += .0005; o.matrix_world = mw; moved.append(o.get("rubik_id")); MT.setdefault("contacto", []).append(o.name); break
-    declared.append(f"separación de contacto: {len(moved)} piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm "
-                    f"(evita superficies coincidentes; objetos: {sorted(set(moved))[:12]})")
+        k = round(lo[2] * 5000); cands = tops.get(k, []) + tops.get(k - 1, []) + tops.get(k + 1, [])
+        coplanar = [(b, blo, bhi) for b, blo, bhi in cands if b is not o and abs(bhi[2] - lo[2]) <= 2e-4]
+        xy = lambda blo, bhi: lo[0] < bhi[0] and hi[0] > blo[0] and lo[1] < bhi[1] and hi[1] > blo[1]
+        sup = next(((b, blo, bhi) for b, blo, bhi in coplanar if xy(blo, bhi)), None)
+        if m.get("rubik_backface"):
+            if sup: ej("cerradas_cara_trasera_oculta", o, sup[0])
+            continue
+        if not sup:
+            if coplanar: ej("mismo_plano_sin_solape_en_planta", o, coplanar[0][0])
+            else:  # ¿se solapa en planta con algo SIN tocarlo (atraviesa o flota)? No se mueve.
+                over = next((b for b, blo, bhi in boxes if b is not o and xy(blo, bhi) and blo[2] < lo[2] < bhi[2] - 2e-4), None)
+                if over: ej("solape_en_planta_sin_contacto", o, over)
+            continue
+        b, blo, bhi = sup; area = (min(hi[0], bhi[0]) - max(lo[0], blo[0])) * (min(hi[1], bhi[1]) - max(lo[1], blo[1]))
+        mw = o.matrix_world.copy(); mw.translation.z += .0005; o.matrix_world = mw
+        MT.setdefault("contacto", []).append(o.name)
+        moved.append({"pieza": o.name, "objeto": o.get("rubik_id"), "soporte": b.name, "soporteObjeto": b.get("rubik_id"), "cotaM": round(lo[2], 4), "areaContactoCm2": round(area * 1e4, 1)})
+    MT["contactoDetalle"] = {"movidas": moved, "descartes": desc, "ejemplosDescarte": ejemplos, "elevacionMm": 0.5, "toleranciaMm": 0.2}
+    declared.append(f"separación de contacto: {len(moved)} piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm; "
+                    f"descartes: {json.dumps(desc, ensure_ascii=False)} (detalle en materiales.contacto)")
 
 def _lum(h):
     r, g, b = _hex_lin(h); return .2126 * r + .7152 * g + .0722 * b
@@ -666,7 +684,7 @@ def main():
         MT["rows"].append({"objetivo": {"tipo": "objeto", "id": t.get("id"), "tipoCatalogo": t.get("type")}, "solicitado": {k: req.get(k) for k in ("token", "source", "certainty")},
                            "aplicado": {"piezas": piezas} if piezas else None, "estado": estado, "motivo": req.get("reason")})
     materiales = {"documento": MT["estado"], "orden": ["explícito", "documentado del catálogo", "aproximación por familia y pieza", "reserva visible"],
-                  "asignaciones": MT["rows"], "tokensSinReceta": sorted(MT.get("tokensSinReceta", [])), "integridad": integridad}
+                  "asignaciones": MT["rows"], "tokensSinReceta": sorted(MT.get("tokensSinReceta", [])), "integridad": integridad, "contacto": MT.get("contactoDetalle")}
     # Cámara animada
     cd = bpy.data.cameras.new("RUBIK_cam_rodaje"); cam = bpy.data.objects.new("RUBIK_cam_rodaje", cd); derived.objects.link(cam); sc.camera = cam
     cd.sensor_width = 36; sc.frame_start, sc.frame_end = 0, nframes - 1; sc.render.fps = fps

@@ -1,0 +1,253 @@
+{
+ "format": "rubik-sota.blender-preflight",
+ "version": "1.0.0",
+ "profile": "revision",
+ "shot": "interior",
+ "light": "dia",
+ "materiales": {
+  "documento": "Material Tokens 1.0.0 (taxonomía 1.0.0): 7 asignaciones leídas",
+  "orden": [
+   "explícito",
+   "documentado del catálogo",
+   "aproximación por familia y pieza",
+   "reserva visible"
+  ],
+  "asignaciones": [
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_living",
+     "estancia": "Synthetic living 6010 × 3730"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_study",
+     "estancia": "Synthetic study 2130 × 2450"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "familia del material"
+    },
+    "estado": "aproximación",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_catalog-bench",
+     "tipoCatalogo": "bench"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_design-table",
+     "tipoCatalogo": "dining-table"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_unknown-ref",
+     "tipoCatalogo": "cabinet"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 7,
+      "madera-clara-barnizada": 10,
+      "papel-carton": 13,
+      "ceramica-esmaltada": 1,
+      "tallo": 5,
+      "flor": 5
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   }
+  ],
+  "tokensSinReceta": [],
+  "integridad": {
+   "objetosComprobados": 94,
+   "cambiados": 2,
+   "soloContactoDeclarado": true,
+   "resultado": "solo las separaciones de contacto declaradas (+0,5 mm)"
+  },
+  "contacto": {
+   "movidas": [
+    {
+     "pieza": "object:obj_unknown-ref:77",
+     "objeto": "obj_unknown-ref",
+     "soporte": "object:obj_unknown-ref:76",
+     "soporteObjeto": "obj_unknown-ref",
+     "cotaM": 1.1498,
+     "areaContactoCm2": 178.9
+    },
+    {
+     "pieza": "object:obj_unknown-ref:90",
+     "objeto": "obj_unknown-ref",
+     "soporte": "object:obj_unknown-ref:76",
+     "soporteObjeto": "obj_unknown-ref",
+     "cotaM": 1.1498,
+     "areaContactoCm2": 617.2
+    }
+   ],
+   "descartes": {
+    "cerradas_cara_trasera_oculta": 9,
+    "mismo_plano_sin_solape_en_planta": 0,
+    "solape_en_planta_sin_contacto": 0
+   },
+   "ejemplosDescarte": {
+    "cerradas_cara_trasera_oculta": [
+     {
+      "pieza": "object:obj_design-table:52",
+      "objeto": "obj_design-table",
+      "otro": "room:rom_living:0"
+     },
+     {
+      "pieza": "object:obj_unknown-ref:53",
+      "objeto": "obj_unknown-ref",
+      "otro": "room:rom_study:1"
+     },
+     {
+      "pieza": "object:obj_unknown-ref:54",
+      "objeto": "obj_unknown-ref",
+      "otro": "room:rom_study:1"
+     },
+     {
+      "pieza": "object:obj_unknown-ref:55",
+      "objeto": "obj_unknown-ref",
+      "otro": "room:rom_study:1"
+     },
+     {
+      "pieza": "object:obj_unknown-ref:56",
+      "objeto": "obj_unknown-ref",
+      "otro": "room:rom_study:1"
+     }
+    ],
+    "mismo_plano_sin_solape_en_planta": [],
+    "solape_en_planta_sin_contacto": []
+   },
+   "elevacionMm": 0.5,
+   "toleranciaMm": 0.2
+  }
+ },
+ "inventario": [
+  {
+   "id": "obj_design-table",
+   "rol": "object",
+   "tipoExportado": "dining-table",
+   "piezas": 1,
+   "distanciaM": 3.04,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_south-slider",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 11,
+   "distanciaM": 3.8,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "rodaje-lacado",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_partition-door",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 4.95,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_unknown-ref",
+   "rol": "object",
+   "tipoExportado": "cabinet",
+   "piezas": 41,
+   "distanciaM": 5.93,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  }
+ ],
+ "veredicto": "Listo para revisión visual",
+ "pendientes": [],
+ "nota": "El render de revisión puede continuar con estas limitaciones visibles; la entrega final exige resolverlas o aceptarlas."
+}
