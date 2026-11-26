@@ -38,3 +38,23 @@ barra ya va fija arriba (`!important`): ambas posiciones miden igual y no se apa
 | S5, S7, S9, S8, S8b, S4-3d, «Desplazar muro», sin chino, retorno PERLA, writer fence | todas en verde | — | — |
 
 CI cruzada: workflow `a0-cross-browser.yml` (A0 + writer fence en 12 trabajos; Muros S5b en los 6 de escritorio).
+
+## §7.1 del encargo (`c14bd07a`) · Muros: edición descubrible desde Diseñar
+
+**Decisión del propietario:** se aprueba el rediseño de interacción de Muros. La composición `a5beb0ab` pasó la CI cruzada,
+pero la Preview revisada lleva OP-07 en estado *integrated*. La prueba de edición necesita una Preview aislada con
+activación autorizada y un proyecto de ejemplo seguro de modificar.
+
+**Siguiente corte (pendiente; no empezado en esta rama):**
+- Al seleccionar un muro, **Forma del muro** con las opciones visuales **Recto / Curvo**.
+- Curvo: asa central, aviso «Arrastra para curvar» y previsualización.
+- **Enderezar**.
+- Milímetros como ajuste secundario.
+- Reutilizar el flujo de edición, validación y guardado de OP-07.
+- Barra de selección libre del asa, también en móvil. Ya resuelto con PERLA en `a5beb0ab`.
+
+**Recorrido de aceptación:** dibujar un muro recto en el plano de ejemplo, curvarlo, verlo en 3D, enderezar, deshacer y
+rehacer, guardar y reabrir.
+
+**URL de prueba humana con SHA y estado de activación:** requiere el despliegue de Preview del propietario o de Codex.
+Desde esta sesión no hay autorización para desplegar.
