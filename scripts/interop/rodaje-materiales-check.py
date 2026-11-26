@@ -4,7 +4,7 @@
 python3 scripts/interop/rodaje-materiales-check.py KIT-DIR OUT-DIR [--blender RUTA]
   KIT-DIR: ZIP de RUBIK › Entregar › Escena para Blender descomprimido, con escena-preparada/ y rodaje-texturas/ verificadas.
 Variantes (cada una en una copia, el KIT-DIR no se toca):
-  A actual · B ZIP anterior (sin rubik-materiales.json) · C huella distinta · D tokens explícitos inyectados (versión futura
+  A actual (incluye el volumen genérico: objeto sin modelo de catálogo representado por una caja) · B ZIP anterior (sin rubik-materiales.json) · C huella distinta · D tokens explícitos inyectados (versión futura
   del proyecto: objeto de varias piezas, token conocido y token desconocido) · E textura ausente.
 Escribe OUT-DIR/resultado.json y sale con 1 si alguna comprobación falla.
 """
@@ -63,7 +63,9 @@ A = variant("A-actual", lambda d: None); ra = rows(A)
 chk("A · se lee el contrato", A["materiales"]["documento"].startswith("Material Tokens"), A["materiales"]["documento"])
 chk("A · suelo del salón: selección explícita del catálogo aplicada", ra[("suelo", "rom_living")]["estado"] == "declarado aplicado", ra[("suelo", "rom_living")]["estado"])
 chk("A · suelo del estudio sin identidad: aproximación declarada", ra[("suelo", "rom_study")]["estado"] == "aproximación", ra[("suelo", "rom_study")]["estado"])
-chk("A · objetos sin material declarado: aproximación por tipo y pieza", ra[("objeto", "obj_design-table")]["estado"] == "aproximación por tipo y pieza")
+chk("A · objeto con modelo de catálogo sin material declarado: aproximación por tipo y pieza", ra[("objeto", "obj_catalog-bench")]["estado"] == "aproximación por tipo y pieza", ra[("objeto", "obj_catalog-bench")]["estado"])
+chk("A · objeto sin modelo representado por una sola caja: volumen neutro declarado, nunca chapa de mueble", ra[("objeto", "obj_design-table")]["estado"].startswith("representación genérica")
+    and list(ra[("objeto", "obj_design-table")]["aplicado"]["piezas"]) == ["volumen-generico"], json.dumps(ra[("objeto", "obj_design-table")]["aplicado"]))
 chk("A · geometría y posiciones intactas (salvo contacto declarado)", A["materiales"]["integridad"]["soloContactoDeclarado"], A["materiales"]["integridad"]["resultado"])
 B = variant("B-zip-anterior", old_zip)
 chk("B · ZIP anterior: abre y explica hasta dónde llega", B["materiales"]["documento"].startswith("ZIP sin rubik-materiales.json"), B["materiales"]["documento"])

@@ -96,7 +96,7 @@ def floor_family(pm, mid, by_use):
         return ("mat_walnut" if lum < .08 else "mat_wood"), "aproximación por color"
     return "mat_tile800", "aproximación por color"
 
-MT = {"doc": None, "estado": None, "byTarget": {}, "rows": [], "objetos": {}}
+MT = {"doc": None, "estado": None, "byTarget": {}, "rows": [], "objetos": {}, "modelosCatalogo": None}
 TOKEN_USE = (("material.wood.oak", "mat_wood"), ("material.wood.walnut", "mat_walnut"), ("material.ceramic.porcelain.polished", "mat_tile800"),
              ("material.ceramic.porcelain.matte", "mat_tile600"), ("material.ceramic.porcelain.antislip", "mat_antislip"),
              ("material.stone.marble", "mat_marble"), ("material.stone.terrazzo", "mat_tile800"), ("material.fabric.wool.carpet", "rug"))
@@ -111,6 +111,9 @@ def token_use(token):
 def cargar_materiales(pkg, manifest):
     """rubik-materiales.json (Material Tokens 1.x) si viaja en el ZIP con la huella del manifiesto. ZIP anterior, huella
     distinta o versión desconocida → no se usa y el informe explica hasta dónde llega la preparación (tipo y color)."""
+    # Objetos con modelo de catálogo (manifest › fallbacks): los demás son representaciones procedimentales de RUBIK.
+    fb = manifest.get("fallbacks") or {}
+    MT["modelosCatalogo"] = set(fb.get("catalogModels") or []) if "catalogModels" in fb else None
     p = pkg / "rubik-materiales.json"; exp = (manifest.get("files") or {}).get("rubik-materiales.json")
     if not p.exists() or not exp:
         MT["estado"] = "ZIP sin rubik-materiales.json (anterior a Material Tokens): identidad de materiales no declarada; suelos por material/familia y mobiliario por tipo, pieza y color (aproximación)"; return
@@ -243,8 +246,12 @@ def inventario(sc, cam, project):
     rows = []; eye = cam.matrix_world.translation
     for (role, rid), objs in groups.items():
         pts = [o.matrix_world @ Vector(c) for o in objs for c in o.bound_box]; ctr = sum(pts, Vector()) / len(pts)
-        v = world_to_camera_view(sc, cam, ctr)
-        if not (0 <= v.x <= 1 and 0 <= v.y <= 1 and v.z > 0) or role in ("wall", "room"):
+        # En toma si su caja proyectada se solapa con el encuadre (no solo su centro: una alfombra cuyo centro queda bajo el
+        # borde inferior sigue estando a la vista y debe declararse).
+        if role in ("wall", "room"):
+            continue
+        vs = [world_to_camera_view(sc, cam, p) for p in pts]; vs = [q for q in vs if q.z > 0]
+        if not vs or max(q.x for q in vs) < 0 or min(q.x for q in vs) > 1 or max(q.y for q in vs) < 0 or min(q.y for q in vs) > 1:
             continue
         d = ctr - eye; hit, _, _, _, ho, _ = sc.ray_cast(dg, eye, d.normalized(), distance=d.length)
         through = bool(hit and ho and ho.data.materials and ho.data.materials[0].get("rubik_viewer_type") == "MeshPhysicalMaterial" and ho.get("rubik_id") != rid)
@@ -256,10 +263,11 @@ def inventario(sc, cam, project):
             return "vidrio físico" if m and m.get("rubik_viewer_type") == "MeshPhysicalMaterial" else "color plano del visor"
         fin = sorted({fin_of(o) for o in objs})
         flat = "color plano del visor" in fin
-        estado = ("sin regla: color plano" if flat and len(fin) == 1 else "aproximación con piezas sin regla" if flat else "aproximación por tipo y pieza")
+        estado = ("representación genérica de RUBIK (sin modelo): volumen neutro" if fin == ["rodaje-volumen-generico"] else
+                  "sin regla: color plano" if flat and len(fin) == 1 else "aproximación con piezas sin regla" if flat else "aproximación por tipo y pieza")
         rows.append({"id": rid, "rol": role, "tipoExportado": types.get(rid) if role == "object" else role, "piezas": len(objs), "distanciaM": round(d.length, 2), "plano": plano, "acabados": fin,
                      "fuente": "tipo y color (aproximación visual)" if role == "object" else "geometría del hueco", "estado": estado,
-                     **({"aviso": "Acabado pendiente de revisión"} if flat and plano == "primer plano" else {})})
+                     **({"aviso": "Acabado pendiente de revisión"} if (flat or fin == ["rodaje-volumen-generico"]) and plano == "primer plano" else {})})
     return sorted(rows, key=lambda r: r["distanciaM"])
 
 def acabados(project, by_use, ok, img, mean_lin, pbr):
@@ -330,6 +338,13 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             if k == pre or k.startswith(pre + "."):
                 return R_[pre]()
         return None
+    # Volumen genérico: un objeto SIN modelo de catálogo cuya representación en RUBIK es una sola caja (6 caras). No es un
+    # mueble modelado: vestirlo con chapa de madera lo haría pasar por uno terminado (f3-openings: «dining-table» como bloque
+    # macizo). Se rueda como volumen neutro mate con su color del proyecto y el informe lo declara.
+    piezas_por_id = {}
+    for o in bpy.data.objects:
+        if o.type == "MESH" and o.get("rubik_role") == "object":
+            piezas_por_id[o.get("rubik_id")] = piezas_por_id.get(o.get("rubik_id"), 0) + 1
     for o in bpy.data.objects:
         if o.type != "MESH" or o.get("rubik_role") != "object" or not o.data.materials:
             continue
@@ -349,7 +364,11 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
         ax = [max(p[i] for p in bb) - min(p[i] for p in bb) for i in range(3)]; dims = sorted(ax); lum = _lum(col)
         long = ax.index(max(ax)); grain = (0, 0, 0) if long == 0 else (0, 0, math.pi / 2) if long == 1 else (0, math.pi / 2, 0)
         r, g, b = _hex_lin(col); green = g > r * 1.15 and g > b * 1.15
-        if t == "plant" or (green and n in (12, 24, 320)):
+        generico = (MT["modelosCatalogo"] is not None and o.get("rubik_id") not in MT["modelosCatalogo"]
+                    and piezas_por_id.get(o.get("rubik_id")) == 1 and n in (6, 12) and len(o.data.vertices) <= 24)
+        if generico:
+            kind, m = "volumen-generico", get("volumen", col, lambda: _proc("rubik:rodaje-volumen-generico:" + col, col, .6))
+        elif t == "plant" or (green and n in (12, 24, 320)):
             if n == 320 or (green and n == 12):
                 kind, m = "hoja", get("hoja", col, lambda: _proc("rubik:rodaje-hoja:" + col, col, .4, translucency=.45, bump=.3, bump_scale=35, variation=.28, coat=.25))
             elif n == 24 or (t == "plant" and dims[0] < .06 and dims[2] > .2):
@@ -689,7 +708,9 @@ def main():
             continue
         got = MT["objetos"].get(t.get("id")); req = a.get("requested") or {}
         piezas = (got or {}).get("piezas", {}); tok = [k for k in piezas if k.startswith("token:")]
-        estado = ("declarado aplicado" if tok else "token sin receta: aproximación" if req.get("token") else "aproximación por tipo y pieza") if piezas else "sin regla: color plano (reserva)"
+        estado = ("declarado aplicado" if tok else "token sin receta: aproximación" if req.get("token") else
+                  "representación genérica de RUBIK (sin modelo): volumen neutro" if list(piezas) == ["volumen-generico"] else
+                  "aproximación por tipo y pieza") if piezas else "sin regla: color plano (reserva)"
         MT["rows"].append({"objetivo": {"tipo": "objeto", "id": t.get("id"), "tipoCatalogo": t.get("type")}, "solicitado": {k: req.get(k) for k in ("token", "source", "certainty")},
                            "aplicado": {"piezas": piezas} if piezas else None, "estado": estado, "motivo": req.get("reason")})
     materiales = {"documento": MT["estado"], "orden": ["explícito", "documentado del catálogo", "aproximación por familia y pieza", "reserva visible"],

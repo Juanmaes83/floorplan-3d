@@ -1,7 +1,7 @@
 {
  "format": "rubik-sota.rodaje-materiales-check",
  "version": "1.0.0",
- "kit": "/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad/rodaje/kit4-f3",
+ "kit": "kit-f3-openings (ZIP de Entregar, descomprimido)",
  "ok": true,
  "comprobaciones": [
   {
@@ -20,9 +20,14 @@
    "detalle": "aproximación"
   },
   {
-   "comprobacion": "A · objetos sin material declarado: aproximación por tipo y pieza",
+   "comprobacion": "A · objeto con modelo de catálogo sin material declarado: aproximación por tipo y pieza",
    "ok": true,
-   "detalle": ""
+   "detalle": "aproximación por tipo y pieza"
+  },
+  {
+   "comprobacion": "A · objeto sin modelo representado por una sola caja: volumen neutro declarado, nunca chapa de mueble",
+   "ok": true,
+   "detalle": "{\"piezas\": {\"volumen-generico\": 1}}"
   },
   {
    "comprobacion": "A · geometría y posiciones intactas (salvo contacto declarado)",

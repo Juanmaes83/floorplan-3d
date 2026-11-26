@@ -46,4 +46,4 @@ bloquear; reabrir en una versión anterior conserva los campos; ningún nombre v
 - Si es B: confirmar quién define el vocabulario de ranuras por modelo de catálogo (propuesta: RUBIK, versionado con la
   taxonomía) y si la interfaz entra en este corte o en el siguiente.
 
-Hasta esa decisión el kit, el contrato y las pruebas (`tests/material-tokens.test.cjs`, comprobador 13/13) se quedan como están.
+Hasta esa decisión el kit, el contrato y las pruebas (`tests/material-tokens.test.cjs`, comprobador 14/14) se quedan como están.
