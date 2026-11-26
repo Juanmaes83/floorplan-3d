@@ -38,7 +38,8 @@ test(`U10 semáforo ${viewport.width}x${viewport.height}`,{timeout:180000},async
  // U12 · Analizar: escala estimada → naranja; norte y parcela sin configurar → rojo; fachadas detectadas → verde.
  await page.evaluate(()=>FloorPlanProfessionalUI.open('analyze'));await page.waitForTimeout(900);
  const an=await page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('#professionalWorkspace .professional-card[data-sem]')].map(c=>[c.querySelector('h2,h3').textContent.trim(),c.dataset.sem])));
- assert.deepEqual(an,{'Medidas y superficies':'pend','Orientación y sol':'req','Emplazamiento':'req','Exterior':'ok'},'estado real de cada ficha de Analizar');
- assert.equal(await page.locator('#professionalWorkspace .perla-sem-bar').getAttribute('aria-valuenow'),'25');
+ assert.deepEqual(an,{'Medidas y superficies':'pend','Orientación y sol':'req','Emplazamiento':'req','Exterior':'pend'},'estado real de cada ficha de Analizar');
+ // §5.3 corte 2 (decisión del propietario 26/11/2026): detectar fachadas NO es «hecho»; solo la revisión marcada cuenta.
+ assert.equal(await page.locator('#professionalWorkspace .perla-sem-bar').getAttribute('aria-valuenow'),'0'); // §5.3 corte 2: Exterior detectado ya no cuenta (0 de 4).
  assert.deepEqual(errors,[]);
 });

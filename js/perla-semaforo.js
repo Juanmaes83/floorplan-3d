@@ -7,7 +7,11 @@
    - Presupuestar: las filas del resumen (mismas tres clases).
    - Recorrido de obra: sus pasos (done → verde · next → naranja · todo → rojo).
    Accesible: color + icono + texto; cada punto es un botón con nombre («Crea las estancias: sin hacer»). */
-(()=>{'use strict';
+(()=>{
+ // §5.3 · Revisión del exterior marcada por la persona (por proyecto y para las fachadas detectadas en ese momento).
+ window.RubikExteriorReview=window.RubikExteriorReview||{key:p=>'rubik-exterior-review-v1:'+(window.FloorPlanApp?.entryInfo?.()?.id||p?.id||'x'),
+  sig:p=>{try{return String(window.FloorPlanExterior.derive(p).walls.filter(w=>w.status==='facade').length);}catch{return '0';}},
+  done(p){try{return localStorage.getItem(this.key(p))===this.sig(p);}catch{return false;}},set(p,on){try{on?localStorage.setItem(this.key(p),this.sig(p)):localStorage.removeItem(this.key(p));}catch{}}};'use strict';
  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
  const tx=(es,en,zh)=>{const l=document.documentElement.lang||'es';return l.startsWith('en')?en:l.startsWith('zh')?zh:es;};
  const LABEL={ok:()=>tx('Hecho','Done','已完成'),pend:()=>tx('Empezado, sin terminar','Started, not finished','已开始，未完成'),req:()=>tx('Sin hacer','Not done','未完成')};
@@ -55,7 +59,7 @@
    const STATES=[[/^(Medidas y superficies|Measurements and areas|Measurements and surfaces|尺寸)/,conf==='real'?'ok':conf==='estimated'?'pend':'req'],
     [/^(Orientación y sol|Orientation and sun|朝向)/,s.northOffsetDeg===undefined?'req':s.location?'ok':'pend'],
     [/^(Emplazamiento|Site context|场地)/,!s.parcel?'req':s.buildingPlacement?'ok':'pend'],
-    [/^(Exterior|外部)/,ext>0?'ok':'req']];
+    [/^(Exterior|外部)/,window.RubikExteriorReview?.done(p)?'ok':ext>0?'pend':'req']];
    const c={ok:0,pend:0,req:0};
    for(const card of $$('#professionalWorkspace .professional-card')){const h=(card.querySelector('h2,h3')?.textContent||'').trim();const m=STATES.find(([re])=>re.test(h));if(!m)continue;
     c[m[1]]++;if(card.dataset.sem!==m[1])card.dataset.sem=m[1];

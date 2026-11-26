@@ -42,3 +42,10 @@
 #professionalWorkspace .perla-sem-base{font-weight:500;color:var(--ink-muted,#5b6066);margin-left:2px}
 #professionalWorkspace .perla-sem-tag{display:inline-flex;align-items:center;gap:4px;width:max-content;margin:2px 0 8px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
 #professionalWorkspace .perla-sem-tag.ok{color:var(--sem-ok,#1d6b3a);background:var(--sem-ok-bg,#e3f2e8)}#professionalWorkspace .perla-sem-tag.pend{color:var(--sem-pend,#8a5a00);background:var(--sem-pend-bg,#fdf2dc)}#professionalWorkspace .perla-sem-tag.req{color:var(--sem-req,#a3271f);background:var(--sem-req-bg,#fbe4e1)}
+/* §5.3 · Comprobar el plano: grupos separados y acciones con aspecto de botón. */
+#planAnalysisDialog .plan-check-group{margin:14px 0;padding-top:10px;border-top:1px solid #e3ddd3}
+#planAnalysisDialog .plan-check-group h3{margin:0 0 6px;font-size:16px}
+#planAnalysisDialog .plan-check-list{margin:6px 0;padding-left:18px;display:grid;gap:6px}
+#planAnalysisDialog .plan-check-list .btn,#planAnalysisDialog #planCheckSite{margin-left:8px;min-height:32px;padding:4px 10px;border:1px solid #1F5A66;border-radius:8px;background:#fff;color:#1F5A66;font-weight:600;cursor:pointer}
+#planAnalysisDialog #planCheckSite{margin-left:0;background:#1F5A66;color:#fff}
+#planAnalysisDialog .plan-check-missing summary{cursor:pointer;font-weight:600}

@@ -64,12 +64,14 @@
  const unknownItems=()=>{const ids=new Set(money?.budget?.items.map(i=>i.id)||[]);return money?.kind==='project'&&money.budget?tasks().flatMap(t=>t.budgetAllocations.filter(a=>!ids.has(a.itemId)).map(a=>({taskId:t.id,itemId:a.itemId}))):[];};
 
  /* ---------- open / save ---------- */
- async function open({tab:t='tasks',taskId=null,itemId=null,elementKey=null}={}){
+ async function open({tab:t='tasks',taskId=null,itemId=null,elementKey=null,addTask=false}={}){
   snap=await C.snapshot();nowF=await C.nowFingerprints(snap);inv=A.inventory(snap.doc);byKey=new Map(inv.elements.map(e=>[e.key,e]));
   draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;removing=null;mspdiNote=null;message='';error=snap.recordError?R.human(snap.recordError):'';
   money=budgetNow();tab=t;focus={taskId,itemId,elementKey};draw();if(!dialog.open)dialog.showModal();
   (dialog.querySelector('.is-focus button, .is-focus')||dialog.querySelector('#planTitle')).focus({preventScroll:false});
   dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});
+  // §5.3 · «Añadir primera tarea» lleva directamente al formulario de la nueva tarea, con el foco en su título.
+  if(addTask&&draft){editing={id:null,milestone:false};draw();const ti=dialog.querySelector('#taskTitle');ti?.scrollIntoView({block:'center'});ti?.focus();}
  }
  async function save({quiet=false,userEvent}={}){
   if(brokenLinks().length){error='Hay tareas vinculadas a elementos que ya no existen en el proyecto. Quítalos antes de guardar (pestaña Comprobaciones).';tab='checks';draw();return false;}

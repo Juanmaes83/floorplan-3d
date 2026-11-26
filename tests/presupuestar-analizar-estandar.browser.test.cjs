@@ -26,12 +26,18 @@ test('§5.3 · Presupuestar: sin plan «Falta»; plan sin tareas «Borrador · 0
   // Crear un plan y guardarlo sin tareas, como la persona.
   const b=await accion(page,'#professionalWorkspace [data-route="construction-plan"]');await b.click();await page.locator('#planCreate').click();
   await page.locator('#planSave').click();await page.waitForFunction(()=>document.getElementById('planSave')?.disabled===true);
-  await page.keyboard.press('Escape');await page.waitForTimeout(400);if(await page.locator('#planSaveClose').count())await page.locator('#planSaveClose').click();
-  await area(page,'budget');await page.waitForFunction(()=>/Borrador · 0 tareas/.test(document.querySelector('#constructionPlanCard .professional-state')?.textContent||''));
+  // Revisión humana: «Cerrar» arriba a la derecha y, SIN volver a entrar en Presupuestar, la ficha ya está al día.
+  await page.locator('#planClose').click();await page.waitForFunction(()=>!document.querySelector('dialog[open]'));
+  await page.waitForFunction(()=>/Borrador · 0 tareas/.test(document.querySelector('#constructionPlanCard .professional-state')?.textContent||''),null,{timeout:8000});
   assert.equal(await page.locator('#constructionPlanCard [data-route="construction-plan"]').innerText(),'Añadir primera tarea');
   const rows=await heroRows(page);assert.ok(rows.includes('Falta Plan de obra (borrador · 0 tareas)'),'resumen coherente con la ficha: '+JSON.stringify(rows));
   assert.ok(!rows.some(r=>/^Listo Plan de obra/.test(r)),'nunca «Listo» con 0 tareas');
   if(shots)await page.screenshot({path:shots+'/1-presupuestar-plan-vacio.png'});
+  // «Añadir primera tarea» lleva al control para añadirla (formulario de nueva tarea con el foco en el título).
+  await page.locator('#constructionPlanCard [data-route="construction-plan"]').click();await page.waitForSelector('#taskForm');
+  await page.waitForFunction(()=>document.activeElement?.id==='taskTitle');assert.match(await page.locator('#taskForm h3').innerText(),/^Nueva tarea$/);
+  if(shots)await page.screenshot({path:shots+'/1b-anadir-primera-tarea.png'});
+  await page.locator('#planClose').click();if(await page.locator('#planDiscard').count()){const d=page.locator('#planDiscard');if(await d.count())await d.click();}
   assert.doesNotMatch(await page.evaluate(()=>document.getElementById('professionalWorkspace').innerText),CJK);assert.deepEqual(w.errors,[]);
  }finally{await ctx.close();}
 });

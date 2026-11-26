@@ -259,7 +259,7 @@
    const st=planState(snap),c=card(grid,'Plan de obra',st.text);c.dataset.module='construction-plan';c.id='constructionPlanCard';sym(c,'plan');
    if(st.result==='obsolete')detail(c,'El proyecto ha cambiado desde que guardaste el plan: revisa los vínculos y vuelve a guardarlo.');
    detail(c,snap.subject.type==='building'?'Tareas, fechas, dependencias y elementos de las dos plantas. Los importes se consultan por planta: RUBIK todavía no tiene presupuesto de edificio.':'Tareas, fechas, dependencias, elementos del proyecto y reparto de partidas del presupuesto. Nada cambia de fecha sin tu decisión.');
-   const sch=snap.record?.schedule;route(c,!sch?'Crear plan de obra':sch.tasks.length?'Abrir plan de obra':'Añadir primera tarea','construction-plan',()=>window.FloorPlanConstructionPlanUI.open(),true);
+   const sch=snap.record?.schedule;route(c,!sch?'Crear plan de obra':sch.tasks.length?'Abrir plan de obra':'Añadir primera tarea','construction-plan',()=>window.FloorPlanConstructionPlanUI.open({addTask:!!sch&&!sch.tasks.length}),true);
    if(snap.record?.schedule)route(c,'Ver evolución','construction-evolution',()=>openEvolution());
    const managed=window.FloorPlanCostCatalog?.managedStatus?.();
    const p=card(grid,'Precios de referencia',managed?'Bases de precios que aportes y tarifa del estudio':'No disponible');p.dataset.module='reference-prices';p.id='referencePricesCard';sym(p,'prices');
