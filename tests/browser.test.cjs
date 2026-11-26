@@ -90,7 +90,7 @@ test('opening and exporting a project does not add absent optional fields',async
 test('file handler rejects invalid inputs atomically with visible element-specific errors',async t=>{
   const {page,errors}=await pageFor(t);await page.click('.item[data-key="0:0"]');
   const before=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),saved:localStorage.getItem('rubik-sota-floorplan-project-v1'),html:document.querySelector('#plan').outerHTML}));
-  const mutations=[()=>'{',p=>{p.schemaVersion='2.0.0';return p;},p=>{p.objects.push({...p.objects[0]});return p;},p=>{p.openings[0].wallId='wal_missing';return p;},p=>{p.objects[0].size.widthMm=-1;return p;},p=>{p.objects[0].id='obj_bad" onmouseover="window.auditExecuted=1';return p;}];
+  const mutations=[()=>'{',p=>{p.schemaVersion='3.0.0';return p;},p=>{p.objects.push({...p.objects[0]});return p;},p=>{p.openings[0].wallId='wal_missing';return p;},p=>{p.objects[0].size.widthMm=-1;return p;},p=>{p.objects[0].id='obj_bad" onmouseover="window.auditExecuted=1';return p;}];
   for(const [i,change]of mutations.entries()){
     const value=change(Core.clone(example)),buffer=Buffer.from(typeof value==='string'?value:JSON.stringify(value));
     await page.locator('#fileIn').setInputFiles({name:`invalid-${i}.json`,mimeType:'application/json',buffer});

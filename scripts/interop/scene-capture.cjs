@@ -36,7 +36,12 @@ async function capture(input, dest, o = {}) {
   const browser = await engine.launch({ ...(browserName === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME } : {}), args });
   const t = {};
   try {
-    const context = await browser.newContext({ viewport, deviceScaleFactor: 1, acceptDownloads: true }), page = await context.newPage(), errors = [];
+    const context = await browser.newContext({ viewport, deviceScaleFactor: 1, acceptDownloads: true });
+    // OP-07 S8: a scenario with curved or sloped walls declares the ACTIVE state explicitly (test origin only); by default the
+    // editor is 'integrated' and refuses to import a 2.0 document.
+    // A0 is not in master yet: the scenario declares a labelled stand-in, as the OP-07 browser tests do (tests/op07/browser-state.cjs).
+    if (o.op07State) await context.addInitScript(st => { globalThis.RUBIK_OP07_STATE = st; if (st === 'active' && !globalThis.FloorPlanSchemaEpoch) globalThis.FloorPlanSchemaEpoch = Object.freeze({ op07StandIn: true }); }, o.op07State);
+    const page = await context.newPage(), errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_|NS_ERROR|WebGL warning/.test(m.text())) errors.push(m.text()); });
     let blocked = 0;

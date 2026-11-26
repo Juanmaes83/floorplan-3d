@@ -6,7 +6,48 @@
  const isolated=window.RUBIK_DELIVERY||new URLSearchParams(location.search).get('demo')==='dibujo-vivo';
  const enabled=P.isTestOrigin()&&!isolated;
  let persistenceDialog;
- const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison};
+ const runtime=window.FloorPlanPersistenceEditor={storage:null,session:null,requireSaved,openComparison,noteEdit};
+ // OP-07 S7 · Save gate: Core.guardSave between the last CONFIRMED revision and the next one, with the intent of the editing
+ // steps made since that revision (each step carries its own; nothing global persists). A refused save writes nothing.
+ let steps=[],seq=0;const MAX_STEPS=512;
+ function noteEdit(beforeText,afterText,{op=null,restore=false}={}){
+  const C=window.FloorPlanCore;if(!C?.editIntent)return;
+  let before,after;try{before=JSON.parse(beforeText);after=JSON.parse(afterText);}catch{return;}
+  steps.push({seq:++seq,pending:new Set(['project','library']),projectId:after?.id||before?.id,intent:C.editIntent(before,after,{op,restore})});
+  // Fail safe: dropping old steps can only refuse a save, never authorize a loss.
+  if(steps.length>MAX_STEPS)steps.splice(0,steps.length-MAX_STEPS);
+ }
+ const KIND=()=>({[P.KEYS[0]]:'project',[window.FloorPlanLibrary?.KEY]:'library'});
+ function refusal(issues){
+  const one=issues[0]||{},what={'curve-lost':'perdería la curva de un muro','slope-lost':'perdería la altura final de un muro inclinado',
+   'wall-lost':'perdería un muro curvo o inclinado','opening-lost':'perdería una puerta o ventana de un muro curvo o inclinado',
+   'writer-lacks-feature':'contiene muros que esta versión de RUBIK no sabe guardar','degraded-view':'viene de una vista simplificada del proyecto',
+   'invalid-wall':'deja un muro curvo o inclinado con una forma no válida','activation-pending':'usa muros curvos o inclinados, que todavía no están activados','invalid-opening':'deja una puerta o ventana fuera de su muro','unreadable':'no se puede leer'}[one.code]||'perdería información del proyecto';
+  if(one.code==='activation-pending')return 'No se ha guardado: '+window.FloorPlanCore.ACTIVATION_PENDING+' Lo guardado no ha cambiado.';
+  return 'No se ha guardado: el cambio '+what+' sin que lo hayas pedido. Lo guardado no ha cambiado y tu cambio sigue en esta pestaña. Deshazlo (Ctrl+Z) o usa «Forma del muro» para enderezar o nivelar el muro de forma explícita.';
+ }
+ // S8: without F0.2b (today's Production) the editor writes localStorage directly: the same gate runs at this facade,
+ // against what is stored now; a refusal throws, which every writer already reports, and nothing is written.
+ function guarded(store){const kinds=KIND();return {op07Protected:true,getItem:k=>store.getItem(k),removeItem:k=>store.removeItem(k),key:i=>store.key(i),get length(){return store.length;},
+  setItem(k,v){if(kinds[k]){const verdict=gate.check({changes:{[k]:v},confirmed:{[k]:store.getItem(k)},restore:false});if(!verdict.ok){notify(verdict.message);throw Error(verdict.message);}store.setItem(k,v);gate.committed(verdict);return;}store.setItem(k,v);}};}
+ const gate={
+  check({changes,confirmed,restore}){
+   const C=window.FloorPlanCore,kinds=KIND(),pairs=Object.keys(changes).filter(k=>kinds[k]).map(k=>({kind:kinds[k],before:confirmed[k]??null,after:changes[k]}));
+   // Intents per project (variants and building levels share wall ids); never one global intent.
+   // Each document is checked ONLY with the steps it has not confirmed yet (OP-07 v5): a document that is never written
+   // (the historical project key while the editor writes the library) cannot keep alive a step another document consumed.
+   const upTo=seq,issues=[];
+   for(const pair of pairs){const intents={};if(!restore)for(const s of steps)if(s.seq<=upTo&&s.pending.has(pair.kind))intents[s.projectId]=C.composeIntent(intents[s.projectId]||{},s.intent);
+    issues.push(...C.saveGate([pair],{intents,restore}).issues);}
+   const v={ok:!issues.length,issues};
+   return {...v,seq:upTo,restore,kinds:pairs.map(p=>p.kind),message:v.ok?'':refusal(v.issues)};
+  },
+  // A confirmed write consumes, for the documents it wrote, every step up to the revision checked (steps made while the
+  // write was in flight stay pending). A restore starts over.
+  committed(v){if(!v)return;if(v.restore){steps=[];return;}
+   for(const s of steps)if(s.seq<=v.seq)for(const k of v.kinds)s.pending.delete(k);
+   steps=steps.filter(s=>s.pending.size);}
+ };
 
  function loadProject(projectKey){
   const storage=runtime.storage,loadedProject=window.FloorPlanCore.load(storage,projectKey);
@@ -121,8 +162,11 @@
   const label=document.getElementById('persistenceStatus');
   let protecting=false;
   const protect=e=>{e.preventDefault();e.returnValue=true;};
+  let refused='';
   const render=s=>{
    label.textContent=statusText(s);label.dataset.state=s.status;
+   // S7: a refused save says why at once (same notice as the rest of the editor); once per distinct refusal.
+   const why=s.error?.code==='guard-refused'?s.error.message:'';if(why&&why!==refused)notify(why);refused=why;
    const warn=s.pending>0||s.status==='saving'||s.status==='error'||s.error?.code==='conflict-unsaved';
    if(warn&&!protecting)addEventListener('beforeunload',protect);
    if(!warn&&protecting)removeEventListener('beforeunload',protect);
@@ -151,17 +195,20 @@
   editor.inert=true;
   if(!enabled){
    // A0: en el origen normal localStorage es la autoridad de las cinco claves; la puerta retiene lo que no pueda escribirse.
-   try{runtime.storage=window.FloorPlanSchemaEpoch?window.FloorPlanSchemaEpoch.guardStorage(localStorage):localStorage;}
+   // A0 retains blocked changes in memory. S8 confirms only writes that reach the durable storage (composición de Codex, 1893a79b).
+   try{const s8=guarded(localStorage),a0=window.FloorPlanSchemaEpoch;runtime.storage=a0?Object.assign(a0.guardStorage(s8),{op07Protected:s8.op07Protected}):s8;}
    catch{runtime.storage={getItem:()=>null,setItem:()=>{throw Error('Almacenamiento local no disponible.');}};}
    if(isolated&&!window.RUBIK_DELIVERY){
     const values=new Map();
     runtime.storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
    }
   }else{
-   runtime.session=await P.session();
+   runtime.session=await P.session({gate});
    runtime.storage=runtime.session.storage;
    attachStatus(runtime.session);
   }
+  // OP-07 S8: this editor's writer is protected (F0.2b session gate, or the guarded localStorage facade).
+  if(enabled||runtime.storage.op07Protected===true)window.FloorPlanCore.registerProtectedWriter();
   const projectKey=P.KEYS[0];
   const bootstrap=loadProject(projectKey);
   if(enabled&&(bootstrap.libraryError||runtime.storage.getItem(window.FloorPlanLibrary.KEY)===null
