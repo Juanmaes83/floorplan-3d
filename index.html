@@ -1898,11 +1898,12 @@ function fabAvoid(){
   const hits = r => hs.some(h => h.right > r.left - 12 && h.left < r.right + 12 && h.bottom > r.top - 12 && h.top < r.bottom + 12);
   const flipped = fab.classList.contains('fab-flip');
   if (!hs.length){ if (flipped) fab.classList.remove('fab-flip'); return; }
-  const r = fab.getBoundingClientRect(), stage = $('#stage').getBoundingClientRect(), h = r.height;
-  const bottomBox = flipped ? { left: r.left, right: r.right, top: stage.bottom - 16 - h, bottom: stage.bottom - 16 } : r;
-  const topBox = flipped ? r : { left: r.left, right: r.right, top: stage.top + 16, bottom: stage.top + 16 + h };
+  // Se MIDEN las dos posiciones reales (la hoja de estilos decide dónde va cada una: PERLA sube la barra a 72 px del
+  // borde inferior y en el teléfono horizontal la fija arriba); nunca se suponen desplazamientos.
+  const at = on => { fab.classList.toggle('fab-flip', on); return fab.getBoundingClientRect(); };
+  const bottomBox = at(false), topBox = at(true);
   const flip = hits(bottomBox) && !hits(topBox);
-  if (flip !== flipped) fab.classList.toggle('fab-flip', flip);
+  fab.classList.toggle('fab-flip', flip);
 }
 // 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
 // Desde applyView (que también corre en la entrega del ResizeObserver del plano) solo se PROGRAMA para el siguiente

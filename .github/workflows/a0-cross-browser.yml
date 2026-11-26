@@ -36,6 +36,21 @@ jobs:
           set -o pipefail
           mkdir -p "$A0_TRACE_OUT"
           node --test-reporter=tap tools/a0-cross/a0-run.cjs ${{ matrix.engine }} a0-browser-residuals.browser.test.cjs a0-writer-fence.browser.test.cjs | tee "$A0_TRACE_OUT/result.tap"
+      # Muros (asa de curvatura bajo #fab) en el mismo arnés: escritorio, porque el modo móvil del arnés fuerza 390×844
+      # en todos los contextos y la suite ya prueba 390×844 por sí misma.
+      - name: Muros S5b (${{ matrix.engine }}, escritorio)
+        if: always() && matrix.size == 'desktop'
+        env:
+          A0_ROOT: ${{ github.workspace }}
+          A0_TRACE_OUT: ${{ runner.temp }}/a0-out
+          A0_TRACED: '0'
+          A0_PATTERN: '.'
+          A0_SIZE: desktop
+          NODE_PATH: ${{ runner.temp }}/pw/node_modules
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test-reporter=tap tools/a0-cross/a0-run.cjs ${{ matrix.engine }} op07-s5b-edit-ui.browser.test.cjs | tee "$A0_TRACE_OUT/muros-s5b.tap"
       - if: always()
         uses: actions/upload-artifact@v4
         with:

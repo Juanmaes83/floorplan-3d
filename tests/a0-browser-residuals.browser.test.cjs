@@ -48,7 +48,10 @@ test('fixture: espera la animación que se dibuja e ignora la de un <details> ce
 
 const read=p=>p.evaluate(()=>{const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim(),nav=document.getElementById('professionalNav');
  return {errors:window.__roErrors,sync:window.__roSync,header:css('--shell-header-bottom'),headerReal:Math.round(document.querySelector('header').getBoundingClientRect().bottom)+'px',
-  nav:nav?css('--professional-nav-bottom'):null,navReal:nav?nav.getBoundingClientRect().bottom+'px':null};});
+  // Contrato de master (PERLA): el área se ancla bajo la barra de áreas si se dibuja; si la barra va integrada en la
+  // cabecera y no tiene caja, bajo la cabecera. Se compara con el borde REAL de ese ancla, al píxel, y con el área.
+  nav:nav?css('--professional-nav-bottom'):null,navReal:nav?(nav.getClientRects().length?nav:document.querySelector('header')).getBoundingClientRect().bottom+'px':null,
+  area:nav?document.getElementById('professionalWorkspace')?.style.top||null:null};});
 // Cada recorrido en un contexto nuevo, como R1-T02/T02b/T04: mismo editor, misma confirmación, mismo aviso A0.
 const ROUTES={
  'R1-T04':async(page)=>{await rename(page,'RO igual');await flush(page);},
@@ -75,7 +78,7 @@ test(`ResizeObserver · ${route} · ${label} · ${viewport.width}x${viewport.hei
   assert.deepEqual(state.errors,[],'ningún error de ResizeObserver llega a la ventana');
   assert.deepEqual(state.sync,[],'ningún callback cambia el tamaño de un elemento observado dentro de la entrega');
   assert.equal(state.header,state.headerReal,'--shell-header-bottom converge');
-  if(state.nav!==null)assert.equal(state.nav,state.navReal,'--professional-nav-bottom converge');
+  if(state.nav!==null){assert.equal(state.nav,state.navReal,'--professional-nav-bottom converge');assert.equal(state.area,state.navReal,'el área de trabajo se ancla en el mismo borde');}
   assert.deepEqual(errors,[]);
  }finally{await context.close();}
 });

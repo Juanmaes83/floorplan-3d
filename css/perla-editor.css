@@ -393,7 +393,7 @@ body.perla .perla-r2:has(>#guideResume:not([hidden])) #perlaTasks{display:none!i
 }
 /* La barra de selección (#fab) sube por encima de la barra inferior del lienzo (zoom y escala): nunca se pisan.
    En el teléfono vertical la barra del lienzo ya va encima del dock y la de selección queda debajo, sin tocarse. */
-@media (min-width:761px) and (min-height:501px){body.perla #stage>#fab{bottom:72px}}
+@media (min-width:761px) and (min-height:501px){body.perla #stage>#fab{bottom:72px}body.perla #stage>#fab.fab-flip{top:16px;bottom:auto}}
 /* Teléfono en horizontal: la barra de selección va en la franja superior libre, a la derecha (a la izquierda siguen Cotas,
    Estancias y Muebles); abajo quedan zoom, escala y la barra de paneles. El aviso del norte cede su sitio mientras tanto. */
 @media (max-width:1100px) and (max-height:500px){
