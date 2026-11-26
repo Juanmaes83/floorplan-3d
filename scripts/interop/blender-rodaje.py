@@ -302,7 +302,11 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
     soft = {"tejido": dict(sheen=.6, ao=.6, edge=.12), "tejido-exterior": dict(sheen=.2, ao=.5),
             "alfombra-campo": dict(sheen=.7, ao=.5, weave=.22, pile=.35, abrash=.07), "alfombra-cenefa": dict(sheen=.7, ao=.5, weave=.26, pile=.35, abrash=.05),
             "alfombra-canto": dict(sheen=.5, ao=.9, weave=.18, pile=.2, abrash=.04)}
-    if arg("--recetas", "v1") == "v2":  # v2 (Astra SOLACE: microarrugas + slub) EVALUADA Y DESCARTADA en A/B 1440p: emborrona la trama y mancha; se conserva solo para reproducir la comparativa
+    receta = arg("--recetas", "v3")
+    if receta == "v3":  # TAPICERÍA v3 (26/11/2026, tras el rechazo visual del sofá v1): ver pbr() › frame/slub/heather/tone
+        soft["tejido"] = dict(sheen=1.0, sheen_rough=.35, ao=.6, edge=.2, frame=True, slub=.13, heather=.11, tone=.03, spec=.25, rough_min=.72, relief=.0022)
+        soft["tejido-exterior"] = dict(sheen=.35, sheen_rough=.5, ao=.5, frame=True, slub=.09, heather=.07, tone=.02, spec=.2, rough_min=.8, relief=.0018)
+    if receta == "v2":  # v2 (Astra SOLACE: microarrugas + slub) EVALUADA Y DESCARTADA en A/B 1440p: emborrona la trama y mancha; se conserva solo para reproducir la comparativa
         soft["tejido"] = dict(sheen=.6, ao=.6, edge=.12, wrinkle=.18, abrash=.045, abrash_scale=(6.0, 18.0, 6.0))
         soft["tejido-exterior"] = dict(sheen=.25, ao=.5, wrinkle=.12, abrash=.03, abrash_scale=(6.0, 18.0, 6.0))
         soft["alfombra-campo"] = dict(sheen=.75, ao=.6, weave=.22, pile=.35, abrash=.10)
@@ -341,6 +345,38 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
     # Volumen genérico: un objeto SIN modelo de catálogo cuya representación en RUBIK es una sola caja (6 caras). No es un
     # mueble modelado: vestirlo con chapa de madera lo haría pasar por uno terminado (f3-openings: «dining-table» como bloque
     # macizo). Se rueda como volumen neutro mate con su color del proyecto y el informe lo declara.
+    def tapiz(o, t, kind, fuente):
+        """Informe de tapicería: qué receta entró en qué pieza, con qué recurso, escala y marco, y con qué límites."""
+        if not ("tapiceria" in kind or kind.startswith("token:material.fabric") or kind.startswith("token:material.leather")):
+            return
+        cuero = "leather" in kind; exterior = "exterior" in kind
+        tex_ok = (not cuero) and ok(fabric)
+        lim = ["el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, "
+               "el contacto (oclusión) y el brillo rasante, no por una costura"]
+        if not tex_ok and not cuero:
+            lim.append("textura de tejido ausente o con huella distinta: receta procedimental de reserva (sustitución declarada)")
+        if receta != "v3":
+            lim.append(f"receta {receta} pedida por opción (--recetas): no es la de entrega")
+        MT.setdefault("tapiceria", []).append({
+            "objeto": o.get("rubik_id"), "tipo": t, "pieza": o.name, "receta": kind, "version": receta,
+            "familia": "cuero" if cuero else ("textil exterior" if exterior else "tapicería interior"),
+            "fuente": fuente, "recurso": (fabric or {}).get("id") if tex_ok else ("receta de cuero (Astra SOLACE adaptada)" if cuero else "procedimental"),
+            "escalaM": round((fabric or {}).get("dimensionsMm", [270])[0] / 1000, 4) if tex_ok else None,
+            "marcoGrados": MT["marcos"].get(o.name), "proyeccion": "triplanar en el marco de la pieza" if receta == "v3" and not cuero else "caja en ejes del mundo",
+            "limitaciones": lim})
+    # Marco propio de cada pieza de mobiliario (orientación en planta, módulo 90°): de la normal de sus caras verticales,
+    # ponderada por área. La rotación del proyecto llega horneada en los vértices, así que es la única fuente fiable.
+    MT["marcos"] = {}
+    for o in bpy.data.objects:
+        if o.type != "MESH" or o.get("rubik_role") != "object":
+            continue
+        c_ = s_ = 0.0
+        for p_ in o.data.polygons:
+            nn = p_.normal
+            if abs(nn.z) < .5:
+                a4 = 4 * math.atan2(nn.y, nn.x); c_ += p_.area * math.cos(a4); s_ += p_.area * math.sin(a4)
+        yaw = math.atan2(s_, c_) / 4 if (abs(c_) + abs(s_)) > 1e-9 else 0.0
+        o["rubik_tex_yaw"] = (0.0, 0.0, -yaw); MT["marcos"][o.name] = round(math.degrees(yaw), 1)
     piezas_por_id = {}
     for o in bpy.data.objects:
         if o.type == "MESH" and o.get("rubik_role") == "object":
@@ -357,7 +393,7 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             if rm:
                 if src.get("rubik_backface"): BACKFACE.add(rm.name)
                 o.data.materials[0] = rm; kind = "token:" + req["token"]; log[f"{t} → {kind}"] = log.get(f"{t} → {kind}", 0) + 1
-                _cuenta(o.get("rubik_id"), t, kind)
+                _cuenta(o.get("rubik_id"), t, kind); tapiz(o, t, kind, "material explícito del profesional (token)")
                 o["rubik_material_applied"] = kind; continue
             MT.setdefault("tokensSinReceta", set()).add(req["token"])
         n = len(o.data.polygons); bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
@@ -424,7 +460,7 @@ def acabados(project, by_use, ok, img, mean_lin, pbr):
             continue
         if src.get("rubik_backface"): BACKFACE.add(m.name)
         o.data.materials[0] = m; key = f"{t or 'sin-tipo'} → {kind}"; log[key] = log.get(key, 0) + 1
-        _cuenta(o.get("rubik_id"), t, kind)
+        _cuenta(o.get("rubik_id"), t, kind); tapiz(o, t, kind, "aproximación visual por tipo, pieza y color (RUBIK no declara el material)")
         o["rubik_material_applied"] = kind  # diagnóstico en el DERIVADO de Blender (nunca en el proyecto)
     for o in bpy.data.objects:  # carpinterías de puertas y ventanas (marcos, hojas, herrajes): no traen material, se aproximan por color
         if o.type != "MESH" or o.get("rubik_role") not in ("opening", "opening-leaf") or not o.data.materials:
@@ -486,13 +522,52 @@ def realismo(project, labels, light, sun, tex):
         px = np.empty(len(im.pixels), dtype=np.float32); im.pixels.foreach_get(px); px = px.reshape(-1, 4)[::7, :3]
         lin = np.where(px <= .04045, px / 12.92, ((px + .055) / 1.055) ** 2.4)  # imágenes de 8 bits: valores sRGB codificados
         return lin.mean(axis=0)
-    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0, weave=0.0, pile=0.0, abrash=0.0, wrinkle=0.0, abrash_scale=(2.5, 7.0, 2.5)):
+    def pbr(name, a, tint_hex, coord, scale_m, normal=0.6, rough_mul=1.0, albedo=True, sheen=0.0, ao=0.0, flatten=0.0, rot=(0, 0, 0), edge=0.0, weave=0.0, pile=0.0, abrash=0.0, wrinkle=0.0, abrash_scale=(2.5, 7.0, 2.5),
+            frame=False, slub=0.0, heather=0.0, tone=0.0, spec=None, rough_min=0.0, sheen_rough=.4, relief=0.0):
         m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; Lk = nt.links
         b = next(n for n in N if n.type == "BSDF_PRINCIPLED")
         tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / scale_m, 1 / scale_m, 1 / scale_m)
-        mp.inputs["Rotation"].default_value = rot; Lk.new(tc.outputs[coord], mp.inputs["Vector"])
+        mp.inputs["Rotation"].default_value = rot
+        P = tc.outputs[coord]; Nrm = tc.outputs["Normal"]
+        if frame and coord == "Object":
+            # MARCO PROPIO DE LA PIEZA: la rotación de cada pieza viene horneada en sus vértices (el sofá de f2-rot30 está a
+            # −30°); proyectar en ejes del mundo cruza la trama en diagonal y la estira en las caras verticales. Se gira la
+            # posición y la normal al marco de la pieza (propiedad de objeto rubik_tex_yaw) y la proyección triplanar usa
+            # la normal GIRADA (la caja de Image Texture usaría la normal sin girar).
+            att = N.new("ShaderNodeAttribute"); att.attribute_type = "OBJECT"; att.attribute_name = "rubik_tex_yaw"
+            rp = N.new("ShaderNodeVectorRotate"); rp.rotation_type = "EULER_XYZ"; Lk.new(P, rp.inputs["Vector"]); Lk.new(att.outputs["Vector"], rp.inputs["Rotation"]); P = rp.outputs["Vector"]
+            rn = N.new("ShaderNodeVectorRotate"); rn.rotation_type = "EULER_XYZ"; Lk.new(Nrm, rn.inputs["Vector"]); Lk.new(att.outputs["Vector"], rn.inputs["Rotation"])
+            rn2 = N.new("ShaderNodeVectorRotate"); rn2.rotation_type = "EULER_XYZ"; rn2.inputs["Rotation"].default_value = rot; Lk.new(rn.outputs["Vector"], rn2.inputs["Vector"]); Nrm = rn2.outputs["Vector"]
+        Lk.new(P, mp.inputs["Vector"]); V = mp.outputs["Vector"]
+        tri = None
+        if frame and coord == "Object":  # pesos triplanares |n|^6 normalizados (transición corta: sin dobles tramas en caras planas)
+            ab = N.new("ShaderNodeVectorMath"); ab.operation = "ABSOLUTE"; Lk.new(Nrm, ab.inputs[0])
+            sx = N.new("ShaderNodeSeparateXYZ"); Lk.new(ab.outputs["Vector"], sx.inputs[0]); ws = []
+            for ax_ in ("X", "Y", "Z"):
+                pw = N.new("ShaderNodeMath"); pw.operation = "POWER"; pw.inputs[1].default_value = 6; Lk.new(sx.outputs[ax_], pw.inputs[0]); ws.append(pw)
+            s1 = N.new("ShaderNodeMath"); s1.operation = "ADD"; Lk.new(ws[0].outputs[0], s1.inputs[0]); Lk.new(ws[1].outputs[0], s1.inputs[1])
+            s2 = N.new("ShaderNodeMath"); s2.operation = "ADD"; Lk.new(s1.outputs[0], s2.inputs[0]); Lk.new(ws[2].outputs[0], s2.inputs[1])
+            wn = []
+            for w_ in ws:
+                dv = N.new("ShaderNodeMath"); dv.operation = "DIVIDE"; Lk.new(w_.outputs[0], dv.inputs[0]); Lk.new(s2.outputs[0], dv.inputs[1]); wn.append(dv.outputs[0])
+            sv = N.new("ShaderNodeSeparateXYZ"); Lk.new(V, sv.inputs[0]); planes = []
+            for u_, v_ in (("Y", "Z"), ("X", "Z"), ("X", "Y")):
+                cb = N.new("ShaderNodeCombineXYZ"); Lk.new(sv.outputs[u_], cb.inputs["X"]); Lk.new(sv.outputs[v_], cb.inputs["Y"]); planes.append(cb.outputs[0])
+            tri = (wn, planes)
         def tnode(k, colour):
-            t = N.new("ShaderNodeTexImage"); t.image = img(a, k, colour); t.projection = "BOX"; t.projection_blend = .25; Lk.new(mp.outputs["Vector"], t.inputs["Vector"]); return t
+            if tri is None:
+                t = N.new("ShaderNodeTexImage"); t.image = img(a, k, colour); t.projection = "BOX"; t.projection_blend = .25; Lk.new(V, t.inputs["Vector"]); return t
+            wn, planes = tri; acc = None
+            for w_, pl in zip(wn, planes):
+                t = N.new("ShaderNodeTexImage"); t.image = img(a, k, colour); t.interpolation = "Cubic"; Lk.new(pl, t.inputs["Vector"])
+                sc_ = N.new("ShaderNodeVectorMath"); sc_.operation = "SCALE"; Lk.new(t.outputs["Color"], sc_.inputs[0]); Lk.new(w_, sc_.inputs["Scale"])
+                if acc is None:
+                    acc = sc_.outputs["Vector"]
+                else:
+                    ad = N.new("ShaderNodeVectorMath"); ad.operation = "ADD"; Lk.new(acc, ad.inputs[0]); Lk.new(sc_.outputs["Vector"], ad.inputs[1]); acc = ad.outputs["Vector"]
+            class _T:  # misma interfaz que un Image Texture (outputs["Color"]) y su imagen (para medir el color medio)
+                pass
+            o_ = _T(); o_.outputs = {"Color": acc}; o_.image = img(a, k, colour); return o_
         d = tnode("diff", True); r = tnode("rough", False); n = tnode("nor", False)
         mix = N.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.blend_type = "MULTIPLY"; mix.inputs["Factor"].default_value = 1
         target = _hex_lin(tint_hex); mean = mean_lin(d.image); f = [min(4.0, t / max(1e-4, float(mv))) for t, mv in zip(target, mean)]
@@ -523,14 +598,52 @@ def realismo(project, labels, light, sun, tex):
             ar = N.new("ShaderNodeMapRange"); ar.inputs["From Min"].default_value = .3; ar.inputs["From Max"].default_value = .7; ar.clamp = True
             ar.inputs["To Min"].default_value = 1 - abrash; ar.inputs["To Max"].default_value = 1 + abrash; Lk.new(nz3.outputs["Fac"], ar.inputs["Value"])
             am3 = N.new("ShaderNodeVectorMath"); am3.operation = "SCALE"; Lk.new(col_out, am3.inputs[0]); Lk.new(ar.outputs["Result"], am3.inputs["Scale"]); col_out = am3.outputs["Vector"]
+        if (slub or heather) and tri is not None:
+            # HILO REAL A ESCALA FÍSICA: variación de grosor y tono del hilo (slub, ~1 mm × 4 cm) y mezcla de hebras (heather,
+            # ~4 mm × 10 cm), alargadas SEGÚN LOS HILOS de cada cara: urdimbre y trama, las dos direcciones del plano de la
+            # cara (la vena alargada según la normal no se ve y se descarta). A distancia normal el hilo queda bajo el píxel,
+            # pero estas vetas dan al tejido su lectura textil sin agrandarlo; son simétricas (claras y oscuras), sin manchas.
+            wn3 = tri[0]
+            for amp, (L_, W_) in ((slub, (.04, .0012)), (heather, (.09, .005))):
+                if not amp:
+                    continue
+                acc_ = None
+                for i_, sc3 in enumerate(((1 / L_, 1 / W_, 1 / W_), (1 / W_, 1 / L_, 1 / W_), (1 / W_, 1 / W_, 1 / L_))):
+                    mm = N.new("ShaderNodeMapping"); mm.inputs["Scale"].default_value = sc3; mm.inputs["Location"].default_value = (i_ * 7.31, i_ * 3.17, i_ * 5.03); Lk.new(P, mm.inputs["Vector"])
+                    nz_ = N.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = 1.0; nz_.inputs["Detail"].default_value = 2; nz_.inputs["Roughness"].default_value = .5
+                    Lk.new(mm.outputs["Vector"], nz_.inputs["Vector"])
+                    om = N.new("ShaderNodeMath"); om.operation = "SUBTRACT"; om.inputs[0].default_value = 1.0; Lk.new(wn3[i_], om.inputs[1])  # 1 − peso de la cara normal a esta vena
+                    pr = N.new("ShaderNodeMath"); pr.operation = "MULTIPLY"; Lk.new(nz_.outputs["Fac"], pr.inputs[0]); Lk.new(om.outputs[0], pr.inputs[1])
+                    if acc_ is None:
+                        acc_ = pr.outputs[0]
+                    else:
+                        ad_ = N.new("ShaderNodeMath"); ad_.operation = "ADD"; Lk.new(acc_, ad_.inputs[0]); Lk.new(pr.outputs[0], ad_.inputs[1]); acc_ = ad_.outputs[0]
+                hv = N.new("ShaderNodeMath"); hv.operation = "MULTIPLY"; hv.inputs[1].default_value = .5; Lk.new(acc_, hv.inputs[0])  # media de las dos venas del plano
+                mr = N.new("ShaderNodeMapRange"); mr.clamp = True; mr.inputs["From Min"].default_value = .36; mr.inputs["From Max"].default_value = .64
+                mr.inputs["To Min"].default_value = 1 - amp; mr.inputs["To Max"].default_value = 1 + amp; Lk.new(hv.outputs[0], mr.inputs["Value"])
+                vm = N.new("ShaderNodeVectorMath"); vm.operation = "SCALE"; Lk.new(col_out, vm.inputs[0]); Lk.new(mr.outputs["Result"], vm.inputs["Scale"]); col_out = vm.outputs["Vector"]
+        if tone:  # cada pieza (cojín, brazo, respaldo) con un matiz propio muy leve, como el pelo de la tela cortado en otra dirección
+            oi = N.new("ShaderNodeObjectInfo"); tr_ = N.new("ShaderNodeMapRange"); tr_.inputs["To Min"].default_value = 1 - tone; tr_.inputs["To Max"].default_value = 1 + tone
+            Lk.new(oi.outputs["Random"], tr_.inputs["Value"]); tv = N.new("ShaderNodeVectorMath"); tv.operation = "SCALE"; Lk.new(col_out, tv.inputs[0]); Lk.new(tr_.outputs["Result"], tv.inputs["Scale"]); col_out = tv.outputs["Vector"]
+        if spec is not None:  # reflectancia especular baja: la tela no tiene la película brillante de un plástico
+            b.inputs["Specular IOR Level"].default_value = spec
         if sheen:
-            b.inputs["Sheen Weight"].default_value = sheen; b.inputs["Sheen Roughness"].default_value = .4
+            b.inputs["Sheen Weight"].default_value = sheen; b.inputs["Sheen Roughness"].default_value = sheen_rough
         if albedo:
             Lk.new(col_out, b.inputs["Base Color"])
         else:  # muros: color plano DEL PROYECTO; del recurso solo relieve y rugosidad
             b.inputs["Base Color"].default_value = (*target, 1)
-        rm = N.new("ShaderNodeMath"); rm.operation = "MULTIPLY"; rm.inputs[1].default_value = rough_mul; Lk.new(r.outputs["Color"], rm.inputs[0]); Lk.new(rm.outputs[0], b.inputs["Roughness"])
-        nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"]); nrm = nm.outputs["Normal"]
+        rm = N.new("ShaderNodeMath"); rm.operation = "MULTIPLY"; rm.inputs[1].default_value = rough_mul; Lk.new(r.outputs["Color"], rm.inputs[0]); rough_out = rm.outputs[0]
+        if rough_min:  # suelo de rugosidad: ninguna zona del tejido llega a brillar como un plástico
+            rx = N.new("ShaderNodeMath"); rx.operation = "MAXIMUM"; rx.inputs[1].default_value = rough_min; Lk.new(rough_out, rx.inputs[0]); rough_out = rx.outputs[0]
+        Lk.new(rough_out, b.inputs["Roughness"])
+        if tri is not None and relief:
+            # Sin UV no hay espacio tangente fiable para el mapa de normales: el relieve de la trama sale de la altura del propio
+            # escaneo (luminancia de su color, proyectada en el marco de la pieza) a la altura física del hilo.
+            hb = N.new("ShaderNodeRGBToBW"); Lk.new(d.outputs["Color"], hb.inputs["Color"]); bpn = N.new("ShaderNodeBump")
+            bpn.inputs["Strength"].default_value = 1.0; bpn.inputs["Distance"].default_value = relief; Lk.new(hb.outputs["Val"], bpn.inputs["Height"]); nrm = bpn.outputs["Normal"]
+        else:
+            nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = normal; Lk.new(n.outputs["Color"], nm.inputs["Color"]); nrm = nm.outputs["Normal"]
         if wrinkle:  # microarrugas y tensión del tapizado (escala de centímetros, legible a 2–3 m): receta de lino de Astra (SOLACE)
             tc4 = N.new("ShaderNodeTexCoord"); nz4 = N.new("ShaderNodeTexNoise"); nz4.inputs["Scale"].default_value = 28; nz4.inputs["Detail"].default_value = 4; nz4.inputs["Roughness"].default_value = .72
             bp4 = N.new("ShaderNodeBump"); bp4.inputs["Strength"].default_value = wrinkle; bp4.inputs["Distance"].default_value = .004
@@ -713,7 +826,10 @@ def main():
                   "aproximación por tipo y pieza") if piezas else "sin regla: color plano (reserva)"
         MT["rows"].append({"objetivo": {"tipo": "objeto", "id": t.get("id"), "tipoCatalogo": t.get("type")}, "solicitado": {k: req.get(k) for k in ("token", "source", "certainty")},
                            "aplicado": {"piezas": piezas} if piezas else None, "estado": estado, "motivo": req.get("reason")})
-    materiales = {"documento": MT["estado"], "orden": ["explícito", "documentado del catálogo", "aproximación por familia y pieza", "reserva visible"],
+    tap = MT.get("tapiceria", [])
+    tapiceria = {"piezas": tap, "resumen": {k: sum(1 for x in tap if x["receta"] == k) for k in sorted({x["receta"] for x in tap})},
+                 "objetos": sorted({x["objeto"] for x in tap if x["objeto"]})}
+    materiales = {"documento": MT["estado"], "tapiceria": tapiceria, "orden": ["explícito", "documentado del catálogo", "aproximación por familia y pieza", "reserva visible"],
                   "asignaciones": MT["rows"], "tokensSinReceta": sorted(MT.get("tokensSinReceta", [])), "integridad": integridad, "contacto": MT.get("contactoDetalle")}
     # Cámara animada
     cd = bpy.data.cameras.new("RUBIK_cam_rodaje"); cam = bpy.data.objects.new("RUBIK_cam_rodaje", cd); derived.objects.link(cam); sc.camera = cam
@@ -814,6 +930,9 @@ def main():
     inv = inventario(sc, cam, project)
     out.mkdir(parents=True, exist_ok=True)
     pend = [r for r in inv if r.get("aviso")] + [r for r in materiales["asignaciones"] if r["objetivo"]["tipo"] == "suelo" and r["estado"].startswith("reserva")]
+    # Tapicería sin su textura verificada: la reserva procedimental es legible, pero no es el acabado de entrega.
+    pend += [{"id": oid, "motivo": "tapicería sin su textura de tejido verificada: receta procedimental de reserva"}
+             for oid in sorted({x["objeto"] for x in materiales["tapiceria"]["piezas"] if x["recurso"] == "procedimental" and x["objeto"]})]
     pre = {"format": "rubik-sota.blender-preflight", "version": "1.0.0", "profile": pname, "shot": shot, "light": light, "materiales": materiales,
            "inventario": inv, "veredicto": ("Acabado pendiente de revisión" if pend else "Listo para revisión visual"),
            "pendientes": [{"id": r.get("id") or r["objetivo"].get("id"), "motivo": r.get("aviso") or r.get("motivo") or r.get("estado")} for r in pend],
