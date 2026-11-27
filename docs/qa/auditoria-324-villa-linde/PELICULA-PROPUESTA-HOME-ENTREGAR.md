@@ -1,26 +1,34 @@
-# Película del proyecto · ubicación en Home y Entregar
+# Home y Entregar · tres formas de animar un proyecto
 
-Propuesta de producto del 27/11/2026, pendiente de aprobación visual y de encargo de implementación. El objetivo es que un visitante entienda el montaje por piezas y que el profesional encuentre cómo preparar la película de su propia revisión.
+Actualización del 27/11/2026. Juanma plantea tres efectos visuales con identidad propia. Si alcanzan la calidad visual exigida, la familia tendrá un módulo propio en Home y un espacio propio en Entregar. Los nombres de esta propuesta son candidatos. La aprobación del resultado y el encargo de implementación siguen pendientes.
 
-## Punto de partida verificado
+## Referencia y resultado esperado
 
-El handoff de rodaje fija **Película del proyecto** y documenta la exportación de escena como entrada. En la rama de rodaje existe el modo Blender y hay tres fotogramas publicados. La ruta de frontend para el nuevo formato y su comunicación en Home siguen pendientes. El Cinematográfico de P1 ya usa «Del plano a la vivienda» para su escena inicial. Mantener el nombre principal decidido y proponer **«Montaje por piezas»** para el primer guion público. [Handoff de rodaje](https://github.com/Juanmaes83/floorplan-3d/blob/90d38d54cd34ad5c0f4a498cefb864e155e9ba8a/docs/qa/pelicula-proyecto/README.md) · [Guion de P1](https://github.com/Juanmaes83/floorplan-3d/blob/dacb5d395abf32449102d73ffd03200e6c09c019/js/presentation-film.js).
+El repositorio donante presenta tres demostraciones, cada una con una entrada y una puesta en escena distintas. En RUBIK el punto de partida de las tres es la escena exportada de una revisión del proyecto. El croquis o plano original puede aparecer cuando exista, pueda utilizarse y esté alineado. Si falta, el guion sobre el papel puede usar la planta de RUBIK identificada como tal. Se reutilizan ideas de cámara y montaje, con los elementos que realmente existen en la escena. [Repositorio donante](https://github.com/Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-) · [Handoff de rodaje](https://github.com/Juanmaes83/floorplan-3d/blob/90d38d54cd34ad5c0f4a498cefb864e155e9ba8a/docs/qa/pelicula-proyecto/README.md)
 
-## Home · mostrar el resultado
+**Nombre de familia propuesto en la interfaz: «Tu proyecto cobra vida».** El título invita a ver el resultado. Cada guion tiene un nombre que anticipa la acción y una línea que la concreta.
 
-- **Ubicación:** Home → Descubre RUBIK en acción → Visualización profesional. Dentro de la ficha existente, dejar accesibles «Ver comparativa de render» y «Ver película de ejemplo». Aprovechar el patrón visual y el visor de muestras de `js/guide-ui.js` y `js/home-en-accion.js`.
-- **Muestra:** un clip continuo aprobado sobre un proyecto real de RUBIK, con reproducción a petición y una imagen de portada extraída del mismo vídeo. El clip deja ver el plano, el montaje por grupos y una vista interior. Etiqueta «Ejemplo renderizado en Blender».
-- **Texto propuesto:** «Tu proyecto se monta por piezas y la cámara recorre el resultado». Cuando la ruta para proyectos propios esté validada, la muestra puede llevar a «Preparar con mi proyecto». Si solo está aprobada la muestra, la acción disponible reproduce el ejemplo.
+| Nombre propuesto | Qué debe verse en la película | Referencia |
+|---|---|---|
+| **La casa se monta sobre el papel** | Vista del croquis o plano. Las piezas entran y encajan en su posición, por grupos reconocibles. La composición conserva la relación con el papel hasta que se entiende cómo surge el conjunto. | Courtyard house |
+| **El plano se abre como una maqueta** | Planta legible que gana volumen. La cámara muestra la distribución desde arriba, desciende a una estancia y permite entender cómo se conectan las habitaciones. | Apartment |
+| **Del paisaje al interior** | Comienza situando el edificio en su entorno representado. El exterior cambia de escala conforme la cámara se acerca y cruza un hueco real. Puede mostrar iluminación, agua o terraza cuando esos elementos estén disponibles y se conozca su procedencia. | Cliff villa |
 
-## Entregar · preparar la película del proyecto activo
+### Qué existe y qué falta
 
-- **Ubicación propuesta:** Entregar → P1 Presentación 3D → panel de la ficha, sección **Película del proyecto**. Mostrar un acceso visible «Preparar película en Blender». Dentro del panel P1, conservar «Grabar vídeo» como acceso al Cinematográfico en navegador. Conectar la preparación a T1 **Escena para Blender**, reutilizando el exportador y su manifiesto. T1 puede enlazar a la misma preparación, con un solo flujo de generación.
-- **Guion inicial:** «Montaje por piezas». El profesional ve el nombre y la revisión del proyecto, el alcance por planta y qué incluye la escena. Si el ZIP cubre la planta activa, identificarla antes de descargar. Si admite ambas plantas, demostrarlo contra el manifiesto y el clip. Mostrar qué causas limitan la entrega, por ejemplo una cubierta sin geometría contrastada.
-- **Flujo propuesto:** proyecto y revisión → preparar el ZIP de escena y el kit o receta del guion → renderizar en Blender → revisar el MP4 con su report. La primera versión debe identificar con claridad el paso externo. La revisión puede empezar abriendo el archivo local producido. Un visor que vincule el MP4 al proyecto o una generación remota se evalúan como ampliaciones si hacen falta.
-- P8 conserva Blueprint 3D, P9 conserva Despiece y P4 conserva Evolución de obra con sus fechas y tareas. Apartment, Courtyard y Villa siguen como referencias de puesta en escena. El primer lanzamiento comunica el único guion implementado y validado.
+Claude tiene en su rama un guion de Blender que combina montaje por grupos y transición al interior. Hay tres fotogramas de control publicados. El guion combinado se conserva como material para el primer clip y la comparación con P1. La definición de tres guiones separados, los clips de referencia y las superficies de Home y Entregar quedan pendientes. P1 Cinematográfico ya tiene una escena «Del plano a la vivienda». P8 Blueprint 3D conserva su uso técnico. [Código de P1](https://github.com/Juanmaes83/floorplan-3d/blob/dacb5d395abf32449102d73ffd03200e6c09c019/js/presentation-film.js)
 
-## Evidencia para decidir y aceptar
+## Home · módulo propio
 
-1. **Comparación visual.** Revisar el MP4 continuo de 30 s a 720p frente a P1 Cinematográfico sobre la misma revisión. Comprobar legibilidad del plano, continuidad y ritmo, montaje reconocible por grupos y llegada a una estancia del modelo. Cuando esté publicado, enlazar el MP4, su huella y el report.
-2. **Home.** En escritorio y móvil, grabar desde «Descubre RUBIK en acción» hasta reproducir y cerrar la muestra. Comprobar que se reconoce como ejemplo, vuelve el foco y abrirla no dispara un render.
-3. **Entregar.** Grabar desde la ficha P1 de un proyecto propio hasta la descarga real y revisión de la salida. Verificar que la revisión, alcance, nombres de estancias y geometría final coinciden con el ZIP y el report. Probar una planta y un edificio de dos, incluyendo una revisión posterior y un elemento ausente. Adjuntar el archivo real con su huella. Dejar #324 fuera de este corte.
+En **Descubre RUBIK en acción**, añadir un módulo del mismo rango visual que las capacidades principales, con una imagen protagonista y un selector de los tres efectos aprobados. Cada efecto tiene su portada y su clip reproducible. La selección actualiza vídeo y texto juntos. Indicar «Ejemplo renderizado en Blender». Explicar el beneficio visible en una línea y mostrar el resultado desde la propia ficha. La ruta «Preparar con mi proyecto» aparece cuando se haya verificado el flujo de proyectos propios. La comparación de imágenes fijas sigue en Visualización profesional.
+
+## Entregar · espacio propio en Vídeo
+
+Añadir **«Tu proyecto cobra vida» como sección propia de Vídeo** para elegir un efecto y preparar la salida. Si la arquitectura vigente no ofrece una agrupación de Vídeo descubrible en el índice, darle una ficha propia en «La vivienda, para tu cliente» y enlazarla desde Vídeo. Abrir siempre el mismo selector. El profesional ve ejemplos, requisitos y alcance antes de elegir. La acción «Preparar en Blender» reutiliza T1 Escena para Blender y su manifiesto. El resultado es el MP4 del guion elegido y su informe. Mostrar la revisión de origen, las plantas incluidas y el paso externo de render. P1 Cinematográfico, Dibujo vivo, P4 Evolución, P8 Blueprint y P9 Despiece conservan sus recorridos.
+
+## Aceptación visual y funcional
+
+1. Publicar un clip continuo por efecto, con revisión, SHA e informe. Cada clip muestra su comienzo, una transición suficientemente desarrollada y su llegada. Los fotogramas de control se usan para inspeccionar encuadres.
+2. Comparar los guiones en una misma escena cuando sea viable y usar un proyecto que tenga entorno representado para el tercer efecto. Comprobar que alguien que ve los clips sin conocer los donantes puede explicar qué cambia en cada uno. Comparar además con P1 Cinematográfico para confirmar que la opción aporta un resultado reconocible.
+3. Usar la geometría, huecos, materiales y plantas de la exportación real. Documentar elementos omitidos o aproximados y comprobar las posiciones finales. Si falta una condición del guion elegido, explicar cuál antes de preparar el ZIP.
+4. Tras la aprobación, validar Home en escritorio y móvil. En Entregar, grabar la elección, preparación y revisión de la salida sobre proyecto propio. Comprobar una planta, dos plantas y una revisión posterior. Registrar qué efectos quedan aprobados y cuáles siguen pendientes de grabación o ajuste.
