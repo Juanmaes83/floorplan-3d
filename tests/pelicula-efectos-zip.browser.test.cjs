@@ -2,13 +2,13 @@
 // en Entregar → Vídeo; al cambiar de efecto lleva el nuevo; al cancelar o cambiar de proyecto no lleva ninguno.
 // Flujo real: diálogo del efecto → «Descargar el paquete para Blender» → Escena para Blender → descargar el ZIP.
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),zlib=require('node:zlib'),{createServer}=require('node:http'),{chromium}=require('playwright');
-const root=path.resolve(__dirname,'..'),fx=path.join(__dirname,'fixtures','scene-blender');let server,browser,url;
+const root=path.resolve(__dirname,'..'),os=require('node:os'),Fixtures=require('./fixtures/scene-blender/build.cjs');let server,browser,url,fx;
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.glb':'model/gltf-binary','.wasm':'application/wasm','.py':'text/plain','.sh':'text/plain','.bat':'text/plain','.txt':'text/plain'};
 function unzip(buffer){const end=buffer.length-22,count=buffer.readUInt16LE(end+10),items=new Map();let at=buffer.readUInt32LE(end+16);
  for(let i=0;i<count;i++){const method=buffer.readUInt16LE(at+10),size=buffer.readUInt32LE(at+20),n=buffer.readUInt16LE(at+28),extra=buffer.readUInt16LE(at+30),comment=buffer.readUInt16LE(at+32),local=buffer.readUInt32LE(at+42),name=buffer.subarray(at+46,at+46+n).toString();
   const start=local+30+buffer.readUInt16LE(local+26)+buffer.readUInt16LE(local+28),raw=buffer.subarray(start,start+size);items.set(name,method===8?zlib.inflateRawSync(raw):raw);at+=46+n+extra+comment;}
  return items;}
-before(async()=>{server=createServer(async(req,res)=>{try{const p=decodeURIComponent(new URL(req.url,'http://l').pathname),f=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
+before(async()=>{fx=path.join(require('node:fs').mkdtempSync(path.join(os.tmpdir(),'pel-zip-')),'fx');Fixtures.build(fx);server=createServer(async(req,res)=>{try{const p=decodeURIComponent(new URL(req.url,'http://l').pathname),f=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});});
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
