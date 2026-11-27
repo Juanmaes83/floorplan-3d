@@ -4,7 +4,7 @@ Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude
 
 ## ▶ ESTADO · 27/11/2026, 22:20 (leer primero; el bloque de las 20:15 queda como histórico)
 
-**#324** (`claude/integracion-cabecera-entregar`, borrador) · HEAD **`2f1c0ee4`**:
+**#324** (`claude/integracion-cabecera-entregar`, borrador) · HEAD **`ad928d43`** (código = `2f1c0ee4`):
 - `ac2fe1ba` V09 verificado integrado en Entregar (5 tamaños, sin recorte; ejemplo, no Villa Linde).
 - `8cff66b7` ID del ejemplo estable al recargar (`prj_reference-home`); CI de `c7093d62` clasificada:
   `app-m2-gate-d` = entorno (apt de Microsoft 403, Chromium sin instalar); `walk-controls` = intermitente (local 3/3; vigilar).
@@ -14,6 +14,23 @@ Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude
 - **En curso:** regresión completa del SHA final `scratchpad/integ-regr-final.sh` → `integ-regr-final.log` (+ `master-final.log`
   con g02, presentation y visual-studio en `dacb5d39`). Lanzada con límite de 2 h: si se corta, retomar los archivos que falten.
 - Después: CI + Preview de `2f1c0ee4`, comentario en #324 por hallazgo, Previews aprobadas (fccda24b, 7b2e01ab) aparte.
+
+**Corrección 22:40 · evidencias regeneradas:** el checkpoint `474e0d7a` (09:22) metió por error 93 imágenes regeneradas de
+`docs/qa/artifacts` (61 M, 32 A) que llegaron a #324. Retiradas: #324 **`ad928d43`** (código idéntico a `2f1c0ee4`, solo cambian
+evidencias; la regresión en curso vale para ambos) y `claude/cabecera-proyectos` `565eb948`. Ninguna otra rama propia vigente las
+tiene, salvo `muros-forma-descubrible` y `geometria-composicion` (36 cada una, de la composición OP-07): excluirlas al integrar.
+
+**Ramas antiguas frente a la base (`dacb5d39`) y a #324 (`merge-tree`, 22:35):**
+| Rama | SHA | Sobre master | Contra #324 | Entre sí |
+|---|---|---|---|---|
+| §5.1 `ux-visita-3d` | `e20644b9` | limpia (6 commits, 11 archivos) | limpia | limpia con §5.2 y §5.3 |
+| §5.2 `ux-bc3` | `a9bac718` | limpia (6, 20) | conflicto en `css/perla-editor.css` | limpia |
+| §5.3 `ux-presupuestar-analizar` | `32de044c` | limpia (11, 27) | conflicto en `css/perla-presupuestar.css` | limpia |
+| §7.1 `muros-forma-descubrible` | `94f5b981` | limpia (40, 102) | `css/perla-editor.css` + 36 evidencias | limpia con geometría |
+| Geometría `geometria-composicion` | `eb5723d4` | limpia (37, 100) | 36 evidencias | — |
+| `muros-asa-accesible` / `muros-sobre-a0` | `b35a6cc3` / `52737606` | **base antigua (200 detrás), conflicto** | — | sustituidas por la composición |
+Orden propuesto tras fusionar #324: §5.1 (limpia) → §5.2 y §5.3 (resolver un CSS cada una) → §7.1 + geometría (sin evidencias).
+Cada una con su regresión y revisión humana; ninguna se integra sin autorización.
 
 **Gesture Labs** `92ffb5f1`: prueba de navegador 6/6 ×2 (reloj sintético monótono en la prueba) y core 11/11; guion de
 cámara frontal en `docs/qa/gesture-labs/GUION-GRABACION-CAMARA-FRONTAL.md`. Pendiente: grabación de Juanma.
