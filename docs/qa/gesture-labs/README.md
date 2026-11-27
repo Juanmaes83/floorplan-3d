@@ -60,7 +60,27 @@ Además:
 Reproducir: abre `/?gesture-lab=1`, pulsa «Presentar con gestos · laboratorio» y después «Activar cámara (opcional)». Hace
 falta HTTPS o localhost, y una variante guardada con algún cambio (Entregar → P10).
 
+## Prueba con webcam física (revisión del propietario)
+URL: https://floorplan-3d-c0qx1ey77-juanma-espinosas-projects.vercel.app/?gesture-lab=1 (commit `4375c07a`; HTTPS, necesario
+para la cámara). Portátil con webcam y Chrome o Edge; buena luz de frente; mano a 40–80 cm de la cámara.
+1. **Preparar dos revisiones:** Entregar → P10 «Crear variante», retirar un mueble, esperar «✓ Guardado» y volver.
+2. Pulsar «Presentar con gestos · laboratorio» (abajo a la izquierda) → «Activar cámara (opcional)» → **Permitir**.
+   Debe verse el punto de estado en verde y el texto de cámara activa.
+3. **Gesto real · siguiente:** mano abierta, palma hacia la cámara, quieta ~1 s → pasa de «1 · Plano» a «2 · Vista 3D». Repetir →
+   «3 · Antes y después». Comprobar que **un** gesto sostenido avanza **un solo** paso.
+4. **Gesto real · antes/después:** en el paso 3, puño cerrado y deslizar en horizontal (~20 cm, rápido) → cambia a «después»;
+   en sentido contrario → «antes». Un movimiento lento o vertical no debe hacer nada.
+5. **Pérdida de seguimiento:** sacar la mano del encuadre (o taparla) > 1 s → punto ámbar, «mano perdida»; no cambia nada.
+   Volver a mostrarla → punto verde y los gestos siguen.
+6. **Continuar con botones:** con la cámara activa, usar «← Anterior», «Siguiente →», «Ver después/antes» y las teclas
+   ← → / A D: el recorrido es el mismo.
+7. **Cierre de cámara:** pulsar «Salir» (o Escape). Debe apagarse la luz de la webcam en 1–2 s y desaparecer el icono de cámara
+   de la pestaña. Repetir con «Apagar cámara» sin salir, y cambiando de pestaña: en ambos casos la luz se apaga.
+8. **Permiso denegado:** en una ventana privada, «Bloquear» → aviso rojo; la presentación sigue con botones y teclado.
+
+Anota por paso: OK / falla / falso disparo (cuántos). Falsos disparos o un gesto que necesite más de 2 intentos son motivo para
+ajustar umbrales antes de integrar.
+
 ## Dónde se integraría en Entregar
 Como acción de la ficha **P1 «Presentación 3D»**: «Presentar con gestos (opcional)», junto a «Preparar presentación». Abriría
-este mismo recorrido con la revisión activa y su variante de P10. Antes de integrarlo hacen falta la prueba con cámara real y
-tu aprobación.
+este mismo recorrido con la revisión activa y su variante de P10. **Pendiente de la revisión con webcam física** (sección anterior) y de tu aprobación; no se integra antes.
