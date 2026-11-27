@@ -2,6 +2,57 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ ROADMAP · 27/11/2026, 22:30 (leer primero; sustituye al orden anterior)
+
+### Ahora mismo
+- **Activo:** solo la regresión final de #324 sobre `ad928d43` (`scratchpad/integ-regr-final.sh`, desligada). Último resultado:
+  228 pruebas, 1 fallo (G-02, ya falla igual en `master`). Al terminar ejecuta su segundo paso, ya previsto: g02 +
+  presentation + visual-studio en `master` `dacb5d39` (contraste). No arranca nada más.
+- **Colas detenidas:** `pel-v11.sh` terminada a las 22:28 y bloqueo `scratchpad/pel-v11-STOP` creado; ningún render largo
+  arrancará al acabar la regresión. Sin tareas programadas en la cuenta (list_triggers vacío) ni crontab.
+
+### Cerrado (enlace · SHA)
+| Tarea | Rama · SHA | Pruebas locales | CI | Humana |
+|---|---|---|---|---|
+| Auditoría #324 V01–V07, V09 | `claude/integracion-cabecera-entregar` [`ad928d43`](https://github.com/Juanmaes83/floorplan-3d/commit/ad928d433c6b60e19622fc07030b518532b534de) | auditoria-324 8/8; V09 integrado 5 tamaños; ID del ejemplo estable | 95/96 verde; `contract` rojo (avc1, ver abajo) | pendiente (Claude, Codex, Juanma) |
+| Grabaciones V03/V05/V07/V09 | `675db8cd`, `32e76db7` (`auditoria-codex/grabaciones/`) | — | — | pendiente |
+| Retirada de 93 evidencias regeneradas | #324 `ad928d43`, cabecera `565eb948` | código idéntico a `2f1c0ee4` | — | informada |
+| Gesture Labs: prueba de navegador + guion | `claude/gesture-labs` [`92ffb5f1`](https://github.com/Juanmaes83/floorplan-3d/commit/92ffb5f130035228d38f5de9ace57b0c699e93f6) | 6/6 ×2, core 11/11 | — | grabación con cámara frontal (Juanma) |
+| Piloto v1.1: código de las 4 correcciones | `claude/rodaje-cierre-1440` [`230c7316`](https://github.com/Juanmaes83/floorplan-3d/commit/230c7316695250bced2e073e13f59efff7877ba7) | sintaxis; cronología = misma revisión | — | tras el render |
+| Catastro WFS/MDT05/PNOA reales desde la interfaz + corrección malla MDT05 | `claude/pelicula-efectos` `6c88d08e` | terrain-provider 6/6 (prueba nueva) | — | candidata independiente a master |
+| ZIP con entorno + importador Blender | `claude/pelicula-efectos` `047646fc`, `25066fd9` | scene-site-core 8/8, scene-delivery 6/6 (sin emplazamiento = mismo ZIP byte a byte) | — | — |
+| Emplazamiento demo elegido | `claude/pelicula-efectos` `cea12600`, `e4e6ac02` | — | — | — |
+
+### A medias / con dependencia
+- **#324 `contract` (P10, avc1):** `tests/story-assist.browser.test.cjs:117` recibe el aviso de Chromium «avc1 … codec description
+  … consider avc3» al grabar el vídeo de P10 (`js/tour-recorder.js`, código de master, lienzo de tamaño fijo). Pasó en ejecuciones
+  previas → candidato a intermitente de Chromium 1234. Falta: grabación reproducible N veces en `master` y en `ad928d43`, y P10
+  repetida; decidir entre intermitente documentado o preferir `avc3` (cambio acotado con prueba). Depende de que acabe la regresión.
+- **Comentario por hallazgo en #324:** borrador listo (`scratchpad/coment-324.md`); depende de la regresión, CI y Preview del SHA final.
+- **Desde el paisaje:** sonda `scratchpad/catlive/demo/montar.cjs` escrita (proyecto «Proyecto de demostración sobre entorno real»,
+  parcela `11039A02800004`, norte 180°, cota del MDT05). Falta ejecutarla, validar el ZIP en Blender y **publicar la previa** suelo ↔
+  terreno ↔ camino ↔ puerta antes de cualquier render.
+- **Home / Entregar → Vídeo (tres efectos):** sin empezar el código de interfaz.
+- **Corrección MDT05 a master:** preparada, pendiente de decisión de integración (Juanma).
+- **Evidencia con contorno catastral en el historial** (`6c88d08e`): recortada en `e4e6ac02`; reescribir historia solo con permiso.
+
+### Orden de ejecución
+**Fase 1 · desarrollos y validaciones dirigidas (sin renders largos; previas ligeras sí)**
+1. *(con la regresión aún en marcha, solo edición)* Interfaz Home + Entregar → Vídeo para los tres efectos en `claude/pelicula-efectos`.
+2. Al terminar la regresión: clasificar su resultado frente a `master`; contraste avc1 (grabación reproducible ×N en master y
+   `ad928d43`); decidir; CI + Preview del SHA final; comentario por hallazgo en #324 (borrador).
+3. Desde el paisaje: montar el proyecto demo (sonda), comprobar en navegador la exportación habitual sin emplazamiento, importar el
+   ZIP en Blender y publicar la **previa** (fotogramas fijos a baja resolución) suelo/terreno/camino/puerta → decidir colocación.
+4. Previas ligeras de cámara (baja resolución, pocas muestras) de Maqueta abierta y Pieza a pieza sobre la misma revisión.
+5. Pruebas de navegador de Home/Entregar (escritorio y móvil, ES/EN) y grabación del recorrido con MP4 de muestra.
+
+**Fase 2 · renders largos (uno cada vez)**
+6. Piloto v1.1 720p (entrega propia). 7. Maqueta abierta. 8. Pieza a pieza. 9. Desde el paisaje (tras aprobar la previa).
+
+**Fase 3** · 10. Examen de los cinco proyectos sobre la candidata común (depende de la fusión de #324).
+
+**Siguiente paso concreto:** fase 1.1, interfaz de los tres efectos (solo edición mientras corre la regresión).
+
 ## ▶ ESTADO · 27/11/2026, 21:50 (leer primero; el bloque de las 20:15 queda como histórico)
 
 **#324** (`claude/integracion-cabecera-entregar`, borrador) · HEAD **`ad928d43`** (código = `2f1c0ee4`):
