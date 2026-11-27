@@ -1,0 +1,81 @@
+/* StoryLayersV1 · «Explicar el cambio» (Entregar › P10). Diálogo modal; en móvil las dos plantas se apilan. */
+.story-layers-dialog{width:min(1180px,calc(100vw - 24px));max-height:calc(100dvh - 24px);box-sizing:border-box;padding:16px 18px;border:1px solid var(--line,#ddd);border-radius:12px;overflow:auto;overflow-x:hidden}
+.story-layers-dialog .sl-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.story-layers-dialog h2{margin:0;font-size:1.2rem}
+.story-layers-dialog .sl-state{padding:8px 12px;border-radius:8px;font-weight:600;background:#f4efe6}
+.story-layers-dialog .sl-ready{background:#e6f2ec;color:#1f6f5c}.story-layers-dialog .sl-obsolete{background:#fbe9e7;color:#b3261e}
+.story-layers-dialog .sl-chapters{list-style:none;padding:0;margin:12px 0;display:grid;gap:16px}
+.story-layers-dialog .sl-chapter{border:1px solid var(--line,#e3e0da);border-radius:10px;padding:12px;min-width:0}
+.story-layers-dialog .sl-figure{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.story-layers-dialog figure{margin:0;min-width:0}.story-layers-dialog figure svg{width:100%;height:auto;max-height:320px;background:#fbfaf7;border-radius:6px}
+.story-layers-dialog figcaption{font-size:.85rem;color:#555;text-align:center}
+.story-layers-dialog textarea{width:100%;box-sizing:border-box;margin:8px 0;font:inherit}
+.story-layers-dialog .sl-data{width:100%;border-collapse:collapse;font-size:.85rem;table-layout:fixed}
+.story-layers-dialog .sl-data th,.story-layers-dialog .sl-data td{border-bottom:1px solid #eee;padding:4px 6px;text-align:left;overflow-wrap:anywhere}
+.story-layers-dialog tr[data-state="absent"] td{color:#8a5a00;font-style:italic}
+.story-layers-dialog .sl-move{display:flex;gap:6px;justify-content:flex-end;margin-top:6px}
+.story-layers-dialog .sl-readiness{font-size:.85rem;padding-left:18px}.story-layers-dialog .sl-readiness [data-ok="false"][data-severity="BLOCKING"]{color:#b3261e}
+.story-layers-dialog .sl-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;position:sticky;bottom:-16px;background:var(--bg,#fff);padding:10px 0}
+@media (max-width:600px){.story-layers-dialog{padding:12px}.story-layers-dialog .sl-figure{grid-template-columns:1fr}
+ /* Teléfono: seis columnas no caben (la revisión se partía letra a letra). Cada fila es una ficha «columna · valor». */
+ .story-layers-dialog .sl-data,.story-layers-dialog .sl-data tbody{display:block}.story-layers-dialog .sl-data thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .story-layers-dialog .sl-data tr{display:block;border:1px solid #eee;border-radius:8px;padding:4px 8px;margin:0 0 8px}
+ .story-layers-dialog .sl-data td{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px;border-bottom:0;padding:3px 0}
+ .story-layers-dialog .sl-data td::before{content:attr(data-label);font-weight:600;color:#555}}
+/* Una acción deshabilitada se VE deshabilitada (la principal mantenía su color con la historia obsoleta). */
+.story-layers-dialog .sl-actions button:disabled{opacity:.45;cursor:not-allowed}
+/* El acceso del Asistente se inserta como último elemento de todo modal, fijo abajo (sticky): aquí chocaba con la barra de
+   acciones, también fija abajo, y tapaba «Descargar historia vigente». Igual que en scene-export.css: en flujo, tras las
+   acciones, con espacio propio. */
+.story-layers-dialog > rubik-assistant-access{position:static;margin:12px 0 0 auto}
+/* §7.3 · Plantilla comercial: pasos, propuesta, identidad de Mi estudio, notas con visibilidad, coste y vista previa. */
+.story-layers-dialog .sl-lead{margin:6px 0 10px;color:#3a3d40}
+.story-layers-dialog .sl-progress{margin:6px 0;font-weight:600;color:#1f6f5c}
+.story-layers-dialog .sl-step{margin:18px 0 6px;font-size:1.05rem}
+.story-layers-dialog .sl-chapter h4{margin:0 0 6px}
+.story-layers-dialog .sl-proposal{display:grid;gap:10px;border:1px solid var(--line,#e3e0da);border-radius:10px;padding:12px}
+.story-layers-dialog .sl-proposal fieldset{border:1px solid #eee;border-radius:8px;padding:8px 10px;margin:0;min-width:0}
+.story-layers-dialog .sl-id-name{margin:2px 0 6px;font-weight:700}
+.story-layers-dialog .sl-check{display:block;margin:2px 0;overflow-wrap:anywhere}
+.story-layers-dialog .sl-field{display:grid;gap:4px;font-weight:600}
+.story-layers-dialog .sl-field input,.story-layers-dialog .sl-field textarea{width:100%;box-sizing:border-box;font:inherit;font-weight:400}
+.story-layers-dialog .sl-cost{background:#f7f5f0;border-radius:8px;padding:8px 10px}
+.story-layers-dialog .sl-cost[data-status="absent"]{color:#8a5a00}
+.story-layers-dialog .sl-note{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto auto;gap:6px;align-items:start;margin:6px 0}
+.story-layers-dialog .sl-note[data-visibility="internal"] textarea{background:#fff8e6}
+.story-layers-dialog .sl-note select{max-width:16em}
+.story-layers-dialog .sl-preview{display:grid;gap:10px}
+.story-layers-dialog .sl-preview img{width:100%;height:auto;border:1px solid #ddd;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.story-layers-dialog .sl-why{color:#8a5a00;font-weight:600}
+.story-layers-dialog .sl-includes{font-size:.85rem;color:#555}
+@media (max-width:600px){.story-layers-dialog .sl-note{grid-template-columns:1fr 1fr}.story-layers-dialog .sl-note textarea{grid-column:1/-1}.story-layers-dialog .sl-note select{max-width:none}}
+/* §7.2 · pasos visibles (ficha P10 y diálogo) y barra «Volver a la historia» en Diseñar */
+.sl-card-steps,.story-layers-dialog .sl-steps{list-style:none;counter-reset:slstep;display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 10px;padding:0;font-size:13px;line-height:1.4}
+.sl-card-steps li,.story-layers-dialog .sl-steps li{counter-increment:slstep;display:flex;align-items:center;gap:6px;color:var(--muted,#5b6066)}
+.sl-card-steps li::before,.story-layers-dialog .sl-steps li::before{content:counter(slstep);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid currentColor;font-weight:700;font-size:12px;flex:none}
+.sl-card-steps li[data-done]::before,.story-layers-dialog .sl-steps li[data-done]::before{content:'✓'}
+.sl-card-steps li[aria-current],.story-layers-dialog .sl-steps li[aria-current]{color:var(--ink,#1f2326);font-weight:700}
+.sl-card-steps li[aria-current]::before,.story-layers-dialog .sl-steps li[aria-current]::before{background:var(--ink,#1f2326);color:#fff;border-color:var(--ink,#1f2326)}
+.story-layers-dialog .sl-steps .btn{min-height:36px;padding:4px 10px;font-weight:600}
+.story-layers-dialog .sl-pairname,.story-layers-dialog .sl-how{margin:4px 0 10px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.sl-return{position:fixed;z-index:58;left:50%;transform:translateX(-50%);top:calc(var(--shell-header-bottom,58px) + 52px);display:flex;align-items:center;gap:10px;max-width:min(760px,calc(100vw - 16px));padding:8px 8px 8px 14px;border-radius:12px;background:var(--surface,#fff);border:1px solid var(--line-strong,#c9c3b8);box-shadow:0 6px 20px rgba(0,0,0,.14);font-size:14px;line-height:1.35}
+.sl-return[hidden]{display:none}
+.sl-return-txt{min-width:0;overflow-wrap:anywhere}
+.sl-return .btn{min-height:44px;flex:none}
+@media (max-width:600px){.sl-return{left:8px;right:8px;transform:none;max-width:none;flex-wrap:wrap;font-size:13px}.sl-return-txt{flex:1 1 100%}}
+/* §8 · cliente, medios y ayuda de redacción */
+.story-layers-dialog .sl-client,.story-layers-dialog .sl-media{border:1px solid var(--line,#d9d4cb);border-radius:10px;padding:10px 14px;margin:12px 0;min-width:0}
+.story-layers-dialog .sl-client-row{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:flex-end;margin-bottom:8px}
+.story-layers-dialog .sl-client-row .sl-field{flex:1 1 220px;min-width:0}
+.story-layers-dialog .sl-hint{font-size:13px;line-height:1.5;color:var(--muted,#5b6066);margin:4px 0 8px;overflow-wrap:anywhere}
+.story-layers-dialog .sl-file{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;position:relative}
+.story-layers-dialog .sl-file input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.story-layers-dialog .sl-media-row{margin:8px 0;line-height:1.5;overflow-wrap:anywhere}
+.story-layers-dialog .sl-thumb{display:inline-flex;align-items:center;gap:6px;margin:6px 12px 6px 0}
+.story-layers-dialog .sl-thumb img{width:96px;height:auto;border-radius:6px;border:1px solid var(--line,#d9d4cb)}
+.story-layers-dialog .sl-assist{border-left:3px solid var(--accent,#1e5a5e);background:var(--surface-2,#f6f4ef);border-radius:8px;padding:8px 12px;margin:10px 0}
+.story-layers-dialog .sl-asks{margin:6px 0 8px 18px;padding:0;font-size:13px;line-height:1.5}
+.story-layers-dialog .sl-actions-inline{display:flex;flex-wrap:wrap;gap:8px}
+.story-layers-dialog .sl-actions-inline .btn,.story-layers-dialog [data-sl="assist"]{min-height:44px}
+.story-layers-dialog [data-sl="preview"] video{display:block;max-width:100%;margin:8px 0;border-radius:8px}
+.story-layers-dialog{overflow-anchor:none}

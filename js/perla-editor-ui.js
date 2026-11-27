@@ -38,7 +38,7 @@
  // en el DOM; la ficha muestra el nombre del proyecto con data-perla-name (CSS), sin pisar las traducciones del botón.
  const proj=move('#projectsBtn',left)||el('button',{type:'button',class:'btn'},left);proj.classList.add('perla-project');proj.setAttribute('aria-haspopup','dialog');
  const projName=()=>{let n='';try{n=(typeof project==='object'&&project?.name)||'';}catch{}const shown=typeof nm==='function'?nm(n):n;return shown||tx('Proyecto','Project','项目');};
- const paintProject=()=>{const raw=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example',n=ex?tx('Proyecto de ejemplo','Example project','示例项目'):raw;proj.dataset.perlaName=n;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
+ const paintProject=()=>{const raw=projName(),ex=$('#guideBar')?.getAttribute('data-project-kind')==='example'&&!window.FloorPlanApp?.entryInfo?.()?.variantOf/* §7.2: una variante se nombra siempre por su nombre, para saber cuál se edita */,n=ex?tx('Proyecto de ejemplo','Example project','示例项目'):raw;proj.dataset.perlaName=n;proj.title=tx(`Proyecto activo: ${n}. Abrir la biblioteca de proyectos`,`Active project: ${n}. Open the project library`,`当前项目：${n}。打开项目库`);proj.setAttribute('aria-label',proj.title);};
  // «Crear copia» del ejemplo: es el MISMO botón de la guía (copia local con id propio); solo visible en el ejemplo.
  const exampleLine=$('.guide-example'),copyBtn=move('#guideCopyExample',left);
  if(copyBtn){copyBtn.classList.add('perla-copy');const lbl=()=>{copyBtn.innerHTML=`${svg('copy',15)}<span class="perla-copy-label">${tx('Crear copia','Create copy','创建副本')}</span>`;copyBtn.setAttribute('aria-label',tx('Crear una copia local del ejemplo','Create a local copy of the example','创建示例的本地副本'));};lbl();
@@ -46,6 +46,37 @@
   const isExample=()=>$('#guideBar')?.getAttribute('data-project-kind')==='example';
   const sync=()=>{copyBtn.hidden=!isExample();paintProject();};
   const gb=$('#guideBar');if(gb)new MutationObserver(sync).observe(gb,{attributes:true,attributeFilter:['data-project-kind']});sync();copyBtn._perlaLabel=lbl;copyBtn._perlaExample=isExample;}
+ // §9 · Un único control de proyecto: el nombre real (abre la biblioteca, como siempre) y su menú ▾ con las acciones de
+ // proyecto, cada una con el efecto en su etiqueta. Cada entrada acciona el flujo existente (mismos ids y manejadores).
+ const projWrap=el('div',{class:'perla-projwrap',role:'group'},left);projWrap.append(proj);
+ const pmenu=el('details',{class:'perla-dd perla-menu perla-projmenu',id:'perlaProjectMenu'},projWrap),pmSum=el('summary',{class:'btn perla-icon'},pmenu),pmPop=el('div',{class:'menu-pop perla-pop perla-projpop',role:'menu'},pmenu);
+ const pmItem=(id,run)=>{const b=el('button',{type:'button',class:'btn perla-pm-item',id,role:'menuitem'},pmPop);b.onclick=async ev=>{pmenu.open=false;try{await run(ev);}catch(e){window.toast?.(e.message,6000);}};return b;};
+ const pmOpen=pmItem('pmOpenOther',()=>$('#projectsBtn').click());
+ const pmUpload=pmItem('pmUpload',()=>$('#importImage').click());
+ const pmCopy=pmItem('pmCopy',()=>{if($('#guideBar')?.getAttribute('data-project-kind')==='example'&&$('#guideCopyExample'))return $('#guideCopyExample').click();return window.FloorPlanApp.duplicateActive();});
+ const pmVariant=pmItem('pmVariant',ev=>window.FloorPlanStoryLayersUI?.createVariant?window.FloorPlanStoryLayersUI.createVariant(ev):window.FloorPlanApp.createVariant(ev));
+ const pmJson=pmItem('pmDownloadJson',()=>{$('#exportJsonQuick').click();window.toast?.(tx('Proyecto JSON descargado','Project JSON downloaded','项目 JSON 已下载'),4000);});
+ new MutationObserver(()=>paintProjectMenu()).observe(pmJson,{attributes:true,attributeFilter:['data-perla-done']});
+ el('hr',{class:'perla-pm-sep','aria-hidden':'true'},pmPop);
+ const pmMore=el('div',{class:'perla-pm-more',role:'group'},pmPop);
+ for(const id of ['newProjectBtn','importJson','joinRoomPlan'])move('#'+id,pmMore);
+ const pmSave=el('p',{class:'perla-pm-note',id:'pmSaveNote'},pmPop);
+ const paintProjectMenu=()=>{const ex=$('#guideBar')?.getAttribute('data-project-kind')==='example';
+  const set=(b,t,d)=>{b.innerHTML=`<b>${t}</b><small>${d}</small>`;b.setAttribute('aria-label',t+'. '+d);};
+  set(pmOpen,tx('Abrir otro proyecto…','Open another project…','打开其他项目…'),tx('Biblioteca de este navegador: cambia el proyecto activo','This browser’s library: switches the active project','本浏览器项目库：切换当前项目'));
+  set(pmUpload,tx('Subir plano o proyecto…','Upload plan or project…','上传平面图或项目…'),tx('Imagen, PDF o proyecto: crea un proyecto nuevo; el abierto no cambia','Image, PDF or project: creates a new project; the open one is unchanged','图片、PDF 或项目：新建项目；当前项目不变'));
+  set(pmCopy,tx('Crear copia','Create copy','创建副本'),ex?tx('Copia independiente del ejemplo para editarla','Independent copy of the example to edit','可编辑的示例独立副本'):tx('Proyecto independiente con id propio; el original no cambia','Independent project with its own id; the original is unchanged','独立项目（新 ID）；原项目不变'));
+  set(pmVariant,tx('Crear variante','Create variant','创建变体'),tx('Vinculada al original para comparar y contar el cambio','Linked to the original to compare and tell the change','与原项目关联，用于比较与说明'));
+  if(pmJson.dataset.perlaDone==='1')set(pmJson,'✓ '+tx('Proyecto JSON descargado','Project JSON downloaded','项目 JSON 已下载'),tx('Descargar proyecto JSON de nuevo','Download project JSON again','再次下载项目 JSON'));
+  else set(pmJson,tx('Descargar proyecto JSON','Download project JSON','下载项目 JSON'),tx('Archivo editable a tu equipo','Editable file to your computer','可编辑文件下载到电脑'));
+  pmSave.textContent=tx('«Guardado local» = se guarda solo en este navegador. Para llevarlo a otro equipo, descarga el JSON.','«Saved locally» = kept only in this browser. To take it to another computer, download the JSON.','“本地保存”仅保存在此浏览器。要带到其他电脑，请下载 JSON。');
+  pmSum.innerHTML=svg('chev',14);pmSum.setAttribute('aria-label',tx('Acciones del proyecto','Project actions','项目操作'));pmSum.title=pmSum.getAttribute('aria-label');projWrap.setAttribute('aria-label',tx('Proyecto','Project','项目'));};
+ pmenu.addEventListener('toggle',()=>{if(pmenu.open){paintProjectMenu();pmOpen.focus({preventScroll:true});}});
+ pmPop.addEventListener('keydown',e=>{const items=[...pmPop.querySelectorAll('button:not([hidden])')],i=items.indexOf(document.activeElement);
+  if(e.key==='Escape'){e.preventDefault();pmenu.open=false;pmSum.focus();}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();items[(i+(e.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus();}});
+ document.addEventListener('pointerdown',e=>{if(pmenu.open&&!pmenu.contains(e.target))pmenu.open=false;});
+ // «Crear copia» vive en el menú: el botón de la guía conserva id y manejador, dentro del menú (oculto en la fila).
+ if(copyBtn){copyBtn.classList.add('perla-copy-moved');pmPop.append(copyBtn);}
  // Áreas: los mismos botones de la barra de áreas, centrados y con más peso.
  for(const id of ['workArea-design','workArea-analyze','workArea-budget','workArea-deliver'])move('#'+id,center);
  center.setAttribute('role','navigation');center.setAttribute('aria-label',tx('Áreas de trabajo','Work areas','工作区域'));
@@ -60,7 +91,7 @@
  for(const id of ['fullscreen'])move('#'+id,morePop);
  if(hist){
   const compactHistory=matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)');
-  const placeHistory=()=>{if(compactHistory.matches)morePop.prepend(hist);else right.insertBefore(hist,studio);};
+  const placeHistory=()=>{if(compactHistory.matches)morePop.prepend(hist);else{const v=$('.perla-r2 #viewSeg');if(v)v.after(hist);else right.insertBefore(hist,studio);}};
   placeHistory();compactHistory.addEventListener('change',placeHistory);
  }
  const legal=$('#legalLink');if(legal){const b=el('button',{type:'button',id:'perlaLegal',class:'btn'},morePop);b.onclick=()=>{more.open=false;legal.click();};b._t=()=>b.textContent=tx('Legal y uso','Legal and use','法律与使用');b._t();}
@@ -68,17 +99,40 @@
  help.onclick=()=>{const k=$('#panel [data-group="keys"] summary,#panel [data-group="keys"]');if(k){openTab('informe');const d=k.closest('details');if(d)d.open=true;k.scrollIntoView({block:'nearest'});(d?.querySelector('summary')||k).focus?.({preventScroll:true});}};
 
  // ── Fila 2 · Importar · Archivo · vista · paso · tareas · Presentar · acción principal ──
- const impWrap=el('div',{class:'perla-split',role:'group'},r2);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
+ // §9 · «Subir plano» y sus variantes pasan al menú de proyecto (mismo id y manejador); la fila 2 queda para la tarea actual.
+ const impWrap=el('div',{class:'perla-split perla-pm-import',role:'group'},pmPop);const up=move('#uploadPlanBtn',impWrap);if(up)up.classList.add('perla-split-main');
  const imp=el('details',{class:'perla-dd perla-menu',id:'perlaImport'},impWrap),impSum=el('summary',{class:'btn'},imp),impPop=el('div',{class:'menu-pop perla-pop'},imp);
  // «Importar proyecto JSON» sigue en «Archivo» (junto a «Guardar»), como en la app; aquí, plano, RoomPlan, nuevo, imagen y unir.
  for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importImage','joinRoomPlan'])move('#'+id,impPop);
+ // Una entrada visible por acción: «Subir plano o proyecto…» (pmUpload) acciona este mismo flujo; los botones de siempre
+ // conservan id y manejador pero no se repiten en el menú. «Nuevo proyecto» y «Unir escaneo RoomPlan…» siguen visibles.
+ impWrap.classList.add('perla-pm-dup');move('#newProjectBtn',pmMore);
+ // OP-04 (aprobado): «Unir escaneo» (#roomPlanJoinQuick) debe estar a la vista y ser pulsable (≥ 44 px); es la entrada visible
+ // del menú. «Unir escaneo RoomPlan…» (#joinRoomPlan) acciona el mismo pickJoin: conserva id y manejador, oculto como duplicado.
+ {const q=$('#roomPlanJoinQuick');if(q){pmUpload.after(q);q.classList.add('perla-pm-join');}const j=move('#joinRoomPlan',pmMore);if(j)j.classList.add('perla-pm-dup-btn');}
  // Estado de las medidas en la barra de estado (V4: «Medidas orientativas»), con su id y su manejador.
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);
  const fileMenu=$$('header details.menu').find(d=>d.querySelector('#exportPng'));
- if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');}
- move('#exportJsonQuick',r2);
+ if(fileMenu){fileMenu.classList.add('perla-menu');fileMenu.id='perlaFile';r2.append(fileMenu);fileMenu.querySelector('.menu-pop')?.classList.add('perla-pop');
+  // §9 · «Exportar diseño» = solo salidas (imagen/captura 3D, lámina, ficha de superficies, DXF, JSON). Lo demás va junto a
+  // su tarea: crear proyecto desde foto → menú de proyecto; contexto, entrega y acciones de diseño → «Más», en grupos con título.
+  // Mismos ids y manejadores (las pruebas y atajos que abren su menú siguen funcionando).
+  const photo=$('#photoReformMenu');if(photo)pmMore.append(photo);
+  const groups=[['ctx',()=>tx('Contexto del proyecto','Project context','项目环境'),['territoryOpen','solarOpen']],['del',()=>tx('Entrega','Delivery','交付'),['reviewNotesBtn','brandManage']],['des',()=>tx('Diseño','Design','设计'),['clearAll','reset']]];
+  // El título y el rótulo accesible se repintan al cambiar de idioma (como una carga nueva en ese idioma).
+  const paintGroups=()=>{for(const [k,t] of groups){const g=morePop.querySelector(`[data-group="${k}"]`);if(!g)continue;g.setAttribute('aria-label',t());const h=g.querySelector('.perla-more-title');if(h)h.textContent=t();}};
+  new MutationObserver(()=>setTimeout(paintGroups,0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  for(const [k,titleOf,ids] of groups){const title=titleOf();const g=el('div',{class:'perla-more-group',role:'group','data-group':k},morePop);const h=el('p',{class:'perla-more-title'},g);h.textContent=title;g.setAttribute('aria-label',title);for(const id of ids){const b=$('#'+id);if(b)g.append(b);}if(!g.querySelector('button'))g.remove();}}
+ // §9 (decisión del propietario): «Descargar proyecto JSON» vive en Proyecto ▾. El botón original se conserva oculto como
+ // fuente única del exportador (mismo manejador que UX-BETA-001); la confirmación U11 pasa al elemento del menú.
+ {const q=move('#exportJsonQuick',pmMore);if(q)q.classList.add('perla-pm-dup-btn');}
+ // §9 (revisión 27/11): el JSON editable no se duplica en «Exportar diseño» (solo salidas de diseño). #exportJson queda
+ // oculto junto al anterior (mismo exportador); la entrada visible es Proyecto ▾ → «Descargar proyecto JSON».
+ {const q=move('#exportJson',pmMore);if(q)q.classList.add('perla-pm-dup-btn');}
  const view=move('#viewSeg',r2);
+ // §9 · Deshacer/rehacer son de la tarea actual: van tras la vista (en pantalla compacta siguen en «Más»).
+ if(hist&&view&&!matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)').matches)view.after(hist);
  move('#levelBar',r2);move('#levelStatus',r2);
  el('span',{class:'perla-break','aria-hidden':'true'},r2);
  const prog=el('div',{class:'perla-progress',id:'perlaProgress',role:'status','aria-live':'polite'},r2);
@@ -106,12 +160,14 @@
   bar.setAttribute('aria-valuenow',String(g.pct));bar.querySelector('i').style.width=g.pct+'%';bar.setAttribute('aria-label',tx('Progreso del recorrido','Journey progress','进度'));
   tasks.innerHTML=`${svg('list',16)}<span>${tx('Tareas del proyecto','Project tasks','项目任务')}</span>${svg('chev',14)}`;
   // Acción principal = la acción real de la tarea actual (`guidePrimary`): mismo texto, mismo estado, mismo efecto.
-  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){primary.textContent=gp.textContent;primary.disabled=gp.disabled;primary.title=gp.title||'';}
+  const gp=$('#guidePrimary');primary.hidden=!gp||!gp.textContent.trim()||gp.hidden;if(gp){const t=gp.textContent.trim(),is3d=/^(Abrir 3D|Open 3D|打开 3D|Revisar en 3D|Review in 3D|在 3D 中检查)$/.test(t);primary.textContent=is3d?tx('Revisar en 3D','Review in 3D','在 3D 中检查'):t;primary.dataset.task3d=is3d?'1':'';primary.disabled=gp.disabled;primary.title=is3d?tx('Abre la misma escena 3D y marca como hecho el paso «Revisa la distribución en 3D». «Escena 3D» solo cambia la vista, sin marcar el paso.','Opens the same 3D scene and marks the step «Review the layout in 3D» as done. «3D scene» only switches the view, without marking the step.','打开同一 3D 场景并将“在 3D 中检查布局”标记为完成。“3D 场景”仅切换视图。'):(gp.title||'');}
   if(present){present.textContent=tx('Presentar vivienda','Present the home','展示住宅');present.insertAdjacentHTML('afterbegin',svg('present',16));}
   if(impSum){impSum.innerHTML=svg('chev',16);impSum.setAttribute('aria-label',tx('Más formas de importar o empezar','More ways to import or start','更多导入或开始方式'));impSum.title=impSum.getAttribute('aria-label');}impWrap.setAttribute('aria-label',tx('Importar','Import','导入'));
-  const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Archivo','File','文件')}</span>${svg('chev',14)}`;
+  const fs=fileMenu?.querySelector('summary');if(fs)fs.innerHTML=`${svg('file',16)}<span>${tx('Exportar diseño','Export design','导出设计')}</span>${svg('chev',14)}`;
+  for(const [k,es,en,zh] of [['ctx','Contexto del proyecto','Project context','项目环境'],['del','Entrega','Delivery','交付'],['des','Diseño','Design','设计']]){const t=morePop.querySelector(`[data-group="${k}"] .perla-more-title`);if(t)t.textContent=tx(es,en,zh);}
   help.setAttribute('aria-label',tx('Ayuda y atajos','Help and shortcuts','帮助与快捷键'));help.title=help.getAttribute('aria-label');moreSum.setAttribute('aria-label',tx('Más opciones','More options','更多选项'));
-  copyBtn?._perlaLabel?.();paintProject();
+  copyBtn?._perlaLabel?.();paintProject();paintProjectMenu();
+  {const ph=$('#photoReformMenu');if(ph&&!pmMore.contains(ph))pmMore.append(ph);}
  }
  primary.onclick=()=>$('#guidePrimary')?.click();
  function setGuide(open,{focus=true}={}){

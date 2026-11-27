@@ -66,7 +66,7 @@ test('CONSOLIDACIÓN · un mismo proyecto: 2D/3D → catálogo → presupuesto c
   const ans=await ask(page,'¿Qué partidas siguen sin precio?');assert.match(ans,/Horno integrable H60 inox · QA-H60-INOX/);assert.doesNotMatch(ans,/Aparador Lumen/);
   const sku=await ask(page,'¿Qué SKU he colocado en este proyecto?');assert.match(sku,/QA-LUMEN-160-RB · Aparador Lumen 160 roble: 1 unidad/);await page.click('#assistantClose');
   // F (project). «Exportar JSON»: links travel, prices do not (the budget is its own document).
-  await page.locator('details.menu summary').first().click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);projectJson=fs.readFileSync(await pd.path(),'utf8');
+  await page.locator('#perlaProjectMenu > summary').click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);projectJson=fs.readFileSync(await pd.path(),'utf8');
   assert.equal(JSON.parse(projectJson).id,A.pid);assert.equal(projectJson.includes('unitPrice'),false);
   // G. Identity contract: the same file imported again is an independent project — own id, no inherited prices, and
   // Presupuestar has no shared document to warn about.
@@ -125,7 +125,7 @@ test('CONSOLIDACIÓN · proyecto propio (id único) llevado a otro navegador: co
   await page.waitForFunction(()=>FloorPlanBudgetUI.current().budget.items.find(i=>i.id==='paint').unitPrice===7.5);await page.locator('#budgetDialog tr[data-item="paint"] [data-field="review"]').check();await page.selectOption('#budgetVat','21');
   O=await facts(page);assert.match(O.pid,/^prj_[0-9a-f]{32}$/);assert.ok(O.net>0);
   const [bd]=await Promise.all([page.waitForEvent('download'),page.locator('#budgetJson').click()]);budgetJson=fs.readFileSync(await bd.path(),'utf8');await closeBudget(page);await toEditor(page);
-  await page.locator('details.menu summary').first().click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);projectJson=fs.readFileSync(await pd.path(),'utf8');assert.deepEqual(w.errors,[]);
+  await page.locator('#perlaProjectMenu > summary').click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);projectJson=fs.readFileSync(await pd.path(),'utf8');assert.deepEqual(w.errors,[]);
  }finally{await context.close();}}
  {const {context,page}=await K.editor(env,{acceptDownloads:true}),w=K.watch(page,env.base);
  try{
@@ -145,7 +145,7 @@ test('CON-02 · a price typed in an imported copy does not change the budget of 
  const {context,page}=await K.editor(env,{acceptDownloads:true});
  try{
   await openBudget(page);const price=()=>page.locator('#budgetDialog tr[data-item="paint"] [data-field="price"]');await price().fill('7');await price().press('Tab');await page.waitForFunction(()=>FloorPlanBudgetUI.current().budget.items.find(i=>i.id==='paint').unitPrice===7);await closeBudget(page);await toEditor(page);
-  const A=await facts(page),savedA=await stored(page,A.pid);await page.locator('details.menu summary').first().click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);
+  const A=await facts(page),savedA=await stored(page,A.pid);await page.locator('#perlaProjectMenu > summary').click();const [pd]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);
   await importProject(page,'copia.json',fs.readFileSync(await pd.path(),'utf8'));
   await openBudget(page);await price().fill('5');await price().press('Tab');await page.waitForFunction(()=>FloorPlanBudgetUI.current().budget.items.find(i=>i.id==='paint').unitPrice===5);
   const paint=t=>JSON.parse(t).items.find(i=>i.id==='paint').unitPrice;assert.equal(paint(await stored(page,A.pid)),paint(savedA),'the price of the original (7) is not the one typed in the copy (5)');

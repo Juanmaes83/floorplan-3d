@@ -104,7 +104,7 @@ test('CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación
   await tr.locator('.cat04-retire').click();await page.waitForFunction(id=>!document.querySelector(`#budgetDialog tr[data-item="${id}"]`),RB);assert.equal((await truth(page,RB)).item,null);
   // 17. Export: the project carries the links; the budget is a separate document (rubik-budget-v1 / JSON download).
   const [bjDl]=await Promise.all([page.waitForEvent('download'),page.locator('#budgetJson').click()]);const bj=JSON.parse(fs.readFileSync(await bjDl.path(),'utf8'));assert.ok(bj.items.some(i=>i.id===H60),'catalogue items travel in the budget document');
-  await closeBudget(page);await toEditor(page);await page.locator('details.menu summary').first().click();const [ex]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);const proj=JSON.parse(fs.readFileSync(await ex.path(),'utf8'));
+  await closeBudget(page);await toEditor(page);await page.locator('#perlaProjectMenu > summary').click();const [ex]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);const proj=JSON.parse(fs.readFileSync(await ex.path(),'utf8'));
   assert.ok(Object.values(proj.extensions['x-cat03-catalog-link'].links).some(l=>l.sku==='QA-H60-INOX'));assert.equal(JSON.stringify(proj).includes('unitPrice'),false,'prices are not in the project file');
   assert.deepEqual(api,[]);assert.deepEqual(w.external,[]);assert.deepEqual(w.errors,[]);
  }finally{await context.close();}

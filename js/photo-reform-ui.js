@@ -205,7 +205,8 @@
  // ── Entradas ────────────────────────────────────────────────────────────────────────────────────────────────────
  const entryButton=id=>{const b=el('button',{type:'button',class:'btn photo-reform-open',id},undefined,'Reformar desde fotografía');b.dataset.es='Reformar desde fotografía';b.dataset.en='Renovate from a photo';b.dataset.zh='从照片改造';b.textContent=L3(b.dataset.es,b.dataset.en,b.dataset.zh);b.onclick=open;return b;};
  // Menú «Archivo» del editor.
- const menu=document.querySelector('details.menu .menu-pop');
+ // §9 · Crea un proyecto desde una foto: va al menú de proyecto si existe (cabecera PERLA); si no, al menú de siempre.
+ const menu=document.querySelector('#perlaProjectMenu .perla-pm-more')||document.querySelector('details.menu .menu-pop');
  if(menu){const b=entryButton('photoReformMenu');b.addEventListener('click',()=>{b.closest('details').open=false;});menu.append(b);}
  // Tarjeta «Imágenes» de «Entregar» (se vuelve a pintar al cambiar de área: se añade si falta).
  const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#photoReformCard')){const b=entryButton('photoReformCard');const wrap=el('div',{class:'photo-reform-card-entry'});wrap.append(b);el('small',{},wrap,'Propuesta visual ilustrativa sobre una foto (simulación; sin envíos).');card.append(wrap);}};

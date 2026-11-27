@@ -55,7 +55,7 @@ test('escritorio: UX-12 -> NAV3D -> MUE-01 -> FOT-01 -> reabrir',{timeout:480000
     assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.filter(o=>o.id.startsWith('obj_sf')).length),count,'nuevas funciones conservan amueblamiento');
     await capture(page,'04-mueble-propio.png');
     const unchanged=await projectState(page);
-    await page.locator('details.menu > summary').click();await page.locator('#photoReformMenu').click();
+    /* §9: «Reformar desde fotografía» está en el menú de proyecto */await (await require('./helpers-perla-editor.cjs').mostrar(page,'#photoReformMenu')).click();
     await page.locator('#photoReformFile').setInputFiles({name:'qa-sintetica.jpg',mimeType:'image/jpeg',buffer:jpg});
     await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.locator('#photoReformIntent').selectOption('walls');await page.locator('#photoReformFinish').selectOption('sage');
@@ -218,7 +218,7 @@ test('cadena completa escritorio: techo R02-A + armario R03, UX-12, NAV3D, muebl
     const e2=await exts(page);assert.deepEqual({r03:e2.r03,r02a:e2.r02a},{r03:base.r03,r02a:base.r02a},'MUE-01 no toca R03/R02-A');step('MUE-01 crear, cotas, duplicar con foto, conflicto, deshacer');
     // FOT-01: consentimiento, simulación, cancelación, descarte; deslizador y notas limpios; registro; proyecto intacto.
     const before=await projectState(page);
-    await page.locator('details.menu > summary').click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
+    /* §9: «Reformar desde fotografía» está en el menú de proyecto */await (await require('./helpers-perla-editor.cjs').mostrar(page,'#photoReformMenu')).click();await page.locator('#photoReformDialog[open]').waitFor();
     await page.locator('#photoReformFile').setInputFiles({name:'IMG_9999.jpg',mimeType:'image/jpeg',buffer:jpg});await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.locator('#photoReformIntent').selectOption('floor');await page.locator('#photoReformFinish').selectOption('walnut');await page.locator('#photoReformAlternatives').selectOption('2');
     await page.locator('#photoReformSimulate').click();assert.match(await page.locator('#photoReformStatus').innerText(),/Falta tu consentimiento/);

@@ -542,7 +542,7 @@ body.perla .perla-left>#perlaSaved{font-size:0;min-width:28px;padding:0;justify-
 button[data-perla-done="1"],button.btn[data-perla-done="1"]{background:#e9f5ee!important;color:#1d6b3f!important;border-color:#9fd0b2!important;box-shadow:none!important}
 button[data-perla-done="1"]:hover{background:#dcefe3!important}
 body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before,body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
-button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
+button[data-perla-done="1"]:not([data-perla-orig]):not(#pmDownloadJson)::before{content:"✓ " / ""}
 /* UX-312 PERLA · tableta estrecha (761–900 px, también el escritorio con zoom al 200 %): las dos filas caben enteras.
    Deshacer/Rehacer van a la barra del lienzo (como en el móvil); idioma, proyecto y áreas se compactan; «Guardar proyecto
    JSON» queda como icono con su nombre accesible. */
@@ -580,3 +580,54 @@ button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
   body.perla .perla-left #projectsBtn.perla-project{flex:0 1 auto;min-width:36px;overflow:hidden}
   body.perla .perla-left>#guideCopyExample,body.perla .perla-left>#welcomeBtn,body.perla .perla-left>#perlaSaved{flex:none}
 }
+
+/* §9 · Proyecto: nombre + menú ▾ como un único control; acciones con su efecto en la etiqueta. */
+body.perla .perla-projwrap{display:inline-flex;align-items:stretch;border:1px solid var(--perla-line);border-radius:8px;background:#fff}
+body.perla .perla-projwrap>.perla-project{border:0!important;border-radius:8px 0 0 8px}
+body.perla .perla-projmenu>summary{border:0!important;border-left:1px solid var(--perla-line)!important;border-radius:0 8px 8px 0;min-height:36px;padding:0 8px}
+body.perla .perla-projpop{min-width:320px;max-width:min(380px,calc(100vw - 24px));display:grid;gap:2px;padding:6px}
+body.perla .perla-pm-item{display:grid!important;justify-items:start;text-align:left;gap:2px;width:100%;padding:8px 10px;border:0!important;background:none;border-radius:6px;white-space:normal}
+body.perla .perla-pm-item:is(:hover,:focus-visible){background:var(--perla-soft,#f1ece6)}
+body.perla .perla-pm-item b{font-weight:600}body.perla .perla-pm-item small{font-size:12px;color:var(--ink-muted,#5c544a)}
+body.perla .perla-pm-sep{border:0;border-top:1px solid var(--perla-line);margin:4px 0}
+body.perla .perla-pm-more{display:flex;flex-wrap:wrap;gap:4px}body.perla .perla-pm-more>.btn{font-size:12px}
+body.perla .perla-pm-note{margin:6px 4px 2px;font-size:12px;color:var(--ink-muted,#5c544a)}
+body.perla .perla-pm-import{display:flex;gap:4px;flex-wrap:wrap}
+body.perla .perla-copy-moved{display:none!important}
+/* La vuelta a la historia, en línea al principio de la fila 2. */
+body.perla .perla-r2 #storyReturn.sl-return-inline{position:static;transform:none;display:inline-flex;align-items:center;gap:8px;max-width:none;margin:0;padding:2px 6px;box-shadow:none;border:1px solid var(--perla-line);border-radius:8px;background:#fff}
+body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{font-size:12px;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* §9 · Ajustes de maquetación tras la revisión de capturas: nombre ▾ (una sola flecha), menú opaco, fila 2 sin desbordar. */
+body.perla .perla-projwrap>#projectsBtn{order:0}body.perla .perla-projwrap>#perlaProjectMenu{order:1}
+body.perla .perla-left .perla-projwrap #projectsBtn.perla-project::after{display:none}
+body.perla .perla-projmenu .perla-projpop{background:#fff!important;opacity:1;z-index:80;box-shadow:0 12px 32px rgba(40,20,28,.18);backdrop-filter:none}
+@media (max-width:760px){body.perla .perla-projmenu .perla-projpop{position:fixed;left:8px!important;right:8px;top:56px!important;max-height:calc(100dvh - 120px);overflow:auto;min-width:0;max-width:none}}
+body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:200px}
+body.perla .perla-r2 #editHistory .edit-history-scope{display:none}
+body.perla .perla-r2 #editHistory :is(#undo,#redo){font-size:0;min-width:36px;padding:0 8px}
+body.perla .perla-r2 #editHistory #undo::before{content:"↶";font-size:18px}body.perla .perla-r2 #editHistory #redo::before{content:"↷";font-size:18px}
+/* §9 · Con la vuelta a la historia en la fila 2, se ahorra espacio: sin la etiqueta «Vista:» y con el nombre de la variante acotado (completo en el título). */
+body.perla .perla-r2:has(#storyReturn:not([hidden])) #viewSeg>span:first-child:not(.pill),body.perla .perla-r2:has(#storyReturn:not([hidden])) #viewSeg .seg-label,body.perla .perla-r2:has(#storyReturn:not([hidden])) #viewSeg .professional-control-label{display:none}
+body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:150px}
+/* §9 · Duplicados del menú de proyecto: conservan id y manejador, no se muestran dos veces. */
+body.perla .perla-projpop .perla-pm-dup,body.perla .perla-projpop .perla-pm-dup-btn{display:none!important}
+
+/* §9 · Grupos con título en «Más»: acciones junto a la tarea a la que pertenecen. */
+body.perla .perla-more .perla-more-group{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--perla-line);padding-top:4px;margin-top:4px}
+body.perla .perla-more .perla-more-title{margin:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted,#5c544a)}
+body.perla .perla-more .perla-more-group>button{justify-content:flex-start;text-align:start;width:100%;min-height:40px}
+/* §9 · aviso de variante en línea: frase completa aprobada en escritorio ancho; corta en el resto (la completa, en el título). */
+body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-full{display:none}
+@media (min-width:1280px){
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-full{display:inline}
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-short{display:none}
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:520px;white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+}
+body.perla #perlaProjectMenu .perla-pm-join{min-height:44px}
+
+/* §9 · revisión 27/11: Tareas del proyecto. El encabezado no se recorta (título en su propia línea); el panel no tapa el
+   inspector en escritorio; con el panel abierto, «Revisar en 3D» se ofrece una sola vez (en su contexto, dentro del panel). */
+body.perla #guideBar .guide-top{flex-wrap:wrap;row-gap:6px}
+body.perla #guideBar .guide-identity{flex:1 1 100%;min-width:0;width:auto!important}
+body.perla.perla-guide-open #perlaPrimary{display:none!important}
+@media (min-width:1101px){body.perla.perla-guide-open #guideBar:not([hidden]){right:calc(var(--perla-inspector-w,300px) + 14px);width:min(560px,calc(100vw - var(--perla-inspector-w,300px) - 290px))}}

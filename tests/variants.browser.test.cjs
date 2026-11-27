@@ -35,7 +35,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`var
  await removeFurniture(page,mobile);await page.screenshot({path:`${shots}/${name}-3-variant-edited.png`});
  await page.evaluate(()=>FloorPlanApp.persistence.requireSaved());const afterEdit=JSON.parse(await lib(page));assert.equal(JSON.stringify(afterEdit.entries.find(e=>e.id===originalId).project),original);
  // Exported JSON of the variant is a normal, valid project without the local link.
- await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.locator('#exportJson').click();const dl=await pending;
+ await page.locator('#perlaProjectMenu > summary').click();const pending=page.waitForEvent('download');await page.locator('#pmDownloadJson').click();const dl=await pending;
  const chunks=[];for await(const c of await dl.createReadStream())chunks.push(c);const exported=JSON.parse(Buffer.concat(chunks).toString());
  Core.validate(exported);assert.equal(JSON.stringify(exported).includes('variantOf'),false);assert.equal(exported.objects.length,JSON.parse(original).objects.length-1);
  // Comparison with real metrics and Phase A evidence states.
