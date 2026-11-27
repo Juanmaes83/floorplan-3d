@@ -28,7 +28,7 @@ async function boot(vp, camera, { variant = false, welcome = false } = {}) {
 const pause = (p, ms = 900) => REC ? p.waitForTimeout(ms) : null;
 // Fotogramas sintéticos con RELOJ VIRTUAL (33 ms por fotograma, como una cámara a 30 fps): el resultado no depende de la
 // carga de la máquina. El detector solo usa el tiempo que recibe; sus umbrales no cambian.
-const hold = async (page, kind, ms, x = 0.5, dx = 0) => page.evaluate(async ([k, ms, x, dx]) => { const t0 = performance.now(), n = Math.max(1, Math.round(ms / 33)); for (let i = 0; i < n; i++) { RubikGestureLab.feed(RubikGestureLab.synthetic(k, x + dx * i, 0.5), t0 + i * 33); if (i % 6 === 5) await new Promise(r => setTimeout(r, 0)); } }, [kind, ms, x, dx]);
+const hold = async (page, kind, ms, x = 0.5, dx = 0) => page.evaluate(async ([k, ms, x, dx]) => { const t0 = Math.max(performance.now(), (window.__glT || 0) + 33), n = Math.max(1, Math.round(ms / 33)); for (let i = 0; i < n; i++) { RubikGestureLab.feed(RubikGestureLab.synthetic(k, x + dx * i, 0.5), window.__glT = t0 + i * 33); if (i % 6 === 5) await new Promise(r => setTimeout(r, 0)); } }, [kind, ms, x, dx]);
 const save = async (ctx, page, name) => { const v = REC && page.video(); await ctx.close(); if (v) fs.renameSync(await v.path(), path.join(REC, name)); };
 const shot = (page, n) => SHOTS ? page.screenshot({ path: path.join(SHOTS, n) }) : null;
 
@@ -73,7 +73,7 @@ for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390,
     await hold(page, 'fist', 200); await hold(page, 'open', 460, 0.8, -0.03); assert.equal(await page.evaluate(() => RubikGestureLab.orbits), az1, 'el barrido rápido no gira');
     await pause(page, 1600); await shot(page, `gl-3b-giro-${vp.tag}.png`);
     // Perder la mano: pausa sin acción; el punto se conserva y se sigue con botones.
-    await page.evaluate(() => { RubikGestureLab.feed(null, performance.now() + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d');
+    await page.evaluate(() => { RubikGestureLab.feed(null, Math.max(performance.now(), window.__glT || 0) + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d');
     assert.match(await page.locator('#glCamText').innerText(), /Mano perdida · gestos en pausa, no se ha cambiado nada/); await pause(page, 1600);
     // Con una sola revisión el recorrido termina en el 3D; «Antes y después» se pide al elegirlo.
     assert.equal(await page.locator('#glNext').isVisible(), false); await hit(page.locator('#glCompare'));
