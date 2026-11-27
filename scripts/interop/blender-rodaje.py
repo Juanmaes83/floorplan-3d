@@ -1154,7 +1154,8 @@ def main():
                                  "planos": [{k: x.get(k) for k in ("id", "seconds", "frames", "camera")} for x in TL["shots"]], "omisiones": TL.get("omissions", []),
                                  "conciliacion": TL.get("reconcile"), "audio": None}} if TL else {}),
                 "script": {"sha256": hashlib.sha256(HERE.read_bytes()).hexdigest()}})
-    for f in range(f0, f1 + 1):
+    paso = max(1, int(arg("--paso", "1")))  # previa ligera: un fotograma de cada «paso» (mismo guion, misma cámara)
+    for f in range(f0, f1 + 1, paso):
         p = fdir / f"f{f:04d}.png"
         if p.exists() and str(f) in rep["frames"]:
             continue
