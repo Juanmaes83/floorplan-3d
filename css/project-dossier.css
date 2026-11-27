@@ -85,3 +85,5 @@
 .dossier-dialog:not([data-dc-client]) .dc-steps,.dossier-dialog:not([data-dc-client]) .dossier-client .dc-foot{display:none!important}
 .dossier-client .dc-prep-error{margin:6px 0 0;padding:6px 10px;border-radius:8px;background:#fdecea;color:#8a1f11;font-size:.9em}
 .dossier-cover-scope{margin-top:6px;font-size:.85em;color:#41504e}
+.dossier-client .dc-save-state{margin:0 0 8px;padding:8px 10px;border-radius:8px;background:#fff4e5;color:#6b3d00;border:1px solid #f0c27b}
+.dossier-client .dc-save-state p{margin:0 0 6px}

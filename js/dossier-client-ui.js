@@ -10,8 +10,21 @@
   const L = (es, en, zh) => ({ es, en, zh })[lang()] || es;
   const el = (tag, attrs, parent, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); if (text !== undefined) n.textContent = text; parent?.append(n); return n; };
   const all = k => { try { return JSON.parse(localStorage.getItem(k) || '{}') || {}; } catch { return {}; } };
-  const load = () => C.normalize(all(KEY)[app.entryId]);
-  const save = s => { const a = all(KEY); a[app.entryId] = C.normalize(s); try { localStorage.setItem(KEY, JSON.stringify(a)); } catch { } };
+  // V03 (#324): el borrador vive en memoria por proyecto (entryId) durante la sesión, y la escritura se intenta en cada
+  // cambio. Si el navegador la rechaza, el borrador NO se pierde: se sigue mostrando y un aviso persistente dice que no
+  // está guardado, con «Reintentar guardar». Nunca se da por guardado lo que no se pudo escribir.
+  const mem = new Map(); let unsaved = null;
+  const load = () => C.normalize(structuredClone(mem.has(app.entryId) ? mem.get(app.entryId) : all(KEY)[app.entryId]));
+  const write = () => { const a = all(KEY); a[app.entryId] = mem.get(app.entryId); try { localStorage.setItem(KEY, JSON.stringify(a)); unsaved = null; } catch (e) { unsaved = { entryId: app.entryId, reason: e?.name || 'Error' }; } paintSaveState(); return !unsaved; };
+  const save = s => { mem.set(app.entryId, C.normalize(s)); write(); };
+  function paintSaveState() {
+    const host = panel?.querySelector(':scope > .dc-body') || panel; if (!host) return;
+    let box = panel.querySelector('#dcSaveState'); const bad = unsaved && unsaved.entryId === app.entryId;
+    if (!bad) { box?.remove(); return; }
+    if (!box) { box = el('div', { id: 'dcSaveState', class: 'dc-save-state', role: 'alert' }); host.prepend(box); }
+    box.replaceChildren(); el('p', {}, box, L('Sin guardar: este navegador no ha permitido guardar el borrador del dossier. Lo que escribes sigue aquí mientras no cierres ni recargues la página.', 'Not saved: this browser did not allow the dossier draft to be saved. What you write stays here as long as you do not close or reload the page.', '未保存：浏览器不允许保存草稿。关闭或刷新页面前内容仍会保留。'));
+    el('button', { type: 'button', class: 'btn', id: 'dcSaveRetry' }, box, L('Reintentar guardar', 'Retry saving', '重试保存')).onclick = () => { if (write()) window.toast?.(L('Borrador del dossier guardado.', 'Dossier draft saved.', '草稿已保存。'), 3000); };
+  }
   // Ficha de la historia (StoryLayers) del mismo proyecto: la más reciente con nombre.
   const storyClient = () => { const a = all(PKEY); const k = Object.keys(a).reverse().find(k => k.startsWith(app.entryId + '→') && a[k]?.client?.name); return k ? a[k].client : null; };
   let panel = null, rerender = () => { }, draftBox = null, dlg = null, step = 'client', nav = null;
@@ -35,6 +48,7 @@
     if (!panel) return; const s = load(), b = window.FloorPlanBrandUI?.snapshot?.() || null;
     panel.replaceChildren(); paintNav();
     const body = el('div', { class: 'dc-body' }, panel);
+    queueMicrotask(paintSaveState);
     const part = (name, node) => { node.dataset.dcPart = name; return node; };
     const src = part('client', el('div', { class: 'dc-row' }, body));
     const file = el('input', { type: 'file', accept: 'application/json,.json', id: 'dcClientFile', hidden: '' }, src);
@@ -117,7 +131,7 @@
   // Los pasos «Cliente y contacto» y «Nota de presentación» son del estilo Cliente; los demás estilos abren en «Revisar».
   let wasClient = null;
   function onStyle(st) { if (!dlg) return; const client = st === 'client'; dlg.toggleAttribute('data-dc-client', client); if (!client) step = 'review'; else if (wasClient !== true) step = 'client'; wasClient = client; dlg.dataset.dcStep = step; if (panel) render(); }
-  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, get preparing() { return preparing; }, get prepError() { return prepError; }, go, onStyle,
+  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, get preparing() { return preparing; }, get unsaved() { return !!(unsaved && unsaved.entryId === app.entryId); }, get prepError() { return prepError; }, go, onStyle,
     mount(dialog, after, onChange) { dlg = dialog; dialog.dataset.dcStep = step;
       nav = el('ol', { class: 'dc-steps', 'aria-label': L('Pasos del dossier', 'Dossier steps', '步骤') }); dialog.querySelector('.dossier-tools').after(nav);
       panel = document.createElement('section'); panel.className = 'dossier-client'; panel.id = 'dossierClient'; after.after(panel); rerender = () => { onChange(); }; },

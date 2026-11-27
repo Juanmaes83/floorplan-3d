@@ -70,3 +70,26 @@ test('V02 · control de una planta: el ejemplo sigue diciendo «Planta única»'
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanDossier);
  await page.getByRole('button',{name:'Entregar',exact:true}).click();await page.evaluate(()=>window.FloorPlanDossier.open('technical'));
  const ct=await page.locator('.dossier-cover').innerText();assert.match(ct,/PLANTA\s+Planta única/i);assert.equal(await page.locator('.dossier-cover-scope').count(),0);});
+
+for(const vp of [{width:1440,height:900,tag:'escritorio'},{width:390,height:844,tag:'movil'}])
+test('V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura falla; reintentar lo guarda · '+vp.tag,{timeout:240000},async t=>{
+ const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.width<1100,hasTouch:vp.width<1100});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',r=>{const u=r.request().url();return u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:')?r.continue():r.abort();});
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanDossierClientUI);
+ await page.locator('#workArea-deliver').click();await page.evaluate(()=>window.FloorPlanDossier.open('client'));await page.waitForSelector('#dossierDialog[open]');
+ // El navegador rechaza SOLO la clave del borrador D3 (como en la auditoría).
+ await page.evaluate(()=>{const real=Storage.prototype.setItem;window.__blockD3=true;Storage.prototype.setItem=function(k,v){if(window.__blockD3&&k==='rubik-dossier-client-v1')throw new DOMException('QA: almacenamiento indisponible','QuotaExceededError');return real.call(this,k,v);};});
+ const name=page.locator('#dc-name');await name.fill('Cliente QA sintético');
+ const notice=page.locator('#dcSaveState');await notice.waitFor();assert.match(await notice.innerText(),/Sin guardar: este navegador no ha permitido guardar el borrador/);
+ assert.equal(await page.evaluate(()=>window.FloorPlanDossierClientUI.unsaved),true);
+ assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('rubik-dossier-client-v1')||'{}')[FloorPlanApp.entryId]?.client?.name||null),null,'nada se da por guardado');
+ // Ir a «Nota» y volver: el nombre sigue y el aviso también.
+ await page.getByRole('button',{name:'Siguiente: nota de presentación'}).click();await page.locator('#dc-note').fill('Nota QA');
+ await page.getByRole('button',{name:'1 · Cliente y contacto'}).click();
+ assert.equal(await page.locator('#dc-name').inputValue(),'Cliente QA sintético');await page.locator('#dcSaveState').waitFor();
+ // La escritura vuelve a funcionar: «Reintentar guardar» guarda nombre y nota, y el aviso desaparece.
+ await page.evaluate(()=>{window.__blockD3=false;});await page.locator('#dcSaveRetry').click();
+ await page.waitForFunction(()=>!document.querySelector('#dcSaveState'));assert.equal(await page.evaluate(()=>window.FloorPlanDossierClientUI.unsaved),false);
+ const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rubik-dossier-client-v1'))[FloorPlanApp.entryId]);
+ assert.equal(stored.client.name,'Cliente QA sintético');assert.equal(stored.note,'Nota QA');
+ assert.deepEqual(errors,[]);});
