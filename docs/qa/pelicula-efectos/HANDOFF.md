@@ -89,6 +89,25 @@ Red del entorno: `ovc.catastro.meh.es`, `servicios.idee.es`, `www.ign.es` y `www
 **Proyecto de demostración:** `3662001TF3136S` es la referencia pública de verificación del proveedor; sirve de prueba técnica,
 no como emplazamiento del vídeo. Pendiente: elegir/preparar el proyecto de demostración con emplazamiento confirmado.
 
+## Proyecto de demostración sobre entorno real (decisión del propietario, 27/11 noche)
+- **Autorizado:** emplazamiento de demostración con MDT05 y PNOA exportables y una **vivienda ficticia de RUBIK** situada allí,
+  identificada como **«Proyecto de demostración sobre entorno real»**. La parcela catastral solo comprueba la ubicación en RUBIK.
+- **Emplazamiento elegido:** parcela rústica **`11039A02800004`** (provincia de Cádiz, término 11039), 15 014 m², **sin
+  construcciones** (ladera abierta con arbolado disperso), junto al casco urbano y con el vial de acceso por el norte.
+  Terreno MDT05 en sesión 48,9–155,3 m (recuadro con margen); ortofoto PNOA disponible. Elegida por relieve legible, contexto
+  reconocible (pueblo y vial) y por no contener ninguna edificación que pueda confundirse con la vivienda ficticia.
+- Evidencia pública: `emplazamiento/demo-entorno-pnoa.jpg` (solo ortofoto con su atribución; **sin** el contorno catastral,
+  que es geometría restringida y queda en RUBIK).
+- MP4 pedido (> 20 s): reconocer el emplazamiento → seguir el acercamiento → cruzar la **puerta real del modelo** → continuidad
+  hasta el interior. Informe con fuentes, atribuciones y evidencia de posición, escala y orientación.
+- Comprobación adicional: exportación habitual con un proyecto sin emplazamiento (prueba de igualdad byte a byte ya en
+  `tests/scene-delivery.test.cjs`; falta la comprobación en navegador).
+
+## Corrección MDT05 · candidata a integración independiente
+`js/ign-mdt05-terrain-provider.js` + prueba `tests/terrain-provider.test.cjs` («recuadro fuera de la malla de 5 m»), commit
+`6c88d08e`. Evidencia: sonda en Chromium contra el WCS real (antes «invalid-terrain-response», después «Disponible», 139–189 m)
+en `emplazamiento/`. Se puede llevar sola a master (un archivo y su prueba), sin el resto de esta rama.
+
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
 - 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
