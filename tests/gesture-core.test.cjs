@@ -1,7 +1,7 @@
 'use strict';
 // Gesture Labs §6 · núcleo puro: dos gestos, sin disparos involuntarios, mano perdida sin acción.
 const test = require('node:test'), assert = require('node:assert/strict');
-const G = require('../labs/gesture-presentacion/gesture-core.js');
+const G = require('../gesture-lab/gesture-core.js');
 const run = (g, seq) => { const ev = []; for (const [lm, t] of seq) ev.push(...g.frame(lm, t).events); return ev; };
 const frames = (kind, t0, n, dt = 33, x = 0.5, dx = 0) => Array.from({ length: n }, (_, i) => [G.syntheticHand(kind, x + dx * i, 0.5), t0 + i * dt]);
 

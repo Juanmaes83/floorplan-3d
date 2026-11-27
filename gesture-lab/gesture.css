@@ -32,3 +32,15 @@ dialog.gl[data-side="before"] .gl-rev[data-side="after"],dialog.gl[data-side="af
 .gl-help{margin:0;font-size:.8rem;color:#555}
 @media (max-width:600px){dialog.gl{padding:10px;width:calc(100vw - 8px)}.gl-bar .btn{flex:1 1 40%}}
 dialog.gl>*{flex:none}
+.gl-intro{display:none;gap:8px}dialog.gl[data-intro] .gl-intro{display:grid}
+dialog.gl[data-intro] .gl-stage,dialog.gl[data-intro] .gl-kind,dialog.gl[data-intro] .gl-calls,dialog.gl[data-intro] .gl-bar:not(.gl-intro .gl-bar),dialog.gl[data-intro] .gl-teach,dialog.gl[data-intro] .gl-steps{display:none}
+.gl-intro-proj{font-weight:600;margin:0}.gl-intro-revs{margin:0;padding-left:18px}
+.gl-teach{margin:0;padding:6px 10px;border-radius:8px;background:#eef5f4;color:#184e52;font-size:.9rem}
+.gl-ack{margin:0;padding:6px 10px;border-radius:8px;background:#1e9e5a;color:#fff;font-weight:600}
+body.gl-active #professionalWorkspace{visibility:hidden}
+/* Revisión 27/11: cabecera propia (no hereda la fila global de <header>), Asistente en flujo al final (no tapa controles)
+   y sin lanzador flotante detrás del diálogo. */
+dialog.gl>header.gl-head{display:block;position:static;height:auto;padding:0;border:0;background:none;box-shadow:none}
+dialog.gl>#assistantAccess{position:static!important;margin-top:4px}
+body.gl-active .gl-launch{display:none}
+@media (max-width:600px){dialog.gl.gl-see-through{max-height:52vh}.gl-steps li{font-size:.78rem;padding:2px 8px}}

@@ -3,7 +3,7 @@
 // Gestos SINTÉTICOS (RubikGestureCore.syntheticHand) inyectados por el gancho del laboratorio: reproducen el recorrido sin
 // webcam física. La cámara se sustituye por una pista de canvas (permiso concedido) o por un rechazo NotAllowedError.
 const test = require('node:test'), assert = require('node:assert/strict'), path = require('node:path'), fs = require('node:fs');
-const K = require('./ux07/kit.cjs');
+const K = require('./ux07/kit.cjs'), { accion } = require('./helpers-perla-entregar.cjs');
 let env; test.before(async () => { env = await K.start({ authority: true }); }); test.after(async () => { await env?.stop(); });
 const REC = process.env.GL_REC, SHOTS = process.env.GL_SHOTS;
 async function boot(vp, camera) {
@@ -28,32 +28,47 @@ const save = async (ctx, page, name) => { const v = REC && page.video(); await c
 for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390, height: 844, tag: 'movil' }]) {
   test('recorrido con gestos sintéticos y controles equivalentes · ' + vp.tag, { timeout: 240000 }, async () => {
     const { ctx, page, errors } = await boot(vp, 'granted');
-    await page.locator('#gestureLabOpen').click(); await page.waitForSelector('#gestureLab[open]'); await pause(page, 1600);
+    // Acceso guiado real: Entregar → P1 Presentación 3D → «Presentar con gestos · laboratorio».
+    const entry0 = await page.evaluate(() => FloorPlanApp.entryId);
+    await page.locator('#workArea-deliver').click(); await page.waitForSelector('#professionalWorkspace [data-entrega-code="P1"] #glFromP1', { state: 'attached' }); await pause(page, 1200);
+    await (await accion(page, '#glFromP1')).click(); await page.waitForSelector('#gestureLab[open]'); await pause(page, 1600);
+    assert.equal(await page.evaluate(() => RubikGestureLab.origin), 'P1');
+    // Inicio: identifica proyecto y las dos revisiones; dos formas de empezar.
+    const intro = await page.locator('#glIntro').innerText();
+    assert.match(intro, /Proyecto: «/); assert.match(intro, /Antes · «.+»/); assert.match(intro, /Después · «.+».* · \d+ cambios? guardados?/);
+    assert.equal(await page.locator('#glStartButtons').isVisible(), true); assert.equal(await page.locator('#glStartCam').isVisible(), true);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-0-inicio-${vp.tag}.png`) });
+    await page.locator('#glStartCam').click(); await page.waitForFunction(() => RubikGestureLab.camera.state === 'on'); assert.deepEqual(await page.evaluate(() => RubikGestureLab.camera.tracks), ['live']); await pause(page, 1200);
     assert.equal(await page.evaluate(() => RubikGestureLab.step), 'plan'); assert.ok(await page.locator('#glStage svg').count() > 0, 'el plano guardado');
     assert.match(await page.locator('#glKind').innerText(), /Imagen del plano guardado · revisión/);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-1-plano-${vp.tag}.png`) });
-    // Cámara: solo por decisión explícita; pistas vivas mientras está activa.
-    await page.locator('#glCam').click(); await page.waitForFunction(() => RubikGestureLab.camera.state === 'on'); assert.deepEqual(await page.evaluate(() => RubikGestureLab.camera.tracks), ['live']);
+    // El gesto de este paso se enseña en el momento de usarlo.
+    assert.match(await page.locator('#glTeach').innerText(), /mano abierta, palma a la cámara, quieta 1 segundo/);
     // Gesto 1: mano abierta sostenida → 3D de la misma revisión.
-    await hold(page, 'open', 1200); await page.waitForFunction(() => RubikGestureLab.step === '3d'); await page.waitForFunction(() => FloorPlanApp.viewMode === '3d', null, { timeout: 30000 }); await pause(page, 2500);
+    await hold(page, 'open', 1200); await page.waitForFunction(() => RubikGestureLab.step === '3d'); assert.match(await page.locator('#glAck').innerText(), /✓ Gesto detectado: mano abierta → siguiente/); await page.waitForFunction(() => FloorPlanApp.viewMode === '3d', null, { timeout: 30000 }); await pause(page, 2500);
     assert.match(await page.locator('#glKind').innerText(), /Visor 3D interactivo de la misma revisión/);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-2-3d-${vp.tag}.png`) });
     // Perder la mano: pausa sin acción; la vista se conserva.
-    await page.evaluate(() => { RubikGestureLab.feed(null, performance.now() + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d');
+    await page.evaluate(() => { RubikGestureLab.feed(null, performance.now() + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d'); assert.match(await page.locator('#glCamText').innerText(), /Mano perdida · gestos en pausa, no se ha cambiado nada/); await pause(page, 1600);
     // Continuidad con controles normales desde el mismo punto: botón «Siguiente».
     await page.locator('#glNext').click(); await page.waitForFunction(() => RubikGestureLab.step === 'compare'); await pause(page, 1400);
     await page.waitForFunction(() => /Superficie útil/.test(document.querySelector('#glCalls').textContent));
     const calls = await page.locator('#glCalls').innerText(); assert.match(calls, /Superficie útil: [\d,.]+ → [\d,.]+ m²/); assert.match(calls, /Piezas de mobiliario: \d+ → \d+ ud\./); assert.match(calls, /fuente: RUBIK/); assert.match(calls, /estado: guardado/);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-3-antes-${vp.tag}.png`) });
     // Gesto 2: deslizar con la mano cerrada → después; teclado A → antes.
-    await hold(page, 'fist', 300, 0.7); await hold(page, 'fist', 320, 0.7, -0.05); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'after'); await pause(page, 1600);
+    await hold(page, 'fist', 300, 0.7); await hold(page, 'fist', 320, 0.7, -0.05); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'after'); assert.match(await page.locator('#glAck').innerText(), /deslizar → después/); assert.match(await page.locator('#glTeach').innerText(), /puño cerrado y deslizar/); await pause(page, 1600);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-4-despues-${vp.tag}.png`) });
     assert.ok(!/[\u3400-\u9fff]/.test(await page.locator('#gestureLab').innerText()), 'sin chino visible en el laboratorio abierto');
     await page.keyboard.press('a'); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'before'); await pause(page);
     await page.locator('#glSide').click(); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'after'); await pause(page);
     // Salir: la cámara se apaga (pistas terminadas) y el proyecto guardado no cambia.
+    assert.equal(await page.locator('#glNext').isVisible(), false, 'en el último paso la acción principal es comparar'); assert.equal(await page.locator('#glExit').innerText(), 'Volver a P1');
     await page.locator('#glExit').click(); await page.waitForFunction(() => !document.querySelector('#gestureLab').open);
     assert.deepEqual(await page.evaluate(() => window.__glTracks.map(t => t.readyState)), ['ended']);
+    // Vuelta al punto de origen: Entregar con la ficha P1 y el proyecto activo de antes.
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#professionalWorkspace')).visibility === 'visible' && !document.body.classList.contains('gl-active'));
+    assert.equal(await page.locator('#professionalWorkspace [data-entrega-code="P1"]').first().isVisible(), true, 'de vuelta en Entregar → P1');
+    assert.equal(await page.evaluate(() => FloorPlanApp.entryId), entry0, 'el proyecto activo vuelve a ser el de antes'); await pause(page, 1800);
     const srcs = await page.evaluate(() => RubikGestureLab.log.filter(e => e.type === 'step' || e.type === 'side').map(e => e.source)); for (const s of ['gesture', 'button', 'keyboard']) assert.ok(srcs.includes(s), 'acción por ' + s);
     assert.ok(!/[㐀-鿿]/.test(await page.locator('body').innerText()), 'sin chino visible'); assert.deepEqual(errors, []);
     await save(ctx, page, `gl-recorrido-${vp.tag}.webm`);
@@ -61,7 +76,17 @@ for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390,
 }
 test('permiso de cámara denegado: aviso y la presentación sigue con botones y teclado', { timeout: 120000 }, async () => {
   const { ctx, page, errors } = await boot({ width: 1440, height: 900 }, 'denied');
-  await page.locator('#gestureLabOpen').click(); await page.locator('#glCam').click();
+  await page.locator('#gestureLabOpen').click(); await page.locator('#glStartCam').click();
   await page.waitForFunction(() => RubikGestureLab.camera.state === 'denied'); assert.match(await page.locator('#glCamText').innerText(), /denegado · sigue con los botones/);
+  assert.match(await page.locator('#glTeach').innerText(), /Sin cámara: sigue con los botones o el teclado, desde este mismo punto/);
   await page.keyboard.press('ArrowRight'); await page.waitForFunction(() => RubikGestureLab.step === '3d'); assert.deepEqual(errors, []); await ctx.close();
+});
+
+test('sin variante con cambios: el inicio ofrece ir a P10 y explica cómo volver', { timeout: 120000 }, async () => {
+  const ctx = await env.browser.newContext({ viewport: { width: 390, height: 844 } }); const page = await ctx.newPage(); const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto(env.base + '?gesture-lab=1'); await page.waitForFunction(() => document.documentElement.dataset.editorReady === 'true' && !!window.RubikGestureLab);
+  if (await page.locator('#welcomeDialog').evaluate(d => d.open).catch(() => false)) await page.keyboard.press('Escape');
+  await page.evaluate(() => RubikGestureLab.open({ origin: 'P1' })); await page.waitForSelector('#glToP10');
+  assert.match(await page.locator('#glIntro').innerText(), /hace falta una variante guardada/); assert.match(await page.locator('#glIntro').innerText(), /vuelve a Entregar → P1 Presentación 3D/);
+  await page.locator('#glToP10').click(); await page.waitForFunction(() => !document.querySelector('#gestureLab').open); assert.deepEqual(errors, []); await ctx.close();
 });

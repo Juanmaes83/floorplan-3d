@@ -42,6 +42,8 @@
   const steps = el('ol', { class: 'gl-steps', 'aria-label': 'Pasos' }, head);
   const STEP_TXT = { plan: 'Plano', '3d': 'Vista 3D', compare: 'Antes y después' };
   for (const k of G.STEPS) el('li', { 'data-step': k }, steps, STEP_TXT[k]);
+  // Inicio guiado: identifica proyecto y revisiones y deja elegir cómo empezar (botones o cámara).
+  const intro = el('section', { class: 'gl-intro', id: 'glIntro' }, dlg);
   const stage = el('div', { class: 'gl-stage', id: 'glStage' }, dlg);
   const kind = el('p', { class: 'gl-kind', id: 'glKind' }, dlg);
   const calls = el('ul', { class: 'gl-calls', id: 'glCalls' }, dlg);
@@ -53,16 +55,27 @@
   const exitB = el('button', { type: 'button', class: 'btn', id: 'glExit' }, bar, 'Salir');
   const hud = el('div', { class: 'gl-hud', role: 'status', 'aria-live': 'polite' }, dlg);
   const dot = el('span', { class: 'gl-dot', 'data-cam': 'off' }, hud), camText = el('span', { id: 'glCamText' }, hud, 'Cámara apagada · usa los botones o el teclado');
-  const help = el('p', { class: 'gl-help', id: 'glHelp' }, dlg, 'Gestos (opcionales): mano abierta quieta un momento = siguiente · mano cerrada y deslizar a un lado = antes/después. Teclado: → siguiente · ← anterior · A/D antes/después · Esc salir.');
+  const teach = el('p', { class: 'gl-teach', id: 'glTeach', 'aria-live': 'polite' }, dlg);
+  const help = el('p', { class: 'gl-help', id: 'glHelp' }, dlg, 'Teclado: → siguiente · ← anterior · A/D antes/después · Esc salir.');
+  const ack = el('p', { class: 'gl-ack', id: 'glAck', role: 'status', 'aria-live': 'assertive', hidden: '' }, dlg);
+  const STATE_TXT = { OPEN: 'mano abierta detectada', FIST: 'puño detectado', HOLDING: 'mano detectada, sin gesto' };
+  let ackT = 0; const confirmGesture = t => { ack.textContent = '✓ Gesto detectado: ' + t; ack.hidden = false; clearTimeout(ackT); ackT = setTimeout(() => { ack.hidden = true; }, 1800); note('ack', { t }); };
+  // Cada gesto se enseña en el paso en que sirve.
+  const TEACH = { plan: 'Gesto para seguir: mano abierta, palma a la cámara, quieta 1 segundo → Siguiente (vista 3D).', '3d': 'Gesto para seguir: mano abierta quieta 1 segundo → Siguiente (antes y después).', compare: 'Gesto para comparar: puño cerrado y deslizar rápido a un lado → antes / después. Retirar la mano no cambia nada.' };;
   const video = el('video', { playsinline: '', muted: '', hidden: '' }, dlg);
 
   function setSide(side) { if (P.step !== 'compare') return; const s = side || (P.side === 'before' ? 'after' : 'before'); if (s === 'after' ? P.toggle('right') : P.toggle('left')) render(); }
+  let showIntro = false, origin = null, entry0 = null;
   function render() {
     title.textContent = pair ? `Presentar: ${nm2(pair.before.name)}` : 'Presentar con gestos';
     for (const li of steps.children) li.toggleAttribute('data-on', li.dataset.step === P.step);
-    prevB.disabled = P.step === 'plan'; nextB.disabled = P.step === 'compare'; sideB.hidden = P.step !== 'compare';
+    prevB.disabled = P.step === 'plan'; nextB.hidden = P.step === 'compare'; sideB.hidden = P.step !== 'compare'; sideB.classList.toggle('primary', P.step === 'compare');
+    exitB.textContent = origin === 'P1' ? 'Volver a P1' : 'Salir';
     sideB.textContent = P.side === 'before' ? 'Ver después' : 'Ver antes'; sideB.setAttribute('aria-pressed', String(P.side === 'after'));
     stage.replaceChildren(); calls.replaceChildren(); dlg.dataset.step = P.step; dlg.dataset.side = P.side;
+    dlg.toggleAttribute('data-intro', showIntro); renderIntro();
+    teach.textContent = stream ? TEACH[P.step] : 'Cámara apagada: avanza con los botones. Si activas la cámara, aquí verás el gesto de este paso.';
+    if (showIntro) { kind.textContent = ''; return; }
     if (!pair) { kind.textContent = 'Hace falta una variante guardada con algún cambio (Entregar → P10 «Explicar el cambio» → Crear variante).'; return; }
     const rn = room ? nm2(room.name) : null;
     if (P.step === 'plan') {
@@ -91,6 +104,26 @@
     const name = c => { const e = find(c); const n = e && e.name ? nm2(e.name) : ''; return n && !/[\u3400-\u9fff]/.test(n) ? `«${n}»` : ''; };
     return cmp.changes.slice(0, 3).map(c => `${KIND[c.entity] || c.entity} ${name(c)} ${CHG[c.change] || c.change}`.replace(/\s+/g, ' ').trim()).join(' · ') + (cmp.changes.length > 3 ? ' …' : '');
   }
+  function renderIntro() {
+    intro.replaceChildren(); if (!showIntro) return;
+    if (!pair) {
+      el('p', {}, intro, `Proyecto: «${nm2(app.project?.name || 'sin nombre')}». Para comparar hace falta una variante guardada con algún cambio.`);
+      const go = el('button', { type: 'button', class: 'btn primary', id: 'glToP10' }, intro, 'Ir a P10 · crear la variante');
+      el('p', { class: 'gl-help' }, intro, 'Crea la variante, cambia algo y espera «✓ Guardado». Después vuelve a Entregar → P1 Presentación 3D → «Presentar con gestos».');
+      go.onclick = () => { dlg.close(); const r = document.querySelector('#professionalWorkspace [data-route="story-layers"]'); if (r) r.click(); else window.FloorPlanProfessionalUI?.open?.('deliver'); note('to-p10'); };
+      return;
+    }
+    el('p', { class: 'gl-intro-proj' }, intro, `Proyecto: «${nm2(pair.before.name)}»`);
+    const ul = el('ul', { class: 'gl-intro-revs' }, intro);
+    el('li', {}, ul, `Antes · ${revLabel('before')}`); el('li', {}, ul, `Después · ${revLabel('after')} · ${cmp.counts.total} cambio${cmp.counts.total === 1 ? '' : 's'} guardado${cmp.counts.total === 1 ? '' : 's'}`);
+    el('p', {}, intro, 'Recorrido: 1 · plano → 2 · vista 3D de esa revisión → 3 · antes y después. Puedes cambiar de botones a cámara en cualquier momento sin perder el punto.');
+    const row = el('div', { class: 'gl-bar' }, intro);
+    const b1 = el('button', { type: 'button', class: 'btn primary', id: 'glStartButtons' }, row, 'Empezar con botones');
+    const b2 = el('button', { type: 'button', class: 'btn', id: 'glStartCam' }, row, 'Activar cámara');
+    el('p', { class: 'gl-help' }, intro, 'La cámara es opcional: la imagen se procesa en este equipo y no se graba ni se guarda.');
+    b1.onclick = () => begin('buttons'); b2.onclick = () => { begin('camera'); startCam(); };
+  }
+  function begin(how) { showIntro = false; P.go('plan'); note('begin', { how }); render(); nextB.focus(); }
   function mark(w, id) { const n = w.querySelector(`[data-room-id="${id}"], [data-id="${id}"]`); if (n) n.classList.add('gl-mark'); }
   async function show3d(on) {
     try { if (on) { if (app.entryId !== pair.before.id) app.openEntry(pair.before.id); await setView('3d'); dlg.classList.add('gl-see-through');
@@ -105,12 +138,12 @@
 
   // ── Webcam (opcional, explícita) ──
   let stream = null, hands = null, token = 0, running = false;
-  const camState = (s, t) => { dot.dataset.cam = s; camText.textContent = t; camB.textContent = s === 'on' || s === 'lost' ? 'Apagar cámara' : 'Activar cámara (opcional)'; note('camera', { state: s }); };
+  const camState = (s, t) => { dot.dataset.cam = s; camText.textContent = t; camB.textContent = s === 'on' || s === 'lost' ? 'Apagar cámara' : 'Activar cámara (opcional)'; note('camera', { state: s }); if (!showIntro) teach.textContent = (s === 'on' || s === 'lost') ? TEACH[P.step] : s === 'denied' ? 'Sin cámara: sigue con los botones o el teclado, desde este mismo punto.' : 'Cámara apagada: avanza con los botones. Si activas la cámara, aquí verás el gesto de este paso.'; };
   function onGesture(lm, t) {
     const r = det.frame(lm, t);
-    for (const e of r.events) { if (e.type === 'next') next('gesture'); else if (e.type === 'swipe') { setSide(e.dir === 'right' ? 'after' : 'before'); note('side', { side: P.side, source: 'gesture' }); }
-      else if (e.type === 'lost') camState('lost', 'Sin mano · gestos en pausa; la vista se conserva y los botones siguen'); else if (e.type === 'found') camState('on', 'Cámara activa · gesto: ' + r.state); }
-    if (stream && !r.events.length && dot.dataset.cam === 'on') camText.textContent = 'Cámara activa · gesto: ' + r.state;
+    for (const e of r.events) { if (e.type === 'next') { if (showIntro) begin('gesture'); else next('gesture'); confirmGesture('mano abierta → siguiente'); } else if (e.type === 'swipe') { setSide(e.dir === 'right' ? 'after' : 'before'); confirmGesture('deslizar → ' + (P.side === 'after' ? 'después' : 'antes')); note('side', { side: P.side, source: 'gesture' }); }
+      else if (e.type === 'lost') camState('lost', 'Mano perdida · gestos en pausa, no se ha cambiado nada; vuelve a mostrar la mano o sigue con los botones'); else if (e.type === 'found') camState('on', 'Cámara activa · ' + (STATE_TXT[r.state] || 'buscando la mano')); }
+    if (stream && !r.events.length && dot.dataset.cam === 'on') camText.textContent = 'Cámara activa · ' + (STATE_TXT[r.state] || 'buscando la mano');
   }
   async function startCam() {
     const my = ++token; camB.disabled = true; camState('starting', 'Pidiendo permiso de cámara…');
@@ -128,12 +161,21 @@
   function stopCam() { token++; running = false; if (stream) { stream.getTracks().forEach(t => { try { t.stop(); } catch { } }); stream = null; } video.srcObject = null; det.reset(); if (dot.dataset.cam !== 'denied') camState('off', 'Cámara apagada · usa los botones o el teclado'); }
   camB.onclick = () => stream || dot.dataset.cam === 'starting' ? stopCam() : startCam();
   exitB.onclick = () => dlg.close();
-  dlg.addEventListener('close', async () => { stopCam(); if (P.step === '3d') await show3d(false); note('exit'); });
+  dlg.addEventListener('close', async () => { stopCam(); if (P.step === '3d') await show3d(false); document.body.classList.remove('gl-active');
+    try { if (entry0 && app.entryId !== entry0) app.openEntry(entry0); } catch { }
+    note('exit', { origin }); if (origin === 'P1') window.dispatchEvent(new CustomEvent('rubik:gesture-lab-exit', { detail: { origin } })); });
   document.addEventListener('visibilitychange', () => { if (document.hidden && stream) stopCam(); });
 
-  function open() { if (!load()) { P.go('plan'); } else P.go('plan'); camState('off', 'Cámara apagada · usa los botones o el teclado'); render(); dlg.showModal(); nextB.focus(); note('open', { pair: pair ? [pair.before.id, pair.after.id] : null }); }
+  function open(opts) { origin = opts?.origin || 'launcher'; entry0 = app.entryId; load(); P.go('plan'); showIntro = true; document.body.classList.add('gl-active');
+    camState('off', 'Cámara apagada · usa los botones o el teclado'); render(); dlg.showModal(); (intro.querySelector('button') || nextB).focus(); note('open', { origin, pair: pair ? [pair.before.id, pair.after.id] : null }); }
+  // Acceso guiado (solo con ?gesture-lab=1): Entregar → P1 Presentación 3D → «Presentar con gestos». La ficha muestra las
+  // acciones de su tarjeta, así que basta con añadir el botón a la tarjeta P1 cuando Entregar se pinta.
+  function injectP1() { const card = document.querySelector('#professionalWorkspace [data-entrega-code="P1"]'); if (!card || card.querySelector('#glFromP1')) return;
+    const host = card.querySelector('button:not(.perla-card-selector)')?.parentElement || card.querySelector('.body') || card;
+    const b = el('button', { type: 'button', class: 'btn', id: 'glFromP1', 'data-route': 'gesture-lab' }, null, 'Presentar con gestos · laboratorio'); host.append(b); b.onclick = () => open({ origin: 'P1' }); }
+  new MutationObserver(() => injectP1()).observe(document.body, { childList: true, subtree: true }); injectP1();
   // Lanzador del laboratorio (solo con ?gesture-lab=1). Integración prevista: Entregar → Presentación (ver README del laboratorio).
-  const launch = el('button', { type: 'button', class: 'btn gl-launch', id: 'gestureLabOpen' }, document.body, 'Presentar con gestos · laboratorio'); launch.onclick = open;
+  const launch = el('button', { type: 'button', class: 'btn gl-launch', id: 'gestureLabOpen' }, document.body, 'Presentar con gestos · laboratorio'); launch.onclick = () => open({ origin: 'launcher' });
   // Gancho de ensayo: alimenta fotogramas SINTÉTICOS (rotulado; no simula una cámara real).
-  window.RubikGestureLab = { open, feed: (lm, t) => onGesture(lm, t), get step() { return P.step; }, get side() { return P.side; }, get camera() { return { state: dot.dataset.cam, tracks: stream ? stream.getTracks().map(t => t.readyState) : [] }; }, get log() { return log.slice(); }, synthetic: G.syntheticHand };
+  window.RubikGestureLab = { open, begin, get intro() { return showIntro; }, get origin() { return origin; }, feed: (lm, t) => onGesture(lm, t), get step() { return P.step; }, get side() { return P.side; }, get camera() { return { state: dot.dataset.cam, tracks: stream ? stream.getTracks().map(t => t.readyState) : [] }; }, get log() { return log.slice(); }, synthetic: G.syntheticHand };
 })();

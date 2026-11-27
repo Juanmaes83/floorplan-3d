@@ -60,26 +60,61 @@ Además:
 Reproducir: abre `/?gesture-lab=1`, pulsa «Presentar con gestos · laboratorio» y después «Activar cámara (opcional)». Hace
 falta HTTPS o localhost, y una variante guardada con algún cambio (Entregar → P10).
 
-## Prueba con webcam física (revisión del propietario)
-URL: https://floorplan-3d-c0qx1ey77-juanma-espinosas-projects.vercel.app/?gesture-lab=1 (commit `4375c07a`; HTTPS, necesario
-para la cámara). Portátil con webcam y Chrome o Edge; buena luz de frente; mano a 40–80 cm de la cámara.
-1. **Preparar dos revisiones:** Entregar → P10 «Crear variante», retirar un mueble, esperar «✓ Guardado» y volver.
-2. Pulsar «Presentar con gestos · laboratorio» (abajo a la izquierda) → «Activar cámara (opcional)» → **Permitir**.
-   Debe verse el punto de estado en verde y el texto de cámara activa.
-3. **Gesto real · siguiente:** mano abierta, palma hacia la cámara, quieta ~1 s → pasa de «1 · Plano» a «2 · Vista 3D». Repetir →
-   «3 · Antes y después». Comprobar que **un** gesto sostenido avanza **un solo** paso.
-4. **Gesto real · antes/después:** en el paso 3, puño cerrado y deslizar en horizontal (~20 cm, rápido) → cambia a «después»;
-   en sentido contrario → «antes». Un movimiento lento o vertical no debe hacer nada.
-5. **Pérdida de seguimiento:** sacar la mano del encuadre (o taparla) > 1 s → punto ámbar, «mano perdida»; no cambia nada.
-   Volver a mostrarla → punto verde y los gestos siguen.
-6. **Continuar con botones:** con la cámara activa, usar «← Anterior», «Siguiente →», «Ver después/antes» y las teclas
-   ← → / A D: el recorrido es el mismo.
-7. **Cierre de cámara:** pulsar «Salir» (o Escape). Debe apagarse la luz de la webcam en 1–2 s y desaparecer el icono de cámara
-   de la pestaña. Repetir con «Apagar cámara» sin salir, y cambiando de pestaña: en ambos casos la luz se apaga.
-8. **Permiso denegado:** en una ventana privada, «Bloquear» → aviso rojo; la presentación sigue con botones y teclado.
+## Revisión 27/11 · despliegue y acceso guiado
+- **Despliegue:** `.vercelignore` excluye `labs/`, por eso el acceso no aparecía en Vercel. Los tres recursos se mueven a
+  `gesture-lab/` (solo `gesture-core.js`, `gesture-ui.js` y `gesture.css`); el resto de `labs/` sigue sin publicarse. Siguen
+  cargándose **solo** con `?gesture-lab=1`.
+- **Acceso guiado:** Entregar → ficha **P1 Presentación 3D** → «Presentar con gestos · laboratorio» (solo con el parámetro).
+  - El inicio identifica el proyecto y las dos revisiones: nombre, fecha de guardado y número de cambios. Ofrece «Empezar con
+    botones» (primaria) y «Activar cámara».
+  - Sin una variante con cambios guardados, ofrece «Ir a P10 · crear la variante» y explica cómo volver.
+- **Cada gesto se enseña en su paso:** franja «Gesto para seguir / Gesto para comparar».
+  - Al detectar un gesto aparece «✓ Gesto detectado: …» en verde.
+  - Al perder la mano aparece «Mano perdida · gestos en pausa, no se ha cambiado nada».
+  - Sin cámara: «sigue con los botones o el teclado, desde este mismo punto».
+- **Una acción primaria por vista:** «Siguiente →» en los pasos 1 y 2 y «Ver después/antes» en el 3. «Volver a P1» devuelve a
+  Entregar con la ficha P1 y restaura el proyecto activo. El acceso del Asistente queda al final, sin tapar controles.
+- Pruebas: 11/11 (núcleo 7 + navegador 4). Vídeos `video/gl-recorrido-{escritorio,movil}.mp4` desde P1 hasta «Volver a P1».
+  Capturas `gl-0-inicio-*` … `gl-4-despues-*`.
 
-Anota por paso: OK / falla / falso disparo (cuántos). Falsos disparos o un gesto que necesite más de 2 intentos son motivo para
+## Prueba con la cámara frontal del móvil (revisión del propietario)
+**URL:** la Preview del SHA indicado en el handoff, con `/?gesture-lab=1`. Necesita HTTPS y Chrome en Android o Safari en iOS.
+Pon el móvil de pie, apoyado, a unos 40–60 cm, con luz de frente y la mano dentro del encuadre de la cámara frontal.
+1. **Prepara las dos revisiones:** Entregar → P10 → Crear variante → retira un mueble → espera «✓ Guardado» → vuelve.
+2. Entregar → **P1 Presentación 3D** → «Presentar con gestos · laboratorio». Comprueba que el inicio nombra el proyecto y las
+   dos revisiones con su fecha.
+3. «Activar cámara» → Permitir.
+   - **Señal:** punto verde y «Cámara activa · …»; con la mano a la vista, «mano abierta detectada» o «puño detectado».
+4. **Gesto 1 · siguiente:** mano abierta, palma hacia la pantalla, dedos separados, **quieta 1 segundo**.
+   - **Señal de detección:** franja verde «✓ Gesto detectado: mano abierta → siguiente» y el paso pasa a «2 · Vista 3D».
+   - Repite para llegar a «3 · Antes y después».
+   - Mantener la mano abierta más tiempo **no** avanza otro paso. Para repetir, cierra la mano y vuelve a abrirla.
+5. **Gesto 2 · antes/después:** puño cerrado y desliza en horizontal unos 15–20 cm en menos de medio segundo.
+   - **Señal:** «✓ Gesto detectado: deslizar → después», y el rótulo del plano pasa a «mostrando: DESPUÉS».
+   - En sentido contrario vuelve a «antes».
+6. **Retirar la mano no dispara nada:**
+   - en el paso 1 o 2, empieza a abrir la mano y sácala del encuadre antes del segundo; o deja el puño quieto y retíralo
+     hacia abajo;
+   - **señal:** punto ámbar y «Mano perdida · gestos en pausa, no se ha cambiado nada»;
+   - el paso y el lado no cambian (compáralos con los resaltados de la cabecera);
+   - vuelve a mostrar la mano y el punto vuelve a verde.
+7. **Seguir con botones sin cambiar de punto:** con la cámara activa o perdida, pulsa «← Anterior», «Siguiente →» o «Ver
+   antes/después». El recorrido sigue desde el mismo paso.
+8. **Apagar al salir:** pulsa «Volver a P1». La cámara se apaga en 1–2 s (desaparece el indicador del sistema) y vuelves a la
+   ficha P1. Repite con «Apagar cámara» y cambiando de app: en ambos casos la cámara se apaga.
+9. **Permiso denegado:** en otra pestaña, «Bloquear». Debe aparecer un punto rojo y «Permiso de cámara denegado · sigue con los
+   botones o el teclado», y el recorrido sigue con los botones.
+
+Anota por paso: OK, falla o falso disparo (cuántos). Un falso disparo o un gesto que necesite más de dos intentos obliga a
 ajustar umbrales antes de integrar.
+
+### Qué está comprobado y qué no
+| Comprobado con entrada **sintética** (Playwright, sin cámara física) | Pendiente de validar con **cámara física** |
+|---|---|
+| lógica de los dos gestos (núcleo, 7 pruebas): un disparo por gesto sostenido, apertura breve sin disparo, deslizar con espera, lento o vertical ignorado, mano perdida sin acción | clasificación real de MediaPipe con la cámara frontal: luz, distancia y fondo |
+| recorrido completo en la app (escritorio y 390×844): P1 → inicio → gesto → 3D → mano perdida → botones → deslizar → «Volver a P1»; pista de cámara simulada que queda `ended` al salir; permiso denegado | falsos disparos en uso real y comodidad del segundo de espera |
+| sin texto chino visible con el laboratorio abierto | el indicador de cámara del sistema se apaga en el móvil |
+| | rendimiento del modelo en el móvil (fluidez y temperatura) |
 
 ## Dónde se integraría en Entregar
 Como acción de la ficha **P1 «Presentación 3D»**: «Presentar con gestos (opcional)», junto a «Preparar presentación». Abriría
