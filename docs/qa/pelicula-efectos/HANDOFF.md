@@ -111,3 +111,13 @@ en `emplazamiento/`. Se puede llevar sola a master (un archivo y su prueba), sin
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
 - 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
+- 27/11 22:35 · Fase 1.1 interfaz: núcleo `js/pelicula-efectos-core.js` (`1c641b97`, 4/4), Home + Entregar → Vídeo
+  `js/pelicula-efectos-ui.js` (`8d9bfd24`), guion en el paquete (`d03a8943`, scene-delivery 25/25 con entorno y núcleo).
+  Sonda local en Chromium: Home con la ficha tras «Dibujo vivo»; Entregar con P12 tras P1; requisitos reales (Desde el paisaje
+  pide emplazamiento y deshabilita la confirmación); previa del guion completo sobre la planta; estimación «no disponible» sin
+  medición; cancelar vuelve sin iniciar nada; 0 errores; sin chino visible (se corrigió el nombre del proyecto). Captura:
+  `entregar-video-previa-1440.png`.
+  **Límites:** previa esquemática 2D (ritmo y montaje; la cámara 3D se juzga en las previas de Blender de fase 1.4). La
+  confirmación descarga el paquete para Blender; el render y la recuperación del MP4/informe ocurren fuera del navegador.
+  Pendiente: prueba de navegador permanente (escritorio y móvil, ES/EN) y kit de rodaje con los tres guiones.
+
