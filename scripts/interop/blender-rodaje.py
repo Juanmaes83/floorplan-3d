@@ -855,15 +855,27 @@ def main():
     a = sys.argv[sys.argv.index("--") + 1:]; pos = []; i = 0
     while i < len(a):
         if a[i].startswith("--"):
-            i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales") else 2; continue
+            i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales", "--con-guion") else 2; continue
         pos.append(a[i]); i += 1
     prep, pkg, out = (Path(p).resolve() for p in pos[:3])
-    pname = arg("--profile", "revision"); prof = PROFILES[pname]
+    # «Tu proyecto cobra vida»: el guion elegido en RUBIK › Entregar › Vídeo (rubik-pelicula-guion.json en el ZIP) manda sobre
+    # efecto, planos, fotogramas y perfil. Sin guion, el kit funciona como siempre.
+    GUION = None; gp = arg("--guion") or (str(Path(pos[1]).resolve() / "rubik-pelicula-guion.json") if flag("--con-guion") else None)
+    if gp:
+        gpp = Path(gp).resolve(); GUION = json.loads(gpp.read_bytes()); GUION["_sha256"] = hashlib.sha256(gpp.read_bytes()).hexdigest()
+        if GUION.get("format") != "rubik-sota.pelicula-script": raise SystemExit("rubik-pelicula-guion.json: formato inesperado")
+    pname = arg("--profile", (GUION or {}).get("profile") or "revision"); prof = PROFILES[pname]
     res = [int(v) for v in arg("--res", prof["res"]).split("x")]; samples = int(arg("--samples", prof["samples"]))
     shot = arg("--shot", "aereo"); light = arg("--light", "dia"); fps = int(arg("--fps", "24")); secs = float(arg("--seconds", "2"))
     nframes = max(1, int(round(fps * secs)))
     TL = None
-    if shot == "pelicula":  # §11 «Película del proyecto» · formato «Del plano a la vivienda»: la cronología manda
+    EFECTOS_KIT = {"maqueta-abierta"}  # coreografías disponibles en este kit; las demás se declaran pendientes (sin inventar)
+    if GUION:
+        if GUION["effect"] not in EFECTOS_KIT:
+            raise SystemExit(f"El efecto «{GUION['effect']}» aún no tiene coreografía en este kit (pendiente); no se renderiza nada.")
+        shot = "pelicula"; fps = int(GUION["fps"]); nframes = int(GUION["frames"])
+        TL = {"output": {"fps": fps, "frames": nframes, "seconds": GUION["seconds"]}, "shots": GUION["shots"], "_sha256": GUION["_sha256"], "guion": GUION}
+    elif shot == "pelicula":  # §11 «Película del proyecto» · formato «Del plano a la vivienda»: la cronología manda
         tlp = Path(arg("--timeline")).resolve(); TL = json.loads(tlp.read_bytes()); TL["_sha256"] = hashlib.sha256(tlp.read_bytes()).hexdigest()
         fps = int(TL["output"]["fps"]); nframes = int(TL["output"]["frames"])
     fr = arg("--frames"); f0, f1 = (int(x) for x in fr.split("-")) if fr else (0, nframes - 1)
@@ -1080,8 +1092,9 @@ def main():
                 "equipment": {"device": "CPU", "cpu": cpu_model(), "logicalCpus": os.cpu_count(), "ramGb": ram_gb(), "gpu": None,
                               "blender": bpy.app.version_string, "cycles": bpy.app.version_string, "os": platform.platform()},
                 "package": {"manifestSha256": hashlib.sha256((pkg / "manifest.json").read_bytes()).hexdigest()},
-                **({"pelicula": {"modulo": "Película del proyecto", "formato": "Del plano a la vivienda", "timelineSha256": TL["_sha256"],
-                                 "planos": [{k: x[k] for k in ("id", "seconds", "frames", "camera")} for x in TL["shots"]], "omisiones": TL["omissions"],
+                **({"guion": ({"efecto": GUION["effect"], "perfil": pname, "segundos": GUION["seconds"], "fotogramas": GUION["frames"], "revision": GUION.get("revision"), "sha256": GUION["_sha256"]} if GUION else None),
+                "pelicula": {"modulo": "Película del proyecto", "formato": ("Maqueta abierta" if GUION else "Del plano a la vivienda"), "timelineSha256": TL["_sha256"],
+                                 "planos": [{k: x.get(k) for k in ("id", "seconds", "frames", "camera")} for x in TL["shots"]], "omisiones": TL.get("omissions", []),
                                  "conciliacion": TL.get("reconcile"), "audio": None}} if TL else {}),
                 "script": {"sha256": hashlib.sha256(HERE.read_bytes()).hexdigest()}})
     for f in range(f0, f1 + 1):

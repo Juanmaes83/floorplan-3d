@@ -76,6 +76,7 @@
     const total = s.frames * spf;
     return { available: true, seconds: Math.round(total), low: Math.round(total * 0.8), high: Math.round(total * 1.3), factors: [...factors, { key: 'secondsPerFrame', value: spf, source: 'measured' }] };
   }
-  const PROFILES = Object.freeze([{ id: 'revision-720', res: '1280x720', samples: 12 }, { id: 'entrega-1080', res: '1920x1080', samples: 32 }, { id: 'home-1440', res: '2560x1440', samples: 48 }]);
+  // Los mismos perfiles que el kit de rodaje (scripts/interop/blender-rodaje.py · PROFILES): el guion nombra uno de ellos.
+  const PROFILES = Object.freeze([{ id: 'revision', res: '1280x720', samples: 16 }, { id: 'entrega1440', res: '2560x1440', samples: 32 }, { id: 'entrega4k', res: '3840x2160', samples: 24 }]);
   return { VERSION, FPS, EFFECTS, PROFILES, byId, requirements, script, estimate };
 });

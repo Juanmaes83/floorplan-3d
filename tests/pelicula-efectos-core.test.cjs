@@ -14,4 +14,7 @@ test('requisitos sobre el proyecto real: el ejemplo cumple Pieza a pieza y Maque
  const vacio={rooms:[],walls:[],openings:[]};assert.equal(E.requirements('pieza-a-pieza',vacio).ready,false);});
 test('estimación: sin medición real dice «no disponible»; con medición da rango y factores',()=>{
  const s=E.script('maqueta-abierta'),p=E.PROFILES[0];assert.deepEqual(E.estimate(s,p,{}).available,false);
- const r=E.estimate(s,p,{'revision-720':30});assert.equal(r.seconds,720*30);assert.ok(r.low<r.seconds&&r.high>r.seconds);assert.equal(r.factors.at(-1).source,'measured');});
+ const r=E.estimate(s,p,{'revision':30});assert.equal(r.seconds,720*30);assert.ok(r.low<r.seconds&&r.high>r.seconds);assert.equal(r.factors.at(-1).source,'measured');});
+test('los perfiles son los del kit de rodaje (mismos id, resolución y muestras)',()=>{
+ const py=require('node:fs').readFileSync(require('node:path').join(__dirname,'../scripts/interop/blender-rodaje.py'),'utf8');const m=JSON.parse(/^PROFILES = (\{.*\})$/m.exec(py)[1]);
+ for(const p of E.PROFILES){assert.equal(m[p.id].res,p.res,p.id);assert.equal(m[p.id].samples,p.samples,p.id);}});

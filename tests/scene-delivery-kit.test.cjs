@@ -65,7 +65,7 @@ test('M03 · an incomplete kit is never shipped half: no kit files, the README s
 
 test('M03 · the kit sources are the repository files and keep their recognisable headers', () => {
   const SPDX = '# SPDX-License-Identifier: GPL-3.0-or-later';
-  const heads = { render: SPDX, verify: SPDX, profiles: '{', sh: '#!/bin/sh', bat: '@echo off', licence: 'RUBIK SOTA · Licencia', copying: '                    GNU GENERAL PUBLIC LICENSE', rodaje: SPDX, recursos: '{', rodar: '#!/bin/sh', rodarBat: '@echo off' };
+  const heads = { render: SPDX, verify: SPDX, profiles: '{', sh: '#!/bin/sh', bat: '@echo off', licence: 'RUBIK SOTA · Licencia', copying: '                    GNU GENERAL PUBLIC LICENSE', rodaje: SPDX, recursos: '{', rodar: '#!/bin/sh', rodarBat: '@echo off', entorno: SPDX };
   for (const [k, rel] of Object.entries(D.KIT_SOURCES)) assert.ok(fs.readFileSync(path.join(root, rel), 'utf8').startsWith(heads[k]), rel);
   const prof = JSON.parse(fs.readFileSync(path.join(root, D.KIT_SOURCES.profiles), 'utf8')); assert.deepEqual(Object.keys(prof.profiles), ['preview', 'review', 'delivery']);
 });

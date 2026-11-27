@@ -20,12 +20,12 @@
   const SCRIPT = 'rubik_blender_prepare.py'; // copia exacta de scripts/interop/blender-scene-import.py (preparación completa)
   // M03 · kit: nombre en el ZIP ← origen en el repositorio (copias exactas, huella en el manifiesto).
   const KIT = Object.freeze({ render: 'rubik_blender_render.py', verify: 'rubik_blender_verify.py', profiles: 'rubik_render_profiles.json', sh: 'renderizar.sh', bat: 'RENDERIZAR-windows.bat', licence: 'LICENCIA-SCRIPTS.txt', copying: 'COPYING-GPL-3.0.txt',
-    rodaje: 'rubik_blender_rodaje.py', recursos: 'rubik_rodaje_recursos.json', rodar: 'rodar.sh', rodarBat: 'RODAR-windows.bat' });
+    rodaje: 'rubik_blender_rodaje.py', recursos: 'rubik_rodaje_recursos.json', rodar: 'rodar.sh', rodarBat: 'RODAR-windows.bat', entorno: 'rubik_blender_entorno.py' });
   const KIT_SOURCES = Object.freeze({ render: 'scripts/interop/blender-scene-render.py', verify: 'scripts/interop/blender-scene-reopen.py', profiles: 'scripts/interop/blender-render-profiles.json',
     sh: 'scripts/interop/blender-kit/renderizar.sh', bat: 'scripts/interop/blender-kit/RENDERIZAR-windows.bat',
     licence: 'scripts/interop/blender-kit/LICENCIA-SCRIPTS.txt', copying: 'scripts/interop/blender-kit/COPYING-GPL-3.0.txt',
     rodaje: 'scripts/interop/blender-rodaje.py', recursos: 'scripts/interop/rodaje-recursos.json', rodar: 'scripts/interop/blender-kit/rodar.sh',
-    rodarBat: 'scripts/interop/blender-kit/RODAR-windows.bat' });
+    rodarBat: 'scripts/interop/blender-kit/RODAR-windows.bat', entorno: 'scripts/interop/blender-entorno.py' });
   const ROOMS = 'rubik-estancias.json', REFERENCE = 'referencia-rubik.png', MATERIALS = 'rubik-materiales.json'; // MATERIALS: Material Tokens 1.0.0 (opcional)
   const SITE = 'rubik-entorno.json', ORTHO = 'rubik-ortofoto.jpg', FILM = 'rubik-pelicula-guion.json'; // «Desde el paisaje» (solo con emplazamiento) y guion del efecto elegido (Entregar → Vídeo)
   const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, MATERIALS, SITE, ORTHO, FILM, ...Object.values(KIT)]);

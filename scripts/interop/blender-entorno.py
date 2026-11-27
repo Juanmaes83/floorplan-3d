@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Juan Manuel Espinosa Galant · Rubik Sota
 """«Desde el paisaje» · importa el entorno de la «Escena para Blender» (rubik-entorno.json + rubik-ortofoto.jpg).
 
 Rama claude/pelicula-efectos (fuera de #324). Lo llaman el kit de rodaje o la preparación; también se puede usar suelto:
