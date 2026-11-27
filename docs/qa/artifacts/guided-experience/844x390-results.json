@@ -24,36 +24,38 @@
   ],
   "layout": {
     "width": 844,
+    "height": 390,
+    "perla": true,
     "overflow": false,
     "stage": {
       "x": 0,
-      "y": 184,
+      "y": 96,
       "width": 844,
-      "height": 182,
-      "top": 184,
+      "height": 270,
+      "top": 96,
       "right": 844,
       "bottom": 366,
       "left": 0
     },
     "bar": {
-      "x": 0,
-      "y": 61,
-      "width": 844,
-      "height": 123,
-      "top": 61,
-      "right": 844,
-      "bottom": 184,
-      "left": 0
+      "x": 8,
+      "y": 112,
+      "width": 560,
+      "height": 208,
+      "top": 112,
+      "right": 568,
+      "bottom": 320,
+      "left": 8
     },
     "primary": {
-      "x": 627,
-      "y": 136,
-      "width": 196,
+      "x": 158.046875,
+      "y": 255,
+      "width": 197.171875,
       "height": 37,
-      "top": 136,
-      "right": 823,
-      "bottom": 173,
-      "left": 627
+      "top": 255,
+      "right": 355.21875,
+      "bottom": 292,
+      "left": 158.046875
     }
   },
   "errors": []

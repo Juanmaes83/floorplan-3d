@@ -97,3 +97,4 @@ Escritorio 1440×900 y móvil 390×844. Script: `tests/zz-rec9b.browser.test.cjs
   (a) «Descargar ⤓» se queda en la fila 2 (con su estado «hecho») y la aserción de §9 se limita a importar, o
   (b) la descarga vive solo en el menú y UX-BETA-001/U11 se adaptan al menú, perdiendo el estado visible en la fila.
   Recomendación: (a). Es la acción más repetida y su confirmación visual ya está aprobada.
+  **Histórico · decidido por el propietario (27/11):** la descarga vive solo en Proyecto ▾ con «Proyecto JSON descargado»; aplicado en `2e23820a`.

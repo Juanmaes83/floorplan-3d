@@ -2,6 +2,24 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## Revisión humana consolidada (27/11, mañana) · sustituye los mensajes parciales anteriores
+**Aprobado:** §5.3 corte 2 (Preview `852e0f44`; aprobación `32de044c`; regresión 153/153 `e31a9264`). Siguen vigentes §5.2 BC3,
+§5.1 Visita 3D, §7.1 Muros con cota, StoryLayersV1 §§7.2·7.3·8.3 y tapicería v3. Altura libre manual = tarea aparte; conservar
+«Ver estancia». Aprobar una Preview ≠ integrar ni producción.
+**Pendiente de revisión humana:** D3, P2/FOT-01, §9 final, Gesture Labs, vídeo Blueprint §11.
+
+| # | Bloque | Rama | Qué pide la revisión | Estado |
+|---|---|---|---|---|
+| 1 | Estándar visual Entregar | `claude/entregar-asistencia` | D3 y P2 con componentes de Entregar/Analizar/Presupuestar: una primaria vino, secundarias, «Volver» al origen, pie/Asistente sin tapar | pendiente |
+| 2 | Cuadrícula P8→P9→P10 | `claude/entregar-asistencia` | orden visual y de teclado; plantilla común; miniatura P10; tarjeta = estado + siguiente acción, pasos al detalle; capturas antes/después | pendiente |
+| 3 | D3 Dossier | `claude/entregar-asistencia` | «Cliente y contacto» · «Nota de presentación» · «Revisar el dossier»; PDF primaria al revisar; «Preparar imágenes» y vuelta sin perder lo escrito; 11 estancias vs 13 espacios (miradores) aclarado; refs. internas solo en Técnica; vídeo escritorio y móvil | pendiente |
+| 4 | P2 / FOT-01 | `claude/entregar-asistencia` | estado «5 vistas preparadas» + acción real «Ver imágenes y opciones» (ratón, teclado, táctil); separar Vistas y Reformar desde fotografía; casos sin cortar; ejemplo ≠ simulación; D3 y P2 en una Preview; regresión photo-project + perla-* | pendiente |
+| 5 | §9 | `claude/cabecera-proyectos` | JSON solo en Proyecto ▾ (hecho en `2e23820a`); sin JSON en «Exportar diseño»; quitar «(paso)» y la revisión duplicada; encabezado de Tareas recortado; vídeos JSON y P10; Distancia conocida 360/390; regresión del SHA final; G-02/P16 con evidencia; disyuntiva de descarga = histórica | en curso |
+| 6 | §6 Gesture | `claude/gesture-labs` | `.vercelignore` excluye `labs/` (el acceso no aparece en Vercel): publicar solo los recursos del laboratorio; captura del botón en la Preview; acceso guiado Entregar → P1; «Empezar con botones»/«Activar cámara»; enseñar cada gesto; vídeo móvil; guía de prueba con cámara frontal; sintético vs físico | en curso |
+| 7 | §11 Blueprint | `claude/rodaje-cierre-1440` | 3 imágenes de la misma vivienda (plano alineado, volumen, interior con acabados del ZIP) enlazadas al report; luego clip 720p sin sonido; MP4 2 s 1440p aparte; render largo en su ventana | pendiente (CPU) |
+| 8 | Home y oferta | por crear | muestra de estilos con original RUBIK vs ilustrativas; propuesta comercial por profesión (dolor→demo→entregable→beneficio), oferta por proyecto, estudios recurrentes, premium; ejemplo de reforma; medición como plan de prueba; precios a revisión | en cola |
+Examen de cinco proyectos: al final, sobre la candidata común.
+
 ## Ramas y worktrees (todo publicado: SHA local = remoto, comprobado con `git fetch` antes de escribir esto)
 | Bloque | Rama | SHA | Worktree local | Estado |
 |---|---|---|---|---|
