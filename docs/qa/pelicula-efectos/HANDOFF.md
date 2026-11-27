@@ -70,6 +70,25 @@
 - Red: añadidos al entorno `servicios.idee.es` y `www.catastro.hacienda.gob.es` (antes, 403 del proxy).
 - Cola: Maqueta abierta y Pieza a pieza avanzan en paralelo; la preparación de este caso no las bloquea.
 
+## Emplazamiento · servicios reales probados en Chromium desde la interfaz (27/11, 22:10)
+Sonda `emplazamiento/sonda-territorio-real.cjs`: ejemplo → Analizar · Contexto territorial → fuente «Catastro · consulta por
+referencia catastral» → `3662001TF3136S` → Guardar → Cargar terreno → Cargar ortofoto. 0 errores de página.
+| Capa | Servicio | Resultado | Licencia (política RUBIK) |
+|---|---|---|---|
+| Parcela | `ovc.catastro.meh.es/INSPIRE/wfsCP.aspx` (GetParcel, EPSG::25830) | **200 XML**; parcela válida en la tarjeta: referencia, EPSG:25830, fuente, fecha, atribución y polígono | **restricted** → solo para comprobar el emplazamiento en RUBIK; **fuera del ZIP y del vídeo** |
+| Terreno | `servicios.idee.es/wcs-inspire/mdt` (MDT05, 5 m) | **corregido** (ver abajo): disponible, cotas 139–189 m | CC BY 4.0 · verificada → exportable con atribución |
+| Ortofoto | `www.ign.es/wms-inspire/pnoa-ma` | **200 JPEG**, disponible en sesión | IGN/CNIG compatible CC BY 4.0 · verificada → exportable con atribución «Sistema Cartográfico Nacional» |
+Capturas: `emplazamiento/territorio-3662001TF3136S-parcela.png`, `…-terreno-ortofoto.png`.
+
+**Fallo real corregido (también en master):** `js/ign-mdt05-terrain-provider.js` pedía al WCS el recuadro exacto de la parcela; si
+no cae en la malla de 5 m, el IGN remuestrea y responde con `dx 5,0016 / dy 4,94` en vez de `cellsize 5`, y RUBIK lo rechazaba
+(«invalid-terrain-response»). Ahora el recuadro se amplía a la malla nativa (contiene el pedido). Prueba nueva en
+`tests/terrain-provider.test.cjs` (6/6) y terrain-core 9/9 en conjunto. Candidata a llevarse a master por separado.
+Red del entorno: `ovc.catastro.meh.es`, `servicios.idee.es`, `www.ign.es` y `www.catastro.hacienda.gob.es` permitidos.
+
+**Proyecto de demostración:** `3662001TF3136S` es la referencia pública de verificación del proveedor; sirve de prueba técnica,
+no como emplazamiento del vídeo. Pendiente: elegir/preparar el proyecto de demostración con emplazamiento confirmado.
+
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
 - 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
