@@ -11,3 +11,7 @@
 CteEPBD y visorepbd son candidatos posteriores al disponer de demanda y consumos. pyBuildingEnergy se reserva para simulación horaria. Los repositorios de Catastro consultados sirven como referencias de formatos y conectores. Aprovechar el proveedor oficial ya integrado para España y evaluar Catastro GPS si se solicita alcance internacional o foral. El [caso Villa Linde](villa-linde/aceptacion/CIERRE-VILLA-LINDE.md) muestra qué datos ya se pueden extraer y dónde falta cobertura.
 
 No se fijan precios, cupos, métricas de ahorro ni compromisos de certificación. Antes de decidir, medir el tiempo hasta la entrega utilizable y los datos que el profesional debe volver a introducir.
+
+## Continuidad
+
+La [guía de implementación y aceptación](GUIA-IMPLEMENTACION-SERVICIOS-TECNICOS.md) define el alcance de cada entrega, la secuencia de trabajo, las rutas de código, los casos de prueba y los criterios de cierre.
