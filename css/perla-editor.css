@@ -624,3 +624,10 @@ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-full{display:none}
  body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:520px;white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 }
 body.perla #perlaProjectMenu .perla-pm-join{min-height:44px}
+
+/* §9 · revisión 27/11: Tareas del proyecto. El encabezado no se recorta (título en su propia línea); el panel no tapa el
+   inspector en escritorio; con el panel abierto, «Revisar en 3D» se ofrece una sola vez (en su contexto, dentro del panel). */
+body.perla #guideBar .guide-top{flex-wrap:wrap;row-gap:6px}
+body.perla #guideBar .guide-identity{flex:1 1 100%;min-width:0;width:auto!important}
+body.perla.perla-guide-open #perlaPrimary{display:none!important}
+@media (min-width:1101px){body.perla.perla-guide-open #guideBar:not([hidden]){right:calc(var(--perla-inspector-w,300px) + 14px);width:min(560px,calc(100vw - var(--perla-inspector-w,300px) - 290px))}}

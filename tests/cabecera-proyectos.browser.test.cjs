@@ -4,7 +4,7 @@
    rehacer, progreso, tareas, presentar, acción del paso). Cada entrada del menú acciona su flujo real:
    Abrir otro proyecto → biblioteca · Subir plano o proyecto → selector de archivo · Crear copia → proyecto con id propio ·
    Crear variante → variante vinculada con la MISMA vuelta que P10 («Volver a la historia», una sola vuelta) ·
-   Descargar proyecto JSON → descarga. «Revisar en 3D (paso)» ≠ «Escena 3D». Teclado y móvil. Capturas HDR_SHOTS. */
+   Descargar proyecto JSON → descarga. «Revisar en 3D» (marca el paso) ≠ «Escena 3D» (solo cambia la vista). Teclado y móvil. Capturas HDR_SHOTS. */
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
 const K=require('./ux07/kit.cjs');
 const shots=process.env.HDR_SHOTS||null;if(shots)fs.mkdirSync(shots,{recursive:true});
@@ -72,9 +72,16 @@ test('§9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada
   const cut=await page.evaluate(()=>[...document.querySelectorAll('.perla-r2 button, .perla-r2 summary')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden').filter(b=>{const r=b.getBoundingClientRect();return r.right>innerWidth+0.5||r.left<-0.5;}).map(b=>b.textContent.trim()||b.id));
   assert.deepEqual(cut,[],'ningún control de la fila 2 queda cortado con la vuelta a la historia');
   if(shots)await page.screenshot({path:shots+'/2-variante-una-vuelta-1440.png'});
-  // «Revisar en 3D (paso)» ≠ «Escena 3D».
+  // «Revisar en 3D» (marca el paso) ≠ «Escena 3D» (solo cambia la vista); sin sufijo «(paso)».
   const prim=await page.locator('#perlaPrimary').evaluate(b=>({t:b.textContent,title:b.title,hidden:b.hidden}));
-  if(!prim.hidden&&/3D/.test(prim.t)){assert.equal(prim.t,'Revisar en 3D (paso)');assert.match(prim.title,/marca como hecho el paso «Revisa la distribución en 3D»/);}
+  if(!prim.hidden&&/3D/.test(prim.t)){assert.equal(prim.t,'Revisar en 3D');assert.match(prim.title,/marca como hecho el paso «Revisa la distribución en 3D»/);}
+  // Tareas del proyecto abierto: una sola «Revisar en 3D» visible; el encabezado del panel no se recorta ni tapa el inspector.
+  await page.locator('#perlaTasks').click();await page.waitForSelector('#guideBar:not([hidden])');await page.waitForTimeout(300);
+  const rev3d=await page.evaluate(()=>[...document.querySelectorAll('button')].filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden'&&/^Revisar en 3D/.test(b.textContent.trim())).length);
+  assert.ok(rev3d<=1,'como mucho una acción «Revisar en 3D» visible con el panel abierto ('+rev3d+')');
+  const idw=await page.locator('#guideBar .guide-identity').evaluate(e=>({w:e.getBoundingClientRect().width,sw:e.scrollWidth}));assert.ok(idw.w>200&&idw.sw<=idw.w+1,'el encabezado de Tareas se lee entero');
+  const ins=await page.evaluate(()=>{const g=document.querySelector('#guideBar').getBoundingClientRect(),i=document.querySelector('.perla-inspector-head')?.parentElement;if(!i||!i.getClientRects().length)return 'sin-inspector';const r=i.getBoundingClientRect();return g.right<=r.left+1;});assert.equal(ins,true,'el panel de Tareas no tapa el inspector (y el inspector existe)');
+  if(shots)await page.screenshot({path:shots+'/4-tareas-1440.png'});await page.locator('#perlaTasks').click();
   assert.doesNotMatch(await page.evaluate(()=>document.querySelector('header').innerText),CJK);assert.deepEqual(w.errors,[]);
  }finally{await ctx.close();}
 });
