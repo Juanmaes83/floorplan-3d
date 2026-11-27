@@ -60,6 +60,37 @@ Además:
 Reproducir: abre `/?gesture-lab=1`, pulsa «Presentar con gestos · laboratorio» y después «Activar cámara (opcional)». Hace
 falta HTTPS o localhost, y una variante guardada con algún cambio (Entregar → P10).
 
+## Decisiones del propietario (27/11) · objetivos de producto y criterios de aceptación
+**1 · Experiencia inicial: desenrollar el plano y ver la vivienda en 3D.**
+- El cliente abre la presentación y ve el plano **enrollado**. Con un gesto (o con un control visible) lo **despliega** y lo
+  puede leer.
+- Con otro gesto intencional pasa al **3D de esa misma vivienda** y reconoce en 3D una estancia o un elemento que acaba de ver
+  en planta.
+- Se valora la transición completa y cómo ayuda a entender el espacio.
+- Funciona con **una sola revisión guardada**. La variante solo se pide al elegir «Antes y después».
+- Cámara opcional y controles visibles en ambos pasos. Al perder la mano se conserva el punto y se puede seguir. Al salir se
+  apaga la cámara.
+
+**2 · Presencia en RUBIK: el profesional entiende qué puede ofrecer.**
+- **Home:** «Presentación con gestos» tiene presencia propia junto a los módulos destacados, con el estándar visual de RUBIK.
+  Quien llega por primera vez entiende qué podrá hacer y encuentra una demo con la vivienda de ejemplo.
+- **Entregar:** ficha propia y fácil de localizar, que explica:
+  - qué experiencia se prepara;
+  - los requisitos de cada modo;
+  - qué verá el cliente.
+
+  P1 puede ofrecer un acceso contextual a la misma experiencia. Se distingue lo disponible para revisión de lo que sigue en
+  ensayo.
+
+**Evidencia para aprobar:**
+- Preview identificada por SHA.
+- Capturas de Home y Entregar.
+- Grabación continua en móvil desde la entrada, pasando por el plano desplegado y el paso a 3D, hasta la salida. Debe mostrar
+  qué encuentra el profesional y qué experimenta el cliente.
+- Prueba sintética y prueba con cámara física separadas.
+
+El propietario aprobará con la cámara frontal del móvil.
+
 ## Revisión 27/11 · despliegue y acceso guiado
 - **Despliegue:** `.vercelignore` excluye `labs/`, por eso el acceso no aparecía en Vercel. Los tres recursos se mueven a
   `gesture-lab/` (solo `gesture-core.js`, `gesture-ui.js` y `gesture.css`); el resto de `labs/` sigue sin publicarse. Siguen
