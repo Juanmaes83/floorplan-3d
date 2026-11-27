@@ -44,3 +44,4 @@ dialog.gl>header.gl-head{display:block;position:static;height:auto;padding:0;bor
 dialog.gl>#assistantAccess{position:static!important;margin-top:4px}
 body.gl-active .gl-launch{display:none}
 @media (max-width:600px){dialog.gl.gl-see-through{max-height:52vh}.gl-steps li{font-size:.78rem;padding:2px 8px}}
+@media (max-width:760px){.gl-launch{bottom:calc(var(--dock-h,64px) + 40px)}}
