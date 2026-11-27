@@ -2,7 +2,7 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
-## ▶ ESTADO · 27/11/2026, 22:20 (leer primero; el bloque de las 20:15 queda como histórico)
+## ▶ ESTADO · 27/11/2026, 21:50 (leer primero; el bloque de las 20:15 queda como histórico)
 
 **#324** (`claude/integracion-cabecera-entregar`, borrador) · HEAD **`ad928d43`** (código = `2f1c0ee4`):
 - `ac2fe1ba` V09 verificado integrado en Entregar (5 tamaños, sin recorte; ejemplo, no Villa Linde).
@@ -12,15 +12,15 @@ Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude
   grabación opcional `AUD_REC`/`AUD_VP` en la prueba (aserciones intactas; 8/8 sin grabar).
 - `2f1c0ee4` acceso del Asistente que tapa el pie de diálogos en móvil = **anterior a #324** (master), mejora propia.
 - **En curso:** regresión completa del SHA final `scratchpad/integ-regr-final.sh` → `integ-regr-final.log` (+ `master-final.log`
-  con g02, presentation y visual-studio en `dacb5d39`). Lanzada con límite de 2 h: si se corta, retomar los archivos que falten.
+  con g02, presentation y visual-studio en `dacb5d39`). Relanzada desligada (setsid) sobre `ad928d43` a las 21:47; el reloj del contenedor se reinició ~21:30 (uptime).
 - Después: CI + Preview de `2f1c0ee4`, comentario en #324 por hallazgo, Previews aprobadas (fccda24b, 7b2e01ab) aparte.
 
-**Corrección 22:40 · evidencias regeneradas:** el checkpoint `474e0d7a` (09:22) metió por error 93 imágenes regeneradas de
+**Corrección 21:40 · evidencias regeneradas:** el checkpoint `474e0d7a` (09:22) metió por error 93 imágenes regeneradas de
 `docs/qa/artifacts` (61 M, 32 A) que llegaron a #324. Retiradas: #324 **`ad928d43`** (código idéntico a `2f1c0ee4`, solo cambian
 evidencias; la regresión en curso vale para ambos) y `claude/cabecera-proyectos` `565eb948`. Ninguna otra rama propia vigente las
 tiene, salvo `muros-forma-descubrible` y `geometria-composicion` (36 cada una, de la composición OP-07): excluirlas al integrar.
 
-**Ramas antiguas frente a la base (`dacb5d39`) y a #324 (`merge-tree`, 22:35):**
+**Ramas antiguas frente a la base (`dacb5d39`) y a #324 (`merge-tree`, 21:40):**
 | Rama | SHA | Sobre master | Contra #324 | Entre sí |
 |---|---|---|---|---|
 | §5.1 `ux-visita-3d` | `e20644b9` | limpia (6 commits, 11 archivos) | limpia | limpia con §5.2 y §5.3 |
