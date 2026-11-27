@@ -308,7 +308,10 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  const {page,errors}=await pageFor(t,{viewport,hasTouch:true});const unexpected=[];page.on('request',r=>{if(!r.url().startsWith(url)&&!r.url().startsWith('blob:')&&!r.url().startsWith('https://cdn.jsdelivr.net/'))unexpected.push(r.url());});
  const original=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  assert.match(await page.locator('#uploadPlanBtn').textContent(),/Subir plano/);assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
- const pending=page.waitForEvent('filechooser');await page.locator('#uploadPlanBtn').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'uploadIn');
+ // §9: «Subir plano» vive en el menú de proyecto; se abre como lo haría la persona.
+ // La entrada visible es «Subir plano o proyecto…» (#pmUpload), que acciona el mismo flujo (pick → #uploadIn).
+ await page.locator('#perlaProjectMenu > summary').tap();
+ const pending=page.waitForEvent('filechooser');await page.locator('#pmUpload').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'uploadIn');
  const fixture=path.join(__dirname,'fixtures/manual-plan.webp'),bytes=await readFile(fixture);await chooser.setFiles({name:'sample.webp',mimeType:'',buffer:bytes});
  await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await page.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
@@ -321,7 +324,7 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
  const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
  await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
- assert.ok(await fresh.locator('#uploadPlanBtn').isVisible());await fresh.locator('#uploadPlanBtn').scrollIntoViewIfNeeded();
+ (await fresh.locator('#perlaProjectMenu > summary').click(),assert.ok(await fresh.locator('#pmUpload').isVisible()),await fresh.locator('#perlaProjectMenu > summary').click());await fresh.locator('#uploadPlanBtn').scrollIntoViewIfNeeded();
  assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   const box=await fresh.locator('#uploadPlanBtn').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
  await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
