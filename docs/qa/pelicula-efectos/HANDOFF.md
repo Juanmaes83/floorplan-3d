@@ -30,5 +30,21 @@
   confirmación, MP4 + informe, cancelación, fallo de preparación).
 - Casos: una planta, dos plantas, cambio de revisión, requisito ausente; regresión P1, Dibujo vivo, P4, P8, P9, ZIP Blender; ES/EN sin chino.
 
+## Precisiones del propietario (27/11, noche) · interpretación aprobada
+- **Pieza a pieza** muestra el **montaje del modelo con los datos reales de RUBIK** (piezas del ZIP de la revisión elegida),
+  no una construcción inventada ni piezas del donante.
+- **Desde el paisaje:** primero se identifica un proyecto con **entorno representable y acceso real**. Si hace falta ampliar la
+  exportación (terreno, agua, vegetación…), es una **decisión del propietario**: se le plantea antes de implementar.
+- **Maqueta abierta** parte del piloto v1.1 como base de trabajo; el piloto v1.1 tiene **su propia revisión**, separada.
+- **Aceptación:** viendo **tres MP4 independientes de más de 20 s** cada uno.
+
+## Qué veremos en cada efecto
+| Efecto | Inicio | Transición | Final |
+|---|---|---|---|
+| Pieza a pieza | Planta de RUBIK rotulada (o croquis alineado si existe), identificada con el proyecto y la revisión | Los grupos de piezas reales del modelo (suelos, muros, huecos y carpinterías, mobiliario) entran por sistemas y encajan sobre su huella; el plano sigue visible bajo el montaje | La vivienda montada, con la cámara mostrando a la vez el volumen y la huella de origen de las piezas |
+| Maqueta abierta | Planta legible con la estancia de destino localizable | La planta gana volumen; la maqueta abierta, sin techo, muestra cómo se conectan las estancias; descenso con referencias visibles | Interior de esa misma estancia, encuadre estable y luz continua; se puede señalar en la planta dónde terminó |
+| Desde el paisaje | La vivienda en el entorno representado del proyecto | Aproximación a escala comprensible, el acceso y el paso por un hueco real | Interior que conserva la relación con el exterior y el acceso; terraza, agua o luz exterior solo si existen en los datos |
+
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
+- 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
