@@ -231,10 +231,12 @@
   for(const [k,cap,cls] of [[c.img[0],c.b,'is-before'],[c.img[1],c.a,'is-after']]){const f=el('figure',{class:cls},fig);const i=el('img',{src:'assets/photo-reform/'+k+'.webp',alt:T3(cap),loading:'lazy',width:'640',height:'360'},f);void i;el('figcaption',{},f,T3(cap));}
   el('p',{class:'photo-reform-badge'},w,L3('Ejemplo hecho con el 3D de RUBIK, no con una foto procesada.','Example made with the RUBIK 3D view, not a processed photo.','示例由 RUBIK 三维视图制作，并非处理过的照片。'));
   el('p',{},w,T3(c.how));el('p',{class:'photo-reform-review'},w,T3(c.rev));
-  const go=el('button',{type:'button',class:'btn primary photo-reform-case-go',id:c.id},w,L3('Probar con tu foto','Try it with your photo','用您的照片试试'));go.onclick=()=>open({intent:c.intent,finish:c.finish,case:c.case});
+  el('button',{type:'button',class:'btn primary photo-reform-case-go',id:c.id,'data-case-go':c.case},w,L3('Probar con tu foto','Try it with your photo','用您的照片试试'));
   el('small',{},w,L3('Con tu foto, hoy las alternativas son una SIMULACIÓN rotulada (no generada por IA) y no se envía nada.','With your photo, alternatives are a labelled SIMULATION today (not AI-generated) and nothing is sent.','使用您的照片时，目前的方案为带标注的模拟（非 AI 生成），不会发送任何内容。'));return w;};
+ // Delegación: el botón funciona en la tarjeta y en su copia dentro de la ficha de Entregar.
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-case-go]');if(!b)return;const c=CASES.find(x=>x.case===b.dataset.caseGo);if(c)open({intent:c.intent,finish:c.finish,case:c.case});});
  const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#photoReformCard')){const b=entryButton('photoReformCard');const wrap=el('div',{class:'photo-reform-card-entry'});
-  const d=el('details',{class:'photo-reform-showcase',id:'photoReformShowcase'},wrap);el('summary',{},d,L3('Reformar desde fotografía · dos casos con ejemplo','Renovate from a photo · two cases with examples','从照片改造 · 两个示例'));
+  const d=el('details',{class:'photo-reform-showcase',id:'photoReformShowcase','data-panel-extra':''},wrap);el('summary',{},d,L3('Reformar desde fotografía · dos casos con ejemplo','Renovate from a photo · two cases with examples','从照片改造 · 两个示例'));
   for(const c of CASES)d.append(caseBlock(c));wrap.append(b);el('small',{},wrap,L3('Propuesta visual ilustrativa sobre una foto (simulación; sin envíos).','Illustrative visual proposal on a photo (simulation; nothing sent).','基于照片的示意视觉方案（模拟；不发送）。'));card.append(wrap);}};
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addToCard();});}).observe(document.body,{childList:true,subtree:true});addToCard();
  window.RubikPhotoReform={open,get state(){return runState&&structuredClone({status:runState.status,items:runState.items.map(i=>({index:i.index,status:i.status,kind:i.result?.kind||null}))});}};

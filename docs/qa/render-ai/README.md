@@ -39,4 +39,13 @@ Inmobiliaria abre **«Más luz y orden»** y lo dice tal cual; interiorismo y re
   foto». Bajo el botón: «hoy las alternativas son una SIMULACIÓN rotulada (no generada por IA) y no se envía nada».
 - Ejemplos propios: vistas reales del 3D de RUBIK del salón del proyecto de ejemplo (`assets/photo-reform/`): original; salón
   sin muebles; suelo porcelánico 80×80 → madera de roble del catálogo del proyecto (`mat_tile800` → `mat_wood`).
-- Estado: código listo; ejemplos, prueba y vídeo desde Entregar → Imágenes **pendientes** de ejecutar con la CPU libre.
+- **Entrada real:** Entregar → tarjeta P2 «Imágenes» → su ficha muestra «Reformar desde fotografía · dos casos con ejemplo» (la
+  ficha copia el bloque entero con `data-panel-extra`; sus botones funcionan por delegación). En la tarjeta compacta no se veía
+  ninguna entrada a FOT-01: el estándar PERLA oculta el contenido de las tarjetas salvo su acción principal.
+- **Ejemplos propios** (`assets/photo-reform/*.webp`), vistas reales de la parada «Salón» del 3D de RUBIK, generadas con
+  `tests/zz-fot01-ejemplos.browser.test.cjs` por las vías normales de la app (retirar = `select` + `deleteSel` de los 8 muebles
+  del salón; suelo = `mutate` con `mat_tile800` → `mat_wood`).
+- **Prueba** `tests/fot01-casos.browser.test.cjs` 2/2 (1440×900 y 390×844): imágenes cargadas, rótulos «Original» /
+  «Alternativa ilustrativa», marca del ejemplo, «SIMULACIÓN rotulada», inmobiliaria dice «no retira muebles», cada acción abre
+  FOT-01 con `light` o con `floor` + `light-oak`; sin chino ni errores.
+- **Evidencia:** `fot01/video/fot01-casos-{escritorio,movil}.mp4` y capturas `fot01/*.png`.

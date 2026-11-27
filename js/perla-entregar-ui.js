@@ -200,7 +200,7 @@
  const narrow=()=>matchMedia('(max-width:1100px)').matches;
  const bodyOf=c=>c.querySelector(':scope>.body, :scope>.bpdp-card-body');
  // Todas las acciones de la ficha, también las que otros módulos añaden fuera de su cuerpo (Reformar desde fotografía, Estudio de imágenes…)
- const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn')&&!b.closest('.thumb'));
+ const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn')&&!b.closest('.thumb')&&!b.closest('[data-panel-extra]'));
  // Vistas del proyecto preparadas y vigentes (si el proyecto cambió después, no cuentan como listas)
  const viewsReady=()=>{try{const V=window.FloorPlanProjectViews;return !!(V?.current?.()||[]).length&&V?.status?.()!=='stale';}catch{return false;}};
  function pillOf(code,card){const st=(card.querySelector('.professional-state')?.textContent||'').trim();
@@ -257,7 +257,10 @@
   const x=el('button','panel-x',head,'✕');x.type='button';x.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));x.onclick=()=>closePanel(true);
   const b=el('div','panel-b');const th=card.querySelector(':scope>.thumb');if(th){const prev=el('div','prev',b),c=th.cloneNode(true);c.querySelector('.code')?.remove();c.querySelectorAll('img').forEach(i=>i.loading='eager');prev.append(c);}
   if(r[0])el('p','perla-panel-desc',b,T(r[0]));
-  const seen=new Set();const pillTxt=card.querySelector('.perla-pill')?.textContent.trim();for(const n of $$('p:not(.perla-desc):not(.perla-pill), figcaption, small',card)){const t=n.textContent.trim();if(!t||t===pillTxt||seen.has(t)||n.closest('.perla-meta,.thumb'))continue;seen.add(t);el('p','perla-panel-more',b,t);}
+  const seen=new Set();const pillTxt=card.querySelector('.perla-pill')?.textContent.trim();for(const n of $$('p:not(.perla-desc):not(.perla-pill), figcaption, small',card)){const t=n.textContent.trim();if(!t||t===pillTxt||seen.has(t)||n.closest('.perla-meta,.thumb,[data-panel-extra]'))continue;seen.add(t);el('p','perla-panel-more',b,t);}
+  // Contenido propio de una tarjeta para su ficha (p. ej. §10 FOT-01: casos con su ejemplo): se copia entero, con imágenes;
+  // sus botones funcionan por delegación en el módulo que los crea. Los id se pasan a data-panel-id (sin duplicados).
+  for(const x of $$('[data-panel-extra]',card)){const cl=x.cloneNode(true);for(const n of [cl,...cl.querySelectorAll('[id]')]){if(n.id){n.dataset.panelId=n.id;n.id='';}}if(cl.tagName==='DETAILS')cl.open=true;b.append(cl);}
   const dl=el('dl',undefined,b);const row=(k,v,node)=>{el('dt',undefined,dl,k);const dd=el('dd',undefined,dl);node?dd.append(node):dd.textContent=v;};
   row(tx('Estado','Status','状态'),null,card.querySelector('.perla-pill')?.cloneNode(true));
   if(r[1])row(tx('Necesita','Needs','需要'),T(r[1]));
