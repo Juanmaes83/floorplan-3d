@@ -190,6 +190,7 @@
   P7:[['Un HTML que abre sin conexión y le permite dejarte observaciones.','An HTML file that opens offline and lets them leave you comments.','可离线打开并可留下意见的 HTML。'],['Publicar el enlace requiere tu confirmación','Publishing the link requires your confirmation','发布链接需你确认'],['Portada real del archivo descargado','Real cover of the downloaded file','下载文件的真实封面']],
   P8:[['Planta, cotas, alzados y secciones sobre el 3D del proyecto.','Plan, dimensions, elevations and sections on the project 3D.','基于项目三维的平面、尺寸、立面与剖面。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Blueprint 3D','Home cover · real Blueprint 3D capture','首页封面 · Blueprint 3D 真实截图']],
   P9:[['Cómo se separa y se monta la vivienda, pieza a pieza.','How the home comes apart and goes together, piece by piece.','住宅如何逐件拆分与组装。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Despiece 3D','Home cover · real Exploded 3D capture','首页封面 · 拆解三维真实截图']],
+  P10:[['Explica a tu cliente qué cambia entre el original y una variante guardada.','Explain to your client what changes between the original and a saved variant.','向客户说明原始方案与已保存变体之间的变化。'],['Una variante guardada con algún cambio','A saved variant with some change','一个已保存且有改动的变体'],['Comparación real de la vivienda de ejemplo (StoryLayers)','Real comparison of the example home (StoryLayers)','示例住宅的真实对比（StoryLayers）']],
   P11:[['Tu cliente despliega el plano con un gesto y pasa al 3D de la misma vivienda.','Your client unrolls the plan with a gesture and moves to the 3D of the same home.','客户用手势展开平面图并进入同一住宅的三维。'],['Una revisión guardada · cámara opcional (permiso, HTTPS)','One saved revision · optional camera (permission, HTTPS)','一个已保存的版本 · 可选摄像头'],['Plano real de la vivienda de ejemplo · en ensayo','Real plan of the example home · in trial','示例住宅真实平面 · 试验中']],
   S1:[['Partidas desde las cantidades del proyecto, con tus precios.','Items from the project quantities, with your prices.','根据项目数量与你的价格生成条目。'],['Tus precios','Your prices','你的价格'],['Presupuestar real','Real Budget area','真实的预算区']],
   S2:[['Lo que te devuelve el cliente, anclado al plano.','What your client sends back, pinned to the plan.','客户反馈，锚定在平面上。'],['El cliente responde desde P7','The client replies from P7','客户通过 P7 回复'],['Gestor real (sin comentarios inventados)','Real manager (no invented comments)','真实管理器（无虚构意见）']],
@@ -320,4 +321,14 @@
   const a=document.activeElement,mine=$(`[data-perla-action="${catFocus}"]`);
   if(mine&&(launched===catFocus||!a||a===document.body||!a.isConnected)){mine.focus({preventScroll:true});mine.scrollIntoView({block:'nearest'});}launched=null;},60),true);
  new MutationObserver(()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();if(deliverOpen()){const i=$('#professionalWorkspace .professional-index');if(i){mo.disconnect();try{maqueta(i);if(selCard)openPanel(selCard);}finally{mo.observe(document.body,{childList:true,subtree:true});}}}},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+
+ // Revisión 27/11 · sin tarjetas aisladas: si la última fila de una cuadrícula queda incompleta, sus tarjetas se reparten el
+ // ancho de la fila (con auto-fill las columnas dependen del ancho, por eso se mide la cuadrícula real y se recalcula al cambiar).
+ function fillRows(){for(const g of document.querySelectorAll('#professionalWorkspace[data-area=deliver] .cards')){
+   const items=[...g.children].filter(c=>c.getClientRects().length&&getComputedStyle(c).display!=='none');for(const c of items){c.style.gridColumn='';delete c.dataset.perlaFill;}
+   const cols=getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length;if(cols<2||!items.length)continue;
+   const r=items.length%cols;if(!r)continue;const last=items.slice(-r),base=Math.floor(cols/r);let extra=cols-base*r;
+   for(const c of last){const span=base+(extra>0?1:0);if(extra>0)extra--;c.style.gridColumn='span '+span;c.dataset.perlaFill=String(span);}}}
+ let fillQ=0;const fillSoon=()=>{if(fillQ)return;fillQ=requestAnimationFrame(()=>{fillQ=0;fillRows();});};
+ new MutationObserver(fillSoon).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});addEventListener('resize',fillSoon);
 })();

@@ -277,3 +277,9 @@
 #professionalWorkspace[data-area=deliver] .perla-ref #deliveryState[data-result=match]{color:var(--ok)}
 /* UX-312 PERLA · U9: la barra fija del móvil no duplica la acción principal mientras la de la cabecera está a la vista. */
 #professionalWorkspace.perla-hero-cta-in-view .professional-dock{visibility:hidden;pointer-events:none}
+
+/* Revisión 27/11 · tarjeta que ocupa más de una columna en una última fila incompleta: imagen y texto en horizontal. */
+#professionalWorkspace[data-area=deliver] .cards>.perla-ref[data-perla-fill]:not([data-perla-fill="1"]){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:auto}
+#professionalWorkspace[data-area=deliver] .cards>.perla-ref[data-perla-fill]:not([data-perla-fill="1"])>.thumb{height:100%;min-height:150px}
+#professionalWorkspace[data-area=deliver] .cards{align-items:stretch}
+#professionalWorkspace[data-area=deliver] .cards>.perla-ref{height:auto;align-self:stretch}
