@@ -51,3 +51,24 @@ vuelta desde «completar» sin perder texto ni posición; sin chino visible; el 
 asesor (`labs/asesor-rubik/nuance-adapter.js`, sesión `api/advisor-session.js`). Si «Anounce» es Nuance, se aplica el alcance y la
 activación ya autorizados para sus canales; el primer caso se acredita con el adaptador local `rubik-texto-local`, sin conectar
 nada nuevo hasta que el propietario confirme el nombre.
+
+## Implementación · §8 D3 Dossier del proyecto (27/11, trabajo nocturno)
+Entrada en RUBIK: **Entregar → D3 Dossier del proyecto → Preparar dossier → «Preparado para · cliente, contacto y nota»**.
+- `js/dossier-client-core.js` (núcleo puro, UMD): reutiliza la ficha de StoryLayers (`FloorPlanStoryProposal.normalize`,
+  `clientFromFile`, `clientForAssist`) sin duplicarla ni tocar el núcleo aprobado. `cover()` decide qué sale en la portada;
+  `draft()` es el adaptador local `rubik-texto-local` (cifras reales del dossier + campos marcados «usar»; pide criterio,
+  siguiente paso, plazos y costes al profesional). Nuance **no** se conecta.
+- `js/dossier-client-ui.js`: panel en el diálogo del dossier. Cargar ficha JSON (campos desconocidos ignorados y avisados) o
+  «Usar la ficha de la historia» del mismo proyecto; por campo «Usar para redactar» y «Mostrar en el dossier»; contacto de
+  **Mi estudio** por casillas (los datos sin valor quedan desactivados); nota de presentación con «Ayuda para redactar»
+  (borrador visible → editar → aceptar / descartar); **notas internas** que nunca salen; «Antes de imprimir · falta: …».
+  Guardado por proyecto en este navegador (`rubik-dossier-client-v1`).
+- `js/project-dossier-ui.js`: la portada usa `cover()` (sin el módulo, comportamiento anterior intacto).
+- Prueba `tests/dossier-cliente.browser.test.cjs` (escritorio 1440×900 y móvil 390×844): ficha cargada; sin «mostrar» el nombre
+  no sale; la ayuda solo lee lo marcado «usar»; descartar no inserta; aceptar inserta; la salida no contiene notas internas,
+  requisitos ni preferencias no marcados, ni el campo extra de la ficha; persistencia al reabrir; sin chino; sin errores.
+- Evidencia: `d3/video/d3-dossier-cliente-{escritorio,movil}.mp4`, capturas `d3/d3-{borrador,portada}-{escritorio,movil}.png`.
+- Pruebas locales: `dossier-cliente` 2/2, `story-proposal-core` 6/6, `no-chinese-display` 5/5. CI de GitHub: no corre en
+  ramas `claude/…`. Preview de Vercel: la del SHA de este commit. Aprobación humana: pendiente.
+- Límites: «Antes de imprimir» enumera lo que falta pero aún no lleva acceso directo a completarlo; la ficha vive en el
+  navegador (no en el JSON del proyecto).

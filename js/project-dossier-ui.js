@@ -49,6 +49,12 @@
      fact(tx('Superficie útil','Net area','使用面积'),area);fact(tx('Certeza','Certainty','可信度'),status+(s.complete?'':tx(' · cómputo incompleto',' · incomplete total',' · 汇总不完整')));
      fact(tx('Estancias','Rooms','房间'),String(s.roomsCounted));fact(tx('Planta','Level','楼层'),s.level?`${s.level.name}`:tx('Planta única','Single level','单层'));
      fact(tx('Fecha','Date','日期'),new Date().toLocaleDateString(locale(),{day:'numeric',month:'long',year:'numeric'}));
+     // §8 D3: la ficha del cliente y la elección de contacto deciden qué sale; sin ese módulo, el contacto completo como antes.
+     const dc=window.FloorPlanDossierClientUI?.cover?.(b);
+     if(dc){if(dc.contact.length)fact(tx('Contacto','Contact','联系方式'),dc.contact.join(' · '),'is-wide');
+      if(dc.addressee)fact(tx('Preparado para','Prepared for','编制对象'),dc.addressee,'is-wide dossier-for');
+      for(const r of dc.requests)fact(r.key==='preferences'?tx('Lo que nos pidió','What you asked for','您的要求'):tx('Requisito','Requirement','要求'),r.text,'is-wide');
+      if(dc.note){const n=el('p',dc.note,p,'dossier-cover-note');n.dataset.dossierNote='';}continue;}
      if(b&&(b.email||b.phone||b.web))fact(tx('Contacto','Contact','联系方式'),[b.email,b.phone,b.web].filter(Boolean).join(' · '),'is-wide');continue;}
    if(key==='sheet'){const p=page('dossier-sheet',tx('Plano de distribución','Floor plan','平面布置图'));if(!(c.sections.sheet&&sheetImage(el('div',undefined,p,'dossier-sheet-frame'),bag)))el('p',tx('El plano no está preparado: abre la planta 2D para generarlo.','The plan is not ready: open the 2D floor to generate it.','平面图未就绪：请打开二维楼层生成。'),p,'dossier-note');continue;}
    if(key==='surfaces'){const p=page('dossier-surfaces',tx('Superficies','Areas','面积'));
@@ -103,6 +109,7 @@
  const linkLabel=el('label',undefined,options),linkCheck=el('input',undefined,linkLabel),linkText=el('span',undefined,linkLabel);
  mapCheck.type=linkCheck.type='checkbox';mapCheck.id='dossierIncludeIgn';linkCheck.id='dossierIncludeLocation';
  const siteStatus=el('p',undefined,options);siteStatus.setAttribute('role','status');
+ window.FloorPlanDossierClientUI?.mount?.(dialog,options,()=>renderDialog());
  let appendix=null,siteRequest=null;
  const parcelOf=()=>window.FloorPlanBuildingUI?.site?.parcel||app.project.site?.parcel;
  const parcelKey=parcel=>parcel&&JSON.stringify([app.entryId,parcel.reference,parcel.sourceCrs,parcel.frame,parcel.sourceGeometry]);
@@ -149,8 +156,8 @@
  function relang(){heading.textContent=tx('Dossier del proyecto','Project dossier','项目资料');styleText.textContent=tx('Estilo','Style','风格');printButton.textContent=tx('Imprimir / Guardar PDF','Print / Save PDF','打印 / 保存 PDF');closeButton.textContent=tx('Cerrar','Close','关闭');
   mapText.textContent=tx('Incluir mapa base IGN','Include IGN basemap','包含 IGN 底图');linkText.textContent=tx('Compartir enlace a la ubicación','Share location link','分享位置链接');
   select.replaceChildren(...Object.entries(STYLES).map(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label();return o;}));select.value=style;}
- select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();};
- function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
+ select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();window.FloorPlanDossierClientUI?.refresh?.();};
+ function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();window.FloorPlanDossierClientUI?.refresh?.();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
  async function print(){
   if(appendix&&appendix.key!==parcelKey(parcelOf())){resetOptions();renderDialog();}
   const win=window.open('','_blank');if(!win){toast(tx('El navegador bloqueó la ventana de impresión.','The browser blocked the print window.','浏览器阻止了打印窗口。'),5000);return;}
