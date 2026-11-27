@@ -80,3 +80,10 @@ proyecto JSON» en la fila 2; deshacer/rehacer en la fila 1. Después: lo indica
   | `TypeError` del observador de `<body>` (preexistente) | defecto preexistente | el observador espera al DOM |
   | pruebas que pulsaban controles que ahora viven en el menú de proyecto | adaptación de pruebas | `mostrar()` llega por el menú; `premium-shell` exige la entrada visible fusionada; `upload` describe el diseño de §9 |
 - Verificación de la corrección: nueva ejecución de los 21 archivos sobre `79ca6670` (en curso; resultado abajo).
+
+## P10 con un cambio guardado · una sola vuelta al mismo capítulo (27/11, noche)
+La grabación anterior usaba una variante sin cambios (historia vacía: no demostraba la vuelta). Nueva evidencia
+(`video/9-p10-capitulo-con-cambio-{escritorio,movil}.mp4` y hojas `.png`): variante con un mueble retirado y **guardada** →
+capítulo «Mobiliario» visible («0 nuevos · 1 quitado», fuente y revisión) → «Editar variante» → Diseñar con «Volver a la
+historia» → una sola vuelta → **el mismo capítulo** «Mobiliario» con el foco (comprobado por `data-chapter` = `furniture`).
+Escritorio 1440×900 y móvil 390×844. Script: `tests/zz-rec9b.browser.test.cjs` (local, no se publica: `zz-*` está ignorado).
