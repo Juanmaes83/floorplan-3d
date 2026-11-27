@@ -26,7 +26,9 @@ async function boot(vp, camera, { variant = false, welcome = false } = {}) {
   return { ctx, page, errors };
 }
 const pause = (p, ms = 900) => REC ? p.waitForTimeout(ms) : null;
-const hold = async (page, kind, ms, x = 0.5, dx = 0) => page.evaluate(async ([k, ms, x, dx]) => { const t0 = performance.now(); let i = 0; while (performance.now() - t0 < ms) { RubikGestureLab.feed(RubikGestureLab.synthetic(k, x + dx * i, 0.5), performance.now()); i++; await new Promise(r => setTimeout(r, 33)); } }, [kind, ms, x, dx]);
+// Fotogramas sintéticos con RELOJ VIRTUAL (33 ms por fotograma, como una cámara a 30 fps): el resultado no depende de la
+// carga de la máquina. El detector solo usa el tiempo que recibe; sus umbrales no cambian.
+const hold = async (page, kind, ms, x = 0.5, dx = 0) => page.evaluate(async ([k, ms, x, dx]) => { const t0 = performance.now(), n = Math.max(1, Math.round(ms / 33)); for (let i = 0; i < n; i++) { RubikGestureLab.feed(RubikGestureLab.synthetic(k, x + dx * i, 0.5), t0 + i * 33); if (i % 6 === 5) await new Promise(r => setTimeout(r, 0)); } }, [kind, ms, x, dx]);
 const save = async (ctx, page, name) => { const v = REC && page.video(); await ctx.close(); if (v) fs.renameSync(await v.path(), path.join(REC, name)); };
 const shot = (page, n) => SHOTS ? page.screenshot({ path: path.join(SHOTS, n) }) : null;
 
@@ -58,7 +60,7 @@ for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390,
     assert.ok(await page.locator('#glStage .gl-mark').count() >= 1, 'la estancia está marcada en planta');
     await pause(page, 2600); await shot(page, `gl-2-desplegado-${vp.tag}.png`);
     // Gesto intencional → 3D de ESA misma revisión, en la estancia vista en planta (miniatura que la marca).
-    await hold(page, 'fist', 200); await hold(page, 'open', 1200); await page.waitForFunction(() => RubikGestureLab.step === '3d'); await page.waitForFunction(() => FloorPlanApp.viewMode === '3d', null, { timeout: 30000 });
+    await hold(page, 'fist', 200); await hold(page, 'open', 1200);  await page.waitForFunction(() => RubikGestureLab.step === '3d'); await page.waitForFunction(() => FloorPlanApp.viewMode === '3d', null, { timeout: 30000 });
     assert.match(await page.locator('#glKind').innerText(), new RegExp('Visor 3D interactivo de la misma revisión «.+».* · encuadre: ' + room));
     assert.match(await page.locator('#glInset figcaption').innerText(), new RegExp(room + ' · la estancia que viste en planta')); assert.ok(await page.locator('#glInset .gl-mark').count() >= 1);
     await pause(page, 2800); await shot(page, `gl-3-3d-${vp.tag}.png`);
@@ -109,4 +111,24 @@ test('Home · «Presentación con gestos» en «Módulos para tu trabajo», con 
   await shot(page, 'gl-home-movil.png');
   await li.locator('#welcomeAI-gesture-presentation').tap(); await page.waitForSelector('#gestureLab[open]'); assert.equal(await page.evaluate(() => RubikGestureLab.origin), 'home');
   assert.match(await page.locator('#glIntro').innerText(), /Proyecto: «/); assert.ok(!CJK.test(await page.locator('#gestureLab').innerText())); assert.deepEqual(errors, []); await ctx.close();
+});
+
+test('viñetas por paso y salida mientras se carga el modelo de manos: la cámara se apaga y nada se reactiva', { timeout: 120000 }, async () => {
+  const { ctx, page, errors } = await boot({ width: 390, height: 844, touch: true }, 'granted');
+  // El modelo de manos (CDN) tarda: la petición queda colgada hasta que la persona ya ha salido.
+  let release; const held = new Promise(r => { release = r; });
+  await page.route('https://cdn.jsdelivr.net/**', async r => { await held; await r.abort(); });
+  await page.evaluate(() => { window.__glNoModel = false; RubikGestureLab.open({ origin: 'launcher' }); });
+  await page.locator('#glStartButtons').tap();
+  for (const [step, re] of [['rolled', /Mano abierta, palma a la cámara, quieta 1 segundo → se despliega el plano/], ['plan', /pasas al 3D de esta estancia/]]) {
+    await page.waitForFunction(s => RubikGestureLab.step === s, step); assert.match(await page.locator('#glVin').innerText(), re);
+    assert.match(await page.locator('#glVin').innerText(), /Sin cámara: botón/); assert.equal(await page.locator('#glVin svg').count(), 1, 'dibujo de la mano');
+    if (step === 'rolled') await page.locator('#glNext').tap(); }
+  await page.locator('#glCam').tap(); await page.waitForFunction(() => RubikGestureLab.camera.state === 'starting');
+  assert.match(await page.locator('#glCamText').innerText(), /cargando el modelo de manos… puedes salir/);
+  await page.locator('#glExit').tap(); await page.waitForFunction(() => !document.querySelector('#gestureLab').open);
+  assert.deepEqual(await page.evaluate(() => window.__glTracks.map(t => t.readyState)), ['ended'], 'la cámara se apaga al salir aunque el modelo siga cargando');
+  release(); await page.waitForTimeout(800);
+  assert.notEqual(await page.evaluate(() => RubikGestureLab.camera.state), 'on', 'nada se reactiva cuando el modelo responde tarde');
+  assert.deepEqual(await page.evaluate(() => RubikGestureLab.camera.tracks), []); assert.deepEqual(errors, []); await ctx.close();
 });

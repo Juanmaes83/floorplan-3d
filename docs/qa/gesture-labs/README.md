@@ -95,6 +95,18 @@ falta HTTPS o localhost, y una variante guardada con algún cambio (Entregar →
 
 El propietario aprobará con la cámara frontal del móvil.
 
+## Avance (27/11, noche) · viñetas y salida durante la carga del modelo
+- **Viñeta por paso** (handoff ampliado `c532877a`): dibujo de la mano, movimiento o tiempo, resultado en pantalla y botón
+  equivalente. Ejemplo: «Mano abierta, palma a la cámara, quieta 1 segundo → se despliega el plano. Sin cámara: botón
+  «Desplegar el plano»».
+- **Salir mientras se carga el modelo de manos:** la cámara se apaga y nada se reactiva cuando el modelo responde tarde.
+  Mientras carga se ve «Pidiendo permiso y cargando el modelo de manos… puedes salir o seguir con los botones».
+- **Pruebas:** reloj virtual para los gestos sintéticos (33 ms por fotograma). Con la máquina cargada por las regresiones, la
+  versión anterior fallaba igual que el código previo; la causa era el entorno y los umbrales del detector no cambian.
+  Navegador 6/6 y núcleo 7/7.
+- **Pendiente:** prueba con cámara física (propietario) y el siguiente ensayo recomendado (girar la maqueta con la palma
+  moviéndose despacio).
+
 ## Candidata para revisión (27/11) · «Presentación con gestos»
 **Estado:** en ensayo, candidata para revisión, no publicada. Solo se activa con `?gesture-lab=1`; sin el parámetro, RUBIK no
 cambia.

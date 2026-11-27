@@ -71,6 +71,16 @@
   // Cada gesto se enseña en el paso en que sirve.
   const TEACH = { rolled: 'Gesto para desplegar: mano abierta, palma a la cámara, quieta 1 segundo.', plan: 'Gesto para ver la vivienda en 3D: mano abierta quieta 1 segundo.', '3d': 'Puedes girar el 3D con el ratón o el dedo. Gesto: mano abierta quieta 1 segundo para pasar a antes y después (si lo has elegido).', compare: 'Gesto para comparar: puño cerrado y deslizar rápido a un lado → antes / después. Retirar la mano no cambia nada.' };
   const NEXT_TXT = { rolled: 'Desplegar el plano', plan: 'Ver en 3D →', '3d': 'Siguiente →' };
+  // Viñetas (handoff ampliado 27/11): cada paso enseña la mano, el movimiento o el tiempo, el resultado y el botón equivalente.
+  const PALM = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M20 58c-6-6-10-14-10-22V26c0-2 2-4 4-4s4 2 4 4v8M18 34V12c0-2 2-4 4-4s4 2 4 4v20M26 30V8c0-2 2-4 4-4s4 2 4 4v22M34 30V12c0-2 2-4 4-4s4 2 4 4v24M42 36V22c0-2 2-4 4-4s4 2 4 4v14c0 10-6 22-16 22H24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const FIST = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 30c0-4 3-6 6-6h18c4 0 7 3 7 7v9c0 9-7 16-16 16h-2c-8 0-13-6-13-14z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M24 24v8M32 24v8M40 24v8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M4 44h8M56 44h-8M8 40l-4 4 4 4M52 40l4 4-4 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const VIN = { rolled: [PALM, 'Mano abierta, palma a la cámara, quieta 1 segundo', 'se despliega el plano', '«Desplegar el plano»'],
+    plan: [PALM, 'Mano abierta quieta 1 segundo (vuelve a abrirla si la cerraste)', 'pasas al 3D de esta estancia', '«Ver en 3D →»'],
+    '3d': [FIST, 'Solo si eliges «Antes y después»: puño y deslizar rápido a un lado', 'cambias entre antes y después', '«Antes y después»'],
+    compare: [FIST, 'Puño cerrado y deslizar rápido a un lado (unos 15–20 cm)', 'antes / después', '«Ver después» / «Ver antes»'] };
+  const vin = el('figure', { class: 'gl-vin', id: 'glVin', 'aria-label': 'Cómo hacer el gesto de este paso' }, dlg);
+  function paintVin() { const v = VIN[P.step]; vin.hidden = showIntro || !v; if (!v) return; vin.replaceChildren(); const ic = el('span', { class: 'gl-vin-hand' }, vin); ic.innerHTML = v[0];
+    const t = el('figcaption', {}, vin); el('b', {}, t, v[1]); el('span', {}, t, ' → ' + v[2] + '.'); el('small', {}, t, ' Sin cámara: botón ' + v[3] + '.'); vin.dataset.step = P.step; }
 
   let showIntro = false, origin = null, entry0 = null;
   function planSvg(target, mini) { const w = el('div', { class: mini ? 'gl-mini' : 'gl-plan' }, target); w.innerHTML = R.planSvg(single, 'before', rev.project, { title: '' }); if (room) mark(w, room.id); return w; }
@@ -84,7 +94,7 @@
     cmpB.hidden = P.step !== '3d' || P.compare; need.hidden = true;
     exitB.textContent = origin === 'P1' ? 'Volver a P1' : origin === 'P11' ? 'Volver a Entregar' : origin === 'home' ? 'Volver al inicio' : 'Salir';
     stage.replaceChildren(); calls.replaceChildren(); dlg.dataset.step = P.step; dlg.dataset.side = P.side;
-    dlg.toggleAttribute('data-intro', showIntro); renderIntro();
+    dlg.toggleAttribute('data-intro', showIntro); renderIntro(); paintVin();
     teach.textContent = stream ? TEACH[P.step] : 'Cámara apagada: avanza con los botones. Si activas la cámara, aquí verás el gesto de este paso.';
     if (showIntro || !rev) { kind.textContent = ''; return; }
     const rn = roomName();
@@ -160,7 +170,7 @@
 
   // ── Cámara (opcional, explícita) ──
   let stream = null, hands = null, token = 0, running = false;
-  const camState = (s, t) => { dot.dataset.cam = s; camText.textContent = t; camB.textContent = s === 'on' || s === 'lost' ? 'Apagar cámara' : 'Activar cámara'; note('camera', { state: s }); if (!showIntro) teach.textContent = (s === 'on' || s === 'lost') ? TEACH[P.step] : s === 'denied' ? 'Sin cámara: sigue con los botones o el teclado, desde este mismo punto.' : 'Cámara apagada: avanza con los botones. Si activas la cámara, aquí verás el gesto de este paso.'; };
+  const camState = (s, t) => { if (s === 'starting') t = 'Pidiendo permiso y cargando el modelo de manos… puedes salir o seguir con los botones'; dot.dataset.cam = s; camText.textContent = t; camB.textContent = s === 'on' || s === 'lost' ? 'Apagar cámara' : 'Activar cámara'; note('camera', { state: s }); if (!showIntro) teach.textContent = (s === 'on' || s === 'lost') ? TEACH[P.step] : s === 'denied' ? 'Sin cámara: sigue con los botones o el teclado, desde este mismo punto.' : 'Cámara apagada: avanza con los botones. Si activas la cámara, aquí verás el gesto de este paso.'; };
   function onGesture(lm, t) {
     const r = det.frame(lm, t);
     for (const e of r.events) {
@@ -178,9 +188,11 @@
       if (my !== token) { s.getTracks().forEach(t => t.stop()); return; }
       stream = s; video.srcObject = s; await video.play().catch(() => { });
       if (!window.Hands && !window.__glNoModel) await new Promise((ok, ko) => { const sc = el('script', { src: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js', crossorigin: 'anonymous' }, document.head); sc.onload = ok; sc.onerror = () => ko(Error('No se pudo cargar el modelo de manos.')); });
+      if (my !== token || !stream) { note('camera-abort', { at: 'model' }); return; } // salió o apagó mientras se cargaba el modelo
       if (window.Hands) { hands = new window.Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${f}` }); hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.6, minTrackingConfidence: 0.5 }); hands.onResults(res => onGesture(res.multiHandLandmarks?.[0] || null, performance.now())); }
+      if (my !== token || !stream) { note('camera-abort', { at: 'start' }); return; }
       camState('on', 'Cámara activa · procesamiento en este equipo; no se graba ni se guarda imagen'); running = true; loop(my);
-    } catch (e) { stopCam(); const denied = /NotAllowed|Permission|denied/i.test(e.name + e.message); camState('denied', denied ? 'Permiso de cámara denegado · sigue con los botones o el teclado' : 'No se pudo activar la cámara (' + e.message + ') · sigue con los botones'); note('camera-error', { name: e.name }); }
+    } catch (e) { if (my !== token) return; stopCam(); const denied = /NotAllowed|Permission|denied/i.test(e.name + e.message); camState('denied', denied ? 'Permiso de cámara denegado · sigue con los botones o el teclado' : 'No se pudo activar la cámara (' + e.message + ') · sigue con los botones'); note('camera-error', { name: e.name }); }
     finally { camB.disabled = false; }
   }
   async function loop(my) { if (!running || my !== token) return; if (hands && video.readyState >= 2) { try { await hands.send({ image: video }); } catch { } } requestAnimationFrame(() => loop(my)); }
