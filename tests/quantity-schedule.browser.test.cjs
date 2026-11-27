@@ -16,17 +16,19 @@ test(`Phase C1: project quantities ${viewport.width}x${viewport.height}`,{timeou
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),workspace=page.locator('#professionalWorkspace');
  await page.locator('#workArea-budget').click();
  const card=workspace.locator('[data-route="quantities"]').locator('xpath=ancestor::*[contains(@class,"professional-card")][1]');
- assert.match(await card.innerText(),/Cantidades del proyecto[\s\S]*87,18 m² útiles · 86,83 m de muro · 22 carpinterías/);
+ // V06 (#324): 22 huecos = 20 carpinterías (puertas y ventanas) + 2 huecos de paso; antes se contaban como 22 carpinterías.
+ assert.match(await card.innerText(),/Cantidades del proyecto[\s\S]*87,18 m² útiles · 86,83 m de muro · 20 carpinterías · 2 huecos de paso/);
  await workspace.locator('[data-route="quantities"]').click();const dialog=page.locator('#quantityDialog');await dialog.waitFor();
  assert.match(await dialog.locator('#quantityNote').innerText(),/estimado: escala sin calibrar[\s\S]*«—» = no se puede calcular/);
- assert.match(await dialog.locator('#quantitySummary').innerText(),/87,18 m²[\s\S]*86,83 m[\s\S]*22 ud[\s\S]*46 ud/);
+ assert.match(await dialog.locator('#quantitySummary').innerText(),/87,18 m²[\s\S]*86,83 m[\s\S]*Carpinterías\s+20 ud[\s\S]*Huecos de paso\s+2 ud[\s\S]*46 ud/);
  assert.equal(await dialog.locator('#quantityRooms tbody tr').count(),13);assert.equal(await dialog.locator('#quantityFloors tbody tr').count(),6);
  assert.equal(await dialog.locator('#quantityOpenings tbody tr th').first().innerText(),'Puerta');
  assert.match(await dialog.locator('#quantityRooms tbody').innerText(),/Dormitorio principal\t12,37\t14,08\t31,36 ⚠\tParquet de roble\tEstimado|Dormitorio principal/);
  if(SHOTS){await fs.mkdir(SHOTS,{recursive:true});await page.screenshot({path:path.join(SHOTS,`c1-${viewport.width}.png`)});}
  const download=page.waitForEvent('download');await dialog.locator('#quantityDownload').click();const d=await download;
  assert.equal(d.suggestedFilename(),'rubik-sota-cantidades-proyecto-de-ejemplo.csv');const text=await fs.readFile(await d.path(),'utf8');
- assert.ok(text.startsWith('﻿Apartado;Elemento;Cantidad;Unidad;Detalle;Estado'));assert.match(text,/\r\nPavimentos;[^;]+;34,27;m2;/);
+ assert.ok(text.startsWith('﻿Apartado;Elemento;Cantidad;Unidad;Detalle;Estado'));
+ assert.match(text,/\r\nCarpinterías;/);assert.match(text,/\r\nHuecos de paso;Hueco de paso \d+×\d+ cm;\d+;ud;;/);assert.doesNotMatch(text,/\r\nCarpinterías;Hueco de paso/);assert.match(text,/\r\nPavimentos;[^;]+;34,27;m2;/);
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#quantityDialog').open);
  assert.equal(await page.evaluate(()=>document.activeElement?.dataset.route),'quantities');
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.deepEqual(external,[]);assert.deepEqual(errors,[]);

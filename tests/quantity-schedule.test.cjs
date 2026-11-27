@@ -21,3 +21,9 @@ test('CSV for a Spanish spreadsheet',()=>{
  assert.match(text,/\r\nEstancias;主卧室;12,37;m2;perímetro 14,08 m · paredes netas 31,36 m2 · 橡木地板;Estimado\r\n/);
  assert.match(text,/\r\nCarpinterías;door 89×210 cm;2;ud;;\r\n/);
 });
+
+// V06 (#324): un hueco de paso va en su apartado si hay etiqueta `passages`; sin ella, como antes (compatibilidad).
+test('V06 · CSV: los huecos de paso no se cuentan como carpinterías',()=>{
+ const sched={rooms:[],floors:[],walls:[],furniture:[],openings:[{kind:'door',widthCm:80,heightCm:210,count:2},{kind:'opening',widthCm:180,heightCm:240,count:1}]};
+ const withP=S.csv(sched,{...L,passages:'Huecos de paso'});assert.match(withP,/\r\nCarpinterías;door 80×210 cm;2;ud;;/);assert.match(withP,/\r\nHuecos de paso;opening 180×240 cm;1;ud;;/);
+ assert.match(S.csv(sched,L),/\r\nCarpinterías;opening 180×240 cm;1;ud;;/);});
