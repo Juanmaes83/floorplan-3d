@@ -1,0 +1,18 @@
+/* «Tu proyecto cobra vida» · Home y Entregar (claude/pelicula-efectos). Componentes y colores de los existentes. */
+.pelicula-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.pelicula-tabs .btn{flex:0 0 auto;min-width:max-content}
+.pelicula-fig{margin:0}
+.pelicula-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:16/9;background:#ece7dc;color:#3a3a3a;border-radius:10px;gap:4px;font-weight:600}
+.pelicula-ph small{font-weight:400;color:#5b5b5b}
+.pelicula-efectos-dialog{max-width:min(760px,calc(100vw - 32px));width:100%;border:0;border-radius:14px;padding:16px 18px}
+.pelicula-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pelicula-head h2{margin:0;font-size:1.25rem}
+.pelicula-beats{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0}
+.pelicula-beats dt{font-weight:700}
+.pelicula-beats dd{margin:0}
+.pelicula-req{list-style:none;padding:0;margin:8px 0}
+.pelicula-req li.ok{color:#1d5e2f}
+.pelicula-req li.missing{color:#8a1f11}
+.pelicula-preview{width:100%;height:auto;border-radius:10px;background:#f4f1ea;display:block}
+.pelicula-cap,.pelicula-est,.pelicula-rev{font-size:.92em;color:#444}
+.pelicula-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:10px}

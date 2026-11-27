@@ -76,7 +76,7 @@
     Entregar: firma → lo que recibirá tu cliente → índice (con códigos y recuentos) → Recorrido de obra → cinco fases.
     Mi estudio: identidad → más ajustes → personalización HERO → cinco fases («Tu marca en RUBIK»). */
  const INDICE=()=>[['documentation',null,[['surface-sheet','D1'],['sheet','D2'],['dossier','D3'],['economic-dossier','D4'],['e3-entregas','D5']]],
-  ['experience',null,[['presentation','P1'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7']]],
+  ['experience',null,[['presentation','P1'],['pelicula-efectos','P12'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7']]],
   ['coordination',null,[['budget','S1'],['review','S2']]],
   ['tools',tx('Herramientas de trabajo (no son para el cliente)','Working tools (not for the client)','工作工具（不交给客户）'),[['blender-scene','T1'],['compare','T2']]]];
  const moduleOf=c=>c.dataset.compareState!==undefined?'compare':c.dataset.module;
