@@ -19,7 +19,7 @@ python blender-rodaje.py -- PREP-DIR PACKAGE-DIR OUT-DIR --profile revision|entr
   relieve de enlucido en muros sin cambiar su color; vidrio físico; cielo HDRI orientado al sol capturado. Si falta un
   recurso, se conserva el color plano y se declara la sustitución. --realismo off = escena «antes» (misma cámara y luz).
 """
-import hashlib, importlib.util, json, math, os, platform, sys, time
+import re, hashlib, importlib.util, json, math, os, platform, sys, time
 from pathlib import Path
 import bpy
 from mathutils import Vector
@@ -741,6 +741,79 @@ def realismo(project, labels, light, sun, tex):
         out.append(f"cielo: HDRI CC0 «{sky['id']}» 0,6, girado al azimut del sol capturado; el sol del visor se conserva")
     return out
 
+def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes):
+    """Del plano a la vivienda: planta legible → muros que crecen desde su huella → huecos → mobiliario → entrada a la estancia.
+    Solo se animan transformaciones de los nodos de entidad (rubik_id) y siempre terminan en su valor de entrada."""
+    from mathutils import Vector as V
+    fps = TL["output"]["fps"]; S = {x["id"]: x["frames"] for x in TL["shots"]}
+    ents = [o for o in bpy.data.objects if o.parent and o.parent.name == "RUBIK_scene" and o.get("rubik_role")]
+    by = {}
+    for o in ents: by.setdefault(o.get("rubik_role"), []).append(o)
+    pts = [o.matrix_world @ V(c) for o in bpy.data.objects if o.type == "MESH" and o.get("rubik_role") in ("room", "wall") for c in o.bound_box]
+    lo = V([min(p[i] for p in pts) for i in range(3)]); hi = V([max(p[i] for p in pts) for i in range(3)]); ctr = V(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, 0)); diag = (hi - lo).length
+    def key(o, f, loc, sc_):
+        o.location = loc; o.scale = sc_; o.keyframe_insert("location", frame=f); o.keyframe_insert("scale", frame=f)
+    def grow(o, f0, f1, s0, drop=0.0):  # de s0 a su escala real, y desde drop metros por encima, entre f0 y f1
+        L, Sc = o.location.copy(), o.scale.copy()
+        if f0 > 0: key(o, 0, L * 1 if s0 is None else V((L.x, L.y, L.z * (s0[2] if s0 else 1) + drop)), V([Sc[i] * s0[i] for i in range(3)]))
+        key(o, f0, V((L.x, L.y, L.z * s0[2] + drop)), V([Sc[i] * s0[i] for i in range(3)])); key(o, f1, L, Sc)
+    ang = lambda o: math.atan2(o.location.y - ctr.y, o.location.x - ctr.x)
+    # Muros: la huella (3 %) se ve en la planta; los tramos altos (dinteles, antepechos superiores) entran al crecer.
+    w0, w1 = S["walls"]; ws = sorted(by.get("wall", []), key=ang); n = max(1, len(ws)); span = w1 - w0 - int(1.2 * fps)
+    for i, o in enumerate(ws):
+        a = w0 + int(span * i / n); base = o.location.z < .05
+        grow(o, a, a + int(1.2 * fps), (1, 1, .03) if base else (1, 1, 0.0005))
+    for role, sh, drop in (("opening", "openings", .0), ("opening-leaf", "openings", .0), ("object", "furniture", .45)):
+        a0, a1 = S[sh]; xs = sorted(by.get(role, []), key=lambda o: (ang(o), o.name)); n = max(1, len(xs)); span = a1 - a0 - int(.8 * fps)
+        for i, o in enumerate(xs):
+            a = a0 + int(span * i / n); grow(o, a, a + int(.8 * fps), (.0005, .0005, .0005), drop)
+    # Estancia final: la que el proyecto llama salón (por su nombre visible) o, si no, la mayor contada.
+    rooms = [r for r in project["rooms"] if r.get("counted", True)]
+    area = lambda r: abs(sum(p["x"] * q["y"] - q["x"] * p["y"] for p, q in zip(r["polygon"], r["polygon"][1:] + r["polygon"][:1]))) / 2
+    room = next((r for r in rooms if re.search(r"sal[oó]n|living|estar", str(labels.get(r["id"], "")), re.I)), None) or max(rooms, key=area)
+    poly = room["polygon"]; c = R.centroid(poly); lc = R.to_blender(c["x"], c["y"], origin, 0)
+    far = max(poly, key=lambda p: (p["x"] - c["x"]) ** 2 + (p["y"] - c["y"]) ** 2)
+    eye0 = R.to_blender(c["x"] + .6 * (far["x"] - c["x"]), c["y"] + .6 * (far["y"] - c["y"]), origin, 1.45)
+    eye1 = R.to_blender(c["x"] + .45 * (far["x"] - c["x"]), c["y"] + .45 * (far["y"] - c["y"]), origin, 1.4)
+    tg0 = R.to_blender(c["x"] - .9 * (far["x"] - c["x"]), c["y"] - .9 * (far["y"] - c["y"]), origin, 1.1)
+    side = (tg0 - eye0).cross(V((0, 0, 1))).normalized() * 1.6; tg1 = tg0 + side
+    # Rótulos de estancia (nombre visible del proyecto) tendidos sobre la planta: se leen en el cenital y se retiran al girar.
+    mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = mat.node_tree.nodes.get("Principled BSDF"); bs.inputs["Base Color"].default_value = (.03, .03, .035, 1); bs.inputs["Roughness"].default_value = .9
+    f_out = S["floors"][1] - int(.6 * fps); nlab = 0
+    for r in rooms:
+        t = labels.get(r["id"]) or ""
+        if not t or re.search(r"[㐀-鿿]", t): continue
+        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = t; cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.24, min(.55, (max(xs_) - min(xs_)) / 1000 / max(4, len(t)) * 1.5, wmin * .3)); cu.extrude = .002
+        ob = bpy.data.objects.new(cu.name, cu); ob.data.materials.append(mat); derived.objects.link(ob); cc = R.centroid(r["polygon"])
+        L = R.to_blender(cc["x"], cc["y"], origin, .03); key(ob, 0, L, V((1, 1, 1))); key(ob, f_out, L, V((1, 1, 1))); key(ob, f_out + int(.6 * fps), L, V((.0005, .0005, .0005))); nlab += 1
+    # Cámara: puntos clave y Catmull-Rom (velocidad continua: sin cortes entre 2D y volumen).
+    def orbit(az, el, d): az, el = math.radians(az), math.radians(el); return ctr + V((math.cos(el) * math.sin(az), -math.cos(el) * math.cos(az), math.sin(el))) * d * diag
+    top = lambda z: ctr + V((0, -.002 * diag, z * diag))
+    lens_top = 50; H = (max(hi.x - lo.x, (hi.y - lo.y) * 16 / 9) * 1.18) * lens_top / 36 / diag  # planta entera en el encuadre
+    up = (eye0 - lc); up.z = 0; aprox = lc + up.normalized() * 2.0 + V((0, 0, h + 2.2)); dentro = lc + up.normalized() * 1.2 + V((0, 0, h - .5))
+    K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .97), ctr, lens_top), (S["floors"][1], orbit(-30, 58, 1.25), ctr, 40),
+         (S["walls"][1], orbit(-2, 46, 1.15), ctr, 35), (S["openings"][1], orbit(18, 42, 1.05), ctr, 35),
+         (S["furniture"][1], aprox, lc, 30), (S["enter"][0] + int(2.5 * fps), dentro, lc + V((0, 0, .6)), 24), (S["enter"][1], eye0, tg0, 18), (nframes - 1, eye1, tg1, 18)]
+    def cr(p0, p1, p2, p3, t): return .5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3)
+    def at(f, idx):
+        for k in range(len(K) - 1):
+            if K[k][0] <= f <= K[k + 1][0]:
+                t = (f - K[k][0]) / max(1, K[k + 1][0] - K[k][0]); t = t * t * (3 - 2 * t) if k in (0, len(K) - 2) else t
+                g = lambda j: K[min(max(j, 0), len(K) - 1)][idx]
+                return cr(g(k - 1), g(k), g(k + 1), g(k + 2), t) if idx < 3 else g(k) + (g(k + 1) - g(k)) * t
+        return K[-1][idx]
+    for f in range(0, nframes, 6): cd.lens = at(f, 3); cd.keyframe_insert("lens", frame=f)
+    cd.clip_start = .05; cd.clip_end = diag * 10
+    # Techos y luminarias: entran cuando la cámara ya está por debajo del techo, fuera del encuadre.
+    f_in = next((f for f in range(S["furniture"][1], nframes) if at(f, 1).z < h - .25), S["enter"][1])
+    for o in by.get("ceiling", []) + by.get("fixture", []): grow(o, f_in, f_in + 2, (.0005, .0005, .0005))
+    sc.render.use_persistent_data = True  # misma escena en todos los fotogramas: se reutiliza entre ellos
+    declared.append(f"Película del proyecto · «Del plano a la vivienda»: {nframes} fotogramas a {fps} fps sin sonido; cronología {TL['_sha256'][:12]}")
+    declared.append(f"planta legible: cenital con objetivo de {lens_top} mm, suelos del ZIP, huella de los muros al 3 % y {nlab} rótulos con el nombre visible de cada estancia (se retiran al girar)")
+    declared.append(f"aparición en su posición: {len(ws)} muros crecen desde su huella; {len(by.get('opening', []))} huecos, {len(by.get('opening-leaf', []))} hojas y {len(by.get('object', []))} muebles crecen en su sitio (muebles desde 0,45 m por encima); techos y luminarias al entrar (fotograma {f_in})")
+    declared.append(f"estancia final «{labels.get(room['id'], room['id'])}» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m")
+    return lambda f: (at(f, 1), at(f, 2))
+
 def main():
     pos = [a for a in sys.argv[sys.argv.index("--") + 1:] if not a.startswith("--")]
     # posicionales = los tres primeros que no son valor de una opción
@@ -754,6 +827,10 @@ def main():
     res = [int(v) for v in arg("--res", prof["res"]).split("x")]; samples = int(arg("--samples", prof["samples"]))
     shot = arg("--shot", "aereo"); light = arg("--light", "dia"); fps = int(arg("--fps", "24")); secs = float(arg("--seconds", "2"))
     nframes = max(1, int(round(fps * secs)))
+    TL = None
+    if shot == "pelicula":  # §11 «Película del proyecto» · formato «Del plano a la vivienda»: la cronología manda
+        tlp = Path(arg("--timeline")).resolve(); TL = json.loads(tlp.read_bytes()); TL["_sha256"] = hashlib.sha256(tlp.read_bytes()).hexdigest()
+        fps = int(TL["output"]["fps"]); nframes = int(TL["output"]["frames"])
     fr = arg("--frames"); f0, f1 = (int(x) for x in fr.split("-")) if fr else (0, nframes - 1)
     manifest = json.loads((pkg / "manifest.json").read_bytes()); cargar_materiales(pkg, manifest)
     project, labels = R.load_rooms(pkg, manifest)
@@ -909,6 +986,8 @@ def main():
             declared.append(f"vista directa del balcón «{labels.get(r0['id'], r0['id'])}»: cámara en su esquina a 1,3 m, objetivo de 20 mm")
         def pose(t):
             return a0.lerp(a1, t), tgt
+    elif shot == "pelicula":
+        pose_f = pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes)
     else:
         if ceilings: ceilings.hide_render = False
         if fixtures: fixtures.hide_render = False
@@ -925,8 +1004,12 @@ def main():
         declared.append(f"plano interior: travelling de {round((a1 - a0).length, 2)} m hacia el centro de «{labels.get(rid, rid)}» a 1,35 m; holgura inicial {round(free, 2)} m")
     for f in range(nframes):
         t = f / max(1, nframes - 1); t = t * t * (3 - 2 * t)  # suavizado
-        loc, look = pose(t); cam.location = loc; cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
+        loc, look = pose_f(f) if shot == "pelicula" else pose(t); cam.location = loc; cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
         cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f)
+    if shot == "pelicula":  # al final de la película todo está en su sitio: huella = escena de entrada
+        sc.frame_set(nframes - 1); geo2 = huella_geometria(); dif = sorted(k for k in geo0 if geo2.get(k) != geo1.get(k))
+        integridad["finalPelicula"] = {"fotograma": nframes - 1, "cambiados": len(dif), "resultado": "posiciones y dimensiones finales = escena de entrada" if not dif else "DIFERENCIAS: " + ", ".join(dif[:8])}
+        sc.frame_set(0)
     inv = inventario(sc, cam, project)
     out.mkdir(parents=True, exist_ok=True)
     pend = [r for r in inv if r.get("aviso")] + [r for r in materiales["asignaciones"] if r["objetivo"]["tipo"] == "suelo" and r["estado"].startswith("reserva")]
@@ -948,6 +1031,9 @@ def main():
                 "equipment": {"device": "CPU", "cpu": cpu_model(), "logicalCpus": os.cpu_count(), "ramGb": ram_gb(), "gpu": None,
                               "blender": bpy.app.version_string, "cycles": bpy.app.version_string, "os": platform.platform()},
                 "package": {"manifestSha256": hashlib.sha256((pkg / "manifest.json").read_bytes()).hexdigest()},
+                **({"pelicula": {"modulo": "Película del proyecto", "formato": "Del plano a la vivienda", "timelineSha256": TL["_sha256"],
+                                 "planos": [{k: x[k] for k in ("id", "seconds", "frames", "camera")} for x in TL["shots"]], "omisiones": TL["omissions"],
+                                 "conciliacion": TL.get("reconcile"), "audio": None}} if TL else {}),
                 "script": {"sha256": hashlib.sha256(HERE.read_bytes()).hexdigest()}})
     for f in range(f0, f1 + 1):
         p = fdir / f"f{f:04d}.png"

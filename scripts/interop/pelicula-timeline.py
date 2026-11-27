@@ -19,17 +19,18 @@ import argparse, hashlib, json, sys
 SCHEMA = "rubik-sota.pelicula-timeline"
 VERSION = "1.0.0"
 # (id, inicio s, fin s, cámara, grupos que aparecen en el plano, rótulo)
-SHOTS = [
-    ("plan", 0.0, 2.0, "cenital fijo", [], "project"),
-    ("floors", 2.0, 5.0, "descenso diagonal suave", ["room"], "rooms"),
-    ("walls", 5.0, 9.0, "órbita lenta", ["wall"], "walls"),
-    ("openings", 9.0, 12.0, "órbita", ["opening", "opening-leaf"], "openings"),
-    ("furniture", 12.0, 16.0, "acercamiento al salón", ["object"], None),
-    ("enter", 16.0, 20.0, "inmersión a altura de ojos por la puerta del salón", [], None),
-    ("living", 20.0, 24.0, "giro lento en el salón", [], "studio"),
+SHOTS = [  # 30 s: tiempo para valorar ritmo, transición y fidelidad (revisión del propietario 27/11)
+    ("plan", 0.0, 3.5, "cenital fijo: planta legible con rótulos de estancia", ["room"], "project"),
+    ("floors", 3.5, 6.5, "del cenital a la diagonal (continuidad de cámara)", [], "rooms"),
+    ("walls", 6.5, 11.5, "órbita lenta mientras los muros crecen desde su huella", ["wall"], "walls"),
+    ("openings", 11.5, 15.0, "órbita", ["opening", "opening-leaf"], "openings"),
+    ("furniture", 15.0, 20.0, "acercamiento a la estancia principal", ["object"], None),
+    ("enter", 20.0, 25.0, "descenso dentro de la estancia hasta la altura de los ojos", [], None),
+    ("living", 25.0, 30.0, "giro lento dentro de la estancia", [], "studio"),
 ]
 # Roles que la película no anima y por qué (se registran como omisiones, nunca se esconden en silencio).
-NOT_ANIMATED = {"ceiling": "techo oculto para ver el interior (se conserva en la escena de entrada)"}
+NOT_ANIMATED = {"ceiling": "techo oculto en los planos exteriores; aparece cuando la cámara ya está dentro de la estancia (por encima del encuadre)",
+                "fixture": "luminarias de techo: aparecen con el techo, al entrar (no flotan en los planos exteriores)"}
 EXPECTED = ["room", "wall", "opening", "opening-leaf", "object"]
 
 

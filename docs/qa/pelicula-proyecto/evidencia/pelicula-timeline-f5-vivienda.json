@@ -1,0 +1,420 @@
+{
+  "schema": "rubik-sota.pelicula-timeline",
+  "version": "1.0.0",
+  "output": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "frames": 720,
+    "seconds": 30.0,
+    "audio": null
+  },
+  "input": {
+    "format": "rubik-sota.scene-delivery",
+    "version": "1.0.0",
+    "projectId": "prj_op10-f5-furniture",
+    "observedProjectSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+    "sceneGlbSha256": "a1b588b7d167aaae4635788239199fec313649a0b74a849d2c341e50f3af0354",
+    "zipSha256": "04e9fe78d7e2b7c6ef13a1eab9662eed1f60d328eeb76926d43f9d28ee084dd5",
+    "bounds": {
+      "min": [
+        -6.185,
+        -0.000896,
+        -5.52
+      ],
+      "max": [
+        6.185,
+        2.8,
+        5.52
+      ]
+    },
+    "units": "metres"
+  },
+  "groups": [
+    {
+      "role": "room",
+      "count": 15
+    },
+    {
+      "role": "wall",
+      "count": 292
+    },
+    {
+      "role": "opening",
+      "count": 97
+    },
+    {
+      "role": "opening-leaf",
+      "count": 12
+    },
+    {
+      "role": "object",
+      "count": 1069
+    }
+  ],
+  "shots": [
+    {
+      "id": "plan",
+      "seconds": [
+        0.0,
+        3.5
+      ],
+      "frames": [
+        0,
+        83
+      ],
+      "camera": "cenital fijo: planta legible con rótulos de estancia",
+      "appear": [
+        {
+          "role": "room",
+          "meshes": 15,
+          "rubikIds": [
+            "rom_balcony",
+            "rom_bay1",
+            "rom_bay2",
+            "rom_child",
+            "rom_dining",
+            "rom_gbath",
+            "rom_hall",
+            "rom_kid",
+            "rom_kitchen",
+            "rom_laundry",
+            "rom_living",
+            "rom_master",
+            "rom_mbath"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "nombre del proyecto",
+        "source": "manifest.source.projectId"
+      }
+    },
+    {
+      "id": "floors",
+      "seconds": [
+        3.5,
+        6.5
+      ],
+      "frames": [
+        84,
+        155
+      ],
+      "camera": "del cenital a la diagonal (continuidad de cámara)",
+      "appear": [],
+      "skippedGroups": [],
+      "label": {
+        "text": "13 estancias",
+        "source": "scene.glb · rubik_id distintos con rubik_role=room"
+      }
+    },
+    {
+      "id": "walls",
+      "seconds": [
+        6.5,
+        11.5
+      ],
+      "frames": [
+        156,
+        275
+      ],
+      "camera": "órbita lenta mientras los muros crecen desde su huella",
+      "appear": [
+        {
+          "role": "wall",
+          "meshes": 292,
+          "rubikIds": [
+            "wal_ref-bay-0",
+            "wal_ref-bay-1",
+            "wal_ref-door-0",
+            "wal_ref-door-1",
+            "wal_ref-door-2",
+            "wal_ref-door-3",
+            "wal_ref-door-4",
+            "wal_ref-door-5",
+            "wal_ref-slide-0",
+            "wal_ref-slide-1",
+            "wal_ref-w0",
+            "wal_ref-w1",
+            "wal_ref-w10",
+            "wal_ref-w11",
+            "wal_ref-w12",
+            "wal_ref-w13",
+            "wal_ref-w14",
+            "wal_ref-w15",
+            "wal_ref-w16",
+            "wal_ref-w17",
+            "wal_ref-w18",
+            "wal_ref-w19",
+            "wal_ref-w2",
+            "wal_ref-w20",
+            "wal_ref-w21",
+            "wal_ref-w22",
+            "wal_ref-w23",
+            "wal_ref-w24",
+            "wal_ref-w25",
+            "wal_ref-w26",
+            "wal_ref-w27",
+            "wal_ref-w28",
+            "wal_ref-w29",
+            "wal_ref-w3",
+            "wal_ref-w30",
+            "wal_ref-w31",
+            "wal_ref-w32",
+            "wal_ref-w33",
+            "wal_ref-w34",
+            "wal_ref-w35",
+            "wal_ref-w36",
+            "wal_ref-w37",
+            "wal_ref-w38",
+            "wal_ref-w39",
+            "wal_ref-w4",
+            "wal_ref-w40",
+            "wal_ref-w41",
+            "wal_ref-w42",
+            "wal_ref-w43",
+            "wal_ref-w44",
+            "wal_ref-w45",
+            "wal_ref-w46",
+            "wal_ref-w47",
+            "wal_ref-w5",
+            "wal_ref-w6",
+            "wal_ref-w7",
+            "wal_ref-w8",
+            "wal_ref-w9",
+            "wal_ref-window-0",
+            "wal_ref-window-1",
+            "wal_ref-window-10",
+            "wal_ref-window-11",
+            "wal_ref-window-2",
+            "wal_ref-window-3",
+            "wal_ref-window-4",
+            "wal_ref-window-5",
+            "wal_ref-window-6",
+            "wal_ref-window-7",
+            "wal_ref-window-8",
+            "wal_ref-window-9"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "70 muros",
+        "source": "scene.glb · rubik_id distintos con rubik_role=wall"
+      }
+    },
+    {
+      "id": "openings",
+      "seconds": [
+        11.5,
+        15.0
+      ],
+      "frames": [
+        276,
+        359
+      ],
+      "camera": "órbita",
+      "appear": [
+        {
+          "role": "opening",
+          "meshes": 97,
+          "rubikIds": [
+            "opn_door-0",
+            "opn_door-1",
+            "opn_door-2",
+            "opn_door-3",
+            "opn_door-4",
+            "opn_door-5",
+            "opn_slide-0",
+            "opn_slide-1",
+            "opn_window-0",
+            "opn_window-1",
+            "opn_window-10",
+            "opn_window-11",
+            "opn_window-2",
+            "opn_window-3",
+            "opn_window-4",
+            "opn_window-5",
+            "opn_window-6",
+            "opn_window-7",
+            "opn_window-8",
+            "opn_window-9"
+          ]
+        },
+        {
+          "role": "opening-leaf",
+          "meshes": 12,
+          "rubikIds": [
+            "opn_door-0",
+            "opn_door-1",
+            "opn_door-2",
+            "opn_door-3",
+            "opn_door-4",
+            "opn_door-5"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "20 huecos",
+        "source": "scene.glb · rubik_id distintos con rubik_role=opening"
+      }
+    },
+    {
+      "id": "furniture",
+      "seconds": [
+        15.0,
+        20.0
+      ],
+      "frames": [
+        360,
+        479
+      ],
+      "camera": "acercamiento a la estancia principal",
+      "appear": [
+        {
+          "role": "object",
+          "meshes": 1069,
+          "rubikIds": [
+            "obj_op10-catalog-bench",
+            "obj_template-001",
+            "obj_template-002",
+            "obj_template-003",
+            "obj_template-004",
+            "obj_template-005",
+            "obj_template-006",
+            "obj_template-007",
+            "obj_template-008",
+            "obj_template-009",
+            "obj_template-010",
+            "obj_template-011",
+            "obj_template-012",
+            "obj_template-013",
+            "obj_template-014",
+            "obj_template-015",
+            "obj_template-016",
+            "obj_template-017",
+            "obj_template-018",
+            "obj_template-019",
+            "obj_template-020",
+            "obj_template-021",
+            "obj_template-022",
+            "obj_template-023",
+            "obj_template-024",
+            "obj_template-025",
+            "obj_template-026",
+            "obj_template-027",
+            "obj_template-028",
+            "obj_template-029",
+            "obj_template-030",
+            "obj_template-031",
+            "obj_template-032",
+            "obj_template-033",
+            "obj_template-034",
+            "obj_template-035",
+            "obj_template-036",
+            "obj_template-037",
+            "obj_template-038",
+            "obj_template-039",
+            "obj_template-040",
+            "obj_template-041",
+            "obj_template-042",
+            "obj_template-043",
+            "obj_template-044",
+            "obj_template-045",
+            "obj_template-046"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": null
+    },
+    {
+      "id": "enter",
+      "seconds": [
+        20.0,
+        25.0
+      ],
+      "frames": [
+        480,
+        599
+      ],
+      "camera": "descenso dentro de la estancia hasta la altura de los ojos",
+      "appear": [],
+      "skippedGroups": [],
+      "label": null
+    },
+    {
+      "id": "living",
+      "seconds": [
+        25.0,
+        30.0
+      ],
+      "frames": [
+        600,
+        719
+      ],
+      "camera": "giro lento dentro de la estancia",
+      "appear": [],
+      "skippedGroups": [],
+      "label": {
+        "text": "logo de Mi estudio (si el profesional lo elige)",
+        "source": "Mi estudio · opcional"
+      }
+    }
+  ],
+  "omissions": [
+    {
+      "role": "ceiling",
+      "reason": "techo oculto para ver el interior (se conserva en la escena de entrada)",
+      "count": 13
+    },
+    {
+      "role": "fixture",
+      "reason": "rol sin regla de aparición: visible desde el inicio",
+      "count": 11
+    }
+  ],
+  "reconcile": [
+    {
+      "role": "room",
+      "project": 13,
+      "glbEntities": 13,
+      "glbMeshes": 28,
+      "manifestMeshes": 15,
+      "missingInScene": [],
+      "notInProject": []
+    },
+    {
+      "role": "wall",
+      "project": 70,
+      "glbEntities": 70,
+      "glbMeshes": 362,
+      "manifestMeshes": 292,
+      "missingInScene": [],
+      "notInProject": []
+    },
+    {
+      "role": "opening",
+      "project": 22,
+      "glbEntities": 20,
+      "glbMeshes": 117,
+      "manifestMeshes": 97,
+      "missingInScene": [
+        "opn_bay-0",
+        "opn_bay-1"
+      ],
+      "notInProject": []
+    }
+  ],
+  "approximations": [],
+  "derived": "RUBIK_derived · cámara, tiempos, luz editorial y rótulos; la escena de entrada no se escribe",
+  "check": "al cerrar, huella de geometría y posiciones finales = escena de entrada (blender-rodaje.py)",
+  "donor": {
+    "repo": "Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-",
+    "commit": "2d3463e4",
+    "license": "MIT",
+    "reused": "estructura de cronología por sistemas (adaptada); sin código, texturas, música ni modelos"
+  }
+}
