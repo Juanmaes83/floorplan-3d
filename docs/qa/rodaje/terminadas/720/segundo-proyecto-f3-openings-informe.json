@@ -1,0 +1,107 @@
+{
+ "frames": {
+  "0": {
+   "seconds": 24.8,
+   "sha256": "52c66005046e2db7efe9b9233f8e83034434863eb987999e6ca1007e14b7a367",
+   "peakRssBytes": 1040068608
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "revision",
+ "resolution": [
+  1280,
+  720
+ ],
+ "samples": 16,
+ "shot": "interior",
+ "light": "dia",
+ "inventario": [
+  {
+   "id": "obj_design-table",
+   "rol": "object",
+   "tipoExportado": "dining-table",
+   "piezas": 1,
+   "distanciaM": 3.04,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara"
+   ],
+   "fuente": "tipo y color (aproximación visual)"
+  },
+  {
+   "id": "opn_south-slider",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 11,
+   "distanciaM": 3.8,
+   "plano": "segundo plano",
+   "acabados": [
+    "color plano del visor"
+   ],
+   "fuente": "geometría del hueco"
+  },
+  {
+   "id": "opn_partition-door",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 4.95,
+   "plano": "segundo plano",
+   "acabados": [
+    "color plano del visor"
+   ],
+   "fuente": "geometría del hueco"
+  },
+  {
+   "id": "obj_unknown-ref",
+   "rol": "object",
+   "tipoExportado": "cabinet",
+   "piezas": 41,
+   "distanciaM": 5.93,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)"
+  }
+ ],
+ "fps": 24,
+ "frameCount": 48,
+ "declared": [
+  "Cycles CPU, 16 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 2 puntos empotrados de 70° (derivados)",
+  "recursos: 0 descargados y verificados; 0 no disponibles (sin red o huella distinta: color plano declarado)",
+  "suelos: 0 estancias con PBR CC0 a escala real y color medio = color del material del proyecto; sustituciones: []",
+  "suelos sin recurso (color plano conservado): [{\"estancia\": \"Synthetic living 6010 × 3730\", \"material\": \"floor:rom_living\", \"motivo\": \"sin recurso verificado: color plano\"}, {\"estancia\": \"Synthetic study 2130 × 2450\", \"material\": \"floor:rom_study\", \"motivo\": \"sin recurso verificado: color plano\"}]",
+  "muros: solo relieve y rugosidad (color plano del proyecto) de «painted_plaster_wall» (CC0) en 27 piezas; el color es el del proyecto (sin cambio de tono)",
+  "vidrio físico: 1 materiales (IOR 1,45, liso); los rayos de sombra lo atraviesan para que entre el sol (recurso de visualización)",
+  "luz de ventana: 3 portales de luz en los huecos acristalados (recurso de visualización; guían el muestreo del cielo, no añaden energía)",
+  "mobiliario (APROXIMACIÓN VISUAL por tipo y pieza; el proyecto no identifica el material): {\"bench → madera-clara-barnizada\": 1, \"cabinet → ceramica-esmaltada\": 1, \"cabinet → flor\": 5, \"cabinet → madera-clara-barnizada\": 10, \"cabinet → madera-oscura\": 7, \"cabinet → papel-carton\": 13, \"cabinet → tallo\": 5, \"dining-table → madera-clara-barnizada\": 1}",
+  "cara trasera oculta como en el visor en 21 materiales generados",
+  "cielo: HDRI CC0 «kloofendal_48d_partly_cloudy_puresky» 0,6, girado al azimut del sol capturado; el sol del visor se conserva",
+  "plano interior: travelling de 1.06 m hacia el centro de «Synthetic living 6010 × 3730» a 1,35 m; holgura inicial 0.93 m"
+ ],
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "824772d292f02250abbc952e915a7d0ad902e98b5e0570370d32919cd178493d"
+ },
+ "script": {
+  "sha256": "c29dd2cd53e655299d93650268d3a5c36ef7da5bbaebc8c30ab965588a6fef0b"
+ }
+}

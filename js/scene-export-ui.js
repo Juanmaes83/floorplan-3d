@@ -80,7 +80,7 @@
  // Camino B: el script de preparación completa, leído del mismo origen (sin red externa). Se cachea; si falla, null.
  // M03 · Kit de render: copias exactas del repositorio leídas del mismo origen. Cada una se reconoce por su cabecera: nunca
  // se empaqueta una página de error en su lugar. Si alguna falta, el kit no se entrega a medias (el LEEME lo explica).
- const SPDX='# SPDX-License-Identifier: GPL-3.0-or-later';const KIT_HEAD={render:SPDX,verify:SPDX,profiles:'{',sh:'#!/bin/sh',bat:'@echo off',licence:'RUBIK SOTA · Licencia',copying:'                    GNU GENERAL PUBLIC LICENSE'};
+ const SPDX='# SPDX-License-Identifier: GPL-3.0-or-later';const KIT_HEAD={render:SPDX,verify:SPDX,profiles:'{',sh:'#!/bin/sh',bat:'@echo off',licence:'RUBIK SOTA · Licencia',copying:'                    GNU GENERAL PUBLIC LICENSE',rodaje:SPDX,recursos:'{',rodar:'#!/bin/sh',rodarBat:'@echo off'};
  let kitCache;async function kit(){
   if(kitCache!==undefined)return kitCache;const out={};
   for(const [k,src] of Object.entries(D.KIT_SOURCES||{})){try{const r=await fetch(src,{cache:'no-store'});if(!r.ok){kitCache=null;return null;}const b=new Uint8Array(await r.arrayBuffer());
@@ -106,9 +106,11 @@
    status.textContent=tx('Empaquetando la escena…','Packaging the scene…','正在打包场景…');await new Promise(r=>setTimeout(r));if(abort.signal.aborted)throw Object.assign(Error('cancelled'),{code:'CANCELLED'});
    const prepareScript=await script(),kitBytes=await kit();ensureCurrent();
    const rooms=D.roomsDoc?D.roomsDoc({project,label:roomLabel}):null,glb=C.toGLB(capture.doc);
+   // Material Tokens 1.0.0: vista derivada del proyecto (identidad pedida por superficie y objeto); si el núcleo no cargó, el ZIP sigue como antes.
+   let materials=null;try{materials=window.RubikMaterialTokens?window.RubikMaterialTokens.materialsDoc({project}):null;}catch{materials=null;}
    const site=await sceneSite(project);ensureCurrent();
-   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,site,film:filmScript(),captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
-   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,site,film:filmScript(),lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
+   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,materials,site,film:filmScript(),captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
+   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,materials,site,film:filmScript(),lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
    const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
    result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
    set('ready');siteNote(site);primary.focus();

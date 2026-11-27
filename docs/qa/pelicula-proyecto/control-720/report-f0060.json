@@ -1,0 +1,5428 @@
+{
+ "frames": {
+  "60": {
+   "seconds": 9.9,
+   "sha256": "266a578750bd6b8ed1194b3451a74c68d9936d3ef31b399be99f5e0fd1a921f0",
+   "peakRssBytes": 2369179648
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "revision",
+ "resolution": [
+  1280,
+  720
+ ],
+ "samples": 8,
+ "shot": "pelicula",
+ "light": "dia",
+ "inventario": [
+  {
+   "id": "obj_template-038",
+   "rol": "object",
+   "tipoExportado": "bed",
+   "piezas": 16,
+   "distanciaM": 31.75,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-027",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.77,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-037",
+   "rol": "object",
+   "tipoExportado": "plant",
+   "piezas": 61,
+   "distanciaM": 31.77,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-maceta",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-016",
+   "rol": "object",
+   "tipoExportado": "vanity",
+   "piezas": 16,
+   "distanciaM": 31.8,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-028",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.8,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-031",
+   "rol": "object",
+   "tipoExportado": "tvstand",
+   "piezas": 31,
+   "distanciaM": 31.8,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-pantalla",
+    "rodaje-papel",
+    "rodaje-plastico",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_op10-catalog-bench",
+   "rol": "object",
+   "tipoExportado": "bench",
+   "piezas": 1,
+   "distanciaM": 31.82,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-015",
+   "rol": "object",
+   "tipoExportado": "toilet",
+   "piezas": 8,
+   "distanciaM": 31.83,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-sanitaria"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-024",
+   "rol": "object",
+   "tipoExportado": "table",
+   "piezas": 30,
+   "distanciaM": 31.83,
+   "plano": "segundo plano",
+   "acabados": [
+    "color plano del visor",
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación con piezas sin regla"
+  },
+  {
+   "id": "obj_template-039",
+   "rol": "object",
+   "tipoExportado": "wardrobe",
+   "piezas": 20,
+   "distanciaM": 31.85,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-023",
+   "rol": "object",
+   "tipoExportado": "fridge",
+   "piezas": 12,
+   "distanciaM": 31.87,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-esmalte",
+    "rodaje-inox",
+    "rodaje-plastico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-025",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.87,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-014",
+   "rol": "object",
+   "tipoExportado": "shower",
+   "piezas": 19,
+   "distanciaM": 31.88,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-inox",
+    "rodaje-metal-oscuro",
+    "rodaje-sanitaria",
+    "vidrio físico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-026",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.9,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-029",
+   "rol": "object",
+   "tipoExportado": "cabinet",
+   "piezas": 49,
+   "distanciaM": 31.9,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-041",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.92,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-004",
+   "rol": "object",
+   "tipoExportado": "wardrobe",
+   "piezas": 24,
+   "distanciaM": 31.93,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-040",
+   "rol": "object",
+   "tipoExportado": "desk",
+   "piezas": 26,
+   "distanciaM": 31.93,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-plastico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-007",
+   "rol": "object",
+   "tipoExportado": "toilet",
+   "piezas": 8,
+   "distanciaM": 31.95,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-sanitaria"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-033",
+   "rol": "object",
+   "tipoExportado": "coffeetable",
+   "piezas": 22,
+   "distanciaM": 31.96,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-030",
+   "rol": "object",
+   "tipoExportado": "rug",
+   "piezas": 3,
+   "distanciaM": 31.97,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-alfombra-campo",
+    "rodaje-alfombra-canto",
+    "rodaje-alfombra-cenefa"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-011",
+   "rol": "object",
+   "tipoExportado": "chair",
+   "piezas": 12,
+   "distanciaM": 31.99,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-008",
+   "rol": "object",
+   "tipoExportado": "vanity",
+   "piezas": 16,
+   "distanciaM": 32.05,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-010",
+   "rol": "object",
+   "tipoExportado": "desk",
+   "piezas": 26,
+   "distanciaM": 32.05,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-plastico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-012",
+   "rol": "object",
+   "tipoExportado": "wardrobe",
+   "piezas": 16,
+   "distanciaM": 32.05,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-035",
+   "rol": "object",
+   "tipoExportado": "shoecab",
+   "piezas": 20,
+   "distanciaM": 32.06,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-006",
+   "rol": "object",
+   "tipoExportado": "shower",
+   "piezas": 19,
+   "distanciaM": 32.09,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-inox",
+    "rodaje-metal-oscuro",
+    "rodaje-sanitaria",
+    "vidrio físico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-042",
+   "rol": "object",
+   "tipoExportado": "baycushion",
+   "piezas": 6,
+   "distanciaM": 32.09,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-001",
+   "rol": "object",
+   "tipoExportado": "bed",
+   "piezas": 17,
+   "distanciaM": 32.1,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-020",
+   "rol": "object",
+   "tipoExportado": "counter",
+   "piezas": 54,
+   "distanciaM": 32.12,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-inox",
+    "rodaje-lacado"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-022",
+   "rol": "object",
+   "tipoExportado": "ksink",
+   "piezas": 10,
+   "distanciaM": 32.12,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-032",
+   "rol": "object",
+   "tipoExportado": "sofa",
+   "piezas": 16,
+   "distanciaM": 32.12,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-034",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 32.12,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-002",
+   "rol": "object",
+   "tipoExportado": "nightstand",
+   "piezas": 19,
+   "distanciaM": 32.14,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-4",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.19,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-009",
+   "rol": "object",
+   "tipoExportado": "bed",
+   "piezas": 13,
+   "distanciaM": 32.2,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-3",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.2,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-013",
+   "rol": "object",
+   "tipoExportado": "bookshelf",
+   "piezas": 95,
+   "distanciaM": 32.22,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-madera-clara",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-021",
+   "rol": "object",
+   "tipoExportado": "stove",
+   "piezas": 23,
+   "distanciaM": 32.22,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-esmalte",
+    "rodaje-inox",
+    "rodaje-metal-oscuro",
+    "rodaje-plastico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-044",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 32.22,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-metal-exterior",
+    "rodaje-tejido-exterior"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-017",
+   "rol": "object",
+   "tipoExportado": "washer",
+   "piezas": 10,
+   "distanciaM": 32.23,
+   "plano": "segundo plano",
+   "acabados": [
+    "color plano del visor",
+    "rodaje-esmalte",
+    "rodaje-inox",
+    "rodaje-plastico"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación con piezas sin regla"
+  },
+  {
+   "id": "obj_template-018",
+   "rol": "object",
+   "tipoExportado": "vanity",
+   "piezas": 16,
+   "distanciaM": 32.23,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-019",
+   "rol": "object",
+   "tipoExportado": "counter",
+   "piezas": 78,
+   "distanciaM": 32.23,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-inox",
+    "rodaje-lacado"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-1",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.27,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-043",
+   "rol": "object",
+   "tipoExportado": "roundtable",
+   "piezas": 17,
+   "distanciaM": 32.28,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-0",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.28,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-005",
+   "rol": "object",
+   "tipoExportado": "baycushion",
+   "piezas": 6,
+   "distanciaM": 32.29,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-003",
+   "rol": "object",
+   "tipoExportado": "nightstand",
+   "piezas": 19,
+   "distanciaM": 32.31,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-036",
+   "rol": "object",
+   "tipoExportado": "plant",
+   "piezas": 61,
+   "distanciaM": 32.35,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-maceta",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-045",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 32.35,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-metal-exterior",
+    "rodaje-tejido-exterior"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-5",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.37,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_door-2",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 1,
+   "distanciaM": 32.39,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-lacado"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-3",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.39,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_slide-1",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 11,
+   "distanciaM": 32.44,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "rodaje-lacado",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-11",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.54,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-9",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.56,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-10",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 6,
+   "distanciaM": 32.58,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-046",
+   "rol": "object",
+   "tipoExportado": "plant",
+   "piezas": 61,
+   "distanciaM": 32.59,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-maceta",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-0",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.62,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-1",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 7,
+   "distanciaM": 32.63,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-4",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 6,
+   "distanciaM": 32.63,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_slide-0",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 11,
+   "distanciaM": 32.64,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "rodaje-lacado",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-2",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 6,
+   "distanciaM": 32.64,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-8",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.64,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-7",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 6,
+   "distanciaM": 32.77,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-5",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 8,
+   "distanciaM": 32.86,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-6",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 5,
+   "distanciaM": 32.86,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  }
+ ],
+ "fps": 24,
+ "frameCount": 720,
+ "declared": [
+  "Cycles CPU, 8 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 14 puntos empotrados de 70° (derivados)",
+  "suelos: 15 estancias con PBR CC0 a escala real y color medio = color del material del proyecto; sustituciones: [{\"estancia\": \"Balcón de estar\", \"materialProyecto\": \"mat_walnut\", \"recurso\": \"wood_floor\", \"escalaM\": 1.6999996900558472, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Mirador del dormitorio principal\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Mirador del dormitorio principal\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Mirador del dormitorio juvenil\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Mirador del dormitorio juvenil\", \"materialProyecto\": \"mat_marble\", \"recurso\": \"marble_01\", \"escalaM\": 1.5, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Dormitorio juvenil\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Comedor\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Baño de invitados\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Pasillo\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Dormitorio infantil\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Cocina\", \"materialProyecto\": \"mat_tile600\", \"recurso\": \"floor_tiles_02\", \"escalaM\": 4.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Balcón-lavadero\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Salón\", \"materialProyecto\": \"mat_tile800\", \"recurso\": \"large_floor_tiles_02\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Dormitorio principal\", \"materialProyecto\": \"mat_wood\", \"recurso\": \"oak_wood_planks\", \"escalaM\": 1.2000000476837158, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}, {\"estancia\": \"Baño en suite\", \"materialProyecto\": \"mat_antislip\", \"recurso\": \"floor_tiles_06\", \"escalaM\": 3.0, \"como\": \"selección explícita del profesional, identidad documentada por el catálogo (token)\"}]",
+  "muros: solo relieve y rugosidad (color plano del proyecto) de «painted_plaster_wall» (CC0) en 292 piezas; el color es el del proyecto (sin cambio de tono)",
+  "vidrio físico: 1 materiales (IOR 1,45, liso); los rayos de sombra lo atraviesan para que entre el sol (recurso de visualización)",
+  "luz de ventana: 16 portales de luz en los huecos acristalados (recurso de visualización; guían el muestreo del cielo, no añaden energía)",
+  "mobiliario (APROXIMACIÓN VISUAL por tipo y pieza; el proyecto no identifica el material): {\"armchair → exterior-estructura-metal-lacado\": 8, \"armchair → exterior-tapiceria-lona\": 14, \"armchair → madera-oscura\": 4, \"armchair → tapiceria-tejido\": 7, \"baycushion → tapiceria-tejido\": 10, \"baycushion → tapiceria-tejido-simple\": 2, \"bed → madera-oscura\": 3, \"bed → tapiceria-tejido\": 43, \"bench → madera-clara-barnizada\": 1, \"bookshelf → hoja\": 14, \"bookshelf → madera-clara-barnizada\": 12, \"bookshelf → papel-carton\": 69, \"cabinet → ceramica-esmaltada\": 1, \"cabinet → flor\": 5, \"cabinet → madera-clara-barnizada\": 12, \"cabinet → madera-oscura\": 7, \"cabinet → papel-carton\": 19, \"cabinet → tallo\": 5, \"chair → tapiceria-tejido\": 12, \"chair → tapiceria-tejido-simple\": 60, \"coffeetable → ceramica-esmaltada\": 2, \"coffeetable → flor\": 5, \"coffeetable → madera-clara-barnizada\": 2, \"coffeetable → madera-oscura\": 5, \"coffeetable → papel-carton\": 3, \"coffeetable → tallo\": 5, \"counter → acero-inoxidable-cepillado\": 8, \"counter → frente-lacado-satinado\": 124, \"desk → ceramica-esmaltada\": 2, \"desk → madera-clara-barnizada\": 10, \"desk → madera-oscura\": 26, \"desk → papel-carton\": 10, \"desk → plastico-satinado\": 4, \"fridge → acero-inoxidable-cepillado\": 2, \"fridge → electrodomestico-esmaltado\": 9, \"fridge → plastico-satinado\": 1, \"ksink → frente-lacado-satinado\": 10, \"nightstand → flor\": 2, \"nightstand → madera-clara-barnizada\": 10, \"nightstand → madera-oscura\": 8, \"nightstand → papel-carton\": 18, \"opening → carpinteria-aluminio-lacado\": 73, \"opening → carpinteria-lacada\": 8, \"opening-leaf → carpinteria-lacada\": 11, \"opening-leaf → carpinteria-madera\": 1, \"plant → hoja\": 174, \"plant → maceta-ceramica\": 3, \"plant → tallo\": 6, \"roundtable → ceramica-esmaltada\": 5, \"roundtable → flor\": 5, \"roundtable → madera-clara-barnizada\": 1, \"roundtable → madera-oscura\": 1, \"roundtable → tallo\": 5, \"rug → alfombra-campo\": 1, \"rug → alfombra-canto\": 1, \"rug → alfombra-cenefa\": 1, \"shoecab → ceramica-esmaltada\": 1, \"shoecab → flor\": 5, \"shoecab → madera-clara-barnizada\": 5, \"shoecab → madera-oscura\": 2, \"shoecab → papel-carton\": 2, \"shoecab → tallo\": 5, \"shower → acero-inoxidable-cepillado\": 10, \"shower → ceramica-sanitaria\": 22, \"shower → metal-oscuro-satinado\": 2, \"sofa → madera-oscura\": 4, \"sofa → tapiceria-tejido\": 12, \"stove → acero-inoxidable-cepillado\": 2, \"stove → electrodomestico-esmaltado\": 2, \"stove → metal-oscuro-satinado\": 2, \"stove → plastico-satinado\": 17, \"table → ceramica-esmaltada\": 5, \"table → flor\": 5, \"table → madera-clara-barnizada\": 7, \"table → papel-carton\": 4, \"table → tallo\": 5, \"toilet → ceramica-sanitaria\": 16, \"tvstand → ceramica-esmaltada\": 1, \"tvstand → flor\": 5, \"tvstand → madera-clara-barnizada\": 5, \"tvstand → madera-oscura\": 11, \"tvstand → pantalla-vidrio-negro\": 1, \"tvstand → papel-carton\": 2, \"tvstand → plastico-satinado\": 1, \"tvstand → tallo\": 5, \"vanity → ceramica-esmaltada\": 3, \"vanity → madera-clara-barnizada\": 33, \"vanity → madera-oscura\": 9, \"vanity → papel-carton\": 3, \"wardrobe → madera-clara-barnizada\": 18, \"wardrobe → madera-oscura\": 6, \"wardrobe → papel-carton\": 36, \"washer → acero-inoxidable-cepillado\": 1, \"washer → electrodomestico-esmaltado\": 6, \"washer → plastico-satinado\": 2}",
+  "piezas SIN acabado identificado (se conserva el color plano del visor), por tipo: {\"washer\": 1}",
+  "cara trasera oculta como en el visor en 180 materiales generados",
+  "cielo: HDRI CC0 «kloofendal_48d_partly_cloudy_puresky» 0,6, girado al azimut del sol capturado; el sol del visor se conserva",
+  "separación de contacto: 29 piezas de doble cara apoyadas en el mismo plano que su soporte, elevadas 0,5 mm; descartes: {\"cerradas_cara_trasera_oculta\": 330, \"mismo_plano_sin_solape_en_planta\": 21, \"solape_en_planta_sin_contacto\": 9} (detalle en materiales.contacto)",
+  "Película del proyecto · «Del plano a la vivienda»: 720 fotogramas a 24 fps sin sonido; cronología df4fcb389ccd",
+  "planta legible: cenital con objetivo de 50 mm, suelos del ZIP, huella de los muros al 3 % y 11 rótulos con el nombre visible de cada estancia (se retiran al girar)",
+  "aparición en su posición: 70 muros crecen desde su huella; 20 huecos, 6 hojas y 47 muebles crecen en su sitio (muebles desde 0,45 m por encima); techos y luminarias al entrar (fotograma 532)",
+  "estancia final «Salón» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m"
+ ],
+ "materiales": {
+  "documento": "Material Tokens 1.0.0 (taxonomía 1.0.0): 60 asignaciones leídas",
+  "tapiceria": {
+   "piezas": [
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:430",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:431",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:432",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:433",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:434",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:435",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:436",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:437",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:438",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:439",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:440",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:441",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:442",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:443",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:444",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-001",
+     "tipo": "bed",
+     "pieza": "object:obj_template-001:445",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:508",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:509",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:510",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:511",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:512",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-005",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-005:513",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:558",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:559",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:560",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:561",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:562",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:563",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:564",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:565",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:566",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:567",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:568",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-009",
+     "tipo": "bed",
+     "pieza": "object:obj_template-009:569",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:596",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:597",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:598",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:599",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:600",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:601",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:602",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:603",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:604",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:605",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:606",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-011",
+     "tipo": "chair",
+     "pieza": "object:obj_template-011:607",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1000",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1001",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1002",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1003",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1004",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1005",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:1006",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:995",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:996",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:997",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:998",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-025",
+     "tipo": "chair",
+     "pieza": "object:obj_template-025:999",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1007",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1008",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1009",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1010",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1011",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1012",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1013",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1014",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1015",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1016",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1017",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-026",
+     "tipo": "chair",
+     "pieza": "object:obj_template-026:1018",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1019",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1020",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1021",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1022",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1023",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1024",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1025",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1026",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1027",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1028",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1029",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-027",
+     "tipo": "chair",
+     "pieza": "object:obj_template-027:1030",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1031",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1032",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1033",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1034",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1035",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1036",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1037",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1038",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1039",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1040",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1041",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-028",
+     "tipo": "chair",
+     "pieza": "object:obj_template-028:1042",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1126",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1127",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1128",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1129",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1130",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1131",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1132",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1133",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1134",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1135",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1136",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 14.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-032",
+     "tipo": "sofa",
+     "pieza": "object:obj_template-032:1137",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -14.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1164",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1165",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1166",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1167",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1168",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1169",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-034",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-034:1170",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1318",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1319",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1320",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1321",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1322",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1323",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1324",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1325",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1326",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1327",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1328",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1329",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1330",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1331",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-038",
+     "tipo": "bed",
+     "pieza": "object:obj_template-038:1332",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1379",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1380",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1381",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1382",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1383",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 4.7,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1384",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 30.9,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1385",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -30.8,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1386",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1387",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1388",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1389",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-041",
+     "tipo": "chair",
+     "pieza": "object:obj_template-041:1390",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1391",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1392",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1393",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1394",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1395",
+     "receta": "tapiceria-tejido",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-042",
+     "tipo": "baycushion",
+     "pieza": "object:obj_template-042:1396",
+     "receta": "tapiceria-tejido-simple",
+     "version": "v3",
+     "familia": "tapicería interior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1414",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1415",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1416",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1417",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1418",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1419",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-044",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-044:1420",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1425",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1426",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1427",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1428",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1429",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": -0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1430",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    },
+    {
+     "objeto": "obj_template-045",
+     "tipo": "armchair",
+     "pieza": "object:obj_template-045:1431",
+     "receta": "exterior-tapiceria-lona",
+     "version": "v3",
+     "familia": "textil exterior",
+     "fuente": "aproximación visual por tipo, pieza y color (RUBIK no declara el material)",
+     "recurso": "rough_linen",
+     "escalaM": 0.2707,
+     "marcoGrados": 0.0,
+     "proyeccion": "triplanar en el marco de la pieza",
+     "limitaciones": [
+      "el modelo exportado no trae costuras, vivos ni pespuntes: los cantos y uniones se leen por la forma redondeada, el contacto (oclusión) y el brillo rasante, no por una costura"
+     ]
+    }
+   ],
+   "resumen": {
+    "exterior-tapiceria-lona": 14,
+    "tapiceria-tejido": 84,
+    "tapiceria-tejido-simple": 62
+   },
+   "objetos": [
+    "obj_template-001",
+    "obj_template-005",
+    "obj_template-009",
+    "obj_template-011",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-028",
+    "obj_template-032",
+    "obj_template-034",
+    "obj_template-038",
+    "obj_template-041",
+    "obj_template-042",
+    "obj_template-044",
+    "obj_template-045"
+   ]
+  },
+  "orden": [
+   "explícito",
+   "documentado del catálogo",
+   "aproximación por familia y pieza",
+   "reserva visible"
+  ],
+  "asignaciones": [
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_balcony",
+     "estancia": "Balcón de estar"
+    },
+    "solicitado": {
+     "token": "material.wood.walnut.satin",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_walnut",
+     "recurso": "wood_floor",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.6999996900558472,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay1",
+     "estancia": "Mirador del dormitorio principal"
+    },
+    "solicitado": {
+     "token": "material.stone.marble.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay1",
+     "estancia": "Mirador del dormitorio principal"
+    },
+    "solicitado": {
+     "token": "material.stone.marble.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay2",
+     "estancia": "Mirador del dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": "material.stone.marble.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay2",
+     "estancia": "Mirador del dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": "material.stone.marble.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_child",
+     "estancia": "Dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_dining",
+     "estancia": "Comedor"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_gbath",
+     "estancia": "Baño de invitados"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.antislip",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_hall",
+     "estancia": "Pasillo"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_kid",
+     "estancia": "Dormitorio infantil"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_kitchen",
+     "estancia": "Cocina"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.matte",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile600",
+     "recurso": "floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 4.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_laundry",
+     "estancia": "Balcón-lavadero"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.antislip",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_living",
+     "estancia": "Salón"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.polished",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_master",
+     "estancia": "Dormitorio principal"
+    },
+    "solicitado": {
+     "token": "material.wood.oak.natural",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_mbath",
+     "estancia": "Baño en suite"
+    },
+    "solicitado": {
+     "token": "material.ceramic.porcelain.antislip",
+     "source": "explicit",
+     "certainty": "documented"
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "selección explícita del profesional, identidad documentada por el catálogo (token)"
+    },
+    "estado": "declarado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-001",
+     "tipoCatalogo": "bed"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 1,
+      "tapiceria-tejido": 16
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-002",
+     "tipoCatalogo": "nightstand"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "papel-carton": 9,
+      "flor": 1,
+      "madera-oscura": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-003",
+     "tipoCatalogo": "nightstand"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "papel-carton": 9,
+      "flor": 1,
+      "madera-oscura": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-004",
+     "tipoCatalogo": "wardrobe"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 2,
+      "madera-clara-barnizada": 7,
+      "papel-carton": 15
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-005",
+     "tipoCatalogo": "baycushion"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido": 5,
+      "tapiceria-tejido-simple": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-006",
+     "tipoCatalogo": "shower"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "ceramica-sanitaria": 11,
+      "acero-inoxidable-cepillado": 5,
+      "metal-oscuro-satinado": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-007",
+     "tipoCatalogo": "toilet"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "ceramica-sanitaria": 8
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-008",
+     "tipoCatalogo": "vanity"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 11,
+      "madera-oscura": 3,
+      "ceramica-esmaltada": 1,
+      "papel-carton": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-009",
+     "tipoCatalogo": "bed"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 1,
+      "tapiceria-tejido": 12
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-010",
+     "tipoCatalogo": "desk"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "madera-oscura": 15,
+      "papel-carton": 3,
+      "plastico-satinado": 2,
+      "ceramica-esmaltada": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-011",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-012",
+     "tipoCatalogo": "wardrobe"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 2,
+      "madera-clara-barnizada": 5,
+      "papel-carton": 9
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-013",
+     "tipoCatalogo": "bookshelf"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 12,
+      "papel-carton": 69,
+      "hoja": 14
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-014",
+     "tipoCatalogo": "shower"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "ceramica-sanitaria": 11,
+      "acero-inoxidable-cepillado": 5,
+      "metal-oscuro-satinado": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-015",
+     "tipoCatalogo": "toilet"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "ceramica-sanitaria": 8
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-016",
+     "tipoCatalogo": "vanity"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 11,
+      "madera-oscura": 3,
+      "ceramica-esmaltada": 1,
+      "papel-carton": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-017",
+     "tipoCatalogo": "washer"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "electrodomestico-esmaltado": 6,
+      "plastico-satinado": 2,
+      "acero-inoxidable-cepillado": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-018",
+     "tipoCatalogo": "vanity"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 11,
+      "madera-oscura": 3,
+      "ceramica-esmaltada": 1,
+      "papel-carton": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-019",
+     "tipoCatalogo": "counter"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "acero-inoxidable-cepillado": 4,
+      "frente-lacado-satinado": 74
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-020",
+     "tipoCatalogo": "counter"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "acero-inoxidable-cepillado": 4,
+      "frente-lacado-satinado": 50
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-021",
+     "tipoCatalogo": "stove"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "plastico-satinado": 17,
+      "electrodomestico-esmaltado": 2,
+      "acero-inoxidable-cepillado": 2,
+      "metal-oscuro-satinado": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-022",
+     "tipoCatalogo": "ksink"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "frente-lacado-satinado": 10
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-023",
+     "tipoCatalogo": "fridge"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "acero-inoxidable-cepillado": 2,
+      "electrodomestico-esmaltado": 9,
+      "plastico-satinado": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-024",
+     "tipoCatalogo": "table"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 7,
+      "ceramica-esmaltada": 5,
+      "tallo": 5,
+      "flor": 5,
+      "papel-carton": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-025",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-026",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-027",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-028",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-029",
+     "tipoCatalogo": "cabinet"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 12,
+      "madera-oscura": 7,
+      "papel-carton": 19,
+      "ceramica-esmaltada": 1,
+      "tallo": 5,
+      "flor": 5
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-030",
+     "tipoCatalogo": "rug"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "alfombra-canto": 1,
+      "alfombra-cenefa": 1,
+      "alfombra-campo": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-031",
+     "tipoCatalogo": "tvstand"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "madera-oscura": 11,
+      "plastico-satinado": 1,
+      "pantalla-vidrio-negro": 1,
+      "ceramica-esmaltada": 1,
+      "tallo": 5,
+      "flor": 5,
+      "papel-carton": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-032",
+     "tipoCatalogo": "sofa"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido": 12,
+      "madera-oscura": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-033",
+     "tipoCatalogo": "coffeetable"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 2,
+      "papel-carton": 3,
+      "madera-oscura": 5,
+      "ceramica-esmaltada": 2,
+      "tallo": 5,
+      "flor": 5
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-034",
+     "tipoCatalogo": "armchair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido": 7,
+      "madera-oscura": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-035",
+     "tipoCatalogo": "shoecab"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "madera-oscura": 2,
+      "ceramica-esmaltada": 1,
+      "tallo": 5,
+      "flor": 5,
+      "papel-carton": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-036",
+     "tipoCatalogo": "plant"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "maceta-ceramica": 1,
+      "tallo": 2,
+      "hoja": 58
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-037",
+     "tipoCatalogo": "plant"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "maceta-ceramica": 1,
+      "tallo": 2,
+      "hoja": 58
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-038",
+     "tipoCatalogo": "bed"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 1,
+      "tapiceria-tejido": 15
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-039",
+     "tipoCatalogo": "wardrobe"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 2,
+      "madera-clara-barnizada": 6,
+      "papel-carton": 12
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-040",
+     "tipoCatalogo": "desk"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 5,
+      "madera-oscura": 11,
+      "papel-carton": 7,
+      "plastico-satinado": 2,
+      "ceramica-esmaltada": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-041",
+     "tipoCatalogo": "chair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido-simple": 10,
+      "tapiceria-tejido": 2
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-042",
+     "tipoCatalogo": "baycushion"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "tapiceria-tejido": 5,
+      "tapiceria-tejido-simple": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-043",
+     "tipoCatalogo": "roundtable"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-oscura": 1,
+      "madera-clara-barnizada": 1,
+      "ceramica-esmaltada": 5,
+      "tallo": 5,
+      "flor": 5
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-044",
+     "tipoCatalogo": "armchair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "exterior-tapiceria-lona": 7,
+      "exterior-estructura-metal-lacado": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-045",
+     "tipoCatalogo": "armchair"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "exterior-tapiceria-lona": 7,
+      "exterior-estructura-metal-lacado": 4
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_template-046",
+     "tipoCatalogo": "plant"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "maceta-ceramica": 1,
+      "tallo": 2,
+      "hoja": 58
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   },
+   {
+    "objetivo": {
+     "tipo": "objeto",
+     "id": "obj_op10-catalog-bench",
+     "tipoCatalogo": "bench"
+    },
+    "solicitado": {
+     "token": null,
+     "source": "none",
+     "certainty": "unknown"
+    },
+    "aplicado": {
+     "piezas": {
+      "madera-clara-barnizada": 1
+     }
+    },
+    "estado": "aproximación por tipo y pieza",
+    "motivo": "el proyecto no declara el material de este objeto: tipo y color solo orientan una aproximación"
+   }
+  ],
+  "tokensSinReceta": [],
+  "integridad": {
+   "objetosComprobados": 1509,
+   "cambiados": 29,
+   "soloContactoDeclarado": true,
+   "resultado": "solo las separaciones de contacto declaradas (+0,5 mm)",
+   "finalPelicula": {
+    "fotograma": 719,
+    "cambiados": 0,
+    "resultado": "posiciones y dimensiones finales = escena de entrada"
+   }
+  },
+  "contacto": {
+   "movidas": [
+    {
+     "pieza": "object:obj_template-006:516",
+     "objeto": "obj_template-006",
+     "soporte": "object:obj_template-006:514",
+     "soporteObjeto": "obj_template-006",
+     "cotaM": 0.05,
+     "areaContactoCm2": 86.0
+    },
+    {
+     "pieza": "object:obj_template-006:517",
+     "objeto": "obj_template-006",
+     "soporte": "object:obj_template-006:514",
+     "soporteObjeto": "obj_template-006",
+     "cotaM": 0.05,
+     "areaContactoCm2": 86.0
+    },
+    {
+     "pieza": "object:obj_template-008:546",
+     "objeto": "obj_template-008",
+     "soporte": "object:obj_template-008:545",
+     "soporteObjeto": "obj_template-008",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1444.0
+    },
+    {
+     "pieza": "object:obj_template-013:674",
+     "objeto": "obj_template-013",
+     "soporte": "object:obj_template-013:665",
+     "soporteObjeto": "obj_template-013",
+     "cotaM": 0.7692,
+     "areaContactoCm2": 81.0
+    },
+    {
+     "pieza": "object:obj_template-013:687",
+     "objeto": "obj_template-013",
+     "soporte": "object:obj_template-013:681",
+     "soporteObjeto": "obj_template-013",
+     "cotaM": 1.1128,
+     "areaContactoCm2": 81.0
+    },
+    {
+     "pieza": "object:obj_template-014:721",
+     "objeto": "obj_template-014",
+     "soporte": "object:obj_template-014:719",
+     "soporteObjeto": "obj_template-014",
+     "cotaM": 0.05,
+     "areaContactoCm2": 86.0
+    },
+    {
+     "pieza": "object:obj_template-014:722",
+     "objeto": "obj_template-014",
+     "soporte": "object:obj_template-014:719",
+     "soporteObjeto": "obj_template-014",
+     "cotaM": 0.05,
+     "areaContactoCm2": 130.0
+    },
+    {
+     "pieza": "object:obj_template-016:751",
+     "objeto": "obj_template-016",
+     "soporte": "object:obj_template-016:750",
+     "soporteObjeto": "obj_template-016",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1444.0
+    },
+    {
+     "pieza": "object:obj_template-018:777",
+     "objeto": "obj_template-018",
+     "soporte": "object:obj_template-018:776",
+     "soporteObjeto": "obj_template-018",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1444.0
+    },
+    {
+     "pieza": "object:obj_template-024:968",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:989",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 576.0
+    },
+    {
+     "pieza": "object:obj_template-024:969",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:989",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 36.0
+    },
+    {
+     "pieza": "object:obj_template-024:970",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:990",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 576.0
+    },
+    {
+     "pieza": "object:obj_template-024:971",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:990",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 36.0
+    },
+    {
+     "pieza": "object:obj_template-024:972",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:991",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 576.0
+    },
+    {
+     "pieza": "object:obj_template-024:973",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:991",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 36.0
+    },
+    {
+     "pieza": "object:obj_template-024:974",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:992",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 576.0
+    },
+    {
+     "pieza": "object:obj_template-024:975",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:992",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 36.0
+    },
+    {
+     "pieza": "object:obj_template-024:976",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:967",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 144.0
+    },
+    {
+     "pieza": "object:obj_template-029:1071",
+     "objeto": "obj_template-029",
+     "soporte": "object:obj_template-029:1070",
+     "soporteObjeto": "obj_template-029",
+     "cotaM": 0.85,
+     "areaContactoCm2": 196.0
+    },
+    {
+     "pieza": "object:obj_template-029:1082",
+     "objeto": "obj_template-029",
+     "soporte": "object:obj_template-029:1070",
+     "soporteObjeto": "obj_template-029",
+     "cotaM": 0.85,
+     "areaContactoCm2": 676.0
+    },
+    {
+     "pieza": "object:obj_template-031:1105",
+     "objeto": "obj_template-031",
+     "soporte": "object:obj_template-031:1095",
+     "soporteObjeto": "obj_template-031",
+     "cotaM": 0.5,
+     "areaContactoCm2": 144.0
+    },
+    {
+     "pieza": "object:obj_template-033:1148",
+     "objeto": "obj_template-033",
+     "soporte": "object:obj_template-033:1146",
+     "soporteObjeto": "obj_template-033",
+     "cotaM": 0.415,
+     "areaContactoCm2": 49.0
+    },
+    {
+     "pieza": "object:obj_template-033:1149",
+     "objeto": "obj_template-033",
+     "soporte": "object:obj_template-033:1142",
+     "soporteObjeto": "obj_template-033",
+     "cotaM": 0.4,
+     "areaContactoCm2": 121.0
+    },
+    {
+     "pieza": "object:obj_template-035:1182",
+     "objeto": "obj_template-035",
+     "soporte": "object:obj_template-035:1180",
+     "soporteObjeto": "obj_template-035",
+     "cotaM": 1.025,
+     "areaContactoCm2": 100.0
+    },
+    {
+     "pieza": "object:obj_template-043:1399",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1398",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 484.0
+    },
+    {
+     "pieza": "object:obj_template-043:1400",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1398",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 484.0
+    },
+    {
+     "pieza": "object:obj_template-043:1401",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1398",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 484.0
+    },
+    {
+     "pieza": "object:obj_template-043:1402",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1398",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 484.0
+    },
+    {
+     "pieza": "object:obj_template-043:1403",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1398",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 100.0
+    }
+   ],
+   "descartes": {
+    "cerradas_cara_trasera_oculta": 330,
+    "mismo_plano_sin_solape_en_planta": 21,
+    "solape_en_planta_sin_contacto": 9
+   },
+   "ejemplosDescarte": {
+    "cerradas_cara_trasera_oculta": [
+     {
+      "pieza": "object:obj_op10-catalog-bench:1497",
+      "objeto": "obj_op10-catalog-bench",
+      "otro": "room:rom_living:9"
+     },
+     {
+      "pieza": "object:obj_template-001:429",
+      "objeto": "obj_template-001",
+      "otro": "room:rom_master:0"
+     },
+     {
+      "pieza": "object:obj_template-001:430",
+      "objeto": "obj_template-001",
+      "otro": "object:obj_template-001:429"
+     },
+     {
+      "pieza": "object:obj_template-001:431",
+      "objeto": "obj_template-001",
+      "otro": "room:rom_master:0"
+     },
+     {
+      "pieza": "object:obj_template-001:438",
+      "objeto": "obj_template-001",
+      "otro": "object:obj_template-001:430"
+     }
+    ],
+    "mismo_plano_sin_solape_en_planta": [
+     {
+      "pieza": "object:obj_template-002:457",
+      "objeto": "obj_template-002",
+      "otro": "object:obj_template-007:533"
+     },
+     {
+      "pieza": "object:obj_template-003:476",
+      "objeto": "obj_template-003",
+      "otro": "object:obj_template-007:533"
+     },
+     {
+      "pieza": "object:obj_template-036:1201",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-029:1058"
+     },
+     {
+      "pieza": "object:obj_template-036:1203",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-013:656"
+     },
+     {
+      "pieza": "object:obj_template-036:1217",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-033:1162"
+     }
+    ],
+    "solape_en_planta_sin_contacto": [
+     {
+      "pieza": "object:obj_template-036:1207",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1210"
+     },
+     {
+      "pieza": "object:obj_template-036:1209",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1197"
+     },
+     {
+      "pieza": "object:obj_template-036:1241",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1237"
+     },
+     {
+      "pieza": "object:obj_template-036:1255",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1249"
+     },
+     {
+      "pieza": "object:obj_template-037:1262",
+      "objeto": "obj_template-037",
+      "otro": "object:obj_template-037:1261"
+     }
+    ]
+   },
+   "elevacionMm": 0.5,
+   "toleranciaMm": 0.2
+  }
+ },
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "05f8c5a6096bd67ae78c39c54dd987eb4eaf29afba210a01f11d4a5eb72daa8b"
+ },
+ "pelicula": {
+  "modulo": "Película del proyecto",
+  "formato": "Del plano a la vivienda",
+  "timelineSha256": "df4fcb389ccdaac5c9cec40696d0859d0764841d689ba453b374265dd1cd610f",
+  "planos": [
+   {
+    "id": "plan",
+    "seconds": [
+     0.0,
+     3.5
+    ],
+    "frames": [
+     0,
+     83
+    ],
+    "camera": "cenital fijo: planta legible con rótulos de estancia"
+   },
+   {
+    "id": "floors",
+    "seconds": [
+     3.5,
+     6.5
+    ],
+    "frames": [
+     84,
+     155
+    ],
+    "camera": "del cenital a la diagonal (continuidad de cámara)"
+   },
+   {
+    "id": "walls",
+    "seconds": [
+     6.5,
+     11.5
+    ],
+    "frames": [
+     156,
+     275
+    ],
+    "camera": "órbita lenta mientras los muros crecen desde su huella"
+   },
+   {
+    "id": "openings",
+    "seconds": [
+     11.5,
+     15.0
+    ],
+    "frames": [
+     276,
+     359
+    ],
+    "camera": "órbita"
+   },
+   {
+    "id": "furniture",
+    "seconds": [
+     15.0,
+     20.0
+    ],
+    "frames": [
+     360,
+     479
+    ],
+    "camera": "acercamiento a la estancia principal"
+   },
+   {
+    "id": "enter",
+    "seconds": [
+     20.0,
+     25.0
+    ],
+    "frames": [
+     480,
+     599
+    ],
+    "camera": "descenso dentro de la estancia hasta la altura de los ojos"
+   },
+   {
+    "id": "living",
+    "seconds": [
+     25.0,
+     30.0
+    ],
+    "frames": [
+     600,
+     719
+    ],
+    "camera": "giro lento dentro de la estancia"
+   }
+  ],
+  "omisiones": [
+   {
+    "role": "ceiling",
+    "reason": "techo oculto para ver el interior (se conserva en la escena de entrada)",
+    "count": 13
+   },
+   {
+    "role": "fixture",
+    "reason": "rol sin regla de aparición: visible desde el inicio",
+    "count": 11
+   }
+  ],
+  "conciliacion": [
+   {
+    "role": "room",
+    "project": 13,
+    "glbEntities": 13,
+    "glbMeshes": 28,
+    "manifestMeshes": 15,
+    "missingInScene": [],
+    "notInProject": []
+   },
+   {
+    "role": "wall",
+    "project": 70,
+    "glbEntities": 70,
+    "glbMeshes": 362,
+    "manifestMeshes": 292,
+    "missingInScene": [],
+    "notInProject": []
+   },
+   {
+    "role": "opening",
+    "project": 22,
+    "glbEntities": 20,
+    "glbMeshes": 117,
+    "manifestMeshes": 97,
+    "missingInScene": [
+     "opn_bay-0",
+     "opn_bay-1"
+    ],
+    "notInProject": []
+   }
+  ],
+  "audio": null
+ },
+ "script": {
+  "sha256": "169acd1439a5f29d8058a04829f06949d07229893e9add2b81164f2c0e9511fc"
+ }
+}

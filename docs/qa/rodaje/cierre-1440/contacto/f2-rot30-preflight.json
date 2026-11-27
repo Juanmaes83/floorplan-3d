@@ -1,0 +1,820 @@
+{
+ "format": "rubik-sota.blender-preflight",
+ "version": "1.0.0",
+ "profile": "revision",
+ "shot": "interior",
+ "light": "dia",
+ "materiales": {
+  "documento": "ZIP sin rubik-materiales.json (anterior a Material Tokens): identidad de materiales no declarada; suelos por material/familia y mobiliario por tipo, pieza y color (aproximación)",
+  "orden": [
+   "explícito",
+   "documentado del catálogo",
+   "aproximación por familia y pieza",
+   "reserva visible"
+  ],
+  "asignaciones": [
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_balcony",
+     "estancia": "Balcón de estar"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_walnut",
+     "recurso": "wood_floor",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.6999996900558472,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay1",
+     "estancia": "Mirador del dormitorio principal"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay1",
+     "estancia": "Mirador del dormitorio principal"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay2",
+     "estancia": "Mirador del dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_bay2",
+     "estancia": "Mirador del dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_marble",
+     "recurso": "marble_01",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.5,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_child",
+     "estancia": "Dormitorio juvenil"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_dining",
+     "estancia": "Comedor"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_gbath",
+     "estancia": "Baño de invitados"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_hall",
+     "estancia": "Pasillo"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_kid",
+     "estancia": "Dormitorio infantil"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_kitchen",
+     "estancia": "Cocina"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile600",
+     "recurso": "floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 4.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_laundry",
+     "estancia": "Balcón-lavadero"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_living",
+     "estancia": "Salón"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_tile800",
+     "recurso": "large_floor_tiles_02",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_master",
+     "estancia": "Dormitorio principal"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_wood",
+     "recurso": "oak_wood_planks",
+     "licencia": "CC0-1.0",
+     "escalaM": 1.2000000476837158,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   },
+   {
+    "objetivo": {
+     "tipo": "suelo",
+     "id": "rom_mbath",
+     "estancia": "Baño en suite"
+    },
+    "solicitado": {
+     "token": null,
+     "source": null,
+     "certainty": null
+    },
+    "aplicado": {
+     "receta": "suelo-pbr:mat_antislip",
+     "recurso": "floor_tiles_06",
+     "licencia": "CC0-1.0",
+     "escalaM": 3.0,
+     "orientacion": "proyección por caja en coordenadas del objeto",
+     "como": "material declarado"
+    },
+    "estado": "documentado aplicado",
+    "motivo": null
+   }
+  ],
+  "tokensSinReceta": [],
+  "integridad": {
+   "objetosComprobados": 1589,
+   "cambiados": 27,
+   "soloContactoDeclarado": true,
+   "resultado": "solo las separaciones de contacto declaradas (+0,5 mm)"
+  },
+  "contacto": {
+   "movidas": [
+    {
+     "pieza": "object:obj_template-006:593",
+     "objeto": "obj_template-006",
+     "soporte": "object:obj_template-006:591",
+     "soporteObjeto": "obj_template-006",
+     "cotaM": 0.05,
+     "areaContactoCm2": 3289.0
+    },
+    {
+     "pieza": "object:obj_template-006:594",
+     "objeto": "obj_template-006",
+     "soporte": "object:obj_template-006:591",
+     "soporteObjeto": "obj_template-006",
+     "cotaM": 0.05,
+     "areaContactoCm2": 3289.0
+    },
+    {
+     "pieza": "object:obj_template-008:623",
+     "objeto": "obj_template-008",
+     "soporte": "object:obj_template-008:622",
+     "soporteObjeto": "obj_template-008",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1440.0
+    },
+    {
+     "pieza": "object:obj_template-014:802",
+     "objeto": "obj_template-014",
+     "soporte": "object:obj_template-014:800",
+     "soporteObjeto": "obj_template-014",
+     "cotaM": 0.05,
+     "areaContactoCm2": 3289.0
+    },
+    {
+     "pieza": "object:obj_template-014:803",
+     "objeto": "obj_template-014",
+     "soporte": "object:obj_template-014:800",
+     "soporteObjeto": "obj_template-014",
+     "cotaM": 0.05,
+     "areaContactoCm2": 7448.3
+    },
+    {
+     "pieza": "object:obj_template-016:832",
+     "objeto": "obj_template-016",
+     "soporte": "object:obj_template-016:831",
+     "soporteObjeto": "obj_template-016",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1440.0
+    },
+    {
+     "pieza": "object:obj_template-018:858",
+     "objeto": "obj_template-018",
+     "soporte": "object:obj_template-018:857",
+     "soporteObjeto": "obj_template-018",
+     "cotaM": 0.81,
+     "areaContactoCm2": 1440.0
+    },
+    {
+     "pieza": "object:obj_template-024:1049",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 143.3
+    },
+    {
+     "pieza": "object:obj_template-024:1050",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 35.4
+    },
+    {
+     "pieza": "object:obj_template-024:1051",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 397.5
+    },
+    {
+     "pieza": "object:obj_template-024:1052",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 35.4
+    },
+    {
+     "pieza": "object:obj_template-024:1053",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 397.5
+    },
+    {
+     "pieza": "object:obj_template-024:1054",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1072",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 35.4
+    },
+    {
+     "pieza": "object:obj_template-024:1055",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 143.3
+    },
+    {
+     "pieza": "object:obj_template-024:1056",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1073",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 35.4
+    },
+    {
+     "pieza": "object:obj_template-024:1057",
+     "objeto": "obj_template-024",
+     "soporte": "object:obj_template-024:1048",
+     "soporteObjeto": "obj_template-024",
+     "cotaM": 0.753,
+     "areaContactoCm2": 143.4
+    },
+    {
+     "pieza": "object:obj_template-029:1152",
+     "objeto": "obj_template-029",
+     "soporte": "object:obj_template-029:1151",
+     "soporteObjeto": "obj_template-029",
+     "cotaM": 0.85,
+     "areaContactoCm2": 195.2
+    },
+    {
+     "pieza": "object:obj_template-029:1163",
+     "objeto": "obj_template-029",
+     "soporte": "object:obj_template-029:1151",
+     "soporteObjeto": "obj_template-029",
+     "cotaM": 0.85,
+     "areaContactoCm2": 673.1
+    },
+    {
+     "pieza": "object:obj_template-031:1186",
+     "objeto": "obj_template-031",
+     "soporte": "object:obj_template-031:1176",
+     "soporteObjeto": "obj_template-031",
+     "cotaM": 0.5,
+     "areaContactoCm2": 143.4
+    },
+    {
+     "pieza": "object:obj_template-033:1229",
+     "objeto": "obj_template-033",
+     "soporte": "object:obj_template-033:1227",
+     "soporteObjeto": "obj_template-033",
+     "cotaM": 0.415,
+     "areaContactoCm2": 48.5
+    },
+    {
+     "pieza": "object:obj_template-033:1230",
+     "objeto": "obj_template-033",
+     "soporte": "object:obj_template-033:1223",
+     "soporteObjeto": "obj_template-033",
+     "cotaM": 0.4,
+     "areaContactoCm2": 120.5
+    },
+    {
+     "pieza": "object:obj_template-035:1263",
+     "objeto": "obj_template-035",
+     "soporte": "object:obj_template-035:1261",
+     "soporteObjeto": "obj_template-035",
+     "cotaM": 1.025,
+     "areaContactoCm2": 99.6
+    },
+    {
+     "pieza": "object:obj_template-043:1480",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1479",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 481.9
+    },
+    {
+     "pieza": "object:obj_template-043:1481",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1479",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 481.9
+    },
+    {
+     "pieza": "object:obj_template-043:1482",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1479",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 481.9
+    },
+    {
+     "pieza": "object:obj_template-043:1483",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1479",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 481.9
+    },
+    {
+     "pieza": "object:obj_template-043:1484",
+     "objeto": "obj_template-043",
+     "soporte": "object:obj_template-043:1479",
+     "soporteObjeto": "obj_template-043",
+     "cotaM": 0.75,
+     "areaContactoCm2": 99.6
+    }
+   ],
+   "descartes": {
+    "cerradas_cara_trasera_oculta": 344,
+    "mismo_plano_sin_solape_en_planta": 12,
+    "solape_en_planta_sin_contacto": 13
+   },
+   "ejemplosDescarte": {
+    "cerradas_cara_trasera_oculta": [
+     {
+      "pieza": "object:obj_template-001:506",
+      "objeto": "obj_template-001",
+      "otro": "room:rom_master:0"
+     },
+     {
+      "pieza": "object:obj_template-001:507",
+      "objeto": "obj_template-001",
+      "otro": "object:obj_template-001:506"
+     },
+     {
+      "pieza": "object:obj_template-001:508",
+      "objeto": "obj_template-001",
+      "otro": "room:rom_master:0"
+     },
+     {
+      "pieza": "object:obj_template-001:515",
+      "objeto": "obj_template-001",
+      "otro": "object:obj_template-001:507"
+     },
+     {
+      "pieza": "object:obj_template-002:523",
+      "objeto": "obj_template-002",
+      "otro": "object:obj_template-002:538"
+     }
+    ],
+    "mismo_plano_sin_solape_en_planta": [
+     {
+      "pieza": "object:obj_template-002:534",
+      "objeto": "obj_template-002",
+      "otro": "object:obj_template-007:610"
+     },
+     {
+      "pieza": "object:obj_template-003:553",
+      "objeto": "obj_template-003",
+      "otro": "object:obj_template-007:610"
+     },
+     {
+      "pieza": "object:obj_template-036:1290",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-024:1066"
+     },
+     {
+      "pieza": "object:obj_template-036:1300",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-024:1050"
+     },
+     {
+      "pieza": "object:obj_template-036:1304",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-031:1187"
+     }
+    ],
+    "solape_en_planta_sin_contacto": [
+     {
+      "pieza": "object:obj_template-019:937",
+      "objeto": "obj_template-019",
+      "otro": "object:obj_template-019:914"
+     },
+     {
+      "pieza": "object:obj_template-020:991",
+      "objeto": "obj_template-020",
+      "otro": "object:obj_template-020:976"
+     },
+     {
+      "pieza": "object:obj_template-036:1280",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1279"
+     },
+     {
+      "pieza": "object:obj_template-036:1282",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1281"
+     },
+     {
+      "pieza": "object:obj_template-036:1288",
+      "objeto": "obj_template-036",
+      "otro": "object:obj_template-036:1278"
+     }
+    ]
+   },
+   "elevacionMm": 0.5,
+   "toleranciaMm": 0.2
+  }
+ },
+ "inventario": [
+  {
+   "id": "obj_template-033",
+   "rol": "object",
+   "tipoExportado": "coffeetable",
+   "piezas": 22,
+   "distanciaM": 2.36,
+   "plano": "primer plano",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-papel",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-032",
+   "rol": "object",
+   "tipoExportado": "sofa",
+   "piezas": 16,
+   "distanciaM": 3.23,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-034",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 3.91,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-madera-oscura",
+    "rodaje-tejido"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_slide-0",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 11,
+   "distanciaM": 4.49,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-aluminio",
+    "rodaje-lacado",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-036",
+   "rol": "object",
+   "tipoExportado": "plant",
+   "piezas": 61,
+   "distanciaM": 4.79,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-maceta",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-043",
+   "rol": "object",
+   "tipoExportado": "roundtable",
+   "piezas": 17,
+   "distanciaM": 5.2,
+   "plano": "a través del vidrio",
+   "acabados": [
+    "rodaje-ceramica",
+    "rodaje-flor",
+    "rodaje-madera-clara",
+    "rodaje-madera-oscura",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-044",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 5.24,
+   "plano": "a través del vidrio",
+   "acabados": [
+    "rodaje-metal-exterior",
+    "rodaje-tejido-exterior"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-045",
+   "rol": "object",
+   "tipoExportado": "armchair",
+   "piezas": 11,
+   "distanciaM": 5.43,
+   "plano": "segundo plano",
+   "acabados": [
+    "rodaje-metal-exterior",
+    "rodaje-tejido-exterior"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "opn_window-5",
+   "rol": "opening",
+   "tipoExportado": "opening",
+   "piezas": 8,
+   "distanciaM": 5.98,
+   "plano": "a través del vidrio",
+   "acabados": [
+    "rodaje-aluminio",
+    "vidrio físico"
+   ],
+   "fuente": "geometría del hueco",
+   "estado": "aproximación por tipo y pieza"
+  },
+  {
+   "id": "obj_template-046",
+   "rol": "object",
+   "tipoExportado": "plant",
+   "piezas": 61,
+   "distanciaM": 6.17,
+   "plano": "a través del vidrio",
+   "acabados": [
+    "rodaje-hoja",
+    "rodaje-maceta",
+    "rodaje-tallo"
+   ],
+   "fuente": "tipo y color (aproximación visual)",
+   "estado": "aproximación por tipo y pieza"
+  }
+ ],
+ "veredicto": "Listo para revisión visual",
+ "pendientes": [],
+ "nota": "El render de revisión puede continuar con estas limitaciones visibles; la entrega final exige resolverlas o aceptarlas."
+}

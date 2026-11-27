@@ -1,0 +1,78 @@
+{
+ "format": "rubik-sota.rodaje-tapiceria-check",
+ "version": "1.0.0",
+ "kit": "kit-f5-furniture (ZIP de Entregar, descomprimido; kit de esta rama)",
+ "ok": true,
+ "comprobaciones": [
+  {
+   "comprobacion": "A · la receta llega sola a las piezas tapizadas del proyecto (sin asignar a mano)",
+   "ok": true,
+   "detalle": "{\"exterior-tapiceria-lona\": 14, \"tapiceria-tejido\": 84, \"tapiceria-tejido-simple\": 62}"
+  },
+  {
+   "comprobacion": "A · tejido con su escaneo a escala física y proyección en el marco de cada pieza",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "A · cada pieza declara fuente, marco y limitaciones (sin costuras en el modelo)",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "A · interior y exterior se distinguen",
+   "ok": true,
+   "detalle": [
+    "tapicería interior",
+    "textil exterior"
+   ]
+  },
+  {
+   "comprobacion": "A · geometría y posiciones intactas (salvo contacto declarado)",
+   "ok": true,
+   "detalle": "solo las separaciones de contacto declaradas (+0,5 mm)"
+  },
+  {
+   "comprobacion": "B · ZIP anterior: la tapicería se resuelve igual por tipo y pieza",
+   "ok": true,
+   "detalle": "{\"exterior-tapiceria-lona\": 14, \"tapiceria-tejido\": 84, \"tapiceria-tejido-simple\": 62}"
+  },
+  {
+   "comprobacion": "E · textura de tejido ausente: reserva procedimental legible y sustitución declarada",
+   "ok": true,
+   "detalle": ""
+  },
+  {
+   "comprobacion": "E · textura ausente: el veredicto lo dice",
+   "ok": true,
+   "detalle": "Acabado pendiente de revisión"
+  },
+  {
+   "comprobacion": "D · material explícito (cuero) prevalece sobre la regla en ese sofá y solo en él",
+   "ok": true,
+   "detalle": "obj_template-032: ['token:material.leather.natural.aniline']"
+  }
+ ],
+ "resumenActual": {
+  "exterior-tapiceria-lona": 14,
+  "tapiceria-tejido": 84,
+  "tapiceria-tejido-simple": 62
+ },
+ "objetosActual": [
+  "obj_template-001",
+  "obj_template-005",
+  "obj_template-009",
+  "obj_template-011",
+  "obj_template-025",
+  "obj_template-026",
+  "obj_template-027",
+  "obj_template-028",
+  "obj_template-032",
+  "obj_template-034",
+  "obj_template-038",
+  "obj_template-041",
+  "obj_template-042",
+  "obj_template-044",
+  "obj_template-045"
+ ]
+}

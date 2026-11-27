@@ -1,0 +1,52 @@
+{
+ "metodo": "residuo temporal compensado en movimiento (Farnebäck), luminancia 0–255",
+ "fotogramas": 18,
+ "regiones": {
+  "sofa": [
+   640,
+   420,
+   1280,
+   720
+  ],
+  "sillon": [
+   375,
+   415,
+   585,
+   600
+  ],
+  "pared": [
+   700,
+   60,
+   1260,
+   380
+  ]
+ },
+ "v1": {
+  "sofa": {
+   "residuo_medio": 1.063,
+   "residuo_p99": 9.29
+  },
+  "sillon": {
+   "residuo_medio": 1.58,
+   "residuo_p99": 10.81
+  },
+  "pared": {
+   "residuo_medio": 0.198,
+   "residuo_p99": 1.01
+  }
+ },
+ "v3": {
+  "sofa": {
+   "residuo_medio": 1.36,
+   "residuo_p99": 9.82
+  },
+  "sillon": {
+   "residuo_medio": 1.762,
+   "residuo_p99": 11.24
+  },
+  "pared": {
+   "residuo_medio": 0.193,
+   "residuo_p99": 1.01
+  }
+ }
+}

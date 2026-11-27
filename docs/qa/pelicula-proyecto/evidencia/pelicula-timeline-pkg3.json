@@ -1,0 +1,276 @@
+{
+  "schema": "rubik-sota.pelicula-timeline",
+  "version": "1.0.0",
+  "output": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24,
+    "frames": 576,
+    "seconds": 24.0,
+    "audio": null
+  },
+  "input": {
+    "format": "rubik-sota.scene-delivery",
+    "version": "1.0.0",
+    "projectId": "prj_op10-f3-openings",
+    "observedProjectSha256": "8675d4cfd813f10bc086581f095f19f03029b4fb9403c6d0579773d20c8dd60d",
+    "sceneGlbSha256": "6a0f8d08fda372ca9ce8dd76a2544b40b7bcd45f4031c50e83d5db60cf915f26",
+    "zipSha256": "ab127002abd10abcd979d444047dda0a19d0bb06b6a0b1c7c746c7d730f557fe",
+    "bounds": {
+      "min": [
+        -5.279953,
+        0,
+        -2.745654
+      ],
+      "max": [
+        5.279953,
+        2.97,
+        2.745654
+      ]
+    },
+    "units": "metres"
+  },
+  "groups": [
+    {
+      "role": "room",
+      "count": 2
+    },
+    {
+      "role": "wall",
+      "count": 27
+    },
+    {
+      "role": "opening",
+      "count": 18
+    },
+    {
+      "role": "opening-leaf",
+      "count": 2
+    },
+    {
+      "role": "object",
+      "count": 43
+    }
+  ],
+  "shots": [
+    {
+      "id": "plan",
+      "seconds": [
+        0.0,
+        2.0
+      ],
+      "frames": [
+        0,
+        47
+      ],
+      "camera": "cenital fijo",
+      "appear": [],
+      "skippedGroups": [],
+      "label": {
+        "text": "nombre del proyecto",
+        "source": "manifest.source.projectId"
+      }
+    },
+    {
+      "id": "floors",
+      "seconds": [
+        2.0,
+        5.0
+      ],
+      "frames": [
+        48,
+        119
+      ],
+      "camera": "descenso diagonal suave",
+      "appear": [
+        {
+          "role": "room",
+          "meshes": 2,
+          "rubikIds": [
+            "rom_living",
+            "rom_study"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "2 estancias",
+        "source": "scene.glb · rubik_id distintos con rubik_role=room"
+      }
+    },
+    {
+      "id": "walls",
+      "seconds": [
+        5.0,
+        9.0
+      ],
+      "frames": [
+        120,
+        215
+      ],
+      "camera": "órbita lenta",
+      "appear": [
+        {
+          "role": "wall",
+          "meshes": 27,
+          "rubikIds": [
+            "wal_diagonal",
+            "wal_east",
+            "wal_north",
+            "wal_partition",
+            "wal_south",
+            "wal_study-south",
+            "wal_west"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "7 muros",
+        "source": "scene.glb · rubik_id distintos con rubik_role=wall"
+      }
+    },
+    {
+      "id": "openings",
+      "seconds": [
+        9.0,
+        12.0
+      ],
+      "frames": [
+        216,
+        287
+      ],
+      "camera": "órbita",
+      "appear": [
+        {
+          "role": "opening",
+          "meshes": 18,
+          "rubikIds": [
+            "opn_north-window",
+            "opn_partition-door",
+            "opn_south-slider"
+          ]
+        },
+        {
+          "role": "opening-leaf",
+          "meshes": 2,
+          "rubikIds": [
+            "opn_partition-door"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": {
+        "text": "3 huecos",
+        "source": "scene.glb · rubik_id distintos con rubik_role=opening"
+      }
+    },
+    {
+      "id": "furniture",
+      "seconds": [
+        12.0,
+        16.0
+      ],
+      "frames": [
+        288,
+        383
+      ],
+      "camera": "acercamiento al salón",
+      "appear": [
+        {
+          "role": "object",
+          "meshes": 43,
+          "rubikIds": [
+            "obj_catalog-bench",
+            "obj_design-table",
+            "obj_unknown-ref"
+          ]
+        }
+      ],
+      "skippedGroups": [],
+      "label": null
+    },
+    {
+      "id": "enter",
+      "seconds": [
+        16.0,
+        20.0
+      ],
+      "frames": [
+        384,
+        479
+      ],
+      "camera": "inmersión a altura de ojos por la puerta del salón",
+      "appear": [],
+      "skippedGroups": [],
+      "label": null
+    },
+    {
+      "id": "living",
+      "seconds": [
+        20.0,
+        24.0
+      ],
+      "frames": [
+        480,
+        575
+      ],
+      "camera": "giro lento en el salón",
+      "appear": [],
+      "skippedGroups": [],
+      "label": {
+        "text": "logo de Mi estudio (si el profesional lo elige)",
+        "source": "Mi estudio · opcional"
+      }
+    }
+  ],
+  "omissions": [
+    {
+      "role": "ceiling",
+      "reason": "techo oculto para ver el interior (se conserva en la escena de entrada)",
+      "count": 2
+    }
+  ],
+  "reconcile": [
+    {
+      "role": "room",
+      "project": 2,
+      "glbEntities": 2,
+      "glbMeshes": 4,
+      "manifestMeshes": 2,
+      "missingInScene": [],
+      "notInProject": []
+    },
+    {
+      "role": "wall",
+      "project": 8,
+      "glbEntities": 7,
+      "glbMeshes": 34,
+      "manifestMeshes": 27,
+      "missingInScene": [
+        "wal_removed"
+      ],
+      "notInProject": []
+    },
+    {
+      "role": "opening",
+      "project": 4,
+      "glbEntities": 3,
+      "glbMeshes": 21,
+      "manifestMeshes": 18,
+      "missingInScene": [
+        "opn_east-void"
+      ],
+      "notInProject": []
+    }
+  ],
+  "approximations": [],
+  "derived": "RUBIK_derived · cámara, tiempos, luz editorial y rótulos; la escena de entrada no se escribe",
+  "check": "al cerrar, huella de geometría y posiciones finales = escena de entrada (blender-rodaje.py)",
+  "donor": {
+    "repo": "Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-",
+    "commit": "2d3463e4",
+    "license": "MIT",
+    "reused": "estructura de cronología por sistemas (adaptada); sin código, texturas, música ni modelos"
+  }
+}

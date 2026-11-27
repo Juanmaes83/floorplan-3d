@@ -27,9 +27,15 @@ const project = { id: 'prj_demo', name: 'Demo', defaults: { wallHeightMm: 2700 }
 
 test('M03 · rooms file: geometry, floor colour and the VISIBLE name only (never the stored raw name)', () => {
   const r = D.roomsDoc({ project, label: room => room.id === 'rom_a' ? 'Salón' : 'Baño' });
-  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped');
+  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped'); assert.equal(r.version, '1.2.0'); assert.ok(Array.isArray(r.objects), 'objetos con su tipo (sin nombres)');
   assert.deepEqual(r.rooms.map(x => [x.id, x.label, x.counted, x.floorColor]), [['rom_a', 'Salón', true, '#c8a27a'], ['rom_b', 'Baño', false, null]]);
   assert.doesNotMatch(JSON.stringify(r), CJK); assert.throws(() => D.roomsDoc({}));
+  // 1.2.0 · clave del material de suelo y su familia (identificadores ASCII del sistema): el rodaje resuelve el acabado por material
+  assert.deepEqual(r.rooms.map(x => [x.floorMaterialId, x.floorPreset]), [['mat_t', null], [null, null]]);
+  const p2 = { ...project, materials: [{ id: 'mat_t', appearance: { color: '#c8a27a', preset: 'surface-oak-wood-planks' } }, { id: 'texto libre 客厅', appearance: { color: '#ffffff', preset: 'a b' } }],
+    rooms: [{ ...project.rooms[0] }, { ...project.rooms[1], floorMaterialId: 'texto libre 客厅' }] };
+  const r2 = D.roomsDoc({ project: p2, label: () => 'x' });
+  assert.deepEqual(r2.rooms.map(x => [x.floorMaterialId, x.floorPreset]), [['mat_t', 'surface-oak-wood-planks'], [null, null]], 'free text never travels as a key');
 });
 
 test('M03 · complete kit: every file fingerprinted, launchers and review path declared, ES/EN/ZH instructions', async () => {
@@ -59,15 +65,20 @@ test('M03 · an incomplete kit is never shipped half: no kit files, the README s
 
 test('M03 · the kit sources are the repository files and keep their recognisable headers', () => {
   const SPDX = '# SPDX-License-Identifier: GPL-3.0-or-later';
-  const heads = { render: SPDX, verify: SPDX, profiles: '{', sh: '#!/bin/sh', bat: '@echo off', licence: 'RUBIK SOTA · Licencia', copying: '                    GNU GENERAL PUBLIC LICENSE' };
+  const heads = { render: SPDX, verify: SPDX, profiles: '{', sh: '#!/bin/sh', bat: '@echo off', licence: 'RUBIK SOTA · Licencia', copying: '                    GNU GENERAL PUBLIC LICENSE', rodaje: SPDX, recursos: '{', rodar: '#!/bin/sh', rodarBat: '@echo off' };
   for (const [k, rel] of Object.entries(D.KIT_SOURCES)) assert.ok(fs.readFileSync(path.join(root, rel), 'utf8').startsWith(heads[k]), rel);
   const prof = JSON.parse(fs.readFileSync(path.join(root, D.KIT_SOURCES.profiles), 'utf8')); assert.deepEqual(Object.keys(prof.profiles), ['preview', 'review', 'delivery']);
 });
 
-test('M03 · the Windows launcher uses CRLF line endings (cmd.exe labels and goto need them)', () => {
-  const bat = fs.readFileSync(path.join(root, D.KIT_SOURCES.bat));
-  assert.equal(bat.includes(Buffer.from('\n')) && !bat.toString('latin1').split('\r\n').some(l => l.includes('\n')), true);
-  for (const label of [':fin_error', 'goto :fin_error']) assert.ok(bat.toString('latin1').includes(label), label);
+test('M03 · the Windows launchers use CRLF line endings (cmd.exe labels and goto need them)', () => {
+  for (const k of ['bat', 'rodarBat']) {
+    const bat = fs.readFileSync(path.join(root, D.KIT_SOURCES[k]));
+    assert.equal(bat.includes(Buffer.from('\n')) && !bat.toString('latin1').split('\r\n').some(l => l.includes('\n')), true, k);
+    for (const label of [':fin_error', 'goto :fin_error']) assert.ok(bat.toString('latin1').includes(label), k + ' ' + label);
+  }
+  const rodar = fs.readFileSync(path.join(root, D.KIT_SOURCES.rodarBat), 'latin1');
+  for (const piece of ['rubik_blender_prepare.py', 'rubik_blender_rodaje.py', '--profile %PERFIL%', 'entrega1440', 'libx264', 'Blender 5.2.1'])
+    assert.ok(rodar.includes(piece), 'Windows rodaje launcher mirrors rodar.sh: ' + piece);
 });
 
 

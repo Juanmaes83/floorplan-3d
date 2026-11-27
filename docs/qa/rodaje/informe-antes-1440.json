@@ -1,0 +1,44 @@
+{
+ "frames": {
+  "0": {
+   "seconds": 290.4,
+   "sha256": "5c55dc2007e65e7357e63327ca982bc1c2e2184b25d4a53f1f7d22cd06baa6a1",
+   "peakRssBytes": 2379464704
+  }
+ },
+ "format": "rubik-sota.blender-rodaje",
+ "version": "1.0.0",
+ "profile": "entrega1440",
+ "resolution": [
+  2560,
+  1440
+ ],
+ "samples": 32,
+ "shot": "interior",
+ "light": "dia",
+ "fps": 24,
+ "frameCount": 48,
+ "declared": [
+  "Cycles CPU, 32 muestras adaptativas (umbral 0,02), OIDN albedo+normal, semilla fija 1729, sin desenfoque de movimiento",
+  "día: sol y cielo capturados del visor (sin cambios)",
+  "ambiente: un área por estancia contada; focos: 18 puntos empotrados de 70° (derivados)",
+  "realismo desactivado: materiales de color plano del visor (escena «antes»)",
+  "plano interior: travelling de 1.01 m hacia el centro de «Salón» a 1,35 m; holgura inicial 0.92 m"
+ ],
+ "equipment": {
+  "device": "CPU",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.30GHz",
+  "logicalCpus": 4,
+  "ramGb": 15.7,
+  "gpu": null,
+  "blender": "5.2.1 LTS",
+  "cycles": "5.2.1 LTS",
+  "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39"
+ },
+ "package": {
+  "manifestSha256": "6db1c16756753f2ce196adfa13deccf1a83b19f20ca9a1453abdebd57c3d594d"
+ },
+ "script": {
+  "sha256": "f9f638f2703179d371f58ed58ddf610b53a44080dee5bf9acb6893df12e503b5"
+ }
+}

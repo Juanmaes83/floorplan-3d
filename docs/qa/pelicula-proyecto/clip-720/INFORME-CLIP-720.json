@@ -1,0 +1,65 @@
+{
+ "entrega": "Película del proyecto · «Del plano a la vivienda» · primera entrega de rodaje para revisión",
+ "fecha": "2026-11-27",
+ "proyecto": {
+  "id": "prj_op10-f5-furniture",
+  "nombre": "Vivienda de ejemplo",
+  "revision": "huella observada del proyecto (el ZIP no trae número de revisión: app.revision = null)",
+  "observedProjectSha256": "20c1a79bbd8cd15e47ebb12dbba2beb16a1b1de63c842bc89fb60bb81163f849",
+  "projectUpdatedAt": "2026-11-19T00:00:00.000Z"
+ },
+ "entrada": {
+  "zip": "docs/qa/pelicula-proyecto/entrada/rubik-escena-blender-prj_op10-f5-furniture.zip",
+  "zipSha256": "04e9fe78d7e2b7c6ef13a1eab9662eed1f60d328eeb76926d43f9d28ee084dd5",
+  "sceneGlbSha256": "a1b588b7d167aaae4635788239199fec313649a0b74a849d2c341e50f3af0354",
+  "cronologia": "docs/qa/pelicula-proyecto/entrada/pel-f5-timeline.json"
+ },
+ "kit": {
+  "rama": "claude/rodaje-cierre-1440",
+  "commit": "90d38d54",
+  "blender-rodaje.py": "169acd1439a5f29d8058a04829f06949d07229893e9add2b81164f2c0e9511fc",
+  "pelicula-timeline.py": "fda813fa0b66551f6cca9a92f90e1f4782806c86a5689ac5333cda680cfc390b",
+  "bpy": "5.2.1 (Python 3.13)",
+  "motor": "Cycles CPU, 8 muestras, 4 vCPU sin GPU"
+ },
+ "salida": {
+  "mp4": "pelicula-del-plano-a-la-vivienda-720p.mp4",
+  "sha256": "f4e7538638845dd9ca07a064fb902b0f33fb8ad303b6ec68d37efab068f66d01",
+  "codec": "h264 yuv420p crf 20",
+  "resolucion": "1280x720",
+  "fps": 24,
+  "fotogramas": 720,
+  "duracion_s": 30.0,
+  "sonido": "ninguno",
+  "decodifica_sin_errores": true
+ },
+ "secuencia": [
+  [
+   "0-6 s",
+   "planta de RUBIK cenital con rótulos de estancia (español)"
+  ],
+  [
+   "7-10 s",
+   "la planta se inclina y los muros ganan volumen"
+  ],
+  [
+   "10-17 s",
+   "órbita sobre la maqueta: conexión entre estancias"
+  ],
+  [
+   "18-24 s",
+   "descenso al salón"
+  ],
+  [
+   "25-30 s",
+   "llegada a la altura de los ojos, plano sostenido"
+  ]
+ ],
+ "observaciones": [
+  "Los últimos ~5 s son un plano sostenido casi fijo.",
+  "Tras la ventana del salón el fondo es azul oscuro: la escena no trae entorno.",
+  "Sin texto chino en ningún fotograma.",
+  "Tiempo de render medido: ~8 s/fotograma en las primeras escenas y ~40 s en el interior; total ~5 h con carga intermitente de pruebas en la misma máquina."
+ ],
+ "informe_tecnico": "rodaje-report.json (inventario, materiales, cronología y equipo del kit) · preflight.json"
+}
