@@ -43,8 +43,8 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
 
  // 1. Capability inventory: nothing removed, everything reachable.
  // §9 (cabecera y proyectos): dos botones de siempre se fusionan en UNA entrada visible del menú de proyecto que acciona el
- // mismo flujo (pick → #uploadIn). La capacidad se exige igual: el original debe existir y su entrada visible ser alcanzable.
- const MERGED={uploadPlanBtn:'pmUpload',importImage:'pmUpload'};
+ // mismo flujo (pick → #uploadIn); igual «Descargar proyecto JSON» (#exportJson → #pmDownloadJson, revisión 27/11). La capacidad se exige igual: el original debe existir y su entrada visible ser alcanzable.
+ const MERGED={uploadPlanBtn:'pmUpload',importImage:'pmUpload',exportJson:'pmDownloadJson'};
  const inv=inventory.map(c=>MERGED[c.id]?{...c,id:MERGED[c.id],mergedFrom:c.id}:c);
  for(const id of Object.keys(MERGED))assert.ok(await page.evaluate(i=>!!document.getElementById(i),id),id+' conserva id y manejador');
  const reach=async(c,in3d)=>page.evaluate(([c,mobile])=>{
