@@ -50,3 +50,23 @@ test('V01 · con un proyecto de una sola planta nada cambia: sin línea de alcan
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanBudgetUI);
  const d=await priceAll(page,'10');assert.equal(await d.locator('#budgetScope').count(),0);assert.equal(await page.evaluate(()=>window.FloorPlanBudgetScope()),null);
  const [csvDl]=await Promise.all([page.waitForEvent('download'),d.locator('#budgetCsv').click()]);assert.doesNotMatch((await read(csvDl)).split('\r\n')[0],/;scope$/);});
+
+test('V02 · Analizar, la portada de D3 y el HTML P7 nombran el edificio y sus dos plantas (nunca «Planta única»)',{timeout:240000},async t=>{
+ const {page,errors}=await open(t);
+ await page.getByRole('button',{name:'Analizar',exact:true}).click();const ws=page.locator('#professionalWorkspace');
+ await page.waitForFunction(()=>/2 plantas: Planta baja, Planta primera/.test(document.querySelector('#professionalWorkspace')?.innerText||''));
+ const an=await ws.innerText();assert.match(an,/Casa sintética de dos plantas/);assert.match(an,/27,36\sm²/);assert.doesNotMatch(an,/Planta única/);
+ await page.getByRole('button',{name:'Entregar',exact:true}).click();await page.evaluate(()=>window.FloorPlanDossier.open('technical'));
+ const cover=page.locator('.dossier-cover');await cover.waitFor();const ct=await cover.innerText();
+ assert.match(ct,/Casa sintética de dos plantas/);assert.match(ct,/PLANTAS\s+2 plantas · Planta baja, Planta primera/i);assert.doesNotMatch(ct,/Planta única/);
+ assert.match(await cover.locator('.dossier-cover-scope').innerText(),/«Planta baja».*el cómputo incluye las 2/);
+ const p7=await page.evaluate(async()=>(await window.FloorPlanClientShare.build()).html);
+ assert.match(p7,/Casa sintética de dos plantas/);assert.match(p7,/2 plantas · Planta baja, Planta primera/);assert.doesNotMatch(p7,/Planta única/);
+ assert.deepEqual(errors,[]);});
+
+test('V02 · control de una planta: el ejemplo sigue diciendo «Planta única»',{timeout:180000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());const page=await context.newPage();
+ await page.route('**/*',r=>{const u=r.request().url();return u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:')?r.continue():r.abort();});
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanDossier);
+ await page.getByRole('button',{name:'Entregar',exact:true}).click();await page.evaluate(()=>window.FloorPlanDossier.open('technical'));
+ const ct=await page.locator('.dossier-cover').innerText();assert.match(ct,/PLANTA\s+Planta única/i);assert.equal(await page.locator('.dossier-cover-scope').count(),0);});

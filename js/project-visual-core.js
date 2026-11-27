@@ -47,14 +47,21 @@
  // Project identity and the figures every area already shows, from the existing metric (never recomputed).
  function summary({project,geometry,metrics,levelContext=null,brand=null}={}){
   const rooms=(metrics?.levels||[]).flatMap(l=>l.rooms||[]);
-  const level=levelContext?.levels?.length?(()=>{const sorted=[...levelContext.levels].sort((a,b)=>a.order-b.order),i=sorted.findIndex(l=>l.id===levelContext.activeLevelId);return i<0?null:{name:sorted[i].name,index:i+1,count:sorted.length};})():null;
+  // V02 (#324): el contexto llega en dos formas, la del 3D (levels: lista, activeLevelId) y la de FloorPlanBuildingUI.context
+  // (levels: número, levelName, index). Si la métrica incluye varias plantas, el resumen describe ESAS plantas
+  // («2 plantas · Baja, Primera»), nunca «Planta única».
+  const ml=(metrics?.levels||[]).filter(l=>l&&l.name!==undefined);
+  const level=ml.length>1?{all:true,count:ml.length,names:ml.map(l=>l.name||''),name:null,index:null}
+   :Array.isArray(levelContext?.levels)&&levelContext.levels.length?(()=>{const sorted=[...levelContext.levels].sort((a,b)=>a.order-b.order),i=sorted.findIndex(l=>l.id===levelContext.activeLevelId);return i<0?null:{name:sorted[i].name,index:i+1,count:sorted.length};})()
+   :typeof levelContext?.levels==='number'&&levelContext.levels>0?{name:levelContext.levelName||'',index:levelContext.index||null,count:levelContext.levels}:null;
+  const building=levelContext&&(levelContext.buildingName||levelContext.buildingId)?{name:levelContext.buildingName||'',levels:typeof levelContext.levels==='number'?levelContext.levels:levelContext.levels?.length||0}:null;
   const p=brand?.profile;
   return {
    name:project?.name||'',
    areaM2:metrics?.areaM2??null,status:metrics?.status||'unavailable',complete:metrics?.complete!==false,
    roomsCounted:rooms.filter(r=>r.counted).length,roomsExcluded:rooms.filter(r=>!r.counted).length,
    spacesOnLevel:(geometry?.rooms||[]).length,
-   level,
+   level,building,
    scale:project?.scale?.confidence||'pending',
    brand:p?{name:p.name,person:p.person||'',tagline:p.tagline||'',email:p.email||'',phone:p.phone||'',web:p.web||'',logo:typeof p.logo==='string'&&p.logo.startsWith('data:image/')?p.logo:null}:null
   };

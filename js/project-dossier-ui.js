@@ -8,7 +8,9 @@
  const app=window.FloorPlanApp,Visual=window.FloorPlanProjectVisual,Preview=window.FloorPlanProjectPreview;if(!app||!Visual||!Preview)return;
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
- const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
+ const local=v=>typeof nm==='function'?nm(v):v;
+ // V02 (#324): si el documento abarca varias plantas, el título es el del edificio, no el del proyecto de una planta.
+ const name=()=>{const c=app.levelContext,multi=c&&(typeof c.levels==='number'?c.levels:c.levels?.length||0)>1&&c.buildingName;return local(multi&&(window.FloorPlanBuildingUI?.presentationSources?.()?.levels?.length||0)>1?c.buildingName:app.project.name);};
  const locale=()=>({es:'es-ES',en:'en-GB',zh:'zh-CN'})[typeof LANG==='string'?LANG:'es']||'es-ES';
  // Styles: which sections, in which order, and the visual tone. Same data for every style.
  const STYLES={
@@ -45,9 +47,11 @@
      const overview=c.views.find(v=>v.kind==='overview');const visual=el('figure',undefined,p,'dossier-cover-visual');
      if(overview){const i=el('img',undefined,visual);i.src=overview.dataUrl;i.alt=tx('Vista general real de la vivienda en 3D','Real 3D overview of the home','住宅真实三维总览');}
      else Preview.plan(visual,{label:tx('Planta de la vivienda','Floor plan of the home','住宅平面'),cls:'project-plan dossier-plan'});
+     // V02: en un documento de varias plantas, la imagen dice qué muestra (el plano es solo de la planta activa).
+     {const c=app.levelContext;if(s.level?.all&&c?.levelName){const v3=window.View3D?.levelView==='all';el('figcaption',overview?(v3?tx(`Vista 3D con las ${s.level.count} plantas`,`3D view with all ${s.level.count} levels`,`含全部 ${s.level.count} 层的三维视图`):tx(`Vista 3D hasta «${local(c.levelName)}»; el cómputo incluye las ${s.level.count} plantas`,`3D view up to «${local(c.levelName)}»; the total includes all ${s.level.count} levels`,`三维视图至「${local(c.levelName)}」；汇总包含全部 ${s.level.count} 层`)):tx(`Plano de «${local(c.levelName)}» (1 de ${s.level.count} plantas); el cómputo incluye las ${s.level.count}`,`Plan of «${local(c.levelName)}» (1 of ${s.level.count} levels); the total includes all ${s.level.count}`,`「${local(c.levelName)}」平面（共 ${s.level.count} 层中的 1 层）；汇总包含全部 ${s.level.count} 层`),visual,'dossier-cover-scope');}}
      const facts=el('dl',undefined,p,'dossier-facts');const fact=(k,v,cls)=>{const g=el('div',undefined,facts,cls);el('dt',k,g);el('dd',v,g);};
      fact(tx('Superficie útil','Net area','使用面积'),area);fact(tx('Certeza','Certainty','可信度'),status+(s.complete?'':tx(' · cómputo incompleto',' · incomplete total',' · 汇总不完整')));
-     fact(tx('Estancias en el cómputo','Rooms in the total','计入房间'),String(s.roomsCounted)+(s.roomsExcluded?tx(` · ${s.roomsExcluded} no suman superficie`,` · ${s.roomsExcluded} not in the area`,` · ${s.roomsExcluded} 个不计面积`):''));fact(tx('Planta','Level','楼层'),s.level?`${s.level.name}`:tx('Planta única','Single level','单层'));
+     fact(tx('Estancias en el cómputo','Rooms in the total','计入房间'),String(s.roomsCounted)+(s.roomsExcluded?tx(` · ${s.roomsExcluded} no suman superficie`,` · ${s.roomsExcluded} not in the area`,` · ${s.roomsExcluded} 个不计面积`):''));fact(s.level?.all?tx('Plantas','Levels','楼层'):tx('Planta','Level','楼层'),s.level?.all?tx(`${s.level.count} plantas · `,`${s.level.count} levels · `,`${s.level.count} 层 · `)+s.level.names.map(n=>local(n)).join(', '):s.level?`${local(s.level.name)}`+(s.level.count>1&&s.level.index?tx(` (${s.level.index} de ${s.level.count})`,` (${s.level.index} of ${s.level.count})`,`（${s.level.index}/${s.level.count}）`):''):tx('Planta única','Single level','单层'));
      fact(tx('Fecha','Date','日期'),new Date().toLocaleDateString(locale(),{day:'numeric',month:'long',year:'numeric'}));
      // §8 D3: la ficha del cliente y la elección de contacto deciden qué sale; sin ese módulo, el contacto completo como antes.
      const dc=window.FloorPlanDossierClientUI?.cover?.(b);
