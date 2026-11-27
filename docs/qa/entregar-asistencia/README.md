@@ -72,3 +72,13 @@ Entrada en RUBIK: **Entregar → D3 Dossier del proyecto → Preparar dossier �
   ramas `claude/…`. Preview de Vercel: la del SHA de este commit. Aprobación humana: pendiente.
 - Límites: «Antes de imprimir» enumera lo que falta pero aún no lleva acceso directo a completarlo; la ficha vive en el
   navegador (no en el JSON del proyecto).
+
+### D3 · evidencia completa para revisión (27/11, noche)
+- **Preview de `24cc42c8`:** https://floorplan-3d-6q38g1av0-juanma-espinosas-projects.vercel.app/ — Entregar → D3 Dossier del
+  proyecto → Preparar dossier → estilo «Cliente» → «Preparado para · cliente, contacto y nota».
+- **Vídeos** (`d3/video/`): `d3-dossier-cliente-{escritorio,movil}.mp4` empiezan en Entregar → D3 → Preparar dossier, cargan la ficha
+  JSON, marcan «usar»/«mostrar», piden la ayuda, descartan, editan la sugerencia, la aceptan y muestran la portada;
+  `d3-ventana-impresion-{escritorio,movil}.mp4` es la ventana «Imprimir / Guardar PDF».
+- **Salida comprobada** (prueba `dossier-cliente`, 2/2, ahora también sobre la ventana de impresión): salen «Preparado para:
+  Sra. Lucía Prueba» y la nota aceptada; **no salen** las notas internas, los requisitos y las preferencias sin «mostrar», ni el
+  campo extra de la ficha. Captura: `d3/d3-impresion-{escritorio,movil}.png`.
