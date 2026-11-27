@@ -1,5 +1,9 @@
 # Gesture Labs §6 · ensayo aislado «Presentar con gestos»
 
+> **Estado (27/11, noche):** pendiente. Queda fuera de la tanda de integración de §9 y Entregar. Falta la prueba del
+> propietario con la cámara frontal del móvil, y la evolución se define con Codex. Avances y evidencias se conservan en esta
+> rama para retomarlos con la guía de auditoría y laboratorios.
+
 **Rama:** `claude/gesture-labs` · base `cd694e88` (StoryLayersV1 aprobado). **Estado:** laboratorio aislado; no es una función
 publicada. Solo se carga con `?gesture-lab=1`; sin ese parámetro, RUBIK no cambia.
 
