@@ -96,3 +96,13 @@ test('sin emplazamiento el manifiesto y el ZIP son idénticos a los de siempre; 
   const inc = await D.manifest({ capture, glb, project, digest, site: { status: 'incomplete', missing: ['terrain'] } });
   assert.deepEqual(inc.site, { status: 'incomplete', missing: ['terrain'] }); assert.equal(D.packageFiles({ manifest: inc, glb, lang: 'es', zip: Package.zip }).entries.size, 3);
 });
+
+test('guion del efecto elegido: viaja declarado (huella) solo cuando existe', async () => {
+  const capture = sampleCapture(), glb = C.toGLB(capture.doc), project = { id: 'prj_demo' };
+  const film = { format: 'rubik-sota.pelicula-script', effect: 'maqueta-abierta', seconds: 30, frames: 720, fps: 24, shots: [], profile: 'revision-720' };
+  const m = await D.manifest({ capture, glb, project, digest, film });
+  assert.deepEqual(m.film, { file: 'rubik-pelicula-guion.json', effect: 'maqueta-abierta', seconds: 30, frames: 720, profile: 'revision-720' });
+  const z = D.packageFiles({ manifest: m, glb, lang: 'es', zip: Package.zip, film });
+  assert.ok(z.entries.has('rubik-pelicula-guion.json')); assert.equal(JSON.parse(new TextDecoder().decode(z.entries.get('rubik-pelicula-guion.json'))).effect, 'maqueta-abierta');
+  assert.equal('film' in (await D.manifest({ capture, glb, project, digest })), false);
+});

@@ -107,8 +107,8 @@
    const prepareScript=await script(),kitBytes=await kit();ensureCurrent();
    const rooms=D.roomsDoc?D.roomsDoc({project,label:roomLabel}):null,glb=C.toGLB(capture.doc);
    const site=await sceneSite(project);ensureCurrent();
-   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,site,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
-   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,site,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
+   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,site,film:filmScript(),captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
+   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,site,film:filmScript(),lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
    const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
    result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
    set('ready');siteNote(site);primary.focus();
@@ -117,6 +117,8 @@
  }
  // «Desde el paisaje» (claude/pelicula-efectos): entorno del emplazamiento (terreno MDT05 + ortofoto PNOA de esta sesión) si el
  // proyecto lo tiene. Sin emplazamiento no se añade nada. La parcela catastral (licencia restringida) nunca se exporta.
+ // Guion del efecto elegido en Entregar → Vídeo (si se llegó desde allí); se consume una vez.
+ function filmScript(){const l=window.RubikPeliculaEfectos?._last;return l?{...l.script,profile:l.profile}:null;}
  async function sceneSite(project){const S=window.FloorPlanSceneSite,R=window.FloorPlanTerritorySession;if(!S||!project?.site?.parcel)return null;
   try{R?.sync?.(window.FloorPlanApp.entryId,project.site);}catch{}const t=R?.get?.('terrain'),o=R?.get?.('orthophoto');
   const session={terrain:t?.grid?{grid:t.grid}:null,orthophoto:o?.blob?{bytes:new Uint8Array(await o.blob.arrayBuffer())}:null};

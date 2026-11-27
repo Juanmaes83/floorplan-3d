@@ -24,8 +24,8 @@
     sh: 'scripts/interop/blender-kit/renderizar.sh', bat: 'scripts/interop/blender-kit/RENDERIZAR-windows.bat',
     licence: 'scripts/interop/blender-kit/LICENCIA-SCRIPTS.txt', copying: 'scripts/interop/blender-kit/COPYING-GPL-3.0.txt' });
   const ROOMS = 'rubik-estancias.json', REFERENCE = 'referencia-rubik.png';
-  const SITE = 'rubik-entorno.json', ORTHO = 'rubik-ortofoto.jpg'; // «Desde el paisaje» (claude/pelicula-efectos): solo con emplazamiento
-  const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, SITE, ORTHO, ...Object.values(KIT)]);
+  const SITE = 'rubik-entorno.json', ORTHO = 'rubik-ortofoto.jpg', FILM = 'rubik-pelicula-guion.json'; // guion del efecto elegido (Entregar → Vídeo) // «Desde el paisaje» (claude/pelicula-efectos): solo con emplazamiento
+  const FILES = Object.freeze(['scene.glb', 'manifest.json', 'LEEME.txt', SCRIPT, ROOMS, REFERENCE, SITE, ORTHO, FILM, ...Object.values(KIT)]);
   const enc = new TextEncoder();
   function sortKeys(x) { if (Array.isArray(x)) return x.map(sortKeys); if (x && typeof x === 'object') return Object.fromEntries(Object.keys(x).sort().map(k => [k, sortKeys(x[k])])); return x; }
   const canonical = x => JSON.stringify(sortKeys(x));
@@ -46,7 +46,7 @@
   }
 
   /** Manifiesto de la entrega. `capture` = resultado de View3D.captureScene() ({doc, info}). */
-  async function manifest({ capture, glb, project, digest, app = {}, createdAt = null, prepareScript = null, kit = null, rooms = null, reference = null, captureId = null, site = null }) {
+  async function manifest({ capture, glb, project, digest, app = {}, createdAt = null, prepareScript = null, kit = null, rooms = null, reference = null, captureId = null, site = null, film = null }) {
     if (!capture || !capture.doc || !glb || typeof digest !== 'function') throw Error('manifest: capture, glb and digest are required');
     const doc = capture.doc, info = capture.info || {};
     const projectSha = project ? await digest(enc.encode(canonical(project))) : null;
@@ -80,7 +80,8 @@
       // Solo la REGLA de estabilidad: las mediciones (fotogramas, ms) varían entre ejecuciones y romperían el determinismo.
       stability: info.stability ? { rule: 'no asset loading, no camera/door motion, identical scene signature', stableFrames: info.stability.stableFrames } : null,
       files: Object.assign({ 'scene.glb': { bytes: glb.length, sha256: await digest(glb) } }, prepareScript ? { [SCRIPT]: { bytes: prepareScript.length, sha256: await digest(prepareScript) } } : {},
-        await kitFiles({ kit, rooms, reference, digest, prepareScript }), await siteFiles(site, digest)),
+        await kitFiles({ kit, rooms, reference, digest, prepareScript }), await siteFiles(site, digest), film ? { [FILM]: { bytes: filmBytes(film).length, sha256: await digest(filmBytes(film)) } } : {}),
+      ...(film ? { film: { file: FILM, effect: film.effect, seconds: film.seconds, frames: film.frames, profile: film.profile || null } } : {}),
       // Entorno (terreno MDT05 + ortofoto PNOA) SOLO si el proyecto tiene emplazamiento: sin él, el manifiesto es el de siempre.
       ...(site && site.status === 'ready' ? { site: { status: 'ready', files: [SITE, ORTHO], attributions: site.doc.attributions, parcel: 'not exported (restricted licence; used in RUBIK to check the site)',
         layers: site.doc.layers } } : site && site.status === 'incomplete' ? { site: { status: 'incomplete', missing: site.missing } } : {}),
@@ -91,6 +92,7 @@
     };
   }
 
+  const filmBytes = f => enc.encode(JSON.stringify(f, null, 1) + '\n');
   async function siteFiles(site, digest) {
     if (!site || site.status !== 'ready') return {};
     const out = {}; for (const [name, bytes] of site.files) out[name] = { bytes: bytes.length, sha256: await digest(bytes) }; return out;
@@ -200,7 +202,7 @@
   }
 
   /** Entradas del ZIP (Map nombre → bytes) y nombre de descarga. `zip` = FloorPlanPackage.zip. */
-  function packageFiles({ manifest: m, glb, lang, zip, prepareScript = null, kit = null, rooms = null, reference = null, site = null }) {
+  function packageFiles({ manifest: m, glb, lang, zip, prepareScript = null, kit = null, rooms = null, reference = null, site = null, film = null }) {
     const entries = new Map([['scene.glb', glb], ['manifest.json', enc.encode(JSON.stringify(m, null, 1) + '\n')], ['LEEME.txt', enc.encode(readme(m, lang))]]);
     if (prepareScript && m.files[SCRIPT]) entries.set(SCRIPT, prepareScript); // solo si el manifiesto lo declara (huella incluida)
     // M03 · kit, sólo con las huellas del manifiesto (mismos bytes que se declararon).
@@ -210,6 +212,7 @@
       if (reference && m.files[REFERENCE]) entries.set(REFERENCE, reference);
     }
     if (site && site.status === 'ready' && m.site && m.site.status === 'ready') for (const [n, b] of site.files) if (m.files[n]) entries.set(n, b); // solo lo declarado (huella incluida)
+    if (film && m.film && m.files[FILM]) entries.set(FILM, filmBytes(film));
     const name = `rubik-escena-blender-${safeName(m.source.projectId)}.zip`;
     if (typeof zip !== 'function') return { entries, name, bytes: null };
     return { entries, name, bytes: zip(entries, { check: n => { if (!FILES.includes(n)) throw Error('Unexpected file in scene package: ' + n); return n; } }) };
