@@ -121,3 +121,13 @@ en `emplazamiento/`. Se puede llevar sola a master (un archivo y su prueba), sin
   confirmación descarga el paquete para Blender; el render y la recuperación del MP4/informe ocurren fuera del navegador.
   Pendiente: prueba de navegador permanente (escritorio y móvil, ES/EN) y kit de rodaje con los tres guiones.
 
+- 27/11 22:50 · **Kit y ZIP** (fusión del kit de rodaje `d93c9fc3`; desde `6b271692` hasta `0534c0c5`):
+  - Blender consume el guion (`--guion`, `sh rodar.sh pelicula`, `RODAR-windows.bat pelicula`): efecto, planos, fotogramas y perfil;
+    MP4 en `resultados/pelicula/pelicula.mp4` + `rodaje-report.json` con bloque «guion». Perfiles del núcleo = kit (prueba).
+  - Coreografías en el kit: Maqueta abierta (piloto v1.1), **Pieza a pieza** (piezas reales caen y encajan; órbita alta; sin
+    entrar) y **Desde el paisaje** (terreno + ortofoto del ZIP, cámara a 1,6–1,7 m sobre el terreno real por rayo vertical, paso
+    por la puerta real `rubik-estancias.json › entrance`, 1.3.0 aditivo). `--paso N` para previas ligeras.
+  - La elección de efecto queda ligada a entrada y proyecto, se consume al empaquetar (corrige herencia entre proyectos).
+  - Pruebas: núcleo 5/5, scene-delivery 14/14 (incluida la entrada del ejemplo `opn_door-5`), kit 6/6.
+  - En cola (`scratchpad/fase1.sh`, tras la regresión de #324): prueba de navegador UI (escritorio/móvil, ES/EN), prueba del ZIP
+    (efecto/perfil/proyecto/revisión, cambio de efecto, cancelar, cambio de proyecto) y previas ligeras de Maqueta abierta y Pieza a pieza.
