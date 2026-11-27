@@ -1,0 +1,12 @@
+### Result
+{"options":[{"value":"catastro-inspire-cp","label":"Catastro · INSPIRE CP"},{"value":"catastro-inspire-wfs","label":"Catastro · consulta por referencia catastral"}],"wfs":{"status":"Parcela preparada; guarda para incorporarla al proyecto.","card":true,"responses":[200]},"gml":{"status":"Parcela preparada; guarda para incorporarla al proyecto.","card":true}}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ const work='AUDIT_WORKSPACE/rubik-audit-villa-5a061725/';
+ await page.keyboard.press('Escape');
+ await page.getByRole('button',{name:'Analizar',exact:true}).click();
+ await page.getByRole('button',{name:'Configurar emplazamiento',exact:true}).click();
+ const d=page.locator('#territoryDialog[open]');
+ const choice=d.locator('#territoryProvider');

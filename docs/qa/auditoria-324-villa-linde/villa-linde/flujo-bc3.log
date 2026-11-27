@@ -1,0 +1,9 @@
+### Result
+{"managed":"false","initial":"Pavimento Parqué de roble\n100,00 € / m² · Precio propio · importe 19.942,65 € · sin revisar","filtered":true,"unchangedOnQuote":true,"unchangedBeforeConfirm":true,"after":"Pavimento Parqué de roble\n38,50 € / m² · Precio de referencia · PAV-ROBLE · importe 7677,92 € · sin revisar"}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ await page.locator('#territoryClose').click();
+ await page.getByRole('button',{name:'Presupuestar',exact:true}).click();
+ await page.locator('#professionalWorkspace [data-route="reference-prices"]').first().click();

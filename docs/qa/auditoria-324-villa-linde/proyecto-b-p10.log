@@ -1,0 +1,5 @@
+### Error
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#panel tr[data-room="rom_cdff0473f41e4f98a307ef5b500b21a5"]')[22m
+

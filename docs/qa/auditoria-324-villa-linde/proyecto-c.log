@@ -1,0 +1,7 @@
+### Result
+{"plan":"Auditoría C · Casa Taller\nEdificio · revisión ed567cf3 · planta activa: Planta baja\nBorrador","keys":["lvl_fixture-ground/wal_op10-001","lvl_fixture-ground/wal_op10-002"],"view":{"canvas":1,"controls":["Ver la evolución en el visor","Generar vídeo y presentación"]},"crumbs":"Edificio · revisión ed567cf3 · planta activa: Planta baja"}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.setViewportSize({width:1440,height:900});

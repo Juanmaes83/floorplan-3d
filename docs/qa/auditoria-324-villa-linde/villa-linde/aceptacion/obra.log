@@ -1,0 +1,4 @@
+### Result
+{"plan":"Villa Linde · proyecto aprobado\nEdificio · revisión 86af0312 · planta activa: Planta baja\nRevisado (declarado)\nIdentidad duplicada en la biblioteca","keys":["lvl_linde-aprobada-b/wal_linde-b-1","lvl_linde-aprobada-p/wal_linde-p-1"],"view":{"canvas":1,"controls":["Ver la evolución en el visor","Generar vídeo y presentación"]},"crumbs":"Edificio · revisión 86af0312 · planta activa: Planta baja"}
+### Ran Playwright code
+```js

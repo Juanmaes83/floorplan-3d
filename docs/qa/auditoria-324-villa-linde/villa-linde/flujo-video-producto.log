@@ -1,0 +1,7 @@
+### Result
+{"modes":[["cine",true],["drone",true],["paradas",true]],"mode":"cine","error":"Cannot read properties of null (reading 'profile')","status":"Revisa el vídeo antes de descargarlo: es exactamente el archivo que se descarga."}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ await page.locator('#presentationVideo').click({timeout:15000});

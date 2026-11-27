@@ -1,0 +1,4 @@
+### Result
+{"outcome":"Descargar ZIP","projectUnchanged":true,"dialog":"Escena para Blender\n\nDescarga la vivienda tal como se ve en la vista 3D, lista para abrir en Blender con sus medidas, materiales e identificadores.\n\nIncluye: muros, suelos, huecos, muebles, luminarias, la cámara actual y la luz del visor.\nNo incluye fotos, texturas ni imágenes del proyecto: las superficies con textura viajan con su color.\nSe prepara en este navegador. No se envía nada y el proyecto no cambia.\n\nDescarga iniciada: rubik-escena-blender-prj_fc609092ff41464cab3be49596d34473.zip\n\nElementos identificados\n236\nMallas · caras\n2200 · 294.678\nTamaño de la descarga\n21.2 MB\nCámara\nvista actual\nHuella de la escena\nce72e2a562fc…\n\nTres formas de usarla en Blender (no dan el mismo render):\n\nRender y entrega sin código (recomendado): descomprime el ZIP y ejecuta RENDERIZAR-windows.bat (Windo"}
+### Ran Playwright code
+```js

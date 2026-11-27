@@ -1,0 +1,7 @@
+### Result
+{"level":"Planta baja","budgetTotals":"Base imponible\n23.244,35 €\nIVA\n4881,32 €\nTotal\n28.125,67 €","screen":["Reforma QA","Total con IVA","28.125,67 €"],"printed":["Reforma QA","Total con IVA","28.125,67 €"],"explicitScope":false}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.setViewportSize({width:1440,height:900});

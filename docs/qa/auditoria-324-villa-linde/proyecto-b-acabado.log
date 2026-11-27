@@ -1,0 +1,6 @@
+### Result
+{"linked":false,"originalMaterial":"mat_tile600","newMaterial":"mat_tile600","scale":"real","card":"P10\nEjemplo\nHistoria del cambio\nContinuar la historia\nVer detalles\n\nExplica a tu cliente qué cambia entre el original y una variante guardada.\n\nRevisión guardada: falta previsualizar y descargar"}
+### Ran Playwright code
+```js
+await (async page => {
+ const p10=page.locator('[data-entrega-code=P10]');

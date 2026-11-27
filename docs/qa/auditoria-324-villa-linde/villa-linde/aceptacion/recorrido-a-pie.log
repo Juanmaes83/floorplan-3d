@@ -1,0 +1,7 @@
+### Error
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#walkOverlay')[22m
+[2m    - locator resolved to <div id="walkOverlay">…</div>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m

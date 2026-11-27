@@ -1,0 +1,82 @@
+### Result
+{"hybrid-superior":{"level":"lvl_linde-primera","rooms":2},"blueprint":["plan","section","elev"],"despiece":{"same":true},"planosIntactos":true,"studio":{"firma":"Estudio Linde Mediterránea","cierre":"Villa Linde · Costa Blanca","editorial":true}}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ const report={};
+ async function check(name,run){try{report[name]=await run();}catch(e){report[name]={error:e.message};await page.screenshot({path:out+'error-'+name+'.png'});}}
+ await check('hybrid-superior',async()=>{
+  await page.locator('#presentationLivingPlay').click({timeout:10000});
+  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing',null,{timeout:15000});
+  const data=await page.evaluate(()=>({level:FloorPlanBuildingUI.context.levelId,rooms:View3D.presentationStoryInfo?.living?.rooms?.length}));
+  await page.screenshot({path:out+'08-hybrid-superior.png'});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:120000});
+  return data;
+ });
+ await page.locator('#presentationClose').click();
+ await page.waitForFunction(()=>!FloorPlanPresentation.active);
+ await page.getByRole('button',{name:'Escena 3D',exact:true}).click();
+ await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');
+ await page.getByRole('button',{name:'Entregar',exact:true}).click();
+ const saved=()=>page.evaluate(()=>JSON.stringify(FloorPlanBuildingUI.presentationSources().levels.map(l=>l.project)));
+ const before=await saved();
+ async function open(card,mod,label){
+  const key=page.locator('#bpdpOpen-'+mod);
+  if(await key.isVisible())await key.click();
+  else{
+   await page.locator('[data-entrega-code="'+card+'"] .perla-card-selector').click({position:{x:12,y:12}});
+   await page.locator('.perla-panel-open').getByRole('button',{name:label,exact:true}).click({timeout:12000});
+  }
+  await page.waitForFunction(()=>Boolean(window.BPDP?.studio),null,{timeout:25000});
+  return page.locator('dialog.bpdp-host[open]');
+ }
+ async function exit(){if(await page.locator('dialog.bpdp-host[open]').isVisible()){await page.keyboard.press('Escape');await page.waitForFunction(()=>!window.BpdpEntregar.abierta);}}
+ await check('blueprint',async()=>{
+  const d=await open('P8','blueprint','Abrir Blueprint');
+  const views=[];
+  for(const view of ['plan','section','elev']){
+   const selector=d.locator('[data-view="'+view+'"]');
+   if(!(await selector.isVisible()))await d.locator('[data-intent="clean"]').click({timeout:8000});
+   await selector.click({timeout:8000});
+   views.push(await page.evaluate(()=>BPDP.app.state.view));
+   await page.screenshot({path:out+'P8-'+view+'.png'});
+  }
+  return views;
+ });
+ await exit();
+ await check('despiece',async()=>{
+  const d=await open('P9','despiece','Abrir Despiece');
+  const signature=await page.evaluate(()=>JSON.stringify(BPDP.studio.transformSignature()));
+  await d.getByRole('button',{name:'Separar',exact:true}).click({timeout:8000});
+  await page.waitForFunction(()=>BPDP.app.state.A===0&&!BPDP.app.state.playing,null,{timeout:40000});
+  await page.screenshot({path:out+'P9-separado.png'});
+  await d.getByRole('button',{name:'Ensamblar',exact:true}).click({timeout:8000});
+  await page.waitForFunction(()=>BPDP.app.state.A===1&&!BPDP.app.state.playing,null,{timeout:40000});
+  return {same:await page.evaluate(s=>JSON.stringify(BPDP.studio.transformSignature())===s,signature)};
+ });
+ await exit();
+ report.planosIntactos=(await saved())===before;
+ await check('studio',async()=>{
+  await page.getByRole('button',{name:'Personalizar el cierre en Mi estudio',exact:true}).click({timeout:10000});
+  await page.getByRole('button',{name:'Crear mi firma profesional',exact:true}).click({timeout:10000});
+  await page.locator('#brand-name').fill('Estudio Linde Mediterránea');
+  await page.locator('#brandSave').click();
+  await page.locator('#brandDialog .brand-status').filter({hasText:'guardada'}).waitFor({timeout:10000});
+  await page.locator('#brandClose').click();
+  await page.locator('#professionalBrandChoice select').selectOption({label:'Estudio Linde Mediterránea'});
+  await page.locator('#shClosing').fill('Villa Linde · Costa Blanca');
+  await page.locator('#shClosing').press('Tab');
+  const hero=page.locator('[data-module="studio-hero"]');
+  await hero.locator('input[name="shStyle"][value="editorial"]').check();
+  await hero.locator('canvas').screenshot({path:out+'Studio-HERO.png'});
+  return {firma:await page.locator('#professionalBrandChoice select option:checked').innerText(),cierre:await page.locator('#shClosing').inputValue(),editorial:await hero.locator('input[name="shStyle"][value="editorial"]').isChecked()};
+ });
+ return report;
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:18767/#editor
+- Page Title: Rubik Sota Floor Plan Designer
+- Console: 1 errors, 0 warnings

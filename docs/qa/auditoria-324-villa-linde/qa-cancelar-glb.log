@@ -1,0 +1,6 @@
+### Result
+{"state":"cancelled","readyToDownloadAtCancel":0,"downloads":0,"retry":"ready","projectUnchanged":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();

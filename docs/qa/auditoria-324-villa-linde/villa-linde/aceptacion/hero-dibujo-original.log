@@ -1,0 +1,4 @@
+### Result
+{"brand":{"marca":"Estudio Linde Mediterránea","estudio":{"perfil":{"id":"brd_mtvvhl9wbzsr","name":"Estudio Linde Mediterránea","person":"","phone":"","email":"","web":"","tagline":"","cta":"","logo":null,"updatedAt":"2026-11-27T14:42:39.483Z"},"titulo":"Villa Linde · Planta baja","hero":{"cliente":"","clienteAutorizado":false,"cierre":"Villa Linde · Costa Blanca","estilo":"editorial","incluirWeb":false}},"id":"bld_linde-aprobada"},"state":"hero","rendered":1,"alpha":"1"}
+### Ran Playwright code
+```js

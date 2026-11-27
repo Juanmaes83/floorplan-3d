@@ -1,0 +1,7 @@
+### Result
+{"review":["1\tSuelo de Estancia\tParqué de roble acabado\trooms[rom_cdff0473f41e4f98a307ef5b500b21a5].floorMaterialId\tantes · ecf490a9\tCalculado del proyecto","2\tSuelo de Estancia\tBaldosa 600 acabado\trooms[rom_cdff0473f41e4f98a307ef5b500b21a5].floorMaterialId\tdespués · 06455d06\tCalculado del proyecto"],"filename":"rubik-propuesta-cliente.zip"}
+### Ran Playwright code
+```js
+await (async page => {
+ const d=page.getByRole('dialog',{name:'Historia del cambio'});
+ await d.getByRole('button',{name:'Rehacer con las revisiones actuales'}).click();

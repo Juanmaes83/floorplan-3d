@@ -1,0 +1,7 @@
+### Result
+{"before":{"pos":0,"date":"2026-11-27"},"paused":{"pos":0.5655999999999767,"date":"2026-11-27","playing":false},"end":{"date":"2026-12-04","tasks":["Montaje de tabiques QA","Pavimento de planta QA"]},"returnToDeliver":false,"sameBuilding":"Auditoría C · Casa Taller"}
+### Ran Playwright code
+```js
+await (async page => {
+ const frame=page.frameLocator('#evolutionFrame');
+ const iframe=await page.locator('#evolutionFrame').elementHandle();

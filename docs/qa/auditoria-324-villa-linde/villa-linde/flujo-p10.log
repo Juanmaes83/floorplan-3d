@@ -1,0 +1,4 @@
+### Result
+{"card":"P10\nEjemplo\nHistoria del cambio\nCrear variante\nVer detalles\n\nExplica a tu cliente qué cambia entre el original y una variante guardada.\n\nPrimer paso: crear una variante","buttons":[["Crear variante",false,null],["Ver detalles",false,"Ver detalles · P10 Historia del cambio: Primer paso: crear una variante"]]}
+### Ran Playwright code
+```js

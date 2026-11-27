@@ -1,0 +1,9 @@
+### Result
+{"project":"Auditoría A · Patio claro","material":"mat_tile600","objects":1,"views":["plan","section","elev"],"reassembled":true,"projectUnchanged":true}
+### Ran Playwright code
+```js
+await (async page => {
+ const saved=()=>page.evaluate(()=>structuredClone(FloorPlanApp.project));
+ const r=(await saved()).rooms[0];
+ await page.locator('#panel tr[data-room="'+r.id+'"]').click();
+ await page.locator('#panel [data-mat="mat_tile600"]').click();

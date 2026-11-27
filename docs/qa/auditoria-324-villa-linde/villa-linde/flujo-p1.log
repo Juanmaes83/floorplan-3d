@@ -1,0 +1,7 @@
+### Result
+{"plan":[{"level":"lvl_1a9fe84ba9fb448db25e781aa9e4e9de","label":"Vista general","kind":"overview"},{"level":"lvl_1a9fe84ba9fb448db25e781aa9e4e9de","label":"Garaje","kind":"room"},{"level":"lvl_0ca1d55c0c5a4b64abfbf57fdf157ad4","label":"Vista general","kind":"overview"},{"level":"lvl_0ca1d55c0c5a4b64abfbf57fdf157ad4","label":"Dormitorio P1","kind":"room"}],"zip":"presentacion-edificio.zip","status":"4 vistas PNG (Planta baja: 2 · Planta primera: 2) y edificio editable descargados."}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ await page.keyboard.press('Escape');

@@ -1,0 +1,4 @@
+### Result
+{"options":[{"value":"catastro-inspire-cp","label":"Catastro · INSPIRE CP"},{"value":"catastro-inspire-wfs","label":"Catastro · consulta por referencia catastral"}],"wfs":{"status":"Parcela preparada; guarda para incorporarla al proyecto.","card":true,"responses":[200]},"gml":{"status":"Parcela preparada; guarda para incorporarla al proyecto.","card":true}}
+### Ran Playwright code
+```js

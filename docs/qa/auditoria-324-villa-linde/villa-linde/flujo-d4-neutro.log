@@ -1,0 +1,5 @@
+### Result
+{"level":"Planta baja","budgetTotals":"Base imponible\n343.301,39 €\nIVA\n72.093,31 €\nTotal\n415.394,70 €","screen":["Villa Linde","Total con IVA"],"printed":["Villa Linde","Total con IVA"],"explicitScope":false}
+### Ran Playwright code
+```js
+await (async page => {

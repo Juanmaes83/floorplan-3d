@@ -1,0 +1,7 @@
+### Result
+{"scale":{"confidence":"real","method":"known-dimension","calibration":{"sourceImageId":"img_f52ea845e0e84eb69d31e15ffaaa1c69","pointA":{"x":40.000006103515624,"y":39.99998779296875},"pointB":{"x":440,"y":39.99998779296875},"knownLengthMm":4000,"mmPerPixel":10.000000152587893,"calibratedAt":"2026-11-27T13:46:36.124Z","confirmedByUser":true},"verification":{"sourceImageId":"img_f52ea845e0e84eb69d31e15ffaaa1c69","pointA":{"x":40.00000549316397,"y":39.999987182617375},"pointB":{"x":40.00000549316397,"y":289.9999955749512},"knownLengthMm":2500,"measuredLengthMm":2500,"errorPercent":0,"thresholdPercent":2,"status":"consistent","verifiedAt":"2026-11-27T13:46:36.289Z"}},"area":9.59375,"expected":9.59375,"delta":0,"walls":5,"analyzed":["9,59 m²","Medido / calibrado","9,59 m² · Medido / calibrado","Revisar superficiesEstancias y pavimentosAbrir herramientas de calibraciónComprobar el plano"]}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.setViewportSize({width:1440,height:900});
+ await page.waitForFunction(()=>FloorPlanApp.project.name.includes('Reforma diagonal')&&document.querySelector('#gSource image'));

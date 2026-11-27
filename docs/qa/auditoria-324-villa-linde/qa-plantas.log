@@ -1,0 +1,6 @@
+### Result
+{"upperQuantity":["Superficie útil","10,56 m²"],"upperPrices":["","","","",""],"lowerAfter":"77.77"}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();

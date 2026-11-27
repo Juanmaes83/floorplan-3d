@@ -1,0 +1,7 @@
+### Result
+{"p3Status":"P3\nEjemplo\nVisita 3D interactiva · prueba privada\nRevisar como cliente\n\nSelecciona «Proyecto de ejemplo» para habilitar esta prueba.\n\nVer detalles\n\nTu cliente recorre la vivienda a la altura de los ojos.\n\nPrueba privada · no se publica","dossier":["Villa Linde · Planta baja","784,46 m²","ESTANCIAS EN EL CÓMPUTO","PLANTA","Planta única","784,46 m² · Estimado","Estancia\tSuperficie","Planta baja","Garaje · 2 plazas\t31,98 m²","Lavandería\t15,34 m²","Gimnasio\t12,48 m²","Acceso\t11,70 m²","Escalera S1\t17,42 m²","Dormitorio B01 · Doble\t20,28 m²"],"printedScope":["Villa Linde · Planta baja","Planta única","Planta baja","Planta primera"],"dxf":["Villa Linde · Planta baja - Planta baja.dxf","Villa Linde · Planta primera - Planta primera.dxf"]}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/aceptacion/';
+ await page.setViewportSize({width:1440,height:900});

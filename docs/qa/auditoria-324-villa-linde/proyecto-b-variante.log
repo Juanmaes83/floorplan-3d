@@ -1,0 +1,7 @@
+### Result
+{"origin":"prj_ac4d05cb61e84348b844200516aca585","originFloor":"mat_wood","variant":"prj_334a51e977bd4494b377053e18498955","variantOf":"prj_ac4d05cb61e84348b844200516aca585","active":{"scale":"real","floor":"mat_wood","walls":5},"returnControl":1,"card":"P10\nEjemplo\nHistoria del cambio\nEditar variante\nVer detalles\n\nExplica a tu cliente qué cambia entre el original y una variante guardada.\n\nVariante creada. Edita algo para mostrar el primer cambio."}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.getByRole('button',{name:'Diseñar',exact:true}).click();
+ const origin=await page.evaluate(()=>({id:FloorPlanApp.entryId,room:FloorPlanApp.project.rooms[0],walls:FloorPlanApp.project.walls.length}));

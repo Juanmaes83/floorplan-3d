@@ -1,0 +1,47 @@
+### Result
+{"Analizar":["Villa Linde · Planta baja","1073,52 m²","36 estancias en el cómputo · 6 fuera · Planta única · Medidas orientativas","1073,52 m² · Estimado"],"Presupuestar":["VILLA LINDE · PLANTA BAJA✓ Guardado","592,2 m² útiles","Precios de referencia de tus bases BC3","592,2 m² útiles · 280,46 m de muro · 37 carpinterías","Tareas, fechas, dependencias y elementos de las dos plantas. Los importes se consultan por planta: RUBIK todavía no tiene presupuesto de edificio.","En un edificio, cada planta tiene su presupuesto: ábrelo desde la planta."],"config":"Presentación del edificio «Villa Linde · Costa Blanca»: las estancias elegidas de sus 2 plantas, en una sola presentación y un solo lote. Cada planta empieza con su vista general; la escalera no se recorre.","start":{"kind":"living-drawing","level":"lvl_linde-baja","live":true,"phase":"intro","rooms":3,"title":"Dibujo vivo"},"mid":{"kind":"living-drawing","level":"lvl_linde-baja","live":true,"phase":"room","rooms":3,"title":"Dibujo vivo"},"end":{"level":"lvl_linde-baja","live":false,"title":"Vista general"},"upper":{"level":"lvl_linde-primera","live":false,"title":"Vista general"}}
+### Ran Playwright code
+```js
+await (async page => {
+ const path='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/';
+ const report={};
+ for(const tab of ['Analizar','Presupuestar']){
+  await page.getByRole('button',{name:tab,exact:true}).first().click();
+  report[tab]=(await page.locator('#professionalWorkspace').innerText()).split('\n').filter(l=>/m²|planta|coste|BC3|BCCA/i.test(l)).slice(0,22);
+ }
+ await page.getByRole('button',{name:'Diseñar',exact:true}).first().click();
+ await page.locator('#presentationBtn').click();
+ await page.locator('#presentationConfig[open]').waitFor();
+ report.config=await page.locator('#presentationLevelNote').innerText();
+ for(const group of await page.locator('.presentation-level-group').all()){
+  const salones=group.getByText(/^Salón /);
+  for(const salon of await salones.all()) await salon.click();
+ }
+ await page.locator('#presentationLivingDrawing').check();
+ await page.screenshot({path:path+'03-hybrid-config.png'});
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ const story=()=>page.evaluate(()=>({kind:FloorPlanPresentation.story?.kind,level:FloorPlanBuildingUI.context?.levelId,live:View3D.presentationLivingDrawingInfo?.active,phase:View3D.presentationStoryInfo?.phase,rooms:View3D.presentationStoryInfo?.living?.rooms?.length,title:document.querySelector('.presentation-card h2')?.textContent}));
+ try{
+  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing',null,{timeout:30000});
+  report.start=await story();
+  await page.screenshot({path:path+'04-hybrid-inicio.png'});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story||FloorPlanPresentation.story.p>0.33,null,{timeout:120000});
+  report.mid=await story();
+  await page.screenshot({path:path+'05-hybrid-transicion.png'});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:180000});
+  report.end=await story();
+  await page.screenshot({path:path+'06-hybrid-fin.png'});
+  const upper=page.getByRole('button',{name:'Vista general · Planta primera',exact:true});
+  await upper.click();
+  await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levelId==='lvl_linde-primera'&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});
+  report.upper=await story();
+  await page.screenshot({path:path+'07-planta-primera.png'});
+ } catch(error){report.error=error.message;await page.screenshot({path:path+'error-hybrid.png'});}
+ return report;
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:18767/#presentacion
+- Page Title: Rubik Sota Floor Plan Designer
+- Console: 1 errors, 0 warnings

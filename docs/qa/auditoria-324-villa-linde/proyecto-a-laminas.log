@@ -1,0 +1,7 @@
+### Result
+{"artifacts":["lamina-blueprint-prj_fa48b358a41848b0bc356b31caaffb17-9a7753f5.png","lamina-despiece-prj_fa48b358a41848b0bc356b31caaffb17-9a7753f5.png"]}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.getByRole('button',{name:'Escena 3D',exact:true}).click();
+ await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d');

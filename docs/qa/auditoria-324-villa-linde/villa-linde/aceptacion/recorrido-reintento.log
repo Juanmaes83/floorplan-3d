@@ -1,0 +1,7 @@
+### Result
+{"start":"rom_linde-b-4","end":"rom_linde-b-5","walked":9181.760000133512}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/aceptacion/';
+ const name='Villa Linde';const assert={equal(a,b,msg){if(a!==b)throw Error(msg);},ok(a,msg){if(!a)throw Error(msg);}};

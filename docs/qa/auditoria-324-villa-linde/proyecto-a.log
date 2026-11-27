@@ -1,0 +1,7 @@
+### Result
+{"title":"Auditoría A · Patio claro","areas":[["Salón de lectura",20],["Estudio",12]],"wallCount":7,"undo":1,"redo":2,"walk":null,"identityUnchanged":true,"geometryUnchanged":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.setViewportSize({width:1440,height:900});

@@ -1,0 +1,8 @@
+### Result
+{"analyze":["32,00 m²","32,00 m² · Estimado","Escala sin calibración confirmada","Revisar superficiesEstancias y pavimentosAbrir herramientas de calibraciónComprobar el plano"],"lineText":"Pavimento Baldosa 600\nPrecio propio\nSin plan de obra: esta partida no está asignada a tareas.\n\t20,00 m² · estimado\t\n\t\n€/m²\t525,00 €\t","partial":"Base imponible\n525,00 €\nIVA\n110,25 €\nTotal parcial (4 sin precio)\n635,25 €","dossier":["Auditoría A · Patio claro","32,00 m²","32,00 m² · Estimado"],"d4":["Auditoría A · Patio claro","525,00 € · parcial","Total con IVA","No definitivo","4 partida(s) sin precio: el total no está completo.","IVA no definido o incompleto en 4 partida(s): no hay total con IVA definitivo.","Subtotal: 525,00 € · incompleto · IVA no definido/incompleto","Subtotal: — · incompleto · IVA no definido/incompleto","Subtotal: — · incompleto · IVA no definido/incompleto"],"dxf":"Auditoría A · Patio claro.dxf","identity":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ const id=await page.evaluate(()=>FloorPlanApp.entryId);
+ await page.getByRole('button',{name:'Analizar',exact:true}).click();

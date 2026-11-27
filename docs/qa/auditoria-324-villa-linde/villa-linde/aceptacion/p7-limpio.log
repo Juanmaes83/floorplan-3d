@@ -1,0 +1,8 @@
+### Result
+{"download":"rubik-sota-villa-linde-planta-baja-para-el-cliente.html"}
+### Ran Playwright code
+```js
+await (async page=>{
+ const out='AUDIT_WORKSPACE/output/auditoria-324/villa-linde/aceptacion/';
+ await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.locator('#uploadIn').setInputFiles(out+'villa-linde-aprobada.json');

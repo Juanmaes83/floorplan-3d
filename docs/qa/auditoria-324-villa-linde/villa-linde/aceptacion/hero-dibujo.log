@@ -1,0 +1,4 @@
+### Result
+{"brand":{"estudio":{"perfil":null,"titulo":"Villa Linde · Planta baja","hero":{"cliente":"","clienteAutorizado":false,"cierre":"","estilo":"cine","incluirWeb":false}},"id":"bld_79c86c5f59c44b7ea5ca217b22cf2b69"},"state":"final-sin-hero","rendered":0,"alpha":null}
+### Ran Playwright code
+```js

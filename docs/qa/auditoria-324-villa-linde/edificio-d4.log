@@ -1,0 +1,8 @@
+### Result
+{"level":"Planta baja","screen":["Casa sintética · planta baja","Total con IVA","28.125,67 €","Subtotal: 4242,00 € · IVA 890,82 € · con IVA 5132,82 €","Subtotal: 12.476,80 € · IVA 2620,13 € · con IVA 15.096,93 €","Subtotal: 6425,55 € · IVA 1349,37 € · con IVA 7774,92 €","Subtotal: 100,00 € · IVA 21,00 € · con IVA 121,00 €"],"printed":["Casa sintética · planta baja","Total con IVA","28.125,67 €","Subtotal: 4242,00 € · IVA 890,82 € · con IVA 5132,82 €","Subtotal: 12.476,80 € · IVA 2620,13 € · con IVA 15.096,93 €","Subtotal: 6425,55 € · IVA 1349,37 € · con IVA 7774,92 €","Subtotal: 100,00 € · IVA 21,00 € · con IVA 121,00 €"]}
+### Ran Playwright code
+```js
+await (async page => {
+ const level=await page.evaluate(()=>FloorPlanApp.levelContext?.levelName);
+ if(level!=='Planta baja') throw new Error('Esperada Planta baja; vista: '+level);
+ if(await page.locator('#budgetClose').isVisible()) await page.locator('#budgetClose').click();

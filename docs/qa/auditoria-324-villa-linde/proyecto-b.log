@@ -1,0 +1,7 @@
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.setViewportSize({width:1440,height:900});
+ await page.getByLabel('Acciones del proyecto',{exact:true}).click();
+ await page.locator('#newProjectBtn').click();await page.locator('#newProjectName').fill('Auditoría B · Reforma diagonal');

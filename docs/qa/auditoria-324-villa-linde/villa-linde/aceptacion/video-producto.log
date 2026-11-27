@@ -1,0 +1,4 @@
+### Result
+{"modes":[["cine",true],["drone",true],["paradas",true]],"mode":"cine","brand":"Estudio Linde Mediterránea","hero":{"cliente":"","clienteAutorizado":false,"cierre":"Villa Linde · Costa Blanca","estilo":"editorial","incluirWeb":false},"filename":"rubik-sota-recorrido-villa-linde-planta-baja.mp4","meta":"MP4 · 1280×720 · 48,7 s · 7 paradas · 32,4 MB"}
+### Ran Playwright code
+```js

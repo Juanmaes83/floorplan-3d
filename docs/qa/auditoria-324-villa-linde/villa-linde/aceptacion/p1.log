@@ -1,0 +1,4 @@
+### Result
+{"plan":[{"level":"lvl_linde-aprobada-b","label":"Vista general","kind":"overview"},{"level":"lvl_linde-aprobada-b","label":"Garaje · 2 plazas","kind":"room"},{"level":"lvl_linde-aprobada-b","label":"Salón principal","kind":"room"},{"level":"lvl_linde-aprobada-b","label":"Salón de piscina","kind":"room"},{"level":"lvl_linde-aprobada-p","label":"Vista general","kind":"overview"},{"level":"lvl_linde-aprobada-p","label":"Despacho","kind":"room"},{"level":"lvl_linde-aprobada-p","label":"Salón panorámico","kind":"room"}],"zip":"presentacion-edificio.zip","status":"7 vistas PNG (Planta baja: 4 · Planta primera: 3) y edificio editable descargados."}
+### Ran Playwright code
+```js

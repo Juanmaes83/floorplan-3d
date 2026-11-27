@@ -1,0 +1,7 @@
+### Result
+{"review":["1\tSuelo de Garaje\tBaldosa 600 acabado\trooms[rom_linde-b-1].floorMaterialId\tantes · bcdad578\tCalculado del proyecto","2\tSuelo de Garaje\tParqué de roble acabado\trooms[rom_linde-b-1].floorMaterialId\tdespués · 259333f5\tCalculado del proyecto"],"filename":"rubik-propuesta-cliente.zip"}
+### Ran Playwright code
+```js
+await (async page => {
+ const d=page.getByRole('dialog',{name:'Historia del cambio'});
+ const save=d.getByRole('button',{name:'Guardar revisión',exact:true});await save.click({timeout:15000});

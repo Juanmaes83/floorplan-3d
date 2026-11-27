@@ -1,0 +1,4 @@
+### Result
+{"mode":"floor","finish":"light-oak","blockedBeforeConsent":true,"cancelledWithoutDownload":true,"outgoing":[],"realBlocked":true,"downloadBlocked":true,"status":"Simulación terminada: 1 alternativa(s), rotuladas como SIMULACIÓN. No se ha llamado a ningún proveedor.","proyecto":"Villa Linde · proyecto aprobado"}
+### Ran Playwright code
+```js

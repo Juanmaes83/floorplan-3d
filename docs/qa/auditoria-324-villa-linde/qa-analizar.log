@@ -1,0 +1,6 @@
+### Result
+{"empty":["Superficie útil · 87,18 m² · estimada",""],"negativeRejected":true,"unchanged":true,"validWithoutParcel":["Superficie útil · 87,18 m² · estimada",""],"focus":true,"sun":"Revisa la ubicación, la zona horaria y el norte en Orientación."}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.getByRole('button',{name:'Analizar',exact:true}).click();

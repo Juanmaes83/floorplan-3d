@@ -1,0 +1,7 @@
+### Result
+{"before":{"id":"prj_f34dc16c9e6742e4baa801b09d889678","name":"Auditoría C · Casa Taller","brand":"Estudio Taller QA","hero":{"cliente":"","clienteAutorizado":false,"cierre":"Cierre de prueba Casa Taller","estilo":"editorial","incluirWeb":false}},"closing":"Cierre de prueba Casa Taller","editorial":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.getByRole('button',{name:'Personalizar el cierre en Mi estudio',exact:true}).click();
+ await page.getByRole('button',{name:'Crear mi firma profesional',exact:true}).click();
