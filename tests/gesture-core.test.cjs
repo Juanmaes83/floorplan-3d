@@ -34,7 +34,11 @@ test('perder la mano 700 ms: evento «lost», sin acción, y la apertura en curs
   assert.deepEqual(b.map(e => e.type), ['lost']); assert.equal(g.state, 'LOST');
   const c = run(g, frames('open', 1200, 10)); assert.equal([...a, ...c].filter(e => e.type === 'next').length, 0, 'no se suma lo anterior');
 });
-test('presentación: plano → 3D → comparar; el cambio de revisión solo en comparar', () => {
-  const p = G.presentation(); assert.equal(p.toggle('right'), null); assert.equal(p.next(), '3d'); assert.equal(p.next(), 'compare'); assert.equal(p.next(), 'compare');
+test('presentación: enrollado → plano → 3D con una revisión; «antes y después» solo al pedirlo', () => {
+  const p = G.presentation(); assert.equal(p.step, 'rolled'); assert.equal(p.toggle('right'), null);
+  assert.equal(p.next(), 'plan'); assert.equal(p.next(), '3d'); assert.equal(p.next(), '3d', 'con una sola revisión el recorrido termina en el 3D');
+  assert.equal(p.go('compare'), '3d', 'comparar no existe hasta pedirlo'); assert.equal(p.toggle('right'), null);
+  p.enableCompare(); assert.equal(p.next(), 'compare'); assert.equal(p.next(), 'compare');
   assert.equal(p.toggle('right'), 'after'); assert.equal(p.toggle('left'), 'before'); assert.equal(p.prev(), '3d');
+  p.enableCompare(false); assert.equal(p.go('compare'), '3d');
 });

@@ -63,12 +63,17 @@
     return lm;
   }
 
-  /** Máquina de la presentación: plano → 3D → comparar; los controles visibles llaman a las mismas acciones. */
-  const STEPS = Object.freeze(['plan', '3d', 'compare']);
-  function presentation() {
-    let i = 0, side = 'before';
-    return { get step() { return STEPS[i]; }, get side() { return side; },
-      next() { if (i < STEPS.length - 1) i++; return STEPS[i]; }, prev() { if (i > 0) i--; return STEPS[i]; }, go(k) { const j = STEPS.indexOf(k); if (j >= 0) i = j; return STEPS[i]; },
+  /** Máquina de la presentación (decisión del propietario 27/11): plano ENROLLADO → plano desplegado y legible → 3D de la misma
+   *  revisión. Funciona con UNA revisión guardada. «Antes y después» es un paso OPCIONAL: solo existe cuando se pide
+   *  (compare: true o enableCompare()), y entonces necesita una variante. Botones, teclado y gestos llaman a estas acciones. */
+  const STEPS = Object.freeze(['rolled', 'plan', '3d', 'compare']);
+  function presentation(opts) {
+    let i = 0, side = 'before', compare = !!(opts && opts.compare);
+    const last = () => compare ? 3 : 2;
+    return { get step() { return STEPS[i]; }, get side() { return side; }, get compare() { return compare; },
+      enableCompare(on = true) { compare = !!on; if (!compare && i > 2) i = 2; return compare; },
+      next() { if (i < last()) i++; return STEPS[i]; }, prev() { if (i > 0) i--; return STEPS[i]; },
+      go(k) { const j = STEPS.indexOf(k); if (j >= 0 && j <= last()) i = j; return STEPS[i]; },
       toggle(dir) { if (STEPS[i] !== 'compare') return null; side = dir === 'right' ? 'after' : dir === 'left' ? 'before' : side === 'before' ? 'after' : 'before'; return side; } };
   }
   return Object.freeze({ PARAMS: P, create, syntheticHand, presentation, STEPS });

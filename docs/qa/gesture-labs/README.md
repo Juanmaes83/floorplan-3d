@@ -91,6 +91,58 @@ falta HTTPS o localhost, y una variante guardada con algún cambio (Entregar →
 
 El propietario aprobará con la cámara frontal del móvil.
 
+## Candidata para revisión (27/11) · «Presentación con gestos»
+**Estado:** en ensayo, candidata para revisión, no publicada. Solo se activa con `?gesture-lab=1`; sin el parámetro, RUBIK no
+cambia.
+
+**Qué encuentra el profesional**
+- **Home:** en «Módulos para tu trabajo», ficha destacada «Presentación con gestos». Lleva la etiqueta «En ensayo · para
+  revisión», el detalle de qué es, qué no es y sus condiciones, y el botón «Ver la demo con la vivienda de ejemplo».
+- **Entregar:** ficha propia **P11 «Presentación con gestos»**, con portada del plano real y el estado «En ensayo · para
+  revisión». Su detalle explica qué experiencia prepara, los requisitos de cada modo (botones: ninguno; cámara: permiso, HTTPS y
+  buena luz) y qué verá el cliente. Acción: «Preparar la presentación».
+- **P1:** acceso contextual «Presentar con gestos (en ensayo)» a la misma experiencia.
+- **Inicio de la presentación:** proyecto, revisión que verá el cliente, si «Antes y después» está disponible, qué verá el
+  cliente y los requisitos de cada modo. Dos acciones: «Empezar con botones» (principal) y «Activar cámara».
+
+**Qué experimenta el cliente (una sola revisión guardada)**
+1. **Plano enrollado** de la vivienda. Para desplegarlo: mano abierta quieta 1 s, o el botón «Desplegar el plano».
+2. **Plano desplegado y legible**, con la estancia principal (el salón) resaltada. Para pasar al 3D: mano abierta quieta 1 s, o
+   el botón «Ver en 3D →».
+3. **3D de la misma revisión**, con la cámara volando a esa misma estancia (`View3D.focusRoom`; el visor la rotula, p. ej.
+   «Salón 21,5 m²»). Una miniatura de la planta la marca: «Salón · la estancia que viste en planta».
+4. **«Antes y después» (opcional):** solo al elegirlo. Si no hay variante guardada con cambios, se explica y se ofrece «Ir a
+   P10 · crear la variante». El punto actual se conserva.
+
+**En todos los pasos**
+- Al perder la mano: «Mano perdida · gestos en pausa, no se ha cambiado nada»; se sigue con los botones desde el mismo punto.
+- Al salir: la cámara se apaga y se vuelve al origen («Volver a Entregar», «Volver a P1» o «Volver al inicio») con el proyecto
+  activo restaurado.
+- Una sola acción principal por paso. El panel de navegación 3D se cierra para no tapar la vivienda. En escritorio, durante el
+  3D, el panel del recorrido va a la derecha.
+
+**Pruebas (locales, Chromium sin interfaz):** 12/12.
+- Núcleo, 7: incluye enrollado → plano → 3D con una revisión y comparar solo al pedirlo.
+- Navegador, 5:
+  - una revisión desde P11, en escritorio y en móvil;
+  - comparación desde P1 con una variante;
+  - permiso denegado;
+  - Home con su demo.
+
+**Evidencia:**
+- `video/gl-recorrido-movil.mp4`: grabación continua en 390×844 táctil. Va de Entregar a la ficha P11, el inicio, la cámara,
+  el plano enrollado, el gesto de desplegar, el plano legible, el gesto al 3D en el salón, la mano perdida, «Antes y después»
+  (pide la variante), la vuelta al plano y «Volver a Entregar» con la cámara apagada.
+- `video/gl-recorrido-escritorio.mp4`: el mismo recorrido en escritorio.
+- Capturas:
+  - `gl-home-movil.png` y `gl-entregar-p11-{escritorio,movil}.png`;
+  - `gl-0-inicio-*`, `gl-1-enrollado-*`, `gl-2-desplegado-*` y `gl-3-3d-*`;
+  - `gl-vercel-boton-*` (acceso en la Preview desplegada, cámara apagada).
+
+**Sintético frente a físico:** todos los gestos de estas pruebas y vídeos son **sintéticos** (mano generada e inyectada) con
+una pista de cámara simulada. Falta la **prueba con cámara física**, que hará el propietario con la cámara frontal del móvil
+(pasos más abajo). La integración definitiva espera esa revisión.
+
 ## Revisión 27/11 · despliegue y acceso guiado
 - **Despliegue:** `.vercelignore` excluye `labs/`, por eso el acceso no aparecía en Vercel. Los tres recursos se mueven a
   `gesture-lab/` (solo `gesture-core.js`, `gesture-ui.js` y `gesture.css`); el resto de `labs/` sigue sin publicarse. Siguen
@@ -116,7 +168,8 @@ Pon el móvil de pie, apoyado, a unos 40–60 cm, con luz de frente y la mano de
    dos revisiones con su fecha.
 3. «Activar cámara» → Permitir.
    - **Señal:** punto verde y «Cámara activa · …»; con la mano a la vista, «mano abierta detectada» o «puño detectado».
-4. **Gesto 1 · siguiente:** mano abierta, palma hacia la pantalla, dedos separados, **quieta 1 segundo**.
+4. **Gesto 1 · desplegar y pasar al 3D:** mano abierta, palma hacia la pantalla, dedos separados, **quieta 1 segundo**.
+   Primero despliega el plano enrollado y, repitiendo el gesto, pasa al 3D en el salón.
    - **Señal de detección:** franja verde «✓ Gesto detectado: mano abierta → siguiente» y el paso pasa a «2 · Vista 3D».
    - Repite para llegar a «3 · Antes y después».
    - Mantener la mano abierta más tiempo **no** avanza otro paso. Para repetir, cierra la mano y vuelve a abrirla.

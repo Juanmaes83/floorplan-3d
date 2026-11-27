@@ -45,3 +45,18 @@ dialog.gl>#assistantAccess{position:static!important;margin-top:4px}
 body.gl-active .gl-launch{display:none}
 @media (max-width:600px){dialog.gl.gl-see-through{max-height:52vh}.gl-steps li{font-size:.78rem;padding:2px 8px}}
 @media (max-width:760px){.gl-launch{bottom:calc(var(--dock-h,64px) + 40px)}}
+/* 27/11 · plano enrollado → desplegado; estancia resaltada; miniatura de la planta en el 3D; ficha en Home */
+.gl-roll{position:relative;width:min(100%,760px);transform-origin:0 50%;transition:transform 1.4s cubic-bezier(.2,.8,.2,1),filter 1.4s;background:#fff;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.gl-roll[data-state=rolled],.gl-roll[data-state=unrolling]{transform:translateX(44%) scaleX(.12);filter:brightness(.92);border-radius:40px/8px}
+.gl-roll[data-state=open]{transform:none;filter:none}
+.gl-roll .gl-plan{width:100%}
+.gl-roll-edge{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.35) 35%,rgba(0,0,0,.18) 70%,rgba(0,0,0,.35));pointer-events:none;border-radius:4px}
+@media (prefers-reduced-motion:reduce){.gl-roll{transition:none}}
+.gl-mark{fill:rgba(192,57,43,.16)!important}
+.gl-inset{position:relative;margin:0;display:grid;justify-items:center;gap:2px}.gl-inset .gl-mini{width:170px}.gl-inset .gl-mini svg{width:100%;height:auto}
+.gl-inset figcaption{font-size:.8rem;font-weight:600;color:#c0392b}
+.gl-need{margin:0;padding:6px 10px;border-radius:8px;background:#fdf3e6;color:#5a3a00;font-size:.9rem}
+.gl-intro-modes{margin:0;padding-left:18px;font-size:.9rem}
+dialog.gl[data-step="3d"] .gl-stage{justify-items:start}
+@media (min-width:900px){dialog.gl.gl-see-through{inset:64px 8px 8px auto;width:430px;max-height:calc(100vh - 72px)}}
+body:has(#professionalWorkspace:not([hidden])) .gl-launch{display:none}
