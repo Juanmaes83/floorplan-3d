@@ -1,0 +1,1762 @@
+[
+  {
+    "archivo": "cantidades.csv",
+    "bytes": 3697,
+    "sha256": "1066f68febd42c62089eec2da23e377c63af9e71e88ef43cc3fcf061a0bc8235"
+  },
+  {
+    "archivo": "capturar-cantidades.js",
+    "bytes": 1065,
+    "sha256": "050f921b60018d7726b57bfb9b22a9d629940353afcff0aa726c1f233b5d6e5d"
+  },
+  {
+    "archivo": "comprobar-glb-girado.log",
+    "bytes": 633,
+    "sha256": "483be27dcaacb6d09216b79e32a0e665c4e2f51dde94ab4f7f4fb739018d59b3"
+  },
+  {
+    "archivo": "comprobar-glb-girado.py",
+    "bytes": 3381,
+    "sha256": "46c71cfdf162db93a9ded2d69e8d200b0df21d0aba6b274ab4642ee8ee4c7bb2"
+  },
+  {
+    "archivo": "control-d3.js",
+    "bytes": 1813,
+    "sha256": "2b6fdcff28a49f879705f0da90d9d6fc78b5c4bf46b33960deebcef2b627a635"
+  },
+  {
+    "archivo": "copiar.js",
+    "bytes": 524,
+    "sha256": "0ecceff8439dc0b4aede739cd649627257139858143bdf76e8eb8b84053c1662"
+  },
+  {
+    "archivo": "d3-360-revision.png",
+    "bytes": 21977,
+    "sha256": "c6e331d88b084ef1e57d13774d0fc29a13f66fbbaa67b794813999b768915f5d"
+  },
+  {
+    "archivo": "d3-antes.png",
+    "bytes": 82361,
+    "sha256": "6ff8a11c1b49fc9de8accf480accff68d94f9d97864f2daa277908af2bf0a7a9"
+  },
+  {
+    "archivo": "d3-captura-error-sin-aviso.png",
+    "bytes": 90096,
+    "sha256": "1abd893c577742efa9b21805ed1755f7a91ba4eb08fbbcc03f5ab07788d3ab46"
+  },
+  {
+    "archivo": "d3-captura-error.js",
+    "bytes": 1348,
+    "sha256": "9185c61462168eddbc36ceac72f4f66f01d25f6685d79689ada2eb63c51bf54b"
+  },
+  {
+    "archivo": "d3-despues.png",
+    "bytes": 81030,
+    "sha256": "4a76172e86bac9753676d3f17ef7e48d8f7ff6079177b857a2aa456c2ce3feef"
+  },
+  {
+    "archivo": "d3-impresion-privacidad.js",
+    "bytes": 1457,
+    "sha256": "71d68ef5c2cec168e2d5ab54625b0dae194a5b186ca6f93779b1b1e665601566"
+  },
+  {
+    "archivo": "d3-movil-despues.png",
+    "bytes": 31958,
+    "sha256": "9965d6ccf36a87b6598ee397fd29b55392460b34553ec6e90e5bf4bfd9232fd4"
+  },
+  {
+    "archivo": "edificio-auditoria.js",
+    "bytes": 1354,
+    "sha256": "f0f6e9e4a1042fd35267811b5c8f3af8c41c07d5a221b2a623574fa335b97fa7"
+  },
+  {
+    "archivo": "edificio-base.js",
+    "bytes": 1526,
+    "sha256": "c91e7108725d8dc59f8e461b5d6cdde7e4c1db35da12c16285b2628a37021623"
+  },
+  {
+    "archivo": "edificio-d4-alcance-neutro.png",
+    "bytes": 79548,
+    "sha256": "4298117f3295388876623e7d6cc3fbddb0bb3c3a86991a4ef566aa472d2d83bf"
+  },
+  {
+    "archivo": "edificio-d4-cliente.png",
+    "bytes": 144063,
+    "sha256": "5061ba9743870f33a419d22e586d4714b2e5704c44e7a42853fc18a2bfded94b"
+  },
+  {
+    "archivo": "edificio-d4-impresion.png",
+    "bytes": 80900,
+    "sha256": "1f539f069fd662b1d7640f43d97379067f920f2b2643d687d3d02dba78da950e"
+  },
+  {
+    "archivo": "edificio-d4-neutro.js",
+    "bytes": 2218,
+    "sha256": "bfabb7db5dc590d8fa38591a413608bd22fd149a2d99432da3770fd3ddba7227"
+  },
+  {
+    "archivo": "edificio-d4-neutro.log",
+    "bytes": 464,
+    "sha256": "f5e14a522223aed6a38c624e900f0891d790a2520f63e4ffdf60b7f634d09cc1"
+  },
+  {
+    "archivo": "edificio-d4.js",
+    "bytes": 1341,
+    "sha256": "faa95e2770e80619f091fafea45126a2d3b8fd701509dfcd0cf102f0e478ea85"
+  },
+  {
+    "archivo": "edificio-d4.log",
+    "bytes": 1056,
+    "sha256": "059e4c083bcd47f0795f39978912095acc81469c5d2448710854e23b2c160853"
+  },
+  {
+    "archivo": "edificio-dos-plantas.json",
+    "bytes": 7244,
+    "sha256": "314e384e4e3c1707c308da3fc391194568eda1ad51bddd2b0e7f438c7bddab74"
+  },
+  {
+    "archivo": "edificio-nombre-neutro.json",
+    "bytes": 7181,
+    "sha256": "4f9c3fe17e21c8988b05da87999b231c93f6a8643cd3b070a37f75b365acfb3f"
+  },
+  {
+    "archivo": "edificio-presupuesto-baja.json",
+    "bytes": 2762,
+    "sha256": "9868213cf6575be5ed1125d6fcccf5e2e48a3450ebe0b7b51a56b8df894ce3be"
+  },
+  {
+    "archivo": "edificio-presupuesto-base-total.png",
+    "bytes": 9254,
+    "sha256": "6539be04545d8f75ecac4112b36ad6b9b040b61fa9d0a312ef9689b71b9febf4"
+  },
+  {
+    "archivo": "edificio-presupuesto-base.log",
+    "bytes": 461,
+    "sha256": "97eb114a7f3c371f99ab17024572393c5c4ae7d329d1ab2bf09a82bc5b75680c"
+  },
+  {
+    "archivo": "edificio-presupuesto-total-detalle.png",
+    "bytes": 9254,
+    "sha256": "6539be04545d8f75ecac4112b36ad6b9b040b61fa9d0a312ef9689b71b9febf4"
+  },
+  {
+    "archivo": "edificio-presupuesto-total.png",
+    "bytes": 87914,
+    "sha256": "b7a51f945dfd19548068c9d6973611f223702cc8bdc359bc7f71dc8f35156e58"
+  },
+  {
+    "archivo": "edificio-presupuesto.png",
+    "bytes": 100886,
+    "sha256": "7a56c2539b8d0a6c3388e303ecce74832832abd621791a4b1182b8acd3b38ef3"
+  },
+  {
+    "archivo": "edificio-total.js",
+    "bytes": 1130,
+    "sha256": "f3a56df2af5cfb5187706a5a12e07c6f36b7700954056e8754ad5dba8315503a"
+  },
+  {
+    "archivo": "escena-3d-escritorio.png",
+    "bytes": 211719,
+    "sha256": "bc05802b713c123b711d1c2e89f1a44c95d8c34fbabca56acf78ee661bf3a5e0"
+  },
+  {
+    "archivo": "escena-auditada.zip",
+    "bytes": 13943617,
+    "sha256": "4320eb822f321eec3d07a1804f4848c1fd93d9662764f6e5da650fb4b3121fad"
+  },
+  {
+    "archivo": "escena-blender-exportacion.png",
+    "bytes": 205682,
+    "sha256": "8bde7fd135434c3bed1c88832e36f4b5a4467f159bade7824ebd5ea476974404"
+  },
+  {
+    "archivo": "escena-girada-30.png",
+    "bytes": 207827,
+    "sha256": "00a75e7e6bb490013054028ef76084f8d889eb6bd3282125d029ef525c8b7fc9"
+  },
+  {
+    "archivo": "escena-girada-30.zip",
+    "bytes": 13913534,
+    "sha256": "4d94a0320faf93b4c9b82bd8de0de0206eae2dcd5cdaa632cf8718f5e53f7fa4"
+  },
+  {
+    "archivo": "INFORME-AUDITORIA.md",
+    "bytes": 22538,
+    "sha256": "6a2e89905a9ac71d19afe5cf3375854416ddc9f62e6478c3ca44128d0009a337"
+  },
+  {
+    "archivo": "json-original.json",
+    "bytes": 55394,
+    "sha256": "3adbdb46a67562c9bc4eec21e1c4dc0eac6569c3f0f41741d8108c2bf3db2aa5"
+  },
+  {
+    "archivo": "json-reimportado.json",
+    "bytes": 55394,
+    "sha256": "e8717dd71623dd36ac7441b2f34a745011ca8ecc4d3df9ab71b16f0c752f380b"
+  },
+  {
+    "archivo": "json-roundtrip.js",
+    "bytes": 1450,
+    "sha256": "2350e962cfe1e33b879e47fdf137e554182738afb50a4a8fcde9a81dcb242707"
+  },
+  {
+    "archivo": "mediciones-presupuesto.png",
+    "bytes": 88811,
+    "sha256": "162adbdf460ff12d4c19f0a505240797e42932f5e0f2a087a9adc2340b3fdde9"
+  },
+  {
+    "archivo": "movil-foco.js",
+    "bytes": 1451,
+    "sha256": "6d83f117f4ba34f91e5ef6c8232a7b383f7c6837de88c40d027a4bda674d3a5f"
+  },
+  {
+    "archivo": "plano-girado-30.json",
+    "bytes": 31567,
+    "sha256": "f7346d55624f75ca96486f4f288d7ac87d45913f49c33d4d249c52f19fe5ea37"
+  },
+  {
+    "archivo": "plano-girado-exportar.js",
+    "bytes": 1700,
+    "sha256": "6423f94d698aeb384a4e7ca841006ad80a604d6f4aeb5a5644cca802a44660d3"
+  },
+  {
+    "archivo": "plano-girado-exportar.log",
+    "bytes": 967,
+    "sha256": "a8962cc7cff3ca979928a9aca9bed2764fb802d1bda0187769bfdc1e033fa21c"
+  },
+  {
+    "archivo": "presupuesto-aislamiento.js",
+    "bytes": 1197,
+    "sha256": "e76902d3b6cd84e50e1d2629626c288e623a02b7429f4f410a4362a6c9399676"
+  },
+  {
+    "archivo": "presupuesto-aislamiento.log",
+    "bytes": 1498,
+    "sha256": "a8ccd50a2a25f98771639ca01ad67474a790113822cce07bc0e84f0f6723c832"
+  },
+  {
+    "archivo": "presupuesto-qa.csv",
+    "bytes": 2553,
+    "sha256": "98503a7ca900718cb0c65a91ab71718d4d05ed8f6d944ad28426e3ab7b935ea9"
+  },
+  {
+    "archivo": "presupuesto-qa.json",
+    "bytes": 5046,
+    "sha256": "ff3c1793199950385e98148ad306ecec90913cfa97f4f553f3eee90f8250a5c2"
+  },
+  {
+    "archivo": "presupuesto-qa.png",
+    "bytes": 94188,
+    "sha256": "eb313df82a38ba068b0ca821ca0cbb0adda5a79693096e7cba2f6b30d64bbd4e"
+  },
+  {
+    "archivo": "probar-blender.js",
+    "bytes": 1461,
+    "sha256": "5d4431d0341f47790dcaac564da453726e8c3e05dda8d1a8b7da02d837a6ca20"
+  },
+  {
+    "archivo": "probar-copia.js",
+    "bytes": 604,
+    "sha256": "8523273a1fdbc0e764a02a5784e6dde3fbbae2afb612780dc226312c1cb52509"
+  },
+  {
+    "archivo": "probar-d3.js",
+    "bytes": 937,
+    "sha256": "7c3ee3ccfeeafc700a6e9024fef8d753a40913575479da0923546fc1a4dfeeb6"
+  },
+  {
+    "archivo": "probar-presupuesto.js",
+    "bytes": 1271,
+    "sha256": "61fdbba24cce25fee67c76ae52cbb8cff119e62d9f1599b7111f22a82b14430e"
+  },
+  {
+    "archivo": "PROMPT-CLAUDE-CODE.md",
+    "bytes": 2649,
+    "sha256": "2dc51addf2567a72cfe094113e1b2c5c407c31ee192dd57ec745885b725ccc28"
+  },
+  {
+    "archivo": "proyecto-a-2d.png",
+    "bytes": 154882,
+    "sha256": "b0d7eab0cae721eaf7f8320b5188cab6f72ae88bf2aa00819f32a524c2ebfc2c"
+  },
+  {
+    "archivo": "proyecto-a-3d-recorrer.png",
+    "bytes": 143227,
+    "sha256": "3635f1d5bf5bac6af174bac875c95ceb86d2d62f2cb192939ce6f818a2eb17e2"
+  },
+  {
+    "archivo": "proyecto-a-blueprint-lamina.png",
+    "bytes": 542432,
+    "sha256": "f41aa7e3a98bce9addda22836c85fdf58c14387d89552e3c87f65f672720b4d6"
+  },
+  {
+    "archivo": "proyecto-a-blueprint.png",
+    "bytes": 120757,
+    "sha256": "8bcf77345878a494aea5a7f0ea6b85376869ba1e47466ecfddf04431bd981bbe"
+  },
+  {
+    "archivo": "proyecto-a-bpdp.js",
+    "bytes": 2555,
+    "sha256": "f8b19bb3dc95fb46b857df17601c6a6452b0faa821915a7006ec19c4df516a23"
+  },
+  {
+    "archivo": "proyecto-a-bpdp.log",
+    "bytes": 467,
+    "sha256": "0daf0ce5db655c1df293a30d3014eee887fde4cab815f45eb2f33d5cecee4fa9"
+  },
+  {
+    "archivo": "proyecto-a-bpdp.webm",
+    "bytes": 1654487,
+    "sha256": "0b4691af1b2ee9ff73fa6b93c74b1945655b7c6cdcf50a8638cfc6d55c3d7b7a"
+  },
+  {
+    "archivo": "proyecto-a-despiece-lamina.png",
+    "bytes": 556498,
+    "sha256": "5a9f4582b2d22dae96db6bd8230e96ea0f1ec5f9b44a310c56e915fef08618e9"
+  },
+  {
+    "archivo": "proyecto-a-despiece.png",
+    "bytes": 79771,
+    "sha256": "51689bbb200431d9613a722977b56e828cffffc74892dd789889fac1b5a24862"
+  },
+  {
+    "archivo": "proyecto-a-dibujo.webm",
+    "bytes": 954362,
+    "sha256": "20647391f79991b9d777c508ebeb76e129a83a716fd53bb26b4cc53506892c77"
+  },
+  {
+    "archivo": "proyecto-a-dossier.png",
+    "bytes": 105522,
+    "sha256": "9aaa56cae2f3b75b82b11b7489835c26488e35d65ae7260d251fb7f6d5b905a8"
+  },
+  {
+    "archivo": "proyecto-a-entrega.js",
+    "bytes": 2165,
+    "sha256": "a9eabcdea375ddac3b2d033cc258a500661c1adbcbf62cd57faa5cc70443e12f"
+  },
+  {
+    "archivo": "proyecto-a-entrega.log",
+    "bytes": 1308,
+    "sha256": "8d55d50b4e641aa66d868765c3eb67439925d1191ab01e59b042d761d5939b85"
+  },
+  {
+    "archivo": "proyecto-a-entrega.webm",
+    "bytes": 649347,
+    "sha256": "39423d4fead1d6afd803e120fc29df0f67f58c0f340490bf3e4437471e24e825"
+  },
+  {
+    "archivo": "proyecto-a-foto.js",
+    "bytes": 2646,
+    "sha256": "31d1005cc02843a496bc002de27ab595621c18d187e0a17dff36a3c5050ba021"
+  },
+  {
+    "archivo": "proyecto-a-foto.log",
+    "bytes": 453,
+    "sha256": "049eeac1655e01a2843795372cdc876bfdd26504c42d1c6c9fa6c0db7c0b4855"
+  },
+  {
+    "archivo": "proyecto-a-foto.webm",
+    "bytes": 956251,
+    "sha256": "01f022a9550e70daa2e19e0c7911fadc35cc2379413d65d7d1df20ed47d13c8c"
+  },
+  {
+    "archivo": "proyecto-a-laminas.js",
+    "bytes": 1011,
+    "sha256": "96fa61c4b1b9fe87e6ad43703f5a8f2b561ff5e9bd09dc7dd42c945762391a6e"
+  },
+  {
+    "archivo": "proyecto-a-laminas.log",
+    "bytes": 358,
+    "sha256": "369c7fe283f83f2ecfca467655363b276a30ea85e2a8d79719f59a565e20dc61"
+  },
+  {
+    "archivo": "proyecto-a-laminas.webm",
+    "bytes": 1337595,
+    "sha256": "b68d7bb5630e3fec26243b211224f55711ead2ef6e84e55cd7bcadf7ab79c2f0"
+  },
+  {
+    "archivo": "proyecto-a-patio-claro.dxf",
+    "bytes": 8644,
+    "sha256": "c1505e138f5303256920f171430b22d2a07786e519ef61c931d8f62600b68c5e"
+  },
+  {
+    "archivo": "proyecto-a-patio-claro.json",
+    "bytes": 5994,
+    "sha256": "36ed4eb6d440431e2bba10b2c91dca92755c90b7e2c56a2b81fda62b113e1575"
+  },
+  {
+    "archivo": "proyecto-a-simulacion-p2.png",
+    "bytes": 316792,
+    "sha256": "5afad2d4b2a12c6570d68a3baee72e961f6379cbf20e1297ec05f612a86e6b45"
+  },
+  {
+    "archivo": "proyecto-a-vista-3d.png",
+    "bytes": 141937,
+    "sha256": "64258c4a91869335ee59fd30b7eef7a4706a96b5b71b58a75277aa7216874abc"
+  },
+  {
+    "archivo": "proyecto-a.js",
+    "bytes": 2906,
+    "sha256": "825bdb6e794c198732d59767a8251590ec546fd094dffb8e72cb809e5eaf9eb6"
+  },
+  {
+    "archivo": "proyecto-a.log",
+    "bytes": 417,
+    "sha256": "0e57917743423840db405c1fda2baed99eecd6f65f176c456e9d19793bde3719"
+  },
+  {
+    "archivo": "proyecto-a.webm",
+    "bytes": 595994,
+    "sha256": "8c61b101aa46846388f6cbe86acbd1e089f1df8f18b12cfa4548a6bf1b9e30b9"
+  },
+  {
+    "archivo": "proyecto-b-acabado.log",
+    "bytes": 429,
+    "sha256": "90abce84a9670506e1b999f38e8e97a961de64f72f12081384acb2cb7767f55a"
+  },
+  {
+    "archivo": "proyecto-b-calibracion.webm",
+    "bytes": 543144,
+    "sha256": "c31933146a2578b773cef9be65bad0223cc08bcc48f4c4a3544caa398d2607c7"
+  },
+  {
+    "archivo": "proyecto-b-calibrado.webm",
+    "bytes": 345133,
+    "sha256": "618785d05e0aa35800fdfd81f209c055a6578c6e39a79c77fe756f42c4c2a6c5"
+  },
+  {
+    "archivo": "proyecto-b-historia.zip",
+    "bytes": 342699,
+    "sha256": "cd0cea987b79692bf39f8b4c4fe71902e25ee273be3afe160599314137eb1f0a"
+  },
+  {
+    "archivo": "proyecto-b-p10-cambio.png",
+    "bytes": 96855,
+    "sha256": "d4795e9c436beed7fcb62cbbfe09ba402c0da38c609867cba2c8e2013b9e0712"
+  },
+  {
+    "archivo": "proyecto-b-p10-cambio.webm",
+    "bytes": 1915470,
+    "sha256": "8570065e618fa65986a04bb785d7da13a3e1d540503a0e812397a1aafda3c2b3"
+  },
+  {
+    "archivo": "proyecto-b-p10-entrega.webm",
+    "bytes": 191810,
+    "sha256": "dcecc11d4536aee9a70280263a19c5605d7b9b4c1fde1e486980688dae968534"
+  },
+  {
+    "archivo": "proyecto-b-p10-exportar.js",
+    "bytes": 816,
+    "sha256": "014e8cbf6dccf3d1749fe41628e3ff7552446f412e9ce6cb70d80c7a36c55d92"
+  },
+  {
+    "archivo": "proyecto-b-p10-exportar.log",
+    "bytes": 576,
+    "sha256": "bb4cfb731e3d7feed7640e922561880447ca9a916f909802967235cc265ffb81"
+  },
+  {
+    "archivo": "proyecto-b-p10.js",
+    "bytes": 1099,
+    "sha256": "da9a7be906938bfbc331e3845092079bcee2dea14b5022bc857d3b0dadc69180"
+  },
+  {
+    "archivo": "proyecto-b-p10.log",
+    "bytes": 163,
+    "sha256": "994a519c17691b13c2ea868f47f5a32cd68c3ad84e1e64317b30dcc8445e2f7e"
+  },
+  {
+    "archivo": "proyecto-b-p10.webm",
+    "bytes": 3207402,
+    "sha256": "821eb86824fe761d08390a88f0e99206907170707b72e6ca93effccaf993dd5d"
+  },
+  {
+    "archivo": "proyecto-b-plano.png",
+    "bytes": 4095,
+    "sha256": "a2a9f518a89ab4d4b2fdb6dba53d73818a64481164d6f13942266d667926ca5d"
+  },
+  {
+    "archivo": "proyecto-b-trazado.log",
+    "bytes": 1157,
+    "sha256": "e5d7f4da499fd46ba85caecf5262b94802c7f4467867ede0fad96aaff789720d"
+  },
+  {
+    "archivo": "proyecto-b-trazado.png",
+    "bytes": 139637,
+    "sha256": "f09e31070e710d22e3359bbced871ef76a5094e96fe0fd1f73011f3bb7bb6563"
+  },
+  {
+    "archivo": "proyecto-b-trazado.webm",
+    "bytes": 961849,
+    "sha256": "e4f171ecfe93be0a2b1bef8b9fac1582253d14af943f710efbabd72ced99f3b7"
+  },
+  {
+    "archivo": "proyecto-b-variante-acabado.webm",
+    "bytes": 240167,
+    "sha256": "6d3de7c6474048b30d297ea15c163513443d2a6d8b03a717e440e772d987cd23"
+  },
+  {
+    "archivo": "proyecto-b-variante-p10.png",
+    "bytes": 168463,
+    "sha256": "5c1ac131399f2b5df6360426a8980114366b864eb87e6911775156e7973033bd"
+  },
+  {
+    "archivo": "proyecto-b-variante.js",
+    "bytes": 1481,
+    "sha256": "1ce6ee4c52b6768501c5432610915346de5b192a37d1bf4b8f9403d4361b9117"
+  },
+  {
+    "archivo": "proyecto-b-variante.log",
+    "bytes": 747,
+    "sha256": "ad63b431580f0df2ed36a0d486443f637b0ded4f29419342be458f1681412e6a"
+  },
+  {
+    "archivo": "proyecto-b-variante.webm",
+    "bytes": 326580,
+    "sha256": "003102c40de072cb555ae793fceadf8c6fbc7064ee8db27ffc0b2e810edc756f"
+  },
+  {
+    "archivo": "proyecto-b.js",
+    "bytes": 2207,
+    "sha256": "faed529fb9583849d2684e8037c2d5991bedd8a4f4be781779af3a520868c84d"
+  },
+  {
+    "archivo": "proyecto-b.log",
+    "bytes": 418,
+    "sha256": "7b818b2defb2b725da597e56c07d41dbfb14293cdb376144bfc3c82b47e4511c"
+  },
+  {
+    "archivo": "proyecto-c-evolucion-final.png",
+    "bytes": 129484,
+    "sha256": "a474266fd55bcdd4f583d51b11c9bfb6c91a23b4e5675bf5320c94cd79f16c1c"
+  },
+  {
+    "archivo": "proyecto-c-evolucion.png",
+    "bytes": 85282,
+    "sha256": "99ba7e4a6cf5ba6b51690460875a6aa105ea7cb3927898274dc83d044272c7c6"
+  },
+  {
+    "archivo": "proyecto-c-evolucion.webm",
+    "bytes": 661313,
+    "sha256": "e1eea345957b62b8a9ffd2ea0f77bbabed2b8826f77f305e4fff2c6d88e7b216"
+  },
+  {
+    "archivo": "proyecto-c-hero.js",
+    "bytes": 1241,
+    "sha256": "0122ebbf2571f63a9db7168cb260bced6577f5d52f728f0f8721a09fb3518bf9"
+  },
+  {
+    "archivo": "proyecto-c-hero.log",
+    "bytes": 565,
+    "sha256": "aeb8fc764ee6ecaeb4e23076700bb5905a398f5d36d3d06901d5c42fde1df846"
+  },
+  {
+    "archivo": "proyecto-c-hero.png",
+    "bytes": 42702,
+    "sha256": "cda3f63999f531ca9550e3e27b350a69c6a7f30a6a02820ca89121c94503c34e"
+  },
+  {
+    "archivo": "proyecto-c-hero.webm",
+    "bytes": 235603,
+    "sha256": "588e12ad1ee34b5007af33d9cb88f7ebf7379f00616ff8fdc79ec5e0a3a9bee3"
+  },
+  {
+    "archivo": "proyecto-c-obra.json",
+    "bytes": 7214,
+    "sha256": "a07e4725ce843c50d3f99f22c70130a64651c646e0af809c846ef0a3db479f18"
+  },
+  {
+    "archivo": "proyecto-c-plan.png",
+    "bytes": 126519,
+    "sha256": "e040a8c084afba481c5dda4dcd8ebcdf29f910d027fb0cf5f6720d648fd3cbe6"
+  },
+  {
+    "archivo": "proyecto-c-reproduccion.js",
+    "bytes": 1265,
+    "sha256": "b6104acdaf220046c0b7de6bc7ae907c2f81f8dd0d6ed9ddb9ae2541944bb461"
+  },
+  {
+    "archivo": "proyecto-c-reproduccion.log",
+    "bytes": 461,
+    "sha256": "d24dd8fcb55dd78b60a0b6f6dcf4cad7ca1b1a386ce334e7e276d0e2d960c915"
+  },
+  {
+    "archivo": "proyecto-c-reproduccion.webm",
+    "bytes": 304178,
+    "sha256": "c408e78eaff064aab9634aa0ccc4744ab340678b619386c246accc3ea170fc82"
+  },
+  {
+    "archivo": "proyecto-c.js",
+    "bytes": 2297,
+    "sha256": "96d41d79846bc5b0a64a8b0b86e5c1074a736b0ee438c1d88a11978ac53cce2b"
+  },
+  {
+    "archivo": "proyecto-c.log",
+    "bytes": 591,
+    "sha256": "39b0d48b8a4c3d11fd988a4a7cc3c11a148ef5b5f5279926e01f709cd0e0e46e"
+  },
+  {
+    "archivo": "publicar-evidencia.py",
+    "bytes": 2113,
+    "sha256": "3e4a4524538c7d28b77897a15c47f3cc6167d1d05ab9b4cac3dce67333208ed6"
+  },
+  {
+    "archivo": "qa-analizar-sin-parcela.png",
+    "bytes": 82322,
+    "sha256": "f146a144fac0009b6b7fc8927ff6c78646e2e12bcef5f7c16605b62c67831792"
+  },
+  {
+    "archivo": "qa-analizar.js",
+    "bytes": 1280,
+    "sha256": "72032523cdc8881a1412d1e18058298c64423bbff4a11e1f28ccd27bb497135a"
+  },
+  {
+    "archivo": "qa-analizar.log",
+    "bytes": 397,
+    "sha256": "d2adb1b1976175cb861ee7a66efbfe80b38dd488c174b907eb38efec86295c51"
+  },
+  {
+    "archivo": "qa-cancelar-glb.js",
+    "bytes": 1892,
+    "sha256": "c89a7631ece443f58a2ef896cde98908a6c3db3fd5edf9a116bbe5c22c96f0e9"
+  },
+  {
+    "archivo": "qa-cancelar-glb.log",
+    "bytes": 196,
+    "sha256": "1ecea7d24e10e5959fe7072c3c2fbaad64f732a996b85d2c7c2f3cbd864cd8cd"
+  },
+  {
+    "archivo": "qa-fot01-simulacion-movil.png",
+    "bytes": 47139,
+    "sha256": "3ecb762682ef19af49aed40bb6d50f9b2968c778a2add473d2d723a9fc1ba758"
+  },
+  {
+    "archivo": "qa-fot01.js",
+    "bytes": 2224,
+    "sha256": "5c7ff2d8080af130fa58bf3934da75f00eee4939b6c7cb72d92dbca444a351a5"
+  },
+  {
+    "archivo": "qa-fot01.log",
+    "bytes": 364,
+    "sha256": "3a6e6ef76642082ccc6f035ef4d9b5735064f03e8457ddf5a6f86e8275b027d6"
+  },
+  {
+    "archivo": "qa-foto-sintetica.png",
+    "bytes": 1391,
+    "sha256": "4e5cd288f145754e486a6883c8be7af8f8b0dbe691d5b3ca0c9376305e3b5a6b"
+  },
+  {
+    "archivo": "qa-glb-cancelado.png",
+    "bytes": 147924,
+    "sha256": "f41544f83385dc92fe047f2a70c076cddc17318ca7a49e743ab356f5077891ab"
+  },
+  {
+    "archivo": "qa-importacion-malformada.js",
+    "bytes": 923,
+    "sha256": "7153e61d1a6c95814d4aee0189015da741c9df869618cdbd2dbd2ed3e315fc19"
+  },
+  {
+    "archivo": "qa-importacion-malformada.log",
+    "bytes": 173,
+    "sha256": "64c4c231634a81a176e62fd614d9764c07213ea1addc666bb9ab67c5361aa4e5"
+  },
+  {
+    "archivo": "qa-importacion-malformada.png",
+    "bytes": 200195,
+    "sha256": "91b70f677af598293c11f1c04b80d5e3b2b16275f70924d48708ffa3218e9721"
+  },
+  {
+    "archivo": "qa-malformado.json",
+    "bytes": 19,
+    "sha256": "8d1010cfd3575195f97c25c75eebb545b6335855b871e89f408628ea88376474"
+  },
+  {
+    "archivo": "qa-plantas.js",
+    "bytes": 1755,
+    "sha256": "6ea418990247a8144b4be2440c05496da59845a7007d98aa750c46ff0c38b12d"
+  },
+  {
+    "archivo": "qa-plantas.log",
+    "bytes": 195,
+    "sha256": "f26837a658e1a7c31f96466b3b9cabcd9d78a470485ab836530efaf9aefcd636"
+  },
+  {
+    "archivo": "README.md",
+    "bytes": 10375,
+    "sha256": "afa49190d74bbdb9d8b4190f49e629b054a440d0d9f2d59863873133282b03c4"
+  },
+  {
+    "archivo": "resultado-d3.js",
+    "bytes": 581,
+    "sha256": "795fa24f155398b2983de1d286223d1fd12f826cfecbee49bf43d8ab99a9fb92"
+  },
+  {
+    "archivo": "revision-3d-antes.png",
+    "bytes": 222812,
+    "sha256": "b4299e8b0272537ea2d063199edca13edf6ee0f72f3d4f9f1e403c3ca54ea782"
+  },
+  {
+    "archivo": "revision-3d-despues.png",
+    "bytes": 276419,
+    "sha256": "6fb6f68fc674ac40f9304e58993bc7199a8a039d88d418452c6011c2dc126217"
+  },
+  {
+    "archivo": "revision-3d.js",
+    "bytes": 938,
+    "sha256": "719372f9fe93c1625f5200ecfa710d2fb549d0eaea3fe9c215b614b65200e6ee"
+  },
+  {
+    "archivo": "villa-linde/01-villa-plano.png",
+    "bytes": 230758,
+    "sha256": "428c2f6189194626684e22fb8c2579050f62bebc8d7f3ff260a78f34951951d0"
+  },
+  {
+    "archivo": "villa-linde/02-villa-3d.png",
+    "bytes": 256396,
+    "sha256": "e2d4e4112130b1330c87f98f5e6e3d55cb19651735f911c28ed0b946890b7d8c"
+  },
+  {
+    "archivo": "villa-linde/03-hybrid-config.png",
+    "bytes": 175295,
+    "sha256": "e2198141a60edd4833b780d3a3e594e894736a10c1e6698e19d0160106eb4a90"
+  },
+  {
+    "archivo": "villa-linde/04-hybrid-inicio.png",
+    "bytes": 1094575,
+    "sha256": "12d90f57b5bb64af769051cdd8c9e971f508bd4f6aea23e3239449e457af2f8c"
+  },
+  {
+    "archivo": "villa-linde/05-hybrid-transicion.png",
+    "bytes": 1082153,
+    "sha256": "6f147accffae826482e10182dfdb8ec8aa6ee3f003a522ce56986379ddc4aa58"
+  },
+  {
+    "archivo": "villa-linde/06-hybrid-fin.png",
+    "bytes": 82074,
+    "sha256": "2c616d9f5e2eb29807a545a8fed1f9850e52f5e3258a3718da950021e2ade70c"
+  },
+  {
+    "archivo": "villa-linde/07-planta-primera.png",
+    "bytes": 251524,
+    "sha256": "d28600b63ee809f704b77345c5d671a87d1974727401dfba7546fe206c7bc31c"
+  },
+  {
+    "archivo": "villa-linde/08-hybrid-superior.png",
+    "bytes": 1114000,
+    "sha256": "2678fe40f9f5e898a7283ddc634289398e6090d00fb52416f634df309f188639"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/01-importar-analizar.js",
+    "bytes": 2059,
+    "sha256": "efcd9e47d29fd783cc9d11c8a0a834e114b1962c5b7e02a2ec311b87e97d2b09"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/01-importar-analizar.log",
+    "bytes": 1635,
+    "sha256": "1f4c5263d28dc8ba1734f30536bb139915dca8625b64374ede367b616894a576"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/01-modelo-orientacion.webm",
+    "bytes": 1266221,
+    "sha256": "be85ce438a88110b1b6ad9554cbd5d7a9cd7e9ed91e5b2e4304b8dd33b174e52"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/01-plano-baja.png",
+    "bytes": 459235,
+    "sha256": "7c003e5adc1a4635f7beba2c7ac3d14f24646bcebf2bf7bee34b8a751f8b2c1e"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/01-plano-primera.png",
+    "bytes": 304040,
+    "sha256": "24b39fbbaf4ee45ab416d75ae856b6491dac0aa79ca687d96744b873cc6ddff4"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/02-orientacion.png",
+    "bytes": 97512,
+    "sha256": "a450612407af671628c7c63d5cde1b2c014bea3812b7c842a8d7612b55795eeb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/03-escena-3d.png",
+    "bytes": 351974,
+    "sha256": "7705da34004764784e95d7e2b4e86b5e6a5ac3347609fbe830eb3d027c6fcf94"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/03-hybrid-config.png",
+    "bytes": 235370,
+    "sha256": "4abec0e73646a54129980b3fea992c7058f272e9e2860f3c98eb5adaa627facb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/04-dibujo-vivo.webm",
+    "bytes": 4836482,
+    "sha256": "828d413a63428df4eb883635386da045533dae6109e1af8b719b714b82e0bb06"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/04-hybrid-inicio.png",
+    "bytes": 1377341,
+    "sha256": "31cbeba4273c266e0c550f7cba2e043e4f530c58253b320c15bf6d1cef2b8e02"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/05-blueprint-despiece-studio.webm",
+    "bytes": 1776791,
+    "sha256": "08177ba7ceb2c8441a6a35749a71d7858bad9cdc009c52d31ba0581c331c5eff"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/05-hybrid-transicion.png",
+    "bytes": 1338927,
+    "sha256": "039cf22ff4fde0f70576fd3ab82cd3c5645b2cc9082dfab3ad7fa026fc468008"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/06-evolucion-ambas-plantas-v2.webm",
+    "bytes": 1214842,
+    "sha256": "b4c1d1b60415ffef7cc2e6fbf4ea9c21b2d43dae6fd40fd91ecc2e9c3687979c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/06-hybrid-fin.png",
+    "bytes": 272325,
+    "sha256": "7392468c1cd6de53024e5ab22fe53819267f097659e0bbbf04103a8cbc3af92d"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/07-HERO-dibujo-vivo.webm",
+    "bytes": 5013348,
+    "sha256": "7175c422043f5e206def870fab199f66c54e6889f204474a1244414b356db85f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/07-planta-primera.png",
+    "bytes": 268906,
+    "sha256": "577d828a96ae5c15e1c0460ca79b568fec13c8229428b7e42c83d211aea36f53"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/08-recorrido-editor.webm",
+    "bytes": 1593608,
+    "sha256": "63b3704726769ea7fbec0096d6ff9f6db8545db18b75f06a84a556633d2073d2"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/archivo-cliente.html",
+    "bytes": 251889,
+    "sha256": "0c8bde180bd0d5c884ba5ae82940a673329301d4eca31d3a489d81a4640d76b3"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/BC3-precio-confirmado.png",
+    "bytes": 134155,
+    "sha256": "949d0a825aaae3a7ba0e355c1c2053762c1a756ffc21992987b9ed30e947ad8e"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/bc3.js",
+    "bytes": 1659,
+    "sha256": "8bedf588d44997d18412a9d84bce573c9180b9c33bfab9312b19a807b811f4a1"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/bc3.log",
+    "bytes": 382,
+    "sha256": "2668a011682ba3b385264f7a0f362e5c292c8617be3662bb9f851f26be7db286"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-baja/preparada/verificacion.json",
+    "bytes": 1505,
+    "sha256": "1c81c72bf516bc039614bb90f3c8ad897425240cadef31c9dc1231cca939c3b8"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-baja/previsualizacion/render-report.json",
+    "bytes": 2120,
+    "sha256": "5dafa3967164092ce78637d25acab1b0f0b8dc9156be6ea79b75b74ae9217b50"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-baja/previsualizacion/rom_linde-b-12.png",
+    "bytes": 391307,
+    "sha256": "1b95613976d9edc2f09e14b0c78f730948535371b1b689881fb4627cc3f80210"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-primera/preparada/verificacion.json",
+    "bytes": 1496,
+    "sha256": "a31aecda67800955457388f59e87ae2cd8779962ee0f0843fa7ce7c991def0e3"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-primera/previsualizacion/render-report.json",
+    "bytes": 2116,
+    "sha256": "bd66e89c38e231b11587cac2d3f8dc1f3f23e4305eeb7b778a13bbb78e7bdc6d"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-primera/previsualizacion/rom_linde-p-11.png",
+    "bytes": 378608,
+    "sha256": "05203993cd52c3945fa1042f3f3730ed7572595a55d5de1f530cf8958161c727"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-primera.js",
+    "bytes": 1717,
+    "sha256": "2f60db896b664d0a6c1f47c3ed256dcb95d83fe3b12650314dc0b8a8ce8a38e5"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender-primera.log",
+    "bytes": 944,
+    "sha256": "f30adb1ca788591783c677d11198ec82905ff99e7f4040d626e6265e92ec1dde"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender.js",
+    "bytes": 1438,
+    "sha256": "14b47b726e65a9b227de0ce6b215942cd8d6d1c2834a354de23d3388e40d9b50"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blender.log",
+    "bytes": 942,
+    "sha256": "91823be925c98d5927b0cc09b2b54c48ca5db8df2c075b4e18224405635b313f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/blueprint-lamina.png",
+    "bytes": 1087917,
+    "sha256": "ab22d2bf05d333da9a70782db081d0ca9edef58adbc5a7e168e59834b9324806"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/Catastro-GML-sintetico.png",
+    "bytes": 81550,
+    "sha256": "93543637cea047bec23bc6668f87b97b59c32acee54b30e5ee464b57c4842096"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/catastro.js",
+    "bytes": 1632,
+    "sha256": "aa019bc6566285a3c109100d5cdcea971574940065c476be7df5e3594d4ab384"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/catastro.log",
+    "bytes": 407,
+    "sha256": "119f595c18bab353543a27fe2c5dd95eadefb6a776b6f8f42773eb54427a225c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/CIERRE-VILLA-LINDE.md",
+    "bytes": 8464,
+    "sha256": "ddb6ab5d8aa3d54cebd0f45ed6bdd9e0b272cf1e4d190f55e7180e392f22b2aa"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/control-modelo.json",
+    "bytes": 1081,
+    "sha256": "dcaaf06f1edfd306380fbd2c997652ce25fb4ccbdd9d3304f577a49d1118de9a"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/D3-cliente.png",
+    "bytes": 107747,
+    "sha256": "a142a36116d86635061b9a95eb4f7bfdfdbd09c13edc784ca0b48344ae7ded74"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/d3-dxf-completo.js",
+    "bytes": 2397,
+    "sha256": "d433147d0248284a1cc5e0ff3c327d555516eca093b1bfcc414dc925fb1ea686"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/d3-dxf-completo.log",
+    "bytes": 994,
+    "sha256": "da2a8402e0aa76b64e5de0dbfbb966dc40e0711c0bfe2461fea04093d9c3ffdb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/d3-dxf.js",
+    "bytes": 977,
+    "sha256": "98c3c922781b5b15df45ec01b4a7a733e9f19c5882ea7d070449c9c6b30aea2c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/D4-neutro.png",
+    "bytes": 99342,
+    "sha256": "940029369ca3c0b76522f8d8468eff5fc266ee3c70a6fe6d00de45a167acb802"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/d4.js",
+    "bytes": 2155,
+    "sha256": "2f6e38367994b7e70eb145a98060598c96e753f75baab398491d249fa2965f51"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/d4.log",
+    "bytes": 268,
+    "sha256": "431e6a7881c0fed43a656be8db1ba1a0297f15ad61c344816d3bd3a835389510"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/despiece-lamina.png",
+    "bytes": 847635,
+    "sha256": "71f9bd4cc4c175362f0c237a4885b56e5e40c23eb1e4ca367aec12f2c5d83b0b"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/empaquetar-presentacion.py",
+    "bytes": 2186,
+    "sha256": "12b525efa92c6b3a1c86153a4bbbdac56ae555393bf4f25d2d0ab473e0d38bc0"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/escena-auditada.zip",
+    "bytes": 22254066,
+    "sha256": "527b96da8c94463e2771cb70dc211d65e21d3730ce52d4391228597046267d50"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/escena-blender-exportacion.png",
+    "bytes": 239866,
+    "sha256": "882d48dbecbf278ab416daf555c12dd5977f5088c8546b9a70ff16688f08db37"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/escena-blender-primera.png",
+    "bytes": 206059,
+    "sha256": "d9dbd10b374c9e2d766bf5856bb33744e81a769c23a40a09ea51a050924389d0"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/escena-primera.zip",
+    "bytes": 40926966,
+    "sha256": "75caac4d3bd8d0312bdf8726ad900f112601f1b8be5d5228dbdc81d3a75d7294"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/evolucion-cliente.html",
+    "bytes": 5517551,
+    "sha256": "636ce12e6cc5e2c38efc169cb7dcb3da7a16334a1287b12e5d685309ee0e25ab"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/evolucion-final.png",
+    "bytes": 171108,
+    "sha256": "f337047673481a49da42d15b5391452869f8fe0efd59d0aacc6439653e27b02f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/evolucion-manifiesto.json",
+    "bytes": 29834,
+    "sha256": "c4061e7826dc7d18c95f95957c946ef9f90b3f5945c5e0eeff77850de1f45502"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/evolucion-producto.mp4",
+    "bytes": 4113367,
+    "sha256": "4e6875b0d4c0beb5072b360598dc5ec35586c8c68355d71cb622181678bc0ff3"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/evolucion.png",
+    "bytes": 85491,
+    "sha256": "4ca4470e3a49f330e3a36eef8fb5ac6bfe41d5c0230d8efaacb51f3197a63f8f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/foto.js",
+    "bytes": 2327,
+    "sha256": "87fe2e496da215926c5e8c0088647ee2672370d86a95be20c70a0f3b266864c0"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/foto.log",
+    "bytes": 363,
+    "sha256": "20357e6d8958fb1bcf419445336dbc09d6cc72d729500c5eb53d4ab4302a436a"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hero-dibujo-original.js",
+    "bytes": 1527,
+    "sha256": "ad2cdebeb49b8a7bbaffc8a8f00901bd4801bec0a2f6516bc1ff0705401dc208"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hero-dibujo-original.log",
+    "bytes": 526,
+    "sha256": "9577e1d9bee69ee7cb056e4215edfa88f371c8a48d6249e042c146a3546c4ab1"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/HERO-dibujo-vivo.png",
+    "bytes": 119311,
+    "sha256": "6d7edf2def8f01999dc45163cfa71b29e8559d7a7aec27d7ede0ddbdff822a26"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hero-dibujo.js",
+    "bytes": 1138,
+    "sha256": "bb5e2dbe5dbcaedd0f530a98a8d9b4ab27ae00de64bd81d8c8391cc0514a8bca"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hero-dibujo.log",
+    "bytes": 311,
+    "sha256": "f4d364ab402443351d5ab5e89e0bc2c345ad8fa1299ee74dee61d2de8a12ebec"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/HERO-final-video.png",
+    "bytes": 227828,
+    "sha256": "380aa5bbb3ba725069c6285b47895eaa5682cd9340184bb1f64e4cdcc7eaa5ea"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hybrid.js",
+    "bytes": 2782,
+    "sha256": "c0cdc67bedde64fb5470ae27a3f4825e2eeb0e268c54a5709e1e59140836b282"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/hybrid.log",
+    "bytes": 1457,
+    "sha256": "1083e5bf0c931fe9708e551d01ec6590657db1a2b08c462dd9f1026fd421faba"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/laminas.js",
+    "bytes": 1233,
+    "sha256": "c8d075887c42631bb9132f4b9704afc37ecde17077adf1243f81d164552f1755"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/laminas.log",
+    "bytes": 198,
+    "sha256": "3e5ff6bcf480d14d1ec786d5e78ae6a299e9e961b4a465bd775f00d47d0e3b81"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/LEEME-PRESENTACION.md",
+    "bytes": 1349,
+    "sha256": "0b119e4d216465763c173c3539c3091e8ad4421a8eeeb05048c0e963b84e006f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/material-board.png",
+    "bytes": 201485,
+    "sha256": "401f31612041c503f619fa95b38d87d12c5ed63d63f091f1668c4e25dc0b1d6c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra-limpio.log",
+    "bytes": 505,
+    "sha256": "8d561d70d272620192aa70c609382cdfaa608b6b4244954c642dd9582492d0b0"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra-play-limpio.log",
+    "bytes": 397,
+    "sha256": "409a71244eb34c4a4241532cc8e2c443cb018482524c73afdb041a608c5a8406"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra-play.js",
+    "bytes": 1377,
+    "sha256": "08a95ee80fb4fdf06beea108fbbef1a764e3155275ba7bf05f056028965ba254"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra-play.log",
+    "bytes": 314,
+    "sha256": "2758ba8a26d92df43868ebf9e9bef596d21cdd58aab232e4bfa1f2c88a871538"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra.js",
+    "bytes": 2441,
+    "sha256": "38be660be22b59052388d91d6a438d2e18ca85a642e5c3df6dd981ac0a7fc137"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/obra.log",
+    "bytes": 464,
+    "sha256": "e38a0917fdc8400a98ee385f9f24b44760137a640f5be1b4e3a759c32ff0795b"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P1-modo-video.png",
+    "bytes": 96250,
+    "sha256": "312efcf395d759a4701d8f1f43bcf7c326c1ec27e6dbe466955ef86ab7d240d3"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P1-presentacion-zip.png",
+    "bytes": 258742,
+    "sha256": "fbff1e0ee9b32bd655691cd4bb0c0ccf1ecd36c33d8a067b444b786410f93791"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P1-rubik-sota-recorrido-villa-linde-planta-baja.mp4",
+    "bytes": 34004203,
+    "sha256": "74e7e2baf94c5eb8614ab839b860c1de801c128a9dc21eb359f50d059216e6bc"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p1.js",
+    "bytes": 1066,
+    "sha256": "c8bc62962806ad7c9a44a80d376d46f501f3da6a7fd6d70c9f0e3881791bbd68"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p1.log",
+    "bytes": 702,
+    "sha256": "02570bb16a7893f5473933e8c4fcece5842614dab382f8b936ca6d65e928a53e"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p10-exportar.js",
+    "bytes": 784,
+    "sha256": "8d155393d2e01644fb258c531ae04ed23168f5ae2cfa9a6355e063884504accf"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p10-exportar.log",
+    "bytes": 241,
+    "sha256": "ad911b259ca5d13609fb589ff453f495bebfdb3fea2a267d17e8153491f8f8fb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p10-variante.js",
+    "bytes": 1380,
+    "sha256": "4b03e2ae0cc551ce7cf04b2be0021d881dac7ae37f4c98698dab47af9004195c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p10-variante.log",
+    "bytes": 2573,
+    "sha256": "74046f44b1c5b6d7bf95fccb44f990e5b665d60add68c9a9adb69a0a626e9dbb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P10-variante.png",
+    "bytes": 98280,
+    "sha256": "ce3a06209d4c9e006a529bbd4b5988771eb24fe71d636b686d1c6a56ef127a7f"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P2-fot01-simulacion-movil.png",
+    "bytes": 47888,
+    "sha256": "ded41c6cdd94d70bbaf374fb7225d89290044318b3234d83610384f503205e6b"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p2-p5-p7.js",
+    "bytes": 2027,
+    "sha256": "ac6fe457a00c659e2153a809f816ee75e61560ad157b5055265050f7e5008d28"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P2-vistas-preparadas.png",
+    "bytes": 33320,
+    "sha256": "e17ff19d84cd8c9f7246aab3a4e6c4b0d562bb255bffe42456f15cb3e543b12c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P3-limite-edificio.png",
+    "bytes": 30936,
+    "sha256": "52e751d486f65bbacd9f601757b72c94a31fd4342630bdd8269c7b26e47cd261"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P4-generacion.png",
+    "bytes": 136348,
+    "sha256": "e3007a80e7419d69c0f4b67c0aa9ee6aa6826bce4160960f51660e64d6781bc4"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p4-salida.js",
+    "bytes": 1258,
+    "sha256": "916366d58c1f6f5b6279b2f1efac22dcb93a70adb4ee2809439c09bff2a3dbae"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p4-salida.log",
+    "bytes": 470,
+    "sha256": "fbcbe53c03be1e5e10ee4080b88888140cc2a815a7a7218c57ea00522deeb841"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p7-limpio.js",
+    "bytes": 803,
+    "sha256": "d703f72da0e240ad827de4b8dcac8c7f8fdc02da08bba70ab891899e32247a23"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p7-limpio.log",
+    "bytes": 385,
+    "sha256": "565026a461462f761781be70c9cad1f912bb2486b57b4e45c08c69209df0c4dc"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p7.js",
+    "bytes": 661,
+    "sha256": "56e21afc3ee3ca0b84c146492292e7eaed76fa189843ba9d1fe4fe78d5474622"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P8-elev.png",
+    "bytes": 70025,
+    "sha256": "314ed7338a1738aad9cacaabf26b332977b1f4a3a1f4596e997f17d17ad051c4"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p8-p9-studio.js",
+    "bytes": 3925,
+    "sha256": "44114656f4e0d4a88981f72bdb949ce326c6942baa8540fa070cc5defc6a35ea"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/p8-p9-studio.log",
+    "bytes": 237,
+    "sha256": "14ecdb8b3fc5816b525a3d31706767593f6bc4722eb6ff44b81ab0e8bd87637c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P8-plan.png",
+    "bytes": 463796,
+    "sha256": "8d7ab257781096029616f038a18fc1697d6be44746441c81996ffccfa480d59b"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P8-section.png",
+    "bytes": 103598,
+    "sha256": "3a9bd846442f152e0af29052bfbc84fb9f9e3cc0443744ab2896986a2d7fb4b3"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/P9-separado.png",
+    "bytes": 154104,
+    "sha256": "265334117365bbabb994e811715df7d358b0853d0caaeaf695df8f9fa73c6252"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/plan.png",
+    "bytes": 131874,
+    "sha256": "96703c70f15e6ec2728bfaa9519d67ab924aa551c5c326a0d7ea8785d8038552"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/presentacion-edificio.zip",
+    "bytes": 2072014,
+    "sha256": "e45201e8db59faa104c677631f7204592c61595407ca1c30bc8aa2a1744c197a"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/recorrido-a-pie.js",
+    "bytes": 5655,
+    "sha256": "9351ab60b13a1e7ae57a045c52e2dc4aa170a72f964ea57972bdc952eb1749e4"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/recorrido-a-pie.log",
+    "bytes": 293,
+    "sha256": "49a0633fea9a1adc888ecac9a4a8486fdfe5c40a55e78ed8dd73b28a7e79d1b2"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/recorrido-a-pie.png",
+    "bytes": 122001,
+    "sha256": "8d08e38b2c22c72e454199bf3f8d49f3e1bbd35735b9e41bfc2cd02b84b71afd"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/recorrido-reintento.js",
+    "bytes": 6097,
+    "sha256": "2f3ada5e1b8baee2422982c68ad4ed9f5cbadc118dcbef0cfcd6c65733d43f31"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/recorrido-reintento.log",
+    "bytes": 339,
+    "sha256": "4480124fcee8e3a8ea9d7cbecd5f2437e68165e5d59e4d94f6ab9ca899f3e374"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/referencia-3d-fot01.jpg",
+    "bytes": 20964,
+    "sha256": "0ceb38cdf66403c1c4fc800d160e828c7c34a21b58df756cb864a27b14c0e7d1"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/retorno-evolucion.js",
+    "bytes": 355,
+    "sha256": "586c0a2d1533562339cb765ca879715980bbe76e2236d66ba716ffe00458de5c"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/retorno-evolucion.log",
+    "bytes": 150,
+    "sha256": "3283c9123a70a0b7e4030d4a74d844a16a48c4eb9d89e878e04fdde10ea4e02e"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/Studio-HERO.png",
+    "bytes": 46507,
+    "sha256": "f1bfef2e52bfb76ffccdfbe769340b2677330e4b5f16fe35713d2df7f42b932e"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/tarifa-sintetica.bc3",
+    "bytes": 570,
+    "sha256": "3401085f5555491be53eb2035b1228f909529d6ff888b4aa2ebc7cbcec7e3fed"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/video-producto.js",
+    "bytes": 1199,
+    "sha256": "402d33908ff3405521d003d005c4f9ade09ef8680a102914c6ae968a620f4039"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/video-producto.log",
+    "bytes": 404,
+    "sha256": "eaa81c69d3403806cdc1041384854100ccc05890263ca2d8a3aa8f8618346f11"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-historia.zip",
+    "bytes": 359752,
+    "sha256": "0dd9f2a726ced2750b90bad189679d6b3f00d27a4b33ea8d5169924f5c52ff46"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-linde-aprobada.json",
+    "bytes": 157216,
+    "sha256": "933d7ebf6a0cc855977689d7d6c0b533890e30c03a3ee03de09a7b37886c1733"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-linde-baja.dxf",
+    "bytes": 47961,
+    "sha256": "b8eee26d9666d30fe0406f65081249abd3322fbb8187fdfbaed4cb1001bf50eb"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-linde-control-alcance.json",
+    "bytes": 69226,
+    "sha256": "f4672dfd46c53f972d9be0c801afb711c749b25c491a28b73b94107c694af7ee"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-linde-dossier-D3.pdf",
+    "bytes": 566763,
+    "sha256": "60c3073f6ede3095e0f55e0619bd2342943bf76928219b8a9639356d7b47ef38"
+  },
+  {
+    "archivo": "villa-linde/aceptacion/villa-linde-primera.dxf",
+    "bytes": 42779,
+    "sha256": "0d10e256b1badc2e88b57d69973f8f53637e6a0559e66e43fc2fb7a3a4c99064"
+  },
+  {
+    "archivo": "villa-linde/Analizar.png",
+    "bytes": 79388,
+    "sha256": "b613655304795bc0b659df1860be49289fa6bcc0ecd2575d4c3e96c6d6b9ab4a"
+  },
+  {
+    "archivo": "villa-linde/BC3-precio-confirmado.png",
+    "bytes": 126716,
+    "sha256": "369f502716a3fc664864c47baf8771123df69295c8e5f283eae36dcbf9de5616"
+  },
+  {
+    "archivo": "villa-linde/capturar-planos-actuales.js",
+    "bytes": 1079,
+    "sha256": "2296bf492597874bc8e81c93b36239c82c0a14611260f50dce987bda65aa1a2a"
+  },
+  {
+    "archivo": "villa-linde/Catastro-GML-sintetico.png",
+    "bytes": 86263,
+    "sha256": "e88a4c0a7f99b090627a83deb63234ec937f1af17d58276578dd9039900cf2a7"
+  },
+  {
+    "archivo": "villa-linde/D3-cliente.png",
+    "bytes": 107612,
+    "sha256": "7a4815eea34f4e274720aa22d630972ca5eb59ec93fef4c5c58c72898b0ad41d"
+  },
+  {
+    "archivo": "villa-linde/D4-impresion.png",
+    "bytes": 99903,
+    "sha256": "7eb8b048ec2c45fb1990b21e8d54ac18f7a90f4f4ef16357ecfd8e54d8361e4a"
+  },
+  {
+    "archivo": "villa-linde/D4-neutro.png",
+    "bytes": 96682,
+    "sha256": "1b0157363303811ce5ea03899fb2709e86268b4418ea745bac52d70945a2fb4d"
+  },
+  {
+    "archivo": "villa-linde/DECISIONES-DE-DISENO-Y-ORIENTACION.md",
+    "bytes": 3930,
+    "sha256": "31b62bb6bfc1be8f4e9777aa048ed93f4ef9cfeb64c9a1e54d928a8bdfcbb4ab"
+  },
+  {
+    "archivo": "villa-linde/Entregar.png",
+    "bytes": 127598,
+    "sha256": "e4e7bbc0aa451c291a5443884a49e3cb9bf0f6e962490a6ce5cfb39e1948a46a"
+  },
+  {
+    "archivo": "villa-linde/escena-auditada.zip",
+    "bytes": 18168333,
+    "sha256": "832e5e2da52a07ded1e9f86757fdeb6c8bebc755e00755c1856b37ae83722eb6"
+  },
+  {
+    "archivo": "villa-linde/escena-blender-exportacion.png",
+    "bytes": 207501,
+    "sha256": "b866c21b57344287879395a8f4b3499efb97150f6829eb833367c2c0417c6f32"
+  },
+  {
+    "archivo": "villa-linde/evolucion-final.png",
+    "bytes": 176008,
+    "sha256": "70df9f1ffee95223f9cbc2bff51d7762669ebb55111f31164e59c7f8b197f305"
+  },
+  {
+    "archivo": "villa-linde/evolucion.png",
+    "bytes": 90950,
+    "sha256": "1a53daba474ba2ef27595af761f5d553dd692a160d388f71c5822e91a670a5af"
+  },
+  {
+    "archivo": "villa-linde/exportar-laminas.py",
+    "bytes": 10348,
+    "sha256": "bbd4d560cc83e84cb6198fb1bf209abb66cd42c4048ccdf9a9741a750ebb7bb3"
+  },
+  {
+    "archivo": "villa-linde/flujo-base.js",
+    "bytes": 1695,
+    "sha256": "5f4b3987a427147a67d793d2dac19eae27b305eeb4321a1b4d9a426f7535bcc7"
+  },
+  {
+    "archivo": "villa-linde/flujo-base.log",
+    "bytes": 1773,
+    "sha256": "86022e8cc50fd2591dc7074ba9392a6a0dc1ed286dbef0afb2aea1bbb0aa023f"
+  },
+  {
+    "archivo": "villa-linde/flujo-bc3.js",
+    "bytes": 1656,
+    "sha256": "8ab2024a1022f7bfb617bdc5da5666b742229121efcdacb1a1ffe9737a27d5bd"
+  },
+  {
+    "archivo": "villa-linde/flujo-bc3.log",
+    "bytes": 689,
+    "sha256": "28e6f248230f4e162283fabe04548a911dff42f2df5f3cca190ca4b72433397d"
+  },
+  {
+    "archivo": "villa-linde/flujo-blender.js",
+    "bytes": 1414,
+    "sha256": "b7f68a743e6adb9aca5c87a3b2c1aa72744d640c34d19c3bc8845c63cca1a4a7"
+  },
+  {
+    "archivo": "villa-linde/flujo-blender.log",
+    "bytes": 937,
+    "sha256": "fb462237dc1d46b7fd4022e3009470cfcfb1c7c0f9ea5958138f8301fc803df3"
+  },
+  {
+    "archivo": "villa-linde/flujo-catastro.js",
+    "bytes": 1619,
+    "sha256": "ac6949e24f63dfbf62bcf175df3b494183ff8e077d3afdf6b3fef77a303a7adb"
+  },
+  {
+    "archivo": "villa-linde/flujo-catastro.log",
+    "bytes": 849,
+    "sha256": "7a619a803835bc7204507072dea42982e342a27976795343b046f85feb480989"
+  },
+  {
+    "archivo": "villa-linde/flujo-d3-dxf.js",
+    "bytes": 964,
+    "sha256": "c4584e715272d6341b7160c110de62d598adce91996999163906622b47fe0a55"
+  },
+  {
+    "archivo": "villa-linde/flujo-d3-dxf.log",
+    "bytes": 366,
+    "sha256": "9b7600074ba62a30f83f927205a9f7ade85c3f658688da0aff62c4ecbed48861"
+  },
+  {
+    "archivo": "villa-linde/flujo-d4-neutro.js",
+    "bytes": 2127,
+    "sha256": "59fc734f42673126e784512e9d6749486697cf989fa095379d7fdc8d90652497"
+  },
+  {
+    "archivo": "villa-linde/flujo-d4-neutro.log",
+    "bytes": 292,
+    "sha256": "950b46acc01f34a442854b2d6966f3d7d8fc2692802fd2cf6b04b087ad20edc9"
+  },
+  {
+    "archivo": "villa-linde/flujo-d4.js",
+    "bytes": 1926,
+    "sha256": "089bc29a8edb9483c6af99bec50e8e04ef17f36d180196fcde985bcca733b72b"
+  },
+  {
+    "archivo": "villa-linde/flujo-d4.log",
+    "bytes": 2097,
+    "sha256": "cc8dc88f0ccf3ef79ad0b58ffb9106b3a2f8f7f193fc34e8cf6bc1932f6007cc"
+  },
+  {
+    "archivo": "villa-linde/flujo-entregables.js",
+    "bytes": 4446,
+    "sha256": "bef70a862005ddf43fb4edca8f6803a634b4aa5f601f0c602f5092e711c04826"
+  },
+  {
+    "archivo": "villa-linde/flujo-entregables.log",
+    "bytes": 4967,
+    "sha256": "c1f63251dd24ded969dea185053c22b002b306f07e68ab007dbe8be8c78c48cd"
+  },
+  {
+    "archivo": "villa-linde/flujo-foto.js",
+    "bytes": 2287,
+    "sha256": "a1e7411c78f935a4b990b927acad92c791b2b75fd5bf5a7892e7e49aca18233d"
+  },
+  {
+    "archivo": "villa-linde/flujo-foto.log",
+    "bytes": 471,
+    "sha256": "c3b2139e9e8f0ae37f53e01cc7162bcbf3b1069b79952eac34eded1f09f7f11c"
+  },
+  {
+    "archivo": "villa-linde/flujo-hybrid.js",
+    "bytes": 2452,
+    "sha256": "76300623cf2a99eda9436345ce57bd29db3910d96d1d7ec74403502a6ad144d5"
+  },
+  {
+    "archivo": "villa-linde/flujo-hybrid.log",
+    "bytes": 3869,
+    "sha256": "dc6cefd3e83b442e3ff0c1041ef5fa43607d8db9379407ca2409c86ea1d2ce2d"
+  },
+  {
+    "archivo": "villa-linde/flujo-obra-play.js",
+    "bytes": 1268,
+    "sha256": "d8129f5034f1105cbb5a762b85f5ce8c646afec01a901ae95b2226de1ab4938d"
+  },
+  {
+    "archivo": "villa-linde/flujo-obra-play.log",
+    "bytes": 302,
+    "sha256": "485c471d0d3eefd1ae38dd1fc1eaf6f2d2fa07711e348bdac4453411c4fec905"
+  },
+  {
+    "archivo": "villa-linde/flujo-obra.js",
+    "bytes": 2005,
+    "sha256": "ef1221dbfc00fba56a149dbb0aaf722a341396dfab07ac49d275b41e2fbe34e3"
+  },
+  {
+    "archivo": "villa-linde/flujo-obra.log",
+    "bytes": 390,
+    "sha256": "8807fa32638ebc2520e1f63da8ac2ff46670c733b3f80f4b1800de1adc8a7fd0"
+  },
+  {
+    "archivo": "villa-linde/flujo-p1.js",
+    "bytes": 1053,
+    "sha256": "3a7439560442233ea1b84c6a4fefe26be0f4f5ecb58b20fca014b1cc9103dd3a"
+  },
+  {
+    "archivo": "villa-linde/flujo-p1.log",
+    "bytes": 660,
+    "sha256": "ceab8296c42d654f643b3821552f0c26a78d148e56be39b247f207aa34cd5704"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10-exportar.js",
+    "bytes": 771,
+    "sha256": "1494c159dc0deac199e75a9e3ec8b466c182263c997131eae08691feeddd30f9"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10-exportar.log",
+    "bytes": 550,
+    "sha256": "db08e787c1bffbe68dbd43ab734eac93e66e786acf1750f9d18c958baccd8c9f"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10-variante.js",
+    "bytes": 1263,
+    "sha256": "7146cf0bdec2a988c60c34baf0b575ffc7322b78b10fbbfcf698468b6c110568"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10-variante.log",
+    "bytes": 2524,
+    "sha256": "c03b5d582ea442d57e5b80f8aaf0bf7e1f83c436d844c0cb851824c08ea39649"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10.js",
+    "bytes": 485,
+    "sha256": "e4f17787ff9ffc8ca8e9a417b47693b2da4164aabbeec6ab6e35776a8b848600"
+  },
+  {
+    "archivo": "villa-linde/flujo-p10.log",
+    "bytes": 374,
+    "sha256": "72dcf45de8416c693263a0816aef2faa10d8f87669400250118d397107fd7948"
+  },
+  {
+    "archivo": "villa-linde/flujo-video-producto.js",
+    "bytes": 1184,
+    "sha256": "9ba94e3193bafd228a26972395dc0f6b75c08ad79e2a57fe1baf01198351f44a"
+  },
+  {
+    "archivo": "villa-linde/flujo-video-producto.log",
+    "bytes": 425,
+    "sha256": "eda79ace2baed05a7fc51f72e1c9d4aadda7eaba53d916421eb650478ff3da17"
+  },
+  {
+    "archivo": "villa-linde/generar-villa.cjs",
+    "bytes": 5459,
+    "sha256": "c3a87d2c5550a786598488c1a557746a155362658b11d2ff2ee334f4ecf99eab"
+  },
+  {
+    "archivo": "villa-linde/INFORME-VILLA-LINDE.md",
+    "bytes": 8954,
+    "sha256": "9ea4a42ade0dd40d1d65e76e9663bce174046a3f1f4658564b9e24a2b24358c8"
+  },
+  {
+    "archivo": "villa-linde/modelar-propuesta.cjs",
+    "bytes": 8860,
+    "sha256": "dbd1df64365475469f0b73911dd7653eb3d062f117451fa4c6e2ab84051accc6"
+  },
+  {
+    "archivo": "villa-linde/P1-modo-video.png",
+    "bytes": 74581,
+    "sha256": "e438cd1a53f0fa1c4f18d99cfc1131cc34e1b84d4aa4ed482f25834d0c0f54c1"
+  },
+  {
+    "archivo": "villa-linde/P1-presentacion-zip.png",
+    "bytes": 211601,
+    "sha256": "542a0e0ecc5113949072a1cca2a332d77293b7fa8b4d96ebca61babfe2c03be8"
+  },
+  {
+    "archivo": "villa-linde/P1-rubik-sota-recorrido-villa-linde.mp4",
+    "bytes": 10092998,
+    "sha256": "1ca43d327b1aecce52cdef167248b90150e86aa23edc1031490d7df406e46d9c"
+  },
+  {
+    "archivo": "villa-linde/P1-video-estado.png",
+    "bytes": 162545,
+    "sha256": "c8ff5c763230fca0f028b842ebfa3112c5f695d7233d090fc06482225769a4f3"
+  },
+  {
+    "archivo": "villa-linde/P10-edificio.png",
+    "bytes": 218391,
+    "sha256": "3a85f1e4808c1ff5a80c9e3daa3859aca7bf044852141b35daaab6f3640b793b"
+  },
+  {
+    "archivo": "villa-linde/P10-variante.png",
+    "bytes": 93156,
+    "sha256": "0b479de28c499d3283d4575752794e98b62fd131e517d7537c60442f0000e1c1"
+  },
+  {
+    "archivo": "villa-linde/P2-fot01-simulacion-movil.png",
+    "bytes": 47174,
+    "sha256": "6ea87d4c017b173fc4a737cd81f0b763dec86b51efc1c1803edc21dd04e13ba6"
+  },
+  {
+    "archivo": "villa-linde/P8-elev.png",
+    "bytes": 37338,
+    "sha256": "722c258bc6b513782f3fbc09bd991014090a40a3922ca7d33d40ab150d29f5d8"
+  },
+  {
+    "archivo": "villa-linde/P8-plan.png",
+    "bytes": 318184,
+    "sha256": "8d084a20a37c18d625d84a6793692d36be8362722880c545e1adb7201c5f02b5"
+  },
+  {
+    "archivo": "villa-linde/P8-section.png",
+    "bytes": 71666,
+    "sha256": "516d662cac292e045475c916d108506ad6ab1b290e62817be6bfd7e7179bd50a"
+  },
+  {
+    "archivo": "villa-linde/P9-separado.png",
+    "bytes": 191782,
+    "sha256": "ac580ea710848f83ff83c3313a991b02d629c63166fcd50ed39eb3b07688c08f"
+  },
+  {
+    "archivo": "villa-linde/plan.png",
+    "bytes": 124914,
+    "sha256": "4680ac8ba00248b24bc559179eb651489fd42290c0101fcafd35f9b8c0c491f2"
+  },
+  {
+    "archivo": "villa-linde/planta-baja-actual.png",
+    "bytes": 278821,
+    "sha256": "7fc5301a90195ed86204cc3b3dafb61a6e06dedca2afbdb5cc6e702e4963506e"
+  },
+  {
+    "archivo": "villa-linde/planta-primera-actual.png",
+    "bytes": 332667,
+    "sha256": "ac63f8bd143541859c181e0b96567522e1448816291c1ab20f5830cb212c3986"
+  },
+  {
+    "archivo": "villa-linde/presentacion-edificio.zip",
+    "bytes": 1343092,
+    "sha256": "f60570f99af0ac18d67dd99f53b3cc8789d11d9a1bf01894eb954736445f5269"
+  },
+  {
+    "archivo": "villa-linde/Presupuestar.png",
+    "bytes": 89354,
+    "sha256": "8ae621267d70aed55d301bd05fe7deb40504342edd8f730c84e72ef70aeebba3"
+  },
+  {
+    "archivo": "villa-linde/propuesta-amueblada.py",
+    "bytes": 10076,
+    "sha256": "a1da0ff6ebf2dec2d56a63a02ca40ffe87badcb38b36d14db2ec6847b7e2f550"
+  },
+  {
+    "archivo": "villa-linde/Studio-HERO.png",
+    "bytes": 46507,
+    "sha256": "f1bfef2e52bfb76ffccdfbe769340b2677330e4b5f16fe35713d2df7f42b932e"
+  },
+  {
+    "archivo": "villa-linde/tarifa-sintetica.bc3",
+    "bytes": 570,
+    "sha256": "3401085f5555491be53eb2035b1228f909529d6ff888b4aa2ebc7cbcec7e3fed"
+  },
+  {
+    "archivo": "villa-linde/villa-entregables.webm",
+    "bytes": 3505731,
+    "sha256": "b1cca67b2ef5018eb65098e0b3c59e3d83282ebbf63297b588de2a7803348d10"
+  },
+  {
+    "archivo": "villa-linde/villa-evolucion.webm",
+    "bytes": 808715,
+    "sha256": "1caffaca6a59c86719d54e9be6dec233c9f9cb5443f6192ab8f33e46f9a95b01"
+  },
+  {
+    "archivo": "villa-linde/villa-historia.zip",
+    "bytes": 349257,
+    "sha256": "6d4e653910b16c2bd8d272b0501c603f81e01d42679739a45b1bee8742849378"
+  },
+  {
+    "archivo": "villa-linde/villa-hybrid.webm",
+    "bytes": 2863006,
+    "sha256": "e3a02a4ed93d813777ba5a90417345573509caaad320a75f054c0779b004a26e"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-baja.dxf",
+    "bytes": 48110,
+    "sha256": "dfa0f29b2db9461940ac2d29afbc379a7be4d3d64788391da926fa2d6b3e45db"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-control.json",
+    "bytes": 10136,
+    "sha256": "a20f8617073592dac386f1cb0772870303fd6628bee68fd5c14d27a696c39a7c"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-edificio.json",
+    "bytes": 113169,
+    "sha256": "e99be7392214b804a66a24e525471a7406c3fedb4bbb4c828ac5e3cdd53887b5"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-neutro.json",
+    "bytes": 49388,
+    "sha256": "4c3830c96eed31fe8b22af5979f6af3491ebc68286f05c2ee30166033c2aaf19"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-propuesta-baja.png",
+    "bytes": 65905,
+    "sha256": "3a0c3910be2e880ce4e9b1bdb82297aa60ddc4ef9a9f4da765df7fd667f81826"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-propuesta-baja.png.json",
+    "bytes": 5078,
+    "sha256": "9f4e5a6573f2e46b50ce41abd8564d381609ca4af66d109b5538ae809f55ebd9"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-propuesta-primera.png",
+    "bytes": 63541,
+    "sha256": "8fe0383a6df121876b912d581f0d8e9f2397ce7c2bb7efdc653afd8cefe1f908"
+  },
+  {
+    "archivo": "villa-linde/villa-linde-propuesta-primera.png.json",
+    "bytes": 4471,
+    "sha256": "43660e76bd2b890824864d4ad39e0b998e9a9806b88292ac532c5553bd25690f"
+  }
+]

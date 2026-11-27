@@ -1,0 +1,6224 @@
+{
+  "schema": "rubik-sota.floorplan-building",
+  "schemaVersion": "1.1.0",
+  "id": "bld_linde-aprobada",
+  "name": "Villa Linde · proyecto aprobado",
+  "createdAt": "2026-11-27T14:41:03.751Z",
+  "updatedAt": "2026-11-27T14:41:03.761Z",
+  "units": "mm",
+  "levels": [
+    {
+      "id": "lvl_linde-aprobada-b",
+      "name": "Planta baja",
+      "order": 0,
+      "elevationMm": 0,
+      "slabThicknessMm": 0,
+      "offsetMm": {
+        "x": 0,
+        "y": 0
+      },
+      "project": {
+        "schema": "rubik-sota.floorplan-project",
+        "schemaVersion": "1.6.0",
+        "id": "prj_linde-aprobada-b",
+        "name": "Villa Linde · Planta baja",
+        "createdAt": "2026-11-27T14:41:03.699Z",
+        "updatedAt": "2026-11-27T14:41:03.699Z",
+        "units": "mm",
+        "coordinateSystem": {
+          "origin": "plan-top-left",
+          "xAxis": "right",
+          "yAxis": "down",
+          "rotation": "degrees-clockwise"
+        },
+        "scale": {
+          "confidence": "pending",
+          "method": "none"
+        },
+        "defaults": {
+          "wallHeightMm": 2800,
+          "wallThicknessMm": 240
+        },
+        "walls": [
+          {
+            "id": "wal_linde-b-1",
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 6350,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-2",
+            "start": {
+              "x": 6350,
+              "y": 0
+            },
+            "end": {
+              "x": 9500,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-3",
+            "start": {
+              "x": 9500,
+              "y": 0
+            },
+            "end": {
+              "x": 12100,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-4",
+            "start": {
+              "x": 12100,
+              "y": 0
+            },
+            "end": {
+              "x": 14550,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-5",
+            "start": {
+              "x": 14550,
+              "y": 0
+            },
+            "end": {
+              "x": 18100,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-6",
+            "start": {
+              "x": 18100,
+              "y": 0
+            },
+            "end": {
+              "x": 22200,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-7",
+            "start": {
+              "x": 22200,
+              "y": 0
+            },
+            "end": {
+              "x": 26600,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-8",
+            "start": {
+              "x": 26600,
+              "y": 0
+            },
+            "end": {
+              "x": 31000,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-9",
+            "start": {
+              "x": 6350,
+              "y": 0
+            },
+            "end": {
+              "x": 6350,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-10",
+            "start": {
+              "x": 0,
+              "y": 5400
+            },
+            "end": {
+              "x": 6350,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-11",
+            "start": {
+              "x": 6350,
+              "y": 5400
+            },
+            "end": {
+              "x": 9500,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-12",
+            "start": {
+              "x": 9500,
+              "y": 5400
+            },
+            "end": {
+              "x": 12100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-13",
+            "start": {
+              "x": 12100,
+              "y": 5400
+            },
+            "end": {
+              "x": 14550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-14",
+            "start": {
+              "x": 14550,
+              "y": 5400
+            },
+            "end": {
+              "x": 18100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-15",
+            "start": {
+              "x": 18100,
+              "y": 5400
+            },
+            "end": {
+              "x": 22200,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-16",
+            "start": {
+              "x": 22200,
+              "y": 5400
+            },
+            "end": {
+              "x": 26600,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-17",
+            "start": {
+              "x": 26600,
+              "y": 5400
+            },
+            "end": {
+              "x": 31000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-18",
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 0,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-19",
+            "start": {
+              "x": 0,
+              "y": 5400
+            },
+            "end": {
+              "x": 0,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-20",
+            "start": {
+              "x": 0,
+              "y": 7480
+            },
+            "end": {
+              "x": 0,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-21",
+            "start": {
+              "x": 9500,
+              "y": 0
+            },
+            "end": {
+              "x": 9500,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-22",
+            "start": {
+              "x": 12100,
+              "y": 0
+            },
+            "end": {
+              "x": 12100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-23",
+            "start": {
+              "x": 14550,
+              "y": 0
+            },
+            "end": {
+              "x": 14550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-24",
+            "start": {
+              "x": 14550,
+              "y": 5400
+            },
+            "end": {
+              "x": 14550,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-25",
+            "start": {
+              "x": 14550,
+              "y": 7480
+            },
+            "end": {
+              "x": 14550,
+              "y": 10500
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-26",
+            "start": {
+              "x": 14550,
+              "y": 10500
+            },
+            "end": {
+              "x": 14550,
+              "y": 13520
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-27",
+            "start": {
+              "x": 14550,
+              "y": 13520
+            },
+            "end": {
+              "x": 14550,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-28",
+            "start": {
+              "x": 18100,
+              "y": 0
+            },
+            "end": {
+              "x": 18100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-29",
+            "start": {
+              "x": 18100,
+              "y": 7480
+            },
+            "end": {
+              "x": 18100,
+              "y": 13520
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-30",
+            "start": {
+              "x": 18100,
+              "y": 13520
+            },
+            "end": {
+              "x": 18100,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-31",
+            "start": {
+              "x": 22200,
+              "y": 0
+            },
+            "end": {
+              "x": 22200,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-32",
+            "start": {
+              "x": 22200,
+              "y": 7480
+            },
+            "end": {
+              "x": 22200,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-33",
+            "start": {
+              "x": 26600,
+              "y": 0
+            },
+            "end": {
+              "x": 26600,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-34",
+            "start": {
+              "x": 26600,
+              "y": 7480
+            },
+            "end": {
+              "x": 26600,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-35",
+            "start": {
+              "x": 31000,
+              "y": 0
+            },
+            "end": {
+              "x": 31000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-36",
+            "start": {
+              "x": 31000,
+              "y": 5400
+            },
+            "end": {
+              "x": 31000,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-37",
+            "start": {
+              "x": 31000,
+              "y": 7480
+            },
+            "end": {
+              "x": 31000,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-38",
+            "start": {
+              "x": 0,
+              "y": 7480
+            },
+            "end": {
+              "x": 5050,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-39",
+            "start": {
+              "x": 5050,
+              "y": 7480
+            },
+            "end": {
+              "x": 10300,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-40",
+            "start": {
+              "x": 10300,
+              "y": 7480
+            },
+            "end": {
+              "x": 14550,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-41",
+            "start": {
+              "x": 14550,
+              "y": 7480
+            },
+            "end": {
+              "x": 17020,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-42",
+            "start": {
+              "x": 17020,
+              "y": 7480
+            },
+            "end": {
+              "x": 18100,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-43",
+            "start": {
+              "x": 18100,
+              "y": 7480
+            },
+            "end": {
+              "x": 22200,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-44",
+            "start": {
+              "x": 22200,
+              "y": 7480
+            },
+            "end": {
+              "x": 26600,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-45",
+            "start": {
+              "x": 26600,
+              "y": 7480
+            },
+            "end": {
+              "x": 31000,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-46",
+            "start": {
+              "x": 18100,
+              "y": 13530
+            },
+            "end": {
+              "x": 22200,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-47",
+            "start": {
+              "x": 22200,
+              "y": 13530
+            },
+            "end": {
+              "x": 26600,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-48",
+            "start": {
+              "x": 26600,
+              "y": 13530
+            },
+            "end": {
+              "x": 31000,
+              "y": 13530
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-49",
+            "start": {
+              "x": 5050,
+              "y": 7480
+            },
+            "end": {
+              "x": 5050,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-50",
+            "start": {
+              "x": 0,
+              "y": 14360
+            },
+            "end": {
+              "x": 5050,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-51",
+            "start": {
+              "x": 5050,
+              "y": 14360
+            },
+            "end": {
+              "x": 10300,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-52",
+            "start": {
+              "x": 10300,
+              "y": 14360
+            },
+            "end": {
+              "x": 14550,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-53",
+            "start": {
+              "x": 10300,
+              "y": 7480
+            },
+            "end": {
+              "x": 10300,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-54",
+            "start": {
+              "x": 17020,
+              "y": 7480
+            },
+            "end": {
+              "x": 17020,
+              "y": 10500
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-55",
+            "start": {
+              "x": 17020,
+              "y": 10500
+            },
+            "end": {
+              "x": 17020,
+              "y": 13520
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-56",
+            "start": {
+              "x": 14550,
+              "y": 10500
+            },
+            "end": {
+              "x": 17020,
+              "y": 10500
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-57",
+            "start": {
+              "x": 14550,
+              "y": 13520
+            },
+            "end": {
+              "x": 17020,
+              "y": 13520
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-b-58",
+            "start": {
+              "x": 17020,
+              "y": 13520
+            },
+            "end": {
+              "x": 18100,
+              "y": 13520
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "openings": [
+          {
+            "id": "opn_linde-b-1",
+            "kind": "opening",
+            "wallId": "wal_linde-b-14",
+            "offsetMm": 1030,
+            "widthMm": 1480,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-2",
+            "kind": "opening",
+            "wallId": "wal_linde-b-24",
+            "offsetMm": 450,
+            "widthMm": 1210,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-3",
+            "kind": "door",
+            "wallId": "wal_linde-b-15",
+            "offsetMm": 3110,
+            "widthMm": 850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-4",
+            "kind": "window",
+            "wallId": "wal_linde-b-6",
+            "offsetMm": 600,
+            "widthMm": 1950,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-5",
+            "kind": "door",
+            "wallId": "wal_linde-b-16",
+            "offsetMm": 3410,
+            "widthMm": 850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-6",
+            "kind": "window",
+            "wallId": "wal_linde-b-7",
+            "offsetMm": 600,
+            "widthMm": 1950,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-7",
+            "kind": "door",
+            "wallId": "wal_linde-b-17",
+            "offsetMm": 3410,
+            "widthMm": 850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-8",
+            "kind": "window",
+            "wallId": "wal_linde-b-8",
+            "offsetMm": 600,
+            "widthMm": 1950,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-9",
+            "kind": "door",
+            "wallId": "wal_linde-b-43",
+            "offsetMm": 3070,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-10",
+            "kind": "window",
+            "wallId": "wal_linde-b-46",
+            "offsetMm": 650,
+            "widthMm": 2050,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-11",
+            "kind": "door",
+            "wallId": "wal_linde-b-44",
+            "offsetMm": 3370,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-12",
+            "kind": "window",
+            "wallId": "wal_linde-b-47",
+            "offsetMm": 650,
+            "widthMm": 2050,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-13",
+            "kind": "door",
+            "wallId": "wal_linde-b-45",
+            "offsetMm": 3370,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-14",
+            "kind": "window",
+            "wallId": "wal_linde-b-48",
+            "offsetMm": 650,
+            "widthMm": 2050,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-b-15",
+            "kind": "opening",
+            "wallId": "wal_linde-b-38",
+            "offsetMm": 3450,
+            "widthMm": 1350,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-16",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-b-50",
+            "offsetMm": 500,
+            "widthMm": 4050,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-17",
+            "kind": "opening",
+            "wallId": "wal_linde-b-39",
+            "offsetMm": 3650,
+            "widthMm": 1350,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-18",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-b-51",
+            "offsetMm": 500,
+            "widthMm": 4250,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-19",
+            "kind": "opening",
+            "wallId": "wal_linde-b-40",
+            "offsetMm": 2650,
+            "widthMm": 1350,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-20",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-b-52",
+            "offsetMm": 500,
+            "widthMm": 3250,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-21",
+            "kind": "door",
+            "wallId": "wal_linde-b-42",
+            "offsetMm": 100,
+            "widthMm": 840,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-22",
+            "kind": "door",
+            "wallId": "wal_linde-b-54",
+            "offsetMm": 1470,
+            "widthMm": 850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-23",
+            "kind": "door",
+            "wallId": "wal_linde-b-55",
+            "offsetMm": 1470,
+            "widthMm": 850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-24",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-b-1",
+            "offsetMm": 330,
+            "widthMm": 5650,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-25",
+            "kind": "door",
+            "wallId": "wal_linde-b-4",
+            "offsetMm": 460,
+            "widthMm": 1380,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-26",
+            "kind": "door",
+            "wallId": "wal_linde-b-10",
+            "offsetMm": 5000,
+            "widthMm": 840,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-27",
+            "kind": "door",
+            "wallId": "wal_linde-b-11",
+            "offsetMm": 2050,
+            "widthMm": 840,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-28",
+            "kind": "door",
+            "wallId": "wal_linde-b-12",
+            "offsetMm": 1500,
+            "widthMm": 840,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-29",
+            "kind": "door",
+            "wallId": "wal_linde-b-13",
+            "offsetMm": 550,
+            "widthMm": 840,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-30",
+            "kind": "door",
+            "wallId": "wal_linde-b-9",
+            "offsetMm": 3550,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-b-31",
+            "kind": "door",
+            "wallId": "wal_linde-b-23",
+            "offsetMm": 3850,
+            "widthMm": 880,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          }
+        ],
+        "rooms": [
+          {
+            "id": "rom_linde-b-1",
+            "name": "Garaje · 2 plazas",
+            "family": "garage",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 100
+              },
+              {
+                "x": 6250,
+                "y": 100
+              },
+              {
+                "x": 6250,
+                "y": 5300
+              },
+              {
+                "x": 100,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 3175,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_tile600",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-2",
+            "name": "Lavandería",
+            "family": "laundry",
+            "polygon": [
+              {
+                "x": 6450,
+                "y": 100
+              },
+              {
+                "x": 9400,
+                "y": 100
+              },
+              {
+                "x": 9400,
+                "y": 5300
+              },
+              {
+                "x": 6450,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 7925,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_tile600",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-3",
+            "name": "Gimnasio",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 9600,
+                "y": 100
+              },
+              {
+                "x": 12000,
+                "y": 100
+              },
+              {
+                "x": 12000,
+                "y": 5300
+              },
+              {
+                "x": 9600,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 10800,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_tile600",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-4",
+            "name": "Acceso",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 12200,
+                "y": 100
+              },
+              {
+                "x": 14450,
+                "y": 100
+              },
+              {
+                "x": 14450,
+                "y": 5300
+              },
+              {
+                "x": 12200,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 13325,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-5",
+            "name": "Escalera S1",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 14650,
+                "y": 100
+              },
+              {
+                "x": 18000,
+                "y": 100
+              },
+              {
+                "x": 18000,
+                "y": 5300
+              },
+              {
+                "x": 14650,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 16325,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-6",
+            "name": "Dormitorio B01 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 18200,
+                "y": 100
+              },
+              {
+                "x": 22100,
+                "y": 100
+              },
+              {
+                "x": 22100,
+                "y": 5300
+              },
+              {
+                "x": 18200,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 20150,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-7",
+            "name": "Dormitorio B02 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 22300,
+                "y": 100
+              },
+              {
+                "x": 26500,
+                "y": 100
+              },
+              {
+                "x": 26500,
+                "y": 5300
+              },
+              {
+                "x": 22300,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 24400,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-8",
+            "name": "Dormitorio B03 · Twin",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 26700,
+                "y": 100
+              },
+              {
+                "x": 30900,
+                "y": 100
+              },
+              {
+                "x": 30900,
+                "y": 5300
+              },
+              {
+                "x": 26700,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 28800,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-9",
+            "name": "Dormitorio B04 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 18200,
+                "y": 7580
+              },
+              {
+                "x": 22100,
+                "y": 7580
+              },
+              {
+                "x": 22100,
+                "y": 13430
+              },
+              {
+                "x": 18200,
+                "y": 13430
+              }
+            ],
+            "labelAt": {
+              "x": 20150,
+              "y": 10505
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-10",
+            "name": "Dormitorio B05 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 22300,
+                "y": 7580
+              },
+              {
+                "x": 26500,
+                "y": 7580
+              },
+              {
+                "x": 26500,
+                "y": 13430
+              },
+              {
+                "x": 22300,
+                "y": 13430
+              }
+            ],
+            "labelAt": {
+              "x": 24400,
+              "y": 10505
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-11",
+            "name": "Dormitorio B06 · Twin",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 26700,
+                "y": 7580
+              },
+              {
+                "x": 30900,
+                "y": 7580
+              },
+              {
+                "x": 30900,
+                "y": 13430
+              },
+              {
+                "x": 26700,
+                "y": 13430
+              }
+            ],
+            "labelAt": {
+              "x": 28800,
+              "y": 10505
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-12",
+            "name": "Salón principal",
+            "family": "living",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 7580
+              },
+              {
+                "x": 4950,
+                "y": 7580
+              },
+              {
+                "x": 4950,
+                "y": 14260
+              },
+              {
+                "x": 100,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 2525,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-13",
+            "name": "Cocina y comedor",
+            "family": "dining",
+            "polygon": [
+              {
+                "x": 5150,
+                "y": 7580
+              },
+              {
+                "x": 10200,
+                "y": 7580
+              },
+              {
+                "x": 10200,
+                "y": 14260
+              },
+              {
+                "x": 5150,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 7675,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-14",
+            "name": "Salón de piscina",
+            "family": "living",
+            "polygon": [
+              {
+                "x": 10400,
+                "y": 7580
+              },
+              {
+                "x": 14450,
+                "y": 7580
+              },
+              {
+                "x": 14450,
+                "y": 14260
+              },
+              {
+                "x": 10400,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 12425,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-15",
+            "name": "Baño B1",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 14650,
+                "y": 7580
+              },
+              {
+                "x": 16920,
+                "y": 7580
+              },
+              {
+                "x": 16920,
+                "y": 10400
+              },
+              {
+                "x": 14650,
+                "y": 10400
+              }
+            ],
+            "labelAt": {
+              "x": 15785,
+              "y": 8990
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-16",
+            "name": "Baño B2",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 14650,
+                "y": 10600
+              },
+              {
+                "x": 16920,
+                "y": 10600
+              },
+              {
+                "x": 16920,
+                "y": 13420
+              },
+              {
+                "x": 14650,
+                "y": 13420
+              }
+            ],
+            "labelAt": {
+              "x": 15785,
+              "y": 12010
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-17",
+            "name": "Galería de acceso",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 5500
+              },
+              {
+                "x": 14450,
+                "y": 5500
+              },
+              {
+                "x": 14450,
+                "y": 7380
+              },
+              {
+                "x": 100,
+                "y": 7380
+              }
+            ],
+            "labelAt": {
+              "x": 7275,
+              "y": 6440
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-18",
+            "name": "Distribuidor privado",
+            "family": "hallway",
+            "polygon": [
+              {
+                "x": 14650,
+                "y": 5500
+              },
+              {
+                "x": 30900,
+                "y": 5500
+              },
+              {
+                "x": 30900,
+                "y": 7380
+              },
+              {
+                "x": 14650,
+                "y": 7380
+              }
+            ],
+            "labelAt": {
+              "x": 22775,
+              "y": 6440
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-19",
+            "name": "Paso de baños",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 17120,
+                "y": 7580
+              },
+              {
+                "x": 18000,
+                "y": 7580
+              },
+              {
+                "x": 18000,
+                "y": 13420
+              },
+              {
+                "x": 17120,
+                "y": 13420
+              }
+            ],
+            "labelAt": {
+              "x": 17560,
+              "y": 10500
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-20",
+            "name": "Terraza cubierta",
+            "family": "terrace",
+            "polygon": [
+              {
+                "x": 0,
+                "y": 14360
+              },
+              {
+                "x": 7250,
+                "y": 14360
+              },
+              {
+                "x": 7250,
+                "y": 19700
+              },
+              {
+                "x": 0,
+                "y": 19700
+              }
+            ],
+            "labelAt": {
+              "x": 3625,
+              "y": 17030
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-21",
+            "name": "Paso exterior de piscina",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 7250,
+                "y": 14360
+              },
+              {
+                "x": 14550,
+                "y": 14360
+              },
+              {
+                "x": 14550,
+                "y": 15460
+              },
+              {
+                "x": 7250,
+                "y": 15460
+              }
+            ],
+            "labelAt": {
+              "x": 10900,
+              "y": 14910
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-b-22",
+            "name": "Piscina · huella",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 7250,
+                "y": 15460
+              },
+              {
+                "x": 13890,
+                "y": 15460
+              },
+              {
+                "x": 13890,
+                "y": 19000
+              },
+              {
+                "x": 7250,
+                "y": 19000
+              }
+            ],
+            "labelAt": {
+              "x": 10570,
+              "y": 17230
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat_wood",
+            "name": "橡木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#d8b88a",
+              "preset": "wood"
+            }
+          },
+          {
+            "id": "mat_walnut",
+            "name": "胡桃木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#9b7250",
+              "preset": "walnut"
+            }
+          },
+          {
+            "id": "mat_tile800",
+            "name": "800 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#ebe6dc",
+              "preset": "tile-800"
+            }
+          },
+          {
+            "id": "mat_tile600",
+            "name": "600 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#dfe3e1",
+              "preset": "tile-600"
+            }
+          },
+          {
+            "id": "mat_marble",
+            "name": "大理石",
+            "category": "floor",
+            "appearance": {
+              "color": "#f1eee8",
+              "preset": "marble"
+            }
+          },
+          {
+            "id": "mat_antislip",
+            "name": "300 防滑砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#d3d8d4",
+              "preset": "tile-300"
+            }
+          },
+          {
+            "id": "mat_terrazzo",
+            "name": "水磨石",
+            "category": "floor",
+            "appearance": {
+              "color": "#e6dfd3",
+              "preset": "terrazzo"
+            }
+          },
+          {
+            "id": "mat_carpet",
+            "name": "满铺地毯",
+            "category": "floor",
+            "appearance": {
+              "color": "#c9c3d3",
+              "preset": "carpet"
+            }
+          }
+        ],
+        "objects": [
+          {
+            "id": "obj_linde-b-1",
+            "type": "shower",
+            "name": "Ducha",
+            "position": {
+              "x": 15260,
+              "y": 8760
+            },
+            "size": {
+              "widthMm": 860,
+              "depthMm": 860
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-b-15"
+          },
+          {
+            "id": "obj_linde-b-2",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 16600,
+              "y": 8625
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-b-15"
+          },
+          {
+            "id": "obj_linde-b-3",
+            "type": "vanity",
+            "name": "Lavabo",
+            "position": {
+              "x": 15200,
+              "y": 10075
+            },
+            "size": {
+              "widthMm": 800,
+              "depthMm": 410
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-15"
+          },
+          {
+            "id": "obj_linde-b-4",
+            "type": "shower",
+            "name": "Ducha",
+            "position": {
+              "x": 15260,
+              "y": 11780
+            },
+            "size": {
+              "widthMm": 860,
+              "depthMm": 860
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-b-16"
+          },
+          {
+            "id": "obj_linde-b-5",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 16600,
+              "y": 11645
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-b-16"
+          },
+          {
+            "id": "obj_linde-b-6",
+            "type": "vanity",
+            "name": "Lavabo",
+            "position": {
+              "x": 15200,
+              "y": 13095
+            },
+            "size": {
+              "widthMm": 800,
+              "depthMm": 410
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-16"
+          },
+          {
+            "id": "obj_linde-b-7",
+            "type": "cabinet",
+            "name": "Volumen de cinta de correr",
+            "position": {
+              "x": 10185,
+              "y": 2350
+            },
+            "size": {
+              "widthMm": 710,
+              "depthMm": 2100
+            },
+            "rotationDeg": 0,
+            "color": "#6c8481",
+            "roomId": "rom_linde-b-3"
+          },
+          {
+            "id": "obj_linde-b-8",
+            "type": "armchair",
+            "name": "Volumen de banco de ejercicios",
+            "position": {
+              "x": 11285,
+              "y": 2175
+            },
+            "size": {
+              "widthMm": 870,
+              "depthMm": 1350
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-3"
+          },
+          {
+            "id": "obj_linde-b-9",
+            "type": "cabinet",
+            "name": "Estante de pesas",
+            "position": {
+              "x": 11050,
+              "y": 4425
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 450
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-3"
+          },
+          {
+            "id": "obj_linde-b-10",
+            "type": "counter",
+            "name": "Encimera de lavado",
+            "position": {
+              "x": 7565,
+              "y": 2025
+            },
+            "size": {
+              "widthMm": 1930,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-2"
+          },
+          {
+            "id": "obj_linde-b-11",
+            "type": "washer",
+            "name": "Lavadora y mueble de servicio",
+            "position": {
+              "x": 8450,
+              "y": 4265
+            },
+            "size": {
+              "widthMm": 1300,
+              "depthMm": 630
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-2"
+          },
+          {
+            "id": "obj_linde-b-12",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 19650,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-6"
+          },
+          {
+            "id": "obj_linde-b-13",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 21280,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-6"
+          },
+          {
+            "id": "obj_linde-b-14",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 18545,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-6"
+          },
+          {
+            "id": "obj_linde-b-15",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 20700,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-6"
+          },
+          {
+            "id": "obj_linde-b-16",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 19280,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-6"
+          },
+          {
+            "id": "obj_linde-b-17",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 23750,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-7"
+          },
+          {
+            "id": "obj_linde-b-18",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 25380,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-7"
+          },
+          {
+            "id": "obj_linde-b-19",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 22645,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-7"
+          },
+          {
+            "id": "obj_linde-b-20",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 24800,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-7"
+          },
+          {
+            "id": "obj_linde-b-21",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 23380,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-7"
+          },
+          {
+            "id": "obj_linde-b-22",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 27520,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-8"
+          },
+          {
+            "id": "obj_linde-b-23",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 28670,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-8"
+          },
+          {
+            "id": "obj_linde-b-24",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 29530,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-8"
+          },
+          {
+            "id": "obj_linde-b-25",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 27780,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-8"
+          },
+          {
+            "id": "obj_linde-b-26",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 19650,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-9"
+          },
+          {
+            "id": "obj_linde-b-27",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 21280,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-9"
+          },
+          {
+            "id": "obj_linde-b-28",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 18545,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-9"
+          },
+          {
+            "id": "obj_linde-b-29",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 20700,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-9"
+          },
+          {
+            "id": "obj_linde-b-30",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 19280,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-9"
+          },
+          {
+            "id": "obj_linde-b-31",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 23750,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-10"
+          },
+          {
+            "id": "obj_linde-b-32",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 25380,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-10"
+          },
+          {
+            "id": "obj_linde-b-33",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 22645,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-10"
+          },
+          {
+            "id": "obj_linde-b-34",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 24800,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-10"
+          },
+          {
+            "id": "obj_linde-b-35",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 23380,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-10"
+          },
+          {
+            "id": "obj_linde-b-36",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 27520,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-11"
+          },
+          {
+            "id": "obj_linde-b-37",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 28670,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-11"
+          },
+          {
+            "id": "obj_linde-b-38",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 29530,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-11"
+          },
+          {
+            "id": "obj_linde-b-39",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 27780,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-11"
+          },
+          {
+            "id": "obj_linde-b-40",
+            "type": "sofa",
+            "name": "Sofá",
+            "position": {
+              "x": 12425,
+              "y": 9075
+            },
+            "size": {
+              "widthMm": 3150,
+              "depthMm": 750
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-14"
+          },
+          {
+            "id": "obj_linde-b-41",
+            "type": "armchair",
+            "name": "Butaca",
+            "position": {
+              "x": 11290,
+              "y": 10635
+            },
+            "size": {
+              "widthMm": 780,
+              "depthMm": 1150
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-14"
+          },
+          {
+            "id": "obj_linde-b-42",
+            "type": "coffeetable",
+            "name": "Mesa baja",
+            "position": {
+              "x": 12745,
+              "y": 10380
+            },
+            "size": {
+              "widthMm": 1630,
+              "depthMm": 780
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-14"
+          },
+          {
+            "id": "obj_linde-b-43",
+            "type": "tvstand",
+            "name": "Mueble auxiliar",
+            "position": {
+              "x": 14115,
+              "y": 10425
+            },
+            "size": {
+              "widthMm": 290,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-14"
+          },
+          {
+            "id": "obj_linde-b-44",
+            "type": "cabinet",
+            "name": "Volumen de vehículo 1",
+            "position": {
+              "x": 1530,
+              "y": 2950
+            },
+            "size": {
+              "widthMm": 1740,
+              "depthMm": 3860
+            },
+            "rotationDeg": 0,
+            "color": "#6c8481",
+            "roomId": "rom_linde-b-1"
+          },
+          {
+            "id": "obj_linde-b-45",
+            "type": "cabinet",
+            "name": "Volumen de vehículo 2",
+            "position": {
+              "x": 4370,
+              "y": 2950
+            },
+            "size": {
+              "widthMm": 1740,
+              "depthMm": 3860
+            },
+            "rotationDeg": 0,
+            "color": "#6c8481",
+            "roomId": "rom_linde-b-1"
+          },
+          {
+            "id": "obj_linde-b-46",
+            "type": "sofa",
+            "name": "Sofá",
+            "position": {
+              "x": 2525,
+              "y": 9075
+            },
+            "size": {
+              "widthMm": 3950,
+              "depthMm": 750
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-12"
+          },
+          {
+            "id": "obj_linde-b-47",
+            "type": "armchair",
+            "name": "Butaca",
+            "position": {
+              "x": 990,
+              "y": 10635
+            },
+            "size": {
+              "widthMm": 780,
+              "depthMm": 1150
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-12"
+          },
+          {
+            "id": "obj_linde-b-48",
+            "type": "coffeetable",
+            "name": "Mesa baja",
+            "position": {
+              "x": 2445,
+              "y": 10380
+            },
+            "size": {
+              "widthMm": 1630,
+              "depthMm": 780
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-12"
+          },
+          {
+            "id": "obj_linde-b-49",
+            "type": "tvstand",
+            "name": "Mueble auxiliar",
+            "position": {
+              "x": 4615,
+              "y": 10425
+            },
+            "size": {
+              "widthMm": 290,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-12"
+          },
+          {
+            "id": "obj_linde-b-50",
+            "type": "counter",
+            "name": "Encimera de cocina",
+            "position": {
+              "x": 7680,
+              "y": 8740
+            },
+            "size": {
+              "widthMm": 4640,
+              "depthMm": 520
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-51",
+            "type": "counter",
+            "name": "Isla de cocina",
+            "position": {
+              "x": 7650,
+              "y": 9825
+            },
+            "size": {
+              "widthMm": 2200,
+              "depthMm": 850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-52",
+            "type": "table",
+            "name": "Mesa de comedor",
+            "position": {
+              "x": 7780,
+              "y": 11875
+            },
+            "size": {
+              "widthMm": 2520,
+              "depthMm": 1050
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-53",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 6860,
+              "y": 11125
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-54",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 6860,
+              "y": 12605
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-55",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 7440,
+              "y": 11125
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-56",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 7440,
+              "y": 12605
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-57",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 8020,
+              "y": 11125
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-58",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 8020,
+              "y": 12605
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-59",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 8600,
+              "y": 11125
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-60",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 8600,
+              "y": 12605
+            },
+            "size": {
+              "widthMm": 360,
+              "depthMm": 250
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-61",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 6305,
+              "y": 11550
+            },
+            "size": {
+              "widthMm": 250,
+              "depthMm": 300
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-62",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 9245,
+              "y": 11550
+            },
+            "size": {
+              "widthMm": 250,
+              "depthMm": 300
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-63",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 6305,
+              "y": 12080
+            },
+            "size": {
+              "widthMm": 250,
+              "depthMm": 300
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-64",
+            "type": "chair",
+            "name": "Silla de comedor",
+            "position": {
+              "x": 9245,
+              "y": 12080
+            },
+            "size": {
+              "widthMm": 250,
+              "depthMm": 300
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-65",
+            "type": "table",
+            "name": "Mesa exterior",
+            "position": {
+              "x": 3550,
+              "y": 16690
+            },
+            "size": {
+              "widthMm": 2300,
+              "depthMm": 880
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-b-20"
+          },
+          {
+            "id": "obj_linde-b-66",
+            "type": "armchair",
+            "name": "Asiento exterior",
+            "position": {
+              "x": 5260,
+              "y": 18320
+            },
+            "size": {
+              "widthMm": 620,
+              "depthMm": 1420
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-20"
+          },
+          {
+            "id": "obj_linde-b-67",
+            "type": "armchair",
+            "name": "Asiento exterior",
+            "position": {
+              "x": 6080,
+              "y": 18320
+            },
+            "size": {
+              "widthMm": 620,
+              "depthMm": 1420
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-b-20"
+          },
+          {
+            "id": "obj_linde-b-68",
+            "type": "fridge",
+            "name": "Frigorífico alto",
+            "position": {
+              "x": 9670,
+              "y": 9980
+            },
+            "size": {
+              "widthMm": 600,
+              "depthMm": 630
+            },
+            "rotationDeg": 0,
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-69",
+            "type": "ksink",
+            "name": "Fregadero integrado",
+            "position": {
+              "x": 6190,
+              "y": 8760
+            },
+            "size": {
+              "widthMm": 700,
+              "depthMm": 470
+            },
+            "rotationDeg": 0,
+            "roomId": "rom_linde-b-13"
+          },
+          {
+            "id": "obj_linde-b-70",
+            "type": "stove",
+            "name": "Placa integrada",
+            "position": {
+              "x": 8490,
+              "y": 8760
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "roomId": "rom_linde-b-13"
+          }
+        ],
+        "measurements": [],
+        "sourceImages": []
+      }
+    },
+    {
+      "id": "lvl_linde-aprobada-p",
+      "name": "Planta primera",
+      "order": 1,
+      "elevationMm": 3100,
+      "slabThicknessMm": 280,
+      "offsetMm": {
+        "x": 0,
+        "y": 0
+      },
+      "project": {
+        "schema": "rubik-sota.floorplan-project",
+        "schemaVersion": "1.6.0",
+        "id": "prj_linde-aprobada-p",
+        "name": "Villa Linde · Planta primera",
+        "createdAt": "2026-11-27T14:41:03.732Z",
+        "updatedAt": "2026-11-27T14:41:03.732Z",
+        "units": "mm",
+        "coordinateSystem": {
+          "origin": "plan-top-left",
+          "xAxis": "right",
+          "yAxis": "down",
+          "rotation": "degrees-clockwise"
+        },
+        "scale": {
+          "confidence": "pending",
+          "method": "none"
+        },
+        "defaults": {
+          "wallHeightMm": 2800,
+          "wallThicknessMm": 240
+        },
+        "walls": [
+          {
+            "id": "wal_linde-p-1",
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 3550,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-2",
+            "start": {
+              "x": 3550,
+              "y": 0
+            },
+            "end": {
+              "x": 8750,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-3",
+            "start": {
+              "x": 8750,
+              "y": 0
+            },
+            "end": {
+              "x": 14550,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-4",
+            "start": {
+              "x": 14550,
+              "y": 0
+            },
+            "end": {
+              "x": 18100,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-5",
+            "start": {
+              "x": 18100,
+              "y": 0
+            },
+            "end": {
+              "x": 21000,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-6",
+            "start": {
+              "x": 21000,
+              "y": 0
+            },
+            "end": {
+              "x": 25700,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-7",
+            "start": {
+              "x": 25700,
+              "y": 0
+            },
+            "end": {
+              "x": 31000,
+              "y": 0
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-8",
+            "start": {
+              "x": 3550,
+              "y": 0
+            },
+            "end": {
+              "x": 3550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-9",
+            "start": {
+              "x": 0,
+              "y": 5400
+            },
+            "end": {
+              "x": 3550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-10",
+            "start": {
+              "x": 3550,
+              "y": 5400
+            },
+            "end": {
+              "x": 8750,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-11",
+            "start": {
+              "x": 8750,
+              "y": 5400
+            },
+            "end": {
+              "x": 14550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-12",
+            "start": {
+              "x": 14550,
+              "y": 5400
+            },
+            "end": {
+              "x": 18100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-13",
+            "start": {
+              "x": 18100,
+              "y": 5400
+            },
+            "end": {
+              "x": 21000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-14",
+            "start": {
+              "x": 21000,
+              "y": 5400
+            },
+            "end": {
+              "x": 25700,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-15",
+            "start": {
+              "x": 25700,
+              "y": 5400
+            },
+            "end": {
+              "x": 31000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-16",
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 0,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-17",
+            "start": {
+              "x": 0,
+              "y": 5400
+            },
+            "end": {
+              "x": 0,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-18",
+            "start": {
+              "x": 0,
+              "y": 7480
+            },
+            "end": {
+              "x": 0,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-19",
+            "start": {
+              "x": 18100,
+              "y": 0
+            },
+            "end": {
+              "x": 18100,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-20",
+            "start": {
+              "x": 14550,
+              "y": 0
+            },
+            "end": {
+              "x": 14550,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-21",
+            "start": {
+              "x": 8750,
+              "y": 0
+            },
+            "end": {
+              "x": 8750,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-22",
+            "start": {
+              "x": 25700,
+              "y": 0
+            },
+            "end": {
+              "x": 25700,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-23",
+            "start": {
+              "x": 21000,
+              "y": 0
+            },
+            "end": {
+              "x": 21000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-24",
+            "start": {
+              "x": 31000,
+              "y": 0
+            },
+            "end": {
+              "x": 31000,
+              "y": 5400
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-25",
+            "start": {
+              "x": 31000,
+              "y": 5400
+            },
+            "end": {
+              "x": 31000,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-26",
+            "start": {
+              "x": 31000,
+              "y": 7480
+            },
+            "end": {
+              "x": 31000,
+              "y": 8450
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-27",
+            "start": {
+              "x": 31000,
+              "y": 8450
+            },
+            "end": {
+              "x": 31000,
+              "y": 10600
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-28",
+            "start": {
+              "x": 31000,
+              "y": 10600
+            },
+            "end": {
+              "x": 31000,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-29",
+            "start": {
+              "x": 0,
+              "y": 7480
+            },
+            "end": {
+              "x": 7100,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-30",
+            "start": {
+              "x": 7100,
+              "y": 7480
+            },
+            "end": {
+              "x": 11450,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-31",
+            "start": {
+              "x": 11450,
+              "y": 7480
+            },
+            "end": {
+              "x": 15650,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-32",
+            "start": {
+              "x": 15650,
+              "y": 7480
+            },
+            "end": {
+              "x": 18650,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-33",
+            "start": {
+              "x": 18650,
+              "y": 7480
+            },
+            "end": {
+              "x": 22750,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-34",
+            "start": {
+              "x": 22750,
+              "y": 7480
+            },
+            "end": {
+              "x": 31000,
+              "y": 7480
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-35",
+            "start": {
+              "x": 7100,
+              "y": 7480
+            },
+            "end": {
+              "x": 7100,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-36",
+            "start": {
+              "x": 0,
+              "y": 14360
+            },
+            "end": {
+              "x": 7100,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-37",
+            "start": {
+              "x": 7100,
+              "y": 14360
+            },
+            "end": {
+              "x": 11450,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-38",
+            "start": {
+              "x": 11450,
+              "y": 14360
+            },
+            "end": {
+              "x": 15650,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-39",
+            "start": {
+              "x": 15650,
+              "y": 14360
+            },
+            "end": {
+              "x": 18650,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-40",
+            "start": {
+              "x": 18650,
+              "y": 14360
+            },
+            "end": {
+              "x": 22750,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-41",
+            "start": {
+              "x": 22750,
+              "y": 14360
+            },
+            "end": {
+              "x": 27500,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-42",
+            "start": {
+              "x": 27500,
+              "y": 14360
+            },
+            "end": {
+              "x": 31000,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-43",
+            "start": {
+              "x": 11450,
+              "y": 7480
+            },
+            "end": {
+              "x": 11450,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-44",
+            "start": {
+              "x": 15650,
+              "y": 7480
+            },
+            "end": {
+              "x": 15650,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-45",
+            "start": {
+              "x": 22750,
+              "y": 7480
+            },
+            "end": {
+              "x": 22750,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-46",
+            "start": {
+              "x": 18650,
+              "y": 7480
+            },
+            "end": {
+              "x": 18650,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-47",
+            "start": {
+              "x": 27500,
+              "y": 8450
+            },
+            "end": {
+              "x": 31000,
+              "y": 8450
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-48",
+            "start": {
+              "x": 27500,
+              "y": 8450
+            },
+            "end": {
+              "x": 27500,
+              "y": 10600
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-49",
+            "start": {
+              "x": 27500,
+              "y": 10600
+            },
+            "end": {
+              "x": 27500,
+              "y": 14360
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_linde-p-50",
+            "start": {
+              "x": 27500,
+              "y": 10600
+            },
+            "end": {
+              "x": 31000,
+              "y": 10600
+            },
+            "thicknessMm": 200,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "openings": [
+          {
+            "id": "opn_linde-p-1",
+            "kind": "window",
+            "wallId": "wal_linde-p-1",
+            "offsetMm": 500,
+            "widthMm": 1900,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-p-2",
+            "kind": "door",
+            "wallId": "wal_linde-p-9",
+            "offsetMm": 2450,
+            "widthMm": 880,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-3",
+            "kind": "opening",
+            "wallId": "wal_linde-p-12",
+            "offsetMm": 1030,
+            "widthMm": 1480,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-4",
+            "kind": "door",
+            "wallId": "wal_linde-p-10",
+            "offsetMm": 3850,
+            "widthMm": 900,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-5",
+            "kind": "window",
+            "wallId": "wal_linde-p-2",
+            "offsetMm": 440,
+            "widthMm": 2000,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-p-6",
+            "kind": "door",
+            "wallId": "wal_linde-p-11",
+            "offsetMm": 4450,
+            "widthMm": 900,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-7",
+            "kind": "window",
+            "wallId": "wal_linde-p-3",
+            "offsetMm": 440,
+            "widthMm": 2000,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-p-8",
+            "kind": "door",
+            "wallId": "wal_linde-p-14",
+            "offsetMm": 3350,
+            "widthMm": 900,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-9",
+            "kind": "window",
+            "wallId": "wal_linde-p-6",
+            "offsetMm": 440,
+            "widthMm": 2000,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-p-10",
+            "kind": "door",
+            "wallId": "wal_linde-p-15",
+            "offsetMm": 3950,
+            "widthMm": 900,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-11",
+            "kind": "window",
+            "wallId": "wal_linde-p-7",
+            "offsetMm": 440,
+            "widthMm": 2000,
+            "heightMm": 1350,
+            "sillHeightMm": 800
+          },
+          {
+            "id": "opn_linde-p-12",
+            "kind": "door",
+            "wallId": "wal_linde-p-13",
+            "offsetMm": 1100,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-13",
+            "kind": "opening",
+            "wallId": "wal_linde-p-29",
+            "offsetMm": 2600,
+            "widthMm": 1650,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-14",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-36",
+            "offsetMm": 1000,
+            "widthMm": 4500,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-15",
+            "kind": "door",
+            "wallId": "wal_linde-p-30",
+            "offsetMm": 3240,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-16",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-37",
+            "offsetMm": 500,
+            "widthMm": 2300,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-17",
+            "kind": "door",
+            "wallId": "wal_linde-p-31",
+            "offsetMm": 3090,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-18",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-38",
+            "offsetMm": 500,
+            "widthMm": 2300,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-19",
+            "kind": "door",
+            "wallId": "wal_linde-p-33",
+            "offsetMm": 2990,
+            "widthMm": 860,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-20",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-40",
+            "offsetMm": 500,
+            "widthMm": 2300,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-21",
+            "kind": "door",
+            "wallId": "wal_linde-p-32",
+            "offsetMm": 1170,
+            "widthMm": 870,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-22",
+            "kind": "door",
+            "wallId": "wal_linde-p-39",
+            "offsetMm": 370,
+            "widthMm": 1300,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-23",
+            "kind": "door",
+            "wallId": "wal_linde-p-34",
+            "offsetMm": 1500,
+            "widthMm": 1130,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-24",
+            "kind": "door",
+            "wallId": "wal_linde-p-48",
+            "offsetMm": 750,
+            "widthMm": 830,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-25",
+            "kind": "door",
+            "wallId": "wal_linde-p-49",
+            "offsetMm": 1190,
+            "widthMm": 880,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-26",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-37",
+            "offsetMm": 650,
+            "widthMm": 2850,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          },
+          {
+            "id": "opn_linde-p-27",
+            "kind": "sliding-door",
+            "wallId": "wal_linde-p-41",
+            "offsetMm": 650,
+            "widthMm": 3250,
+            "heightMm": 2150,
+            "sillHeightMm": 0
+          }
+        ],
+        "rooms": [
+          {
+            "id": "rom_linde-p-1",
+            "name": "Despacho",
+            "family": "office",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 100
+              },
+              {
+                "x": 3450,
+                "y": 100
+              },
+              {
+                "x": 3450,
+                "y": 5300
+              },
+              {
+                "x": 100,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 1775,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_tile600",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-2",
+            "name": "Escalera S1",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 14650,
+                "y": 100
+              },
+              {
+                "x": 18000,
+                "y": 100
+              },
+              {
+                "x": 18000,
+                "y": 5300
+              },
+              {
+                "x": 14650,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 16325,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-3",
+            "name": "Dormitorio P01 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 3650,
+                "y": 100
+              },
+              {
+                "x": 8650,
+                "y": 100
+              },
+              {
+                "x": 8650,
+                "y": 5300
+              },
+              {
+                "x": 3650,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 6150,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-4",
+            "name": "Dormitorio P02 · Twin",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 8850,
+                "y": 100
+              },
+              {
+                "x": 14450,
+                "y": 100
+              },
+              {
+                "x": 14450,
+                "y": 5300
+              },
+              {
+                "x": 8850,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 11650,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-5",
+            "name": "Dormitorio P03 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 21100,
+                "y": 100
+              },
+              {
+                "x": 25600,
+                "y": 100
+              },
+              {
+                "x": 25600,
+                "y": 5300
+              },
+              {
+                "x": 21100,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 23350,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-6",
+            "name": "Dormitorio P04 · Twin",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 25800,
+                "y": 100
+              },
+              {
+                "x": 30900,
+                "y": 100
+              },
+              {
+                "x": 30900,
+                "y": 5300
+              },
+              {
+                "x": 25800,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 28350,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-7",
+            "name": "Baño P1",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 18200,
+                "y": 100
+              },
+              {
+                "x": 20900,
+                "y": 100
+              },
+              {
+                "x": 20900,
+                "y": 5300
+              },
+              {
+                "x": 18200,
+                "y": 5300
+              }
+            ],
+            "labelAt": {
+              "x": 19550,
+              "y": 2700
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-8",
+            "name": "Salón panorámico",
+            "family": "living",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 7580
+              },
+              {
+                "x": 7000,
+                "y": 7580
+              },
+              {
+                "x": 7000,
+                "y": 14260
+              },
+              {
+                "x": 100,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 3550,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-9",
+            "name": "Dormitorio P05 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 7200,
+                "y": 7580
+              },
+              {
+                "x": 11350,
+                "y": 7580
+              },
+              {
+                "x": 11350,
+                "y": 14260
+              },
+              {
+                "x": 7200,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 9275,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-10",
+            "name": "Dormitorio P06 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 11550,
+                "y": 7580
+              },
+              {
+                "x": 15550,
+                "y": 7580
+              },
+              {
+                "x": 15550,
+                "y": 14260
+              },
+              {
+                "x": 11550,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 13550,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-11",
+            "name": "Dormitorio P07 · Doble",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 18750,
+                "y": 7580
+              },
+              {
+                "x": 22650,
+                "y": 7580
+              },
+              {
+                "x": 22650,
+                "y": 14260
+              },
+              {
+                "x": 18750,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 20700,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-12",
+            "name": "Baño P2",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 15750,
+                "y": 7580
+              },
+              {
+                "x": 18550,
+                "y": 7580
+              },
+              {
+                "x": 18550,
+                "y": 14260
+              },
+              {
+                "x": 15750,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 17150,
+              "y": 10920
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-13",
+            "name": "Dormitorio P08 · Principal",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 22850,
+                "y": 7580
+              },
+              {
+                "x": 30900,
+                "y": 7580
+              },
+              {
+                "x": 30900,
+                "y": 8350
+              },
+              {
+                "x": 27400,
+                "y": 8350
+              },
+              {
+                "x": 27400,
+                "y": 14260
+              },
+              {
+                "x": 22850,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 27050,
+              "y": 10063
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-14",
+            "name": "Vestidor",
+            "family": "unspecified",
+            "polygon": [
+              {
+                "x": 27600,
+                "y": 8550
+              },
+              {
+                "x": 30900,
+                "y": 8550
+              },
+              {
+                "x": 30900,
+                "y": 10500
+              },
+              {
+                "x": 27600,
+                "y": 10500
+              }
+            ],
+            "labelAt": {
+              "x": 29250,
+              "y": 9525
+            },
+            "floorMaterialId": "mat_tile600",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-15",
+            "name": "Baño P3",
+            "family": "bathroom",
+            "polygon": [
+              {
+                "x": 27600,
+                "y": 10700
+              },
+              {
+                "x": 30900,
+                "y": 10700
+              },
+              {
+                "x": 30900,
+                "y": 14260
+              },
+              {
+                "x": 27600,
+                "y": 14260
+              }
+            ],
+            "labelAt": {
+              "x": 29250,
+              "y": 12480
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-16",
+            "name": "Galería de dormitorios",
+            "family": "bedroom",
+            "polygon": [
+              {
+                "x": 100,
+                "y": 5500
+              },
+              {
+                "x": 30900,
+                "y": 5500
+              },
+              {
+                "x": 30900,
+                "y": 7380
+              },
+              {
+                "x": 100,
+                "y": 7380
+              }
+            ],
+            "labelAt": {
+              "x": 15500,
+              "y": 6440
+            },
+            "floorMaterialId": "mat_marble",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-17",
+            "name": "Terraza del salón",
+            "family": "living",
+            "polygon": [
+              {
+                "x": 0,
+                "y": 14360
+              },
+              {
+                "x": 7100,
+                "y": 14360
+              },
+              {
+                "x": 7100,
+                "y": 17760
+              },
+              {
+                "x": 0,
+                "y": 17760
+              }
+            ],
+            "labelAt": {
+              "x": 3550,
+              "y": 16060
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-18",
+            "name": "Balcón P05",
+            "family": "balcony",
+            "polygon": [
+              {
+                "x": 7100,
+                "y": 14360
+              },
+              {
+                "x": 11450,
+                "y": 14360
+              },
+              {
+                "x": 11450,
+                "y": 16040
+              },
+              {
+                "x": 7100,
+                "y": 16040
+              }
+            ],
+            "labelAt": {
+              "x": 9275,
+              "y": 15200
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_linde-p-19",
+            "name": "Balcón principal",
+            "family": "balcony",
+            "polygon": [
+              {
+                "x": 22750,
+                "y": 14360
+              },
+              {
+                "x": 27500,
+                "y": 14360
+              },
+              {
+                "x": 27500,
+                "y": 16040
+              },
+              {
+                "x": 22750,
+                "y": 16040
+              }
+            ],
+            "labelAt": {
+              "x": 25125,
+              "y": 15200
+            },
+            "floorMaterialId": "mat_antislip",
+            "countsTowardArea": false,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat_wood",
+            "name": "橡木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#d8b88a",
+              "preset": "wood"
+            }
+          },
+          {
+            "id": "mat_walnut",
+            "name": "胡桃木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#9b7250",
+              "preset": "walnut"
+            }
+          },
+          {
+            "id": "mat_tile800",
+            "name": "800 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#ebe6dc",
+              "preset": "tile-800"
+            }
+          },
+          {
+            "id": "mat_tile600",
+            "name": "600 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#dfe3e1",
+              "preset": "tile-600"
+            }
+          },
+          {
+            "id": "mat_marble",
+            "name": "大理石",
+            "category": "floor",
+            "appearance": {
+              "color": "#f1eee8",
+              "preset": "marble"
+            }
+          },
+          {
+            "id": "mat_antislip",
+            "name": "300 防滑砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#d3d8d4",
+              "preset": "tile-300"
+            }
+          },
+          {
+            "id": "mat_terrazzo",
+            "name": "水磨石",
+            "category": "floor",
+            "appearance": {
+              "color": "#e6dfd3",
+              "preset": "terrazzo"
+            }
+          },
+          {
+            "id": "mat_carpet",
+            "name": "满铺地毯",
+            "category": "floor",
+            "appearance": {
+              "color": "#c9c3d3",
+              "preset": "carpet"
+            }
+          }
+        ],
+        "objects": [
+          {
+            "id": "obj_linde-p-1",
+            "type": "wardrobe",
+            "name": "Armario de vestidor",
+            "position": {
+              "x": 28955,
+              "y": 9565
+            },
+            "size": {
+              "widthMm": 2330,
+              "depthMm": 470
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-14"
+          },
+          {
+            "id": "obj_linde-p-2",
+            "type": "shower",
+            "name": "Ducha",
+            "position": {
+              "x": 28210,
+              "y": 11880
+            },
+            "size": {
+              "widthMm": 860,
+              "depthMm": 860
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-15"
+          },
+          {
+            "id": "obj_linde-p-3",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 30580,
+              "y": 11745
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-15"
+          },
+          {
+            "id": "obj_linde-p-4",
+            "type": "vanity",
+            "name": "Lavabo",
+            "position": {
+              "x": 28340,
+              "y": 13935
+            },
+            "size": {
+              "widthMm": 1180,
+              "depthMm": 410
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-15"
+          },
+          {
+            "id": "obj_linde-p-5",
+            "type": "shower",
+            "name": "Ducha",
+            "position": {
+              "x": 18810,
+              "y": 1280
+            },
+            "size": {
+              "widthMm": 860,
+              "depthMm": 860
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-7"
+          },
+          {
+            "id": "obj_linde-p-6",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 20580,
+              "y": 1145
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-7"
+          },
+          {
+            "id": "obj_linde-p-7",
+            "type": "vanity",
+            "name": "Lavabo",
+            "position": {
+              "x": 18940,
+              "y": 4975
+            },
+            "size": {
+              "widthMm": 1180,
+              "depthMm": 410
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-7"
+          },
+          {
+            "id": "obj_linde-p-8",
+            "type": "desk",
+            "name": "Mesa de trabajo",
+            "position": {
+              "x": 1300,
+              "y": 1470
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 640
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-1"
+          },
+          {
+            "id": "obj_linde-p-9",
+            "type": "chair",
+            "name": "Silla de trabajo",
+            "position": {
+              "x": 1225,
+              "y": 2125
+            },
+            "size": {
+              "widthMm": 550,
+              "depthMm": 490
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-1"
+          },
+          {
+            "id": "obj_linde-p-10",
+            "type": "sofa",
+            "name": "Sofá del despacho",
+            "position": {
+              "x": 1250,
+              "y": 4055
+            },
+            "size": {
+              "widthMm": 1600,
+              "depthMm": 670
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-1"
+          },
+          {
+            "id": "obj_linde-p-11",
+            "type": "shower",
+            "name": "Ducha",
+            "position": {
+              "x": 16360,
+              "y": 8760
+            },
+            "size": {
+              "widthMm": 860,
+              "depthMm": 860
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-12"
+          },
+          {
+            "id": "obj_linde-p-12",
+            "type": "toilet",
+            "name": "Inodoro",
+            "position": {
+              "x": 18230,
+              "y": 8625
+            },
+            "size": {
+              "widthMm": 400,
+              "depthMm": 650
+            },
+            "rotationDeg": 0,
+            "color": "#f2eee7",
+            "roomId": "rom_linde-p-12"
+          },
+          {
+            "id": "obj_linde-p-13",
+            "type": "vanity",
+            "name": "Lavabo",
+            "position": {
+              "x": 16490,
+              "y": 13935
+            },
+            "size": {
+              "widthMm": 1180,
+              "depthMm": 410
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-12"
+          },
+          {
+            "id": "obj_linde-p-14",
+            "type": "table",
+            "name": "Mesa exterior",
+            "position": {
+              "x": 1550,
+              "y": 15910
+            },
+            "size": {
+              "widthMm": 2100,
+              "depthMm": 720
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-17"
+          },
+          {
+            "id": "obj_linde-p-15",
+            "type": "armchair",
+            "name": "Asiento exterior",
+            "position": {
+              "x": 5200,
+              "y": 15960
+            },
+            "size": {
+              "widthMm": 1600,
+              "depthMm": 720
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-17"
+          },
+          {
+            "id": "obj_linde-p-16",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 22550,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-5"
+          },
+          {
+            "id": "obj_linde-p-17",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 24180,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-5"
+          },
+          {
+            "id": "obj_linde-p-18",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 21445,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-5"
+          },
+          {
+            "id": "obj_linde-p-19",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 23600,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-5"
+          },
+          {
+            "id": "obj_linde-p-20",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 22180,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-5"
+          },
+          {
+            "id": "obj_linde-p-21",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 5100,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-3"
+          },
+          {
+            "id": "obj_linde-p-22",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 6730,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-3"
+          },
+          {
+            "id": "obj_linde-p-23",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 3995,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-3"
+          },
+          {
+            "id": "obj_linde-p-24",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 6150,
+              "y": 1200
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-3"
+          },
+          {
+            "id": "obj_linde-p-25",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 4730,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-3"
+          },
+          {
+            "id": "obj_linde-p-26",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 20200,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-11"
+          },
+          {
+            "id": "obj_linde-p-27",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 21830,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-11"
+          },
+          {
+            "id": "obj_linde-p-28",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 19095,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-11"
+          },
+          {
+            "id": "obj_linde-p-29",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 21250,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-11"
+          },
+          {
+            "id": "obj_linde-p-30",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 19830,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-11"
+          },
+          {
+            "id": "obj_linde-p-31",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 26620,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-6"
+          },
+          {
+            "id": "obj_linde-p-32",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 27770,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-6"
+          },
+          {
+            "id": "obj_linde-p-33",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 28630,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-6"
+          },
+          {
+            "id": "obj_linde-p-34",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 26880,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-6"
+          },
+          {
+            "id": "obj_linde-p-35",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 13000,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-10"
+          },
+          {
+            "id": "obj_linde-p-36",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 14630,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-10"
+          },
+          {
+            "id": "obj_linde-p-37",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 11895,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-10"
+          },
+          {
+            "id": "obj_linde-p-38",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 14050,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-10"
+          },
+          {
+            "id": "obj_linde-p-39",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 12630,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-10"
+          },
+          {
+            "id": "obj_linde-p-40",
+            "type": "bed",
+            "name": "Cama doble",
+            "position": {
+              "x": 8650,
+              "y": 9480
+            },
+            "size": {
+              "widthMm": 1700,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-9"
+          },
+          {
+            "id": "obj_linde-p-41",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 10280,
+              "y": 9405
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-9"
+          },
+          {
+            "id": "obj_linde-p-42",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 7545,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 350,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-9"
+          },
+          {
+            "id": "obj_linde-p-43",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 9700,
+              "y": 8680
+            },
+            "size": {
+              "widthMm": 300,
+              "depthMm": 400
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-9"
+          },
+          {
+            "id": "obj_linde-p-44",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 8280,
+              "y": 11170
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-9"
+          },
+          {
+            "id": "obj_linde-p-45",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 9670,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-4"
+          },
+          {
+            "id": "obj_linde-p-46",
+            "type": "bed",
+            "name": "Cama individual",
+            "position": {
+              "x": 10820,
+              "y": 2000
+            },
+            "size": {
+              "widthMm": 940,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-4"
+          },
+          {
+            "id": "obj_linde-p-47",
+            "type": "wardrobe",
+            "name": "Armario",
+            "position": {
+              "x": 11680,
+              "y": 1925
+            },
+            "size": {
+              "widthMm": 660,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-4"
+          },
+          {
+            "id": "obj_linde-p-48",
+            "type": "desk",
+            "name": "Escritorio",
+            "position": {
+              "x": 9930,
+              "y": 3690
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 480
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-4"
+          },
+          {
+            "id": "obj_linde-p-49",
+            "type": "sofa",
+            "name": "Sofá",
+            "position": {
+              "x": 3550,
+              "y": 9075
+            },
+            "size": {
+              "widthMm": 6000,
+              "depthMm": 750
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-8"
+          },
+          {
+            "id": "obj_linde-p-50",
+            "type": "armchair",
+            "name": "Butaca",
+            "position": {
+              "x": 990,
+              "y": 10635
+            },
+            "size": {
+              "widthMm": 780,
+              "depthMm": 1150
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-8"
+          },
+          {
+            "id": "obj_linde-p-51",
+            "type": "coffeetable",
+            "name": "Mesa baja",
+            "position": {
+              "x": 2445,
+              "y": 10380
+            },
+            "size": {
+              "widthMm": 1630,
+              "depthMm": 780
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-8"
+          },
+          {
+            "id": "obj_linde-p-52",
+            "type": "tvstand",
+            "name": "Mueble auxiliar",
+            "position": {
+              "x": 6665,
+              "y": 10425
+            },
+            "size": {
+              "widthMm": 290,
+              "depthMm": 1850
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-8"
+          },
+          {
+            "id": "obj_linde-p-53",
+            "type": "bed",
+            "name": "Cama principal",
+            "position": {
+              "x": 25600,
+              "y": 10160
+            },
+            "size": {
+              "widthMm": 2000,
+              "depthMm": 2120
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-13"
+          },
+          {
+            "id": "obj_linde-p-54",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 24210,
+              "y": 9325
+            },
+            "size": {
+              "widthMm": 420,
+              "depthMm": 450
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-13"
+          },
+          {
+            "id": "obj_linde-p-55",
+            "type": "nightstand",
+            "name": "Mesilla",
+            "position": {
+              "x": 26960,
+              "y": 9325
+            },
+            "size": {
+              "widthMm": 420,
+              "depthMm": 450
+            },
+            "rotationDeg": 0,
+            "color": "#b39476",
+            "roomId": "rom_linde-p-13"
+          },
+          {
+            "id": "obj_linde-p-56",
+            "type": "armchair",
+            "name": "Butaca de la suite",
+            "position": {
+              "x": 24140,
+              "y": 13025
+            },
+            "size": {
+              "widthMm": 1600,
+              "depthMm": 550
+            },
+            "rotationDeg": 0,
+            "color": "#aab9bc",
+            "roomId": "rom_linde-p-13"
+          }
+        ],
+        "measurements": [],
+        "sourceImages": []
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "id": "str_linde-s1",
+      "kind": "straight",
+      "fromLevelId": "lvl_linde-aprobada-b",
+      "toLevelId": "lvl_linde-aprobada-p",
+      "startMm": {
+        "x": 16040,
+        "y": 4730
+      },
+      "rotationDeg": 270,
+      "widthMm": 1100,
+      "runLengthMm": 4010,
+      "risers": 18
+    }
+  ],
+  "site": {
+    "northOffsetDeg": 0,
+    "location": {
+      "latitude": 38.35,
+      "longitude": -0.48,
+      "timeZone": "Europe/Madrid",
+      "source": {
+        "providerId": "manual",
+        "type": "user-entered",
+        "sourceName": "Escenario aproximado Alicante"
+      }
+    }
+  }
+}

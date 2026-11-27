@@ -1,0 +1,1 @@
+async page=>({hash: await page.evaluate(()=>location.hash), active:await page.locator('nav[aria-label="Áreas de trabajo"] [aria-current]').allTextContents(),heads:await page.getByRole('heading',{level:1}).allTextContents(),evolution:await page.locator('#evolutionFrame').isVisible(),entregar:await page.locator('[data-entrega-code="P4"]').isVisible()})

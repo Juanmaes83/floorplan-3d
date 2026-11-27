@@ -1,0 +1,67 @@
+﻿Apartado;Elemento;Cantidad;Unidad;Detalle;Estado
+Estancias;Dormitorio principal;12,37;m2;perímetro 14,08 m · paredes netas 31,36 m2 · Parqué de roble;Estimado
+Estancias;Baño en suite;3,2;m2;perímetro 7,24 m · paredes netas 18 m2 · Baldosa antideslizante 300;Estimado
+Estancias;Dormitorio infantil;9,3;m2;perímetro 12,26 m · paredes netas 27,88 m2 · Parqué de roble;Estimado
+Estancias;Baño de invitados;2,89;m2;perímetro 7 m · paredes netas 16,44 m2 · Baldosa antideslizante 300;Estimado
+Estancias;Balcón-lavadero;2,92;m2;perímetro 7,04 m · paredes netas 9,69 m2 · Baldosa antideslizante 300;Estimado
+Estancias;Dormitorio juvenil;10,89;m2;perímetro 13,41 m · paredes netas 31,08 m2 · Parqué de roble;Estimado
+Estancias;Cocina;6,04;m2;perímetro 9,9 m · paredes netas 18,24 m2 · Baldosa 600;Estimado
+Estancias;Comedor;7,03;m2;perímetro 10,82 m · paredes netas 15,5 m2 · Baldosa 800;Estimado
+Estancias;Pasillo;5,71;m2;perímetro 11,66 m · paredes netas 16,72 m2 · Baldosa 800;Estimado
+Estancias;Salón;21,53;m2;perímetro 18,8 m · paredes netas 37,09 m2 · Baldosa 800;Estimado
+Estancias;Balcón de estar;5,29;m2;perímetro 10,58 m · paredes netas 16,9 m2 · Parqué de nogal;Estimado
+Estancias;Mirador del dormitorio principal;1,41;m2;perímetro 5,3 m · paredes netas 3,46 m2 · Mármol · fuera del cómputo;Estimado
+Estancias;Mirador del dormitorio juvenil;1,17;m2;perímetro 4,67 m · paredes netas 3,08 m2 · Mármol · fuera del cómputo;Estimado
+Pavimentos;Parqué de roble;32,56;m2;Dormitorio principal, Dormitorio infantil, Dormitorio juvenil;Estimado
+Pavimentos;Baldosa antideslizante 300;9,02;m2;Baño en suite, Baño de invitados, Balcón-lavadero;Estimado
+Pavimentos;Baldosa 600;6,04;m2;Cocina;Estimado
+Pavimentos;Baldosa 800;34,27;m2;Comedor, Pasillo, Salón;Estimado
+Pavimentos;Parqué de nogal;5,29;m2;Balcón de estar;Estimado
+Pavimentos;Mármol;2,59;m2;Mirador del dormitorio principal, Mirador del dormitorio juvenil;Estimado
+Muros;Muros existentes;86,83;m;70 tramos · cara neta 187,34 m2;Estimado
+Carpinterías;Puerta 89×210 cm;2;ud;;
+Carpinterías;Puerta 88×210 cm;2;ud;;
+Carpinterías;Puerta 79×210 cm;2;ud;;
+Carpinterías;Puerta corredera 237×240 cm;1;ud;;
+Carpinterías;Puerta corredera 82×210 cm;1;ud;;
+Carpinterías;Ventana 335×150 cm;1;ud;;
+Carpinterías;Ventana 307×150 cm;1;ud;;
+Carpinterías;Ventana 189×195 cm;1;ud;;
+Carpinterías;Ventana 182×150 cm;1;ud;;
+Carpinterías;Ventana 158×195 cm;1;ud;;
+Carpinterías;Ventana 158×150 cm;1;ud;;
+Carpinterías;Ventana 62×195 cm;4;ud;;
+Carpinterías;Ventana 62×100 cm;1;ud;;
+Carpinterías;Ventana 61×150 cm;1;ud;;
+Carpinterías;Hueco de paso 180×240 cm;1;ud;;
+Carpinterías;Hueco de paso 148×240 cm;1;ud;;
+Mobiliario;Silla de comedor;4;ud;;
+Mobiliario;Armario;3;ud;;
+Mobiliario;Planta;3;ud;;
+Mobiliario;Cama doble;2;ud;;
+Mobiliario;Colchoneta para mirador;2;ud;;
+Mobiliario;Encimera;2;ud;;
+Mobiliario;Escritorio;2;ud;;
+Mobiliario;Inodoro;2;ud;;
+Mobiliario;Mesilla;2;ud;;
+Mobiliario;Mueble de baño;2;ud;;
+Mobiliario;Silla;2;ud;;
+Mobiliario;Sillón de descanso;2;ud;;
+Mobiliario;Alfombra;1;ud;;
+Mobiliario;Aparador;1;ud;;
+Mobiliario;Butaca;1;ud;;
+Mobiliario;Cama individual;1;ud;;
+Mobiliario;Ducha;1;ud;;
+Mobiliario;Estantería;1;ud;;
+Mobiliario;Fregadero;1;ud;;
+Mobiliario;Frigorífico;1;ud;;
+Mobiliario;Lavadora;1;ud;;
+Mobiliario;Mesa auxiliar;1;ud;;
+Mobiliario;Mesa de centro;1;ud;;
+Mobiliario;Mesa de comedor;1;ud;;
+Mobiliario;Mueble de TV;1;ud;;
+Mobiliario;Pila de lavar;1;ud;;
+Mobiliario;Placa de gas;1;ud;;
+Mobiliario;Sofá de 3 plazas;1;ud;;
+Mobiliario;Zapatero;1;ud;;
+Mobiliario;Zona de ducha;1;ud;;

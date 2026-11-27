@@ -1,0 +1,67 @@
+{
+ "format": "rubik-sota.blender-render",
+ "version": "1.1.0",
+ "status": "complete",
+ "profile": "preview",
+ "profileSpec": {
+  "purpose": "fast check of framing and light",
+  "resolution": "640x400",
+  "samples": 16,
+  "fill": "rooms"
+ },
+ "resolution": [
+  768,
+  432
+ ],
+ "samples": 8,
+ "blender": "5.2.1 LTS",
+ "renderer": "Cycles CPU, 8 samples, denoise, 768x432, AgX",
+ "threads": 4,
+ "cpuCount": 24,
+ "requestedViews": [
+  "rom_linde-b-12"
+ ],
+ "runIdentity": "dc68f2ff3b039e83ec173116df0a24234121f18714cea1af7cc52902d7ae68b4",
+ "input": {
+  "manifestSha256": "39c97dbda68872610919771eb7ac55dd3659f53b92f3b073040b1b4a6661d488",
+  "preparedBlendSha256": "3ad1dbe837a2ccc4196a2e2c3654e27bb576e76a3fa3afb4f40761eac97dc467",
+  "glbSha256": "ce72e2a562fc257836ade63db47a8e57e22b67bf297c8305f5893114a4217f01",
+  "projectId": "prj_fc609092ff41464cab3be49596d34473",
+  "observedProjectSha256": "0af2ca8c1f6d5e4bb8e1b49405a8c7f4522675b7cacebab81f366f36684a1f21",
+  "materials": "observed",
+  "light": "viewer"
+ },
+ "derived": [
+  "sun and sky: captured from the viewer (see import-report derivedLight)",
+  "room fill: one ceiling area light per room (22), energy 20·√area W (derived)",
+  "exposure -0.4 EV (derived)",
+  "textured floors coloured from their project material (22 meshes; textures never copied)"
+ ],
+ "views": [
+  {
+   "view": "rom_linde-b-12",
+   "label": "Salón principal",
+   "camera": "perspective 22.0 mm, eye 1.35 m at plan (2525, 13759)",
+   "targetRoomPresence": 0.806,
+   "nearSurfaceFraction": 0.0,
+   "foregroundFurnitureFraction": 0.0,
+   "bottomCutFurnitureFraction": 0.0,
+   "heroInFrame": 1.0,
+   "heroWithMargin": 1.0,
+   "heroObject": "obj_linde-b-46",
+   "score": 1.306,
+   "twoPoint": true,
+   "seconds": 6.57,
+   "png": {
+    "bytes": 391307,
+    "sha256": "1b95613976d9edc2f09e14b0c78f730948535371b1b689881fb4627cc3f80210"
+   }
+  }
+ ],
+ "peakRssBytes": null,
+ "rendererScriptSha256": "7148e1abb89489bce7bc2c45c8c94f57c22e7cb1a3aebdc20d1795b79da8756a",
+ "resumedViews": [],
+ "reviewBlend": {
+  "bytes": 3631905
+ }
+}

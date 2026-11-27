@@ -1,0 +1,12 @@
+﻿budget_id;subject_type;subject_id;chapter_id;item_id;description;context_scope;context_id;quantity_value;quantity_unit;quantity_status;quantity_complete;waste_percent;budget_quantity;unit_price_eur;price_source_type;price_source_label;price_source_as_of;price_provider_id;price_provider_item_id;reference_provider_id;reference_item_id;reference_license_status;review_status;reviewed_at;tax_rate_percent;subtotal_net_eur;tax_eur;subtotal_gross_eur;pricing_complete;tax_complete
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_wood;Pavimento Parqué de roble;;;32.56282;m2;estimated;true;5;34.190961;42.75;manual;Precio propio;;;;;;;reviewed;2026-11-27T12:52:54.445Z;21;1461.66;306.95;1768.61;true;true
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_antislip;Pavimento Baldosa antideslizante 300;;;9.018799999999999;m2;estimated;true;5;9.46974;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_tile600;Pavimento Baldosa 600;;;6.0386;m2;estimated;true;5;6.34053;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_tile800;Pavimento Baldosa 800;;;34.269580000000005;m2;estimated;true;5;35.983059000000004;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_walnut;Pavimento Parqué de nogal;;;5.293;m2;estimated;true;5;5.557650000000001;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;floors;floor:mat_marble;Pavimento Mármol;;;2.589;m2;estimated;true;5;2.7184500000000003;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;floors;skirting;Rodapié (perímetro de estancias, sin descontar puertas);;;132.76399999999998;m;estimated;true;5;139.4022;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;walls;paint;Pintura plástica en paredes (caras netas);;;374.67670000000004;m2;estimated;true;0;374.67670000000004;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;carpentry;opening:door;Puerta de paso;;;6;unit;measured;true;0;6;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;carpentry;opening:sliding-door;Puerta corredera;;;2;unit;measured;true;0;2;;;;;;;;;;unreviewed;;21;;;;false;false
+bud_prj_reference-home;project;prj_reference-home;carpentry;opening:window;Ventana;;;12;unit;measured;true;0;12;;;;;;;;;;unreviewed;;21;;;;false;false

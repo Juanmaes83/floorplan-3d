@@ -1,0 +1,452 @@
+[
+  {
+    "id": "prj_linde-b",
+    "name": "Villa Linde · Planta baja",
+    "roomCount": 23,
+    "bedrooms": 6,
+    "bathrooms": 2,
+    "salons": 2,
+    "furniture": 16,
+    "walls": 49,
+    "openings": 37,
+    "interiorM2": 592.2,
+    "nonCountedM2": 116.52,
+    "area": [
+      {
+        "name": "Garaje",
+        "roomId": "rom_linde-b-1",
+        "x": 0,
+        "y": 0,
+        "width": 6500,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 33.15
+      },
+      {
+        "name": "Dormitorio B1",
+        "roomId": "rom_linde-b-2",
+        "x": 6740,
+        "y": 0,
+        "width": 6200,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 31.62
+      },
+      {
+        "name": "Dormitorio B2",
+        "roomId": "rom_linde-b-3",
+        "x": 13180,
+        "y": 0,
+        "width": 5500,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 28.05
+      },
+      {
+        "name": "Salón de recepción",
+        "roomId": "rom_linde-b-4",
+        "x": 18920,
+        "y": 0,
+        "width": 7000,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 35.7
+      },
+      {
+        "name": "Dormitorio B3",
+        "roomId": "rom_linde-b-5",
+        "x": 0,
+        "y": 5340,
+        "width": 6500,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 33.8
+      },
+      {
+        "name": "Baño B1",
+        "roomId": "rom_linde-b-6",
+        "x": 6740,
+        "y": 5340,
+        "width": 6200,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 32.24
+      },
+      {
+        "name": "Baño B2",
+        "roomId": "rom_linde-b-7",
+        "x": 13180,
+        "y": 5340,
+        "width": 5500,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 28.6
+      },
+      {
+        "name": "Gimnasio",
+        "roomId": "rom_linde-b-8",
+        "x": 18920,
+        "y": 5340,
+        "width": 7000,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 36.4
+      },
+      {
+        "name": "Galería oeste",
+        "roomId": "rom_linde-b-9",
+        "x": 0,
+        "y": 10780,
+        "width": 6500,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 22.75
+      },
+      {
+        "name": "Vestíbulo de escalera",
+        "roomId": "rom_linde-b-10",
+        "x": 6740,
+        "y": 10780,
+        "width": 6200,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 21.7
+      },
+      {
+        "name": "Galería este",
+        "roomId": "rom_linde-b-11",
+        "x": 13180,
+        "y": 10780,
+        "width": 5500,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 19.25
+      },
+      {
+        "name": "Acceso principal",
+        "roomId": "rom_linde-b-12",
+        "x": 18920,
+        "y": 10780,
+        "width": 7000,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 24.5
+      },
+      {
+        "name": "Dormitorio B4",
+        "roomId": "rom_linde-b-13",
+        "x": 0,
+        "y": 14520,
+        "width": 6500,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 34.45
+      },
+      {
+        "name": "Dormitorio B5",
+        "roomId": "rom_linde-b-14",
+        "x": 6740,
+        "y": 14520,
+        "width": 6200,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 32.86
+      },
+      {
+        "name": "Dormitorio B6",
+        "roomId": "rom_linde-b-15",
+        "x": 13180,
+        "y": 14520,
+        "width": 5500,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 29.15
+      },
+      {
+        "name": "Salón de piscina",
+        "roomId": "rom_linde-b-16",
+        "x": 18920,
+        "y": 14520,
+        "width": 7000,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 37.1
+      },
+      {
+        "name": "Lavandería",
+        "roomId": "rom_linde-b-17",
+        "x": 0,
+        "y": 20060,
+        "width": 6500,
+        "depth": 4400,
+        "countsTowardArea": true,
+        "areaM2": 28.6
+      },
+      {
+        "name": "Cocina",
+        "roomId": "rom_linde-b-18",
+        "x": 6740,
+        "y": 20060,
+        "width": 6200,
+        "depth": 4400,
+        "countsTowardArea": true,
+        "areaM2": 27.28
+      },
+      {
+        "name": "Comedor",
+        "roomId": "rom_linde-b-19",
+        "x": 13180,
+        "y": 20060,
+        "width": 5500,
+        "depth": 4400,
+        "countsTowardArea": true,
+        "areaM2": 24.2
+      },
+      {
+        "name": "Cuarto técnico",
+        "roomId": "rom_linde-b-20",
+        "x": 18920,
+        "y": 20060,
+        "width": 7000,
+        "depth": 4400,
+        "countsTowardArea": true,
+        "areaM2": 30.8
+      },
+      {
+        "name": "Terraza de piscina",
+        "roomId": "rom_linde-b-21",
+        "x": 1000,
+        "y": -6000,
+        "width": 11500,
+        "depth": 5200,
+        "countsTowardArea": false,
+        "areaM2": 59.8
+      },
+      {
+        "name": "Vaso de piscina · representación de planta",
+        "roomId": "rom_linde-b-22",
+        "x": 14000,
+        "y": -6000,
+        "width": 9000,
+        "depth": 4200,
+        "countsTowardArea": false,
+        "areaM2": 37.8
+      },
+      {
+        "name": "Terraza del garaje",
+        "roomId": "rom_linde-b-23",
+        "x": 26700,
+        "y": 12600,
+        "width": 4300,
+        "depth": 4400,
+        "countsTowardArea": false,
+        "areaM2": 18.92
+      }
+    ]
+  },
+  {
+    "id": "prj_linde-p",
+    "name": "Villa Linde · Planta primera",
+    "roomCount": 19,
+    "bedrooms": 8,
+    "bathrooms": 3,
+    "salons": 1,
+    "furniture": 18,
+    "walls": 40,
+    "openings": 31,
+    "interiorM2": 481.32,
+    "nonCountedM2": 73.83,
+    "area": [
+      {
+        "name": "Dormitorio P1",
+        "roomId": "rom_linde-p-1",
+        "x": 0,
+        "y": 0,
+        "width": 6500,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 33.15
+      },
+      {
+        "name": "Dormitorio P2",
+        "roomId": "rom_linde-p-2",
+        "x": 6740,
+        "y": 0,
+        "width": 6200,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 31.62
+      },
+      {
+        "name": "Dormitorio P3",
+        "roomId": "rom_linde-p-3",
+        "x": 13180,
+        "y": 0,
+        "width": 5500,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 28.05
+      },
+      {
+        "name": "Dormitorio P4",
+        "roomId": "rom_linde-p-4",
+        "x": 18920,
+        "y": 0,
+        "width": 7000,
+        "depth": 5100,
+        "countsTowardArea": true,
+        "areaM2": 35.7
+      },
+      {
+        "name": "Baño P1",
+        "roomId": "rom_linde-p-5",
+        "x": 0,
+        "y": 5340,
+        "width": 6500,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 33.8
+      },
+      {
+        "name": "Baño P2",
+        "roomId": "rom_linde-p-6",
+        "x": 6740,
+        "y": 5340,
+        "width": 6200,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 32.24
+      },
+      {
+        "name": "Baño P3",
+        "roomId": "rom_linde-p-7",
+        "x": 13180,
+        "y": 5340,
+        "width": 5500,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 28.6
+      },
+      {
+        "name": "Salón panorámico",
+        "roomId": "rom_linde-p-8",
+        "x": 18920,
+        "y": 5340,
+        "width": 7000,
+        "depth": 5200,
+        "countsTowardArea": true,
+        "areaM2": 36.4
+      },
+      {
+        "name": "Galería oeste",
+        "roomId": "rom_linde-p-9",
+        "x": 0,
+        "y": 10780,
+        "width": 6500,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 22.75
+      },
+      {
+        "name": "Vestíbulo de escalera",
+        "roomId": "rom_linde-p-10",
+        "x": 6740,
+        "y": 10780,
+        "width": 6200,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 21.7
+      },
+      {
+        "name": "Galería este",
+        "roomId": "rom_linde-p-11",
+        "x": 13180,
+        "y": 10780,
+        "width": 5500,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 19.25
+      },
+      {
+        "name": "Distribuidor",
+        "roomId": "rom_linde-p-12",
+        "x": 18920,
+        "y": 10780,
+        "width": 7000,
+        "depth": 3500,
+        "countsTowardArea": true,
+        "areaM2": 24.5
+      },
+      {
+        "name": "Dormitorio P5",
+        "roomId": "rom_linde-p-13",
+        "x": 0,
+        "y": 14520,
+        "width": 6500,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 34.45
+      },
+      {
+        "name": "Dormitorio P6",
+        "roomId": "rom_linde-p-14",
+        "x": 6740,
+        "y": 14520,
+        "width": 6200,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 32.86
+      },
+      {
+        "name": "Dormitorio P7",
+        "roomId": "rom_linde-p-15",
+        "x": 13180,
+        "y": 14520,
+        "width": 5500,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 29.15
+      },
+      {
+        "name": "Dormitorio P8",
+        "roomId": "rom_linde-p-16",
+        "x": 18920,
+        "y": 14520,
+        "width": 7000,
+        "depth": 5300,
+        "countsTowardArea": true,
+        "areaM2": 37.1
+      },
+      {
+        "name": "Terraza alta",
+        "roomId": "rom_linde-p-17",
+        "x": 6000,
+        "y": -5000,
+        "width": 12600,
+        "depth": 4500,
+        "countsTowardArea": false,
+        "areaM2": 56.7
+      },
+      {
+        "name": "Balcón oeste",
+        "roomId": "rom_linde-p-18",
+        "x": -2300,
+        "y": 600,
+        "width": 1950,
+        "depth": 4400,
+        "countsTowardArea": false,
+        "areaM2": 8.58
+      },
+      {
+        "name": "Balcón este",
+        "roomId": "rom_linde-p-19",
+        "x": 25300,
+        "y": 5500,
+        "width": 1900,
+        "depth": 4500,
+        "countsTowardArea": false,
+        "areaM2": 8.55
+      }
+    ]
+  }
+]

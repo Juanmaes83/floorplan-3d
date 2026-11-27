@@ -1,0 +1,28 @@
+async page => {
+ await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
+ await page.setViewportSize({width:1440,height:900});
+ const fingerprint=()=>page.evaluate(()=>JSON.stringify(window.FloorPlanApp.project));
+ const before=await fingerprint();
+ await page.getByRole('button',{name:'Diseñar',exact:true}).click();
+ await page.getByRole('group',{name:'Planta activa'}).getByRole('button',{name:'Planta primera',exact:true}).click();
+ await page.waitForFunction(()=>FloorPlanApp.levelContext?.levelId==='lvl_linde-aprobada-p');
+ await page.getByRole('button',{name:'Entregar',exact:true}).click();
+ const card=page.locator('#sceneExportCard');
+ const action=card.locator('#sceneExportOpen');
+ if(!(await action.isVisible())) await card.getByRole('button',{name:/Ver detalles/}).click();
+ await action.click();
+ const d=page.getByRole('dialog',{name:'Escena para Blender'});
+ const open=d.getByRole('button',{name:'Abrir la vista 3D',exact:true});
+ if(await open.isVisible()) await open.click();
+ await d.getByRole('button',{name:'Preparar escena',exact:true}).click();
+ const outcome=await d.getByRole('button',{name:/^(Descargar ZIP|Reintentar)$/}).innerText({timeout:60000});
+ if(outcome==='Descargar ZIP'){
+  const [file]=await Promise.all([page.waitForEvent('download'),d.getByRole('button',{name:'Descargar ZIP',exact:true}).click()]);
+  await file.saveAs('AUDIT_WORKSPACE/output/auditoria-324/villa-linde/aceptacion/escena-primera.zip');
+ }
+ await page.screenshot({path:'AUDIT_WORKSPACE/output/auditoria-324/villa-linde/aceptacion/escena-blender-primera.png'});
+ return {outcome,projectUnchanged:before===await fingerprint(),dialog:(await d.innerText()).slice(0,800)};
+}
+
+
+

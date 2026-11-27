@@ -1,0 +1,304 @@
+{
+  "schema": "rubik-sota.floorplan-project",
+  "schemaVersion": "1.6.0",
+  "id": "prj_fa48b358a41848b0bc356b31caaffb17",
+  "name": "Auditoría A · Patio claro",
+  "createdAt": "2026-11-27T13:44:22.577Z",
+  "updatedAt": "2026-11-27T13:44:22.909Z",
+  "units": "mm",
+  "coordinateSystem": {
+    "origin": "plan-top-left",
+    "xAxis": "right",
+    "yAxis": "down",
+    "rotation": "degrees-clockwise"
+  },
+  "scale": {
+    "confidence": "pending",
+    "method": "none"
+  },
+  "defaults": {
+    "wallHeightMm": 2800,
+    "wallThicknessMm": 240
+  },
+  "walls": [
+    {
+      "id": "wal_c9300e80fd8d44e993757823951eca82",
+      "start": {
+        "x": -120,
+        "y": -120
+      },
+      "end": {
+        "x": -120,
+        "y": 4120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_f1c45bd88ea74942a7673ef46c304404",
+      "start": {
+        "x": 5120,
+        "y": -120
+      },
+      "end": {
+        "x": 5120,
+        "y": 4120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_1d28e3e0fed346c3a569086be333519e",
+      "start": {
+        "x": -120,
+        "y": -120
+      },
+      "end": {
+        "x": 5120,
+        "y": -120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_d58791f6c5564d74918fdc4335ed4887",
+      "start": {
+        "x": -120,
+        "y": 4120
+      },
+      "end": {
+        "x": 5120,
+        "y": 4120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_2d3acc060e6648a8b74bf87c5bf593ed",
+      "start": {
+        "x": 8360,
+        "y": -120
+      },
+      "end": {
+        "x": 8360,
+        "y": 4120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_56ee9aba262e47ee86180b4dde1dd3d3",
+      "start": {
+        "x": 5120,
+        "y": -120
+      },
+      "end": {
+        "x": 8360,
+        "y": -120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_c5b57ea1506b48a8bdc0a21712dc0912",
+      "start": {
+        "x": 5120,
+        "y": 4120
+      },
+      "end": {
+        "x": 8360,
+        "y": 4120
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "openings": [],
+  "rooms": [
+    {
+      "id": "rom_0f01fce32ad94c28b604f9b0d9500c19",
+      "name": "Salón de lectura",
+      "family": "unspecified",
+      "polygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 5000,
+          "y": 0
+        },
+        {
+          "x": 5000,
+          "y": 4000
+        },
+        {
+          "x": 0,
+          "y": 4000
+        }
+      ],
+      "labelAt": {
+        "x": 2500,
+        "y": 2000
+      },
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "rom_ca957a7499e04c138cfb4df7ac199c10",
+      "name": "Estudio",
+      "family": "unspecified",
+      "polygon": [
+        {
+          "x": 5240,
+          "y": 0
+        },
+        {
+          "x": 8240,
+          "y": 0
+        },
+        {
+          "x": 8240,
+          "y": 4000
+        },
+        {
+          "x": 5240,
+          "y": 4000
+        }
+      ],
+      "labelAt": {
+        "x": 6740,
+        "y": 2000
+      },
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat_wood",
+      "name": "橡木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#d8b88a",
+        "preset": "wood"
+      }
+    },
+    {
+      "id": "mat_walnut",
+      "name": "胡桃木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#9b7250",
+        "preset": "walnut"
+      }
+    },
+    {
+      "id": "mat_tile800",
+      "name": "800 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#ebe6dc",
+        "preset": "tile-800"
+      }
+    },
+    {
+      "id": "mat_tile600",
+      "name": "600 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#dfe3e1",
+        "preset": "tile-600"
+      }
+    },
+    {
+      "id": "mat_marble",
+      "name": "大理石",
+      "category": "floor",
+      "appearance": {
+        "color": "#f1eee8",
+        "preset": "marble"
+      }
+    },
+    {
+      "id": "mat_antislip",
+      "name": "300 防滑砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#d3d8d4",
+        "preset": "tile-300"
+      }
+    },
+    {
+      "id": "mat_terrazzo",
+      "name": "水磨石",
+      "category": "floor",
+      "appearance": {
+        "color": "#e6dfd3",
+        "preset": "terrazzo"
+      }
+    },
+    {
+      "id": "mat_carpet",
+      "name": "满铺地毯",
+      "category": "floor",
+      "appearance": {
+        "color": "#c9c3d3",
+        "preset": "carpet"
+      }
+    }
+  ],
+  "objects": [],
+  "measurements": [],
+  "sourceImages": []
+}

@@ -1,0 +1,68 @@
+{
+ "status": "PASS",
+ "process": "fresh",
+ "blender": "5.2.1 LTS",
+ "checks": [
+  {
+   "check": "blend hash equals import report",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "scene metadata links the package",
+   "pass": true,
+   "detail": "prj_fc609092ff41464cab3be49596d34473"
+  },
+  {
+   "check": "units metric, scale 1",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "transform declared once",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "collections and counts",
+   "pass": true,
+   "detail": {
+    "camera": 1,
+    "ceiling": 42,
+    "fixture": 44,
+    "object": 1525,
+    "opening": 122,
+    "opening-leaf": 48,
+    "room": 47,
+    "stair": 19,
+    "wall": 589
+   }
+  },
+  {
+   "check": "active camera kept",
+   "pass": true,
+   "detail": "RUBIK_camera"
+  },
+  {
+   "check": "mesh count",
+   "pass": true,
+   "detail": 2200
+  },
+  {
+   "check": "every mesh carries rubik_role and rubik_mesh",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "check": "regenerated geometry hash equals the import",
+   "pass": true,
+   "detail": "c8afa33b4b098961"
+  }
+ ],
+ "input": {
+  "preparedBlendSha256": "3ad1dbe837a2ccc4196a2e2c3654e27bb576e76a3fa3afb4f40761eac97dc467",
+  "glbSha256": "ce72e2a562fc257836ade63db47a8e57e22b67bf297c8305f5893114a4217f01",
+  "projectId": "prj_fc609092ff41464cab3be49596d34473",
+  "observedProjectSha256": "0af2ca8c1f6d5e4bb8e1b49405a8c7f4522675b7cacebab81f366f36684a1f21"
+ }
+}

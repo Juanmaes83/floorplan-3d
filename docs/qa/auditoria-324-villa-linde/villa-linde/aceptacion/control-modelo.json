@@ -1,0 +1,43 @@
+{
+  "summary": [
+    {
+      "name": "Planta baja",
+      "rooms": 22,
+      "bedrooms": 6,
+      "baths": 2,
+      "salons": 2,
+      "objects": 70,
+      "walls": 58,
+      "openings": 31,
+      "notPlaced": [],
+      "layoutFindings": [],
+      "stairsConflicts": 0
+    },
+    {
+      "name": "Planta primera",
+      "rooms": 19,
+      "bedrooms": 8,
+      "baths": 3,
+      "salons": 1,
+      "objects": 56,
+      "walls": 50,
+      "openings": 27,
+      "notPlaced": [],
+      "layoutFindings": [],
+      "stairsConflicts": 0
+    }
+  ],
+  "warnings": [
+    {
+      "code": "BW3",
+      "path": "/levels",
+      "message": "Escala por planta: «Planta baja» pendiente, «Planta primera» pendiente. Ninguna escala está confirmada: las medidas de todas las plantas son orientativas."
+    },
+    {
+      "code": "BW4",
+      "path": "/levels/lvl_linde-aprobada-p",
+      "level": "lvl_linde-aprobada-p",
+      "message": "19 de 50 muro(s) de «Planta primera» no tienen un muro de la planta inferior debajo. Aviso de coherencia visual, no un dictamen estructural."
+    }
+  ]
+}
