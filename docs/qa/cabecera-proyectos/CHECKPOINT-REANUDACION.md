@@ -2,6 +2,83 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT DE COMPACTACIÓN · 27/11/2026, 12:10 (leer primero)
+**Hecho que cambia el estado:** el contenedor se **reinició hacia las 12:05**. Todos los procesos murieron. El scratchpad
+(`/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad`, en adelante `$S`) sobrevivió, pero no es
+fiable: todo lo necesario está en GitHub. **No hay nada en ejecución.**
+
+### Ramas y worktrees (local = remoto, sin cambios útiles sin subir; comprobado a las 12:08)
+| Frente | Rama · SHA remoto | Worktree | Handoff |
+|---|---|---|---|
+| **PR #324 · candidata conjunta** | `claude/integracion-cabecera-entregar` · `6d087b6650d7cc7db2faf1608406d3fd0a23fcfc` | `/home/user/integ` | [`docs/qa/integracion-324/README.md`](https://github.com/Juanmaes83/floorplan-3d/blob/claude/integracion-cabecera-entregar/docs/qa/integracion-324/README.md) · [PR #324](https://github.com/Juanmaes83/floorplan-3d/pull/324) (borrador) |
+| §9 Cabecera | `claude/cabecera-proyectos` · ver el SHA de este checkpoint (código `98a6d3a1`) | `/home/user/hdr` | `docs/qa/cabecera-proyectos/README.md` |
+| Entregar: D3, P2, cuadrícula y Home | `claude/entregar-asistencia` · `8b83d955` (código `2f4a25d9`) | `/home/user/ent` | `docs/qa/entregar-asistencia/revision-27-11/README.md` |
+| Gesture Labs §6 | `claude/gesture-labs` · `809aa3cb` | `/home/user/gest` | `docs/qa/gesture-labs/README.md` |
+| Película §11 | `claude/rodaje-cierre-1440` · `90d38d54cd34ad5c0f4a498cefb864e155e9ba8a` | `/home/user/rodaje` | `docs/qa/pelicula-proyecto/README.md` |
+| Base `master` | `dacb5d39` (#323) | `/home/user/base53` (detached en `dacb5d39`) | — |
+| StoryLayersV1 (dependencia en #324) | `claude/storylayers-v1` · `cd694e88` | `/home/user/story` | `docs/qa/storylayers-v1/README.md` |
+
+Guía de referencia del propietario: `c532877a` (rama `codex/encargo-reutilizacion-cinco-repos`):
+`docs/integration/GUIA-AUDITORIA-INTEGRACION-Y-LABORATORIOS.md` y `HANDOFF-GESTURE-LABS-Y-CANDIDATAS.md`.
+
+### Aprobaciones y decisiones vigentes
+- **Aprobado (Preview):**
+  - §9 en `fccda24b`;
+  - Entregar (D3, P2/FOT-01, cuadrícula P8 → P9 → P10) y la muestra de estilos de Home en `7b2e01ab`.
+  - La propuesta comercial sigue en borrador.
+- **Decisión del propietario (27/11):** StoryLayersV1 `cd694e88` entra como dependencia explícita en #324.
+- **#324:** se mantiene en **borrador** hasta la revisión del SHA final por Claude, Codex y el propietario. La **fusión
+  espera la autorización explícita del propietario sobre ese SHA**.
+- **Fuera de #324:** Gesture Labs (pendiente de la prueba con cámara frontal y de las mejoras del handoff ampliado) y
+  Película §11 (se revisa con el MP4 de 720p).
+
+### Resultados
+- **Regresión final §9 sobre `fccda24b`** (log `$S/hdr-regr-final4.log`): 418 · 403 superadas · 4 omitidas · 11 fallos.
+  - G-02 y P16: **base** (mismo error en `cd694e88`; falta comprobarlos en `master`).
+  - 9 de **pruebas sin adaptar**: `guide-navigation` ×5 y `premium-shell` ×4. Corregidas en `ec45639d` (14/14) y `98a6d3a1`
+    (5/5); ambas están en `6d087b66`.
+  - Publicado en el README de §9 y en un [comentario de #324](https://github.com/Juanmaes83/floorplan-3d/pull/324#issuecomment-7217539535).
+- **Regresión del conjunto sobre `6d087b66`** (log `$S/integ-regr.log`): **INTERRUMPIDA** por el reinicio en la prueba 33.
+  33 superadas, 0 fallos hasta ahí. Hay que relanzarla.
+- **G-02/P16 sobre `master`** (`$S/master-g02-p16.log`): **no llegó a ejecutarse**.
+- **Clip de 720p:** **no llegó a empezar** (0 fotogramas). La entrada y la receta para reproducirlo están versionadas en la
+  rama de la película.
+- **D3, verificado y grabado en la candidata:**
+  - falla o se abandona «Preparar imágenes»: prueba 5/5;
+  - vídeos en `docs/qa/integracion-324/video/`.
+
+### Discrepancias detectadas en la auditoría
+1. Dije que la Preview conjunta `7eee68a1` no incluía la corrección de D3. **La incluye** (`2f4a25d9` es antecesor de
+   `7eee68a1`). Lo único que falta en esa Preview es el ajuste de prueba de `premium-shell` (`98a6d3a1`), que no toca la
+   interfaz.
+2. Dije que la regresión del conjunto y el clip «corrían» o «estaban en cola». El reinicio los interrumpió; ver arriba.
+3. El comentario de #324 dice que la regresión del conjunto «ya está en marcha». Hay que publicar un comentario
+   corrigiéndolo al relanzar.
+4. Pendiente de verificar: CI de GitHub en #324 (no consultada). La Preview de `6d087b66` no está comprobada.
+
+### Cómo comprobar y retomar (por orden)
+```bash
+S=/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad; uptime; pgrep -fa "integ-regr|pel-clip|blender|node --test"
+```
+1. **Regresión del conjunto** (una sola tanda pesada a la vez). Script versionado:
+   `docs/qa/cabecera-proyectos/reanudacion/integ-regr.sh`. Corre los 64 archivos en `/home/user/integ` y después G-02 y P16
+   en `/home/user/base53` (`master`). Logs: `$S/integ-regr.log` y `$S/master-g02-p16.log`.
+   ```bash
+   cp /home/user/hdr/docs/qa/cabecera-proyectos/reanudacion/integ-regr.sh $S/ && chmod +x $S/integ-regr.sh && nohup $S/integ-regr.sh >/dev/null 2>&1 &
+   ```
+   Si faltan los worktrees: `git worktree add /home/user/integ claude/integracion-cabecera-entregar` y
+   `git worktree add --detach /home/user/base53 dacb5d39`. CHROME:
+   `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`.
+2. **Clasificar cada fallo** (base, candidata o entorno). Si se sospecha del entorno, reproducir con el código previo o la
+   base y la máquina en el mismo estado de carga, como se hizo con Gesture Labs. Publicar en un comentario de #324 y en
+   `docs/qa/integracion-324/README.md`. Añadir la Preview del SHA final y consultar la CI.
+3. **Clip de 720p (después de la regresión):** script `docs/qa/cabecera-proyectos/reanudacion/pel-clip.sh`, o la receta del
+   README de la película. Es reanudable. Log `$S/rodaje/pel-clip.log`; fotogramas en `$S/rodaje/pel-clip/frames/`. Se
+   publica con MP4, SHA y report.
+4. **Gesture Labs:** siguiente ensayo (girar la maqueta con la palma moviéndose despacio) y Preview con viñetas, según
+   `c532877a`.
+5. **Examen de cinco proyectos:** al final, sobre la candidata común.
+
 ## Aprobaciones del propietario (27/11, noche) y autorización de integración
 | Bloque | Rama · SHA aprobado | Preview revisada | Evidencia |
 |---|---|---|---|
