@@ -50,7 +50,11 @@
   el('p',tx('Incluye recorrido libre, plano de estancias para desplazarte y, si la preparaste, presentación guiada. Sin editor.','Includes free walking, a clickable room map, and the guided presentation if prepared. No editor.','自由漫游、平面导航、可选展示，不可编辑。'),body,'delivery3d-meta');
   const actions=el('div',undefined,body,'delivery3d-actions'),b=btn(tx('Revisar como cliente','Review as a client','作为客户预览'),actions);
   b.id='delivery3dPreview';b.dataset.emphasis='accent';b.disabled=!eligible();
-  const result=el('p',b.disabled?tx('Selecciona «Proyecto de ejemplo» para habilitar esta prueba.','Select the example project to enable the test.','请选择示例项目。'):'',body,'delivery3d-meta');
+  // V07 (#324): en un edificio de varias plantas el límite se dice aquí, junto a la acción, y se ofrece lo que sí funciona:
+  // P1 Presentación 3D (cambia de planta por vista; no es un recorrido por la escalera).
+  const nLv=app.levelContext?.levels>1?app.levelContext.levels:0;
+  const result=el('p',b.disabled?(nLv?tx(`Esta prueba privada recorre una sola planta, y este proyecto tiene ${nLv}. Para enseñar el edificio completo usa P1 Presentación 3D: muestra cada planta por separado (no recorre la escalera).`,`This private test walks a single level, and this project has ${nLv}. To show the whole building use P1 3D presentation: it shows each level separately (it does not walk the stairs).`,`此私人测试只能浏览单层，本项目有 ${nLv} 层。展示整栋建筑请用 P1 三维展示：逐层显示（不经过楼梯）。`):tx('Selecciona «Proyecto de ejemplo» para habilitar esta prueba.','Select the example project to enable the test.','请选择示例项目。')):'',body,'delivery3d-meta');
+  if(b.disabled&&nLv){const p1=btn(tx('Abrir P1 Presentación 3D','Open P1 3D presentation','打开 P1 三维展示'),actions);p1.id='delivery3dUseP1';p1.onclick=()=>{const r=document.querySelector('#professionalWorkspace [data-route="presentation"]');if(r)r.click();else window.FloorPlanPresentation?.open?.();};}
   result.id='delivery3dMessage';result.setAttribute('role','status');
   b.onclick=()=>{try{preview();result.textContent=tx('Vista previa abierta. No se ha publicado nada.','Preview opened. Nothing was published.','预览已打开，未发布。');}catch(e){result.textContent=e.message;}};
  }

@@ -10,7 +10,8 @@
  const app=window.FloorPlanApp;if(!app||!window.FloorPlanDossier||!window.FloorPlanReviewNotes)return;
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
- const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
+ // V02 (#324): el archivo abarca el edificio si el dossier abarca varias plantas; su nombre es el del edificio.
+ const name=()=>{const c=app.levelContext,v=c&&(typeof c.levels==='number'?c.levels:c.levels?.length||0)>1&&c.buildingName&&(window.FloorPlanBuildingUI?.presentationSources?.()?.levels?.length||0)>1?c.buildingName:app.project.name;return typeof nm==='function'?nm(v):v;};
  const revision=()=>FloorPlanGuide.revision(app.project);
  const CSP="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'none'";
  async function text(url){const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw Error(tx('No se pudo preparar el archivo. Vuelve a intentarlo.','The file could not be prepared. Try again.','无法准备文件，请重试。'));return r.text();}

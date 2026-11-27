@@ -51,3 +51,39 @@
 .dossier-ign-figure img{display:block;width:100%;height:auto;border:1px solid var(--d-rule)}
 .dossier-ign-figure figcaption{padding-top:6px;font-size:11px;color:var(--d-muted)}
 .dossier-ign-figure a,.dossier-location-link{color:var(--d-accent);text-decoration:underline}
+/* §8 D3 · panel «Preparado para» (solo en el diálogo; el documento impreso no lo contiene) */
+.dossier-client{margin:8px 16px;border:1px solid var(--line,#ddd);border-radius:10px;padding:8px 12px;background:var(--panel,#fff)}
+.dossier-client>summary{cursor:pointer;font-weight:600}
+.dossier-client .dc-body{display:grid;gap:10px;margin-top:10px}
+.dossier-client .dc-field{display:grid;gap:4px}.dossier-client .dc-field input[type=text],.dossier-client textarea{width:100%;box-sizing:border-box;font:inherit}
+.dossier-client .dc-flags,.dossier-client .dc-row{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.dossier-client .dc-contact{display:grid;gap:4px;border:0;padding:0;margin:0}
+.dossier-client .dc-draft{border-left:3px solid #2f6f6a;padding:8px 10px;background:rgba(47,111,106,.06);display:grid;gap:6px}
+.dossier-client .dc-draft-label,.dossier-client .dc-used,.dossier-client .dc-missing{font-size:.85em;opacity:.85;margin:0}
+.dossier-client .dc-asks{margin:0;padding-left:18px;font-size:.9em}
+.dossier-client .dc-internal label{color:#8a5a00}
+.dossier-cover-note{grid-column:1/-1;font-size:1.05em;line-height:1.5;margin:12px 0 0;white-space:pre-line}
+.dossier-client .dc-flags label,.dossier-client .dc-contact label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;width:auto!important;margin:0}
+.dossier-client input[type=checkbox]{width:auto!important;margin:0;flex:none}
+.dossier-client #dcAssist,.dossier-client .dc-row .btn{width:auto;justify-self:start}
+
+/* Revisión 27/11 · D3 en tres pasos: preparar (cliente, nota) → revisar el dossier → imprimir. Una acción principal por vista. */
+.dossier-dialog .dc-steps{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:4px 16px 0;padding:0}
+.dossier-dialog .dc-steps button{border:1px solid var(--line,#d9d6cf);background:#fff;border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;min-height:36px;cursor:pointer;color:var(--ink,#1f2326)}
+.dossier-dialog .dc-steps button[aria-current]{background:var(--perla-petrol,#184e52);border-color:var(--perla-petrol,#184e52);color:#fff;font-weight:600}
+.dossier-client{border:0!important;background:none!important;padding:0 4px!important}
+.dossier-dialog:not([data-dc-step=client]) [data-dc-part=client],.dossier-dialog:not([data-dc-step=client]) .dossier-client [data-dc-field]{display:none!important}
+.dossier-dialog:not([data-dc-step=note]) [data-dc-part=note]{display:none!important}
+.dossier-dialog:not([data-dc-step=review]) [data-dc-part=review],.dossier-dialog:not([data-dc-step=review]) .dossier-paper,.dossier-dialog:not([data-dc-step=review]) .dossier-site-options,.dossier-dialog:not([data-dc-step=review]) #dossierPrint{display:none!important}
+.dossier-dialog[data-dc-step=review] #dossierPrint{background:var(--perla-wine,#783B4B)!important;border-color:var(--perla-wine,#783B4B)!important;color:#fff!important;font-weight:600}
+.dossier-client .dc-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:6px}
+.dossier-client .dc-foot .btn.primary{background:var(--perla-wine,#783B4B);border-color:var(--perla-wine,#783B4B);color:#fff}
+.dossier-client .dc-hint,.dossier-client .dc-step-intro{font-size:.88em;color:#555;margin:0}
+.dossier-dialog[data-dc-step=review] .dossier-client .dc-foot{justify-content:flex-start}
+.dossier-dialog>#assistantAccess{position:static!important;margin:8px 16px 12px}
+.dossier-client .dc-row .btn{border:1px solid var(--line,#cfccc4)!important;background:#fff;min-height:40px;padding:6px 14px;border-radius:8px}
+.dossier-dialog:not([data-dc-client]) .dc-steps,.dossier-dialog:not([data-dc-client]) .dossier-client .dc-foot{display:none!important}
+.dossier-client .dc-prep-error{margin:6px 0 0;padding:6px 10px;border-radius:8px;background:#fdecea;color:#8a1f11;font-size:.9em}
+.dossier-cover-scope{margin-top:6px;font-size:.85em;color:#41504e}
+.dossier-client .dc-save-state{margin:0 0 8px;padding:8px 10px;border-radius:8px;background:#fff4e5;color:#6b3d00;border:1px solid #f0c27b}
+.dossier-client .dc-save-state p{margin:0 0 6px}

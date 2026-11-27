@@ -8,7 +8,9 @@
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const node=(tag,attrs,parent)=>{const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs||{}))n.setAttribute(k,v);parent?.append(n);return n;};
- const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
+ const local=v=>typeof nm==='function'?nm(v):v;
+ // V02 (#324): si el documento abarca varias plantas, el título es el del edificio, no el del proyecto de una planta.
+ const name=()=>{const c=app.levelContext,multi=c&&(typeof c.levels==='number'?c.levels:c.levels?.length||0)>1&&c.buildingName;return local(multi&&(window.FloorPlanBuildingUI?.presentationSources?.()?.levels?.length||0)>1?c.buildingName:app.project.name);};
  let urls=[];
  // Blob URLs of earlier sheet previews are released when the host renders again.
  function release(){for(const u of urls)URL.revokeObjectURL(u);urls=[];}
@@ -56,7 +58,7 @@
   const facts=el('p',undefined,copy,'project-context-facts');
   el('span',areaNumber(s),facts,'project-context-area');el('span',statusText(s)+(s.complete?'':tx(' · cómputo incompleto',' · incomplete total',' · 汇总不完整')),facts,'professional-status-chip');
   const meta=el('p',undefined,copy,'project-context-meta');
-  meta.textContent=[tx(`${s.roomsCounted} estancias en el cómputo`,`${s.roomsCounted} rooms in the total`,`${s.roomsCounted} 个计入房间`),s.roomsExcluded?tx(`${s.roomsExcluded} fuera`,`${s.roomsExcluded} excluded`,`${s.roomsExcluded} 个排除`):'',s.level?tx(`${s.level.name} (${s.level.index} de ${s.level.count})`,`${s.level.name} (${s.level.index} of ${s.level.count})`,`${s.level.name}（${s.level.index}/${s.level.count}）`):tx('Planta única','Single level','单层'),s.scale==='real'?tx('Escala confirmada','Scale confirmed','比例已确认'):tx('Medidas orientativas','Indicative dimensions','尺寸仅供参考')].filter(Boolean).join(' · ');
+  meta.textContent=[tx(`${s.roomsCounted} estancias en el cómputo`,`${s.roomsCounted} rooms in the total`,`${s.roomsCounted} 个计入房间`),s.roomsExcluded?tx(`${s.roomsExcluded} fuera`,`${s.roomsExcluded} excluded`,`${s.roomsExcluded} 个排除`):'',s.level?.all?tx(`${s.level.count} plantas: ${s.level.names.map(local).join(', ')}`,`${s.level.count} levels: ${s.level.names.map(local).join(', ')}`,`${s.level.count} 层：${s.level.names.map(local).join('、')}`):s.level?(s.level.index?tx(`${s.level.name} (${s.level.index} de ${s.level.count})`,`${s.level.name} (${s.level.index} of ${s.level.count})`,`${s.level.name}（${s.level.index}/${s.level.count}）`):s.level.name):tx('Planta única','Single level','单层'),s.scale==='real'?tx('Escala confirmada','Scale confirmed','比例已确认'):tx('Medidas orientativas','Indicative dimensions','尺寸仅供参考')].filter(Boolean).join(' · ');
   if(extra)extra(copy);
   return c;
  }

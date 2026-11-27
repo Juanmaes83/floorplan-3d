@@ -80,7 +80,7 @@ test('CAT-03 escritorio: modelo validado / volumen genérico / no colocable, pan
   // Save and reopen.
   await K.reopen(page);L=await links(page);assert.equal(Object.keys(L).length,4);assert.equal(L[r2.id].representation,'generic-volume');
   // Export and import in another browser context.
-  await page.locator('details.menu summary').first().click();const [ex]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);const exported=fs.readFileSync(await ex.path(),'utf8');
+  await page.locator('#perlaProjectMenu > summary').click();const [ex]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);const exported=fs.readFileSync(await ex.path(),'utf8');
   assert.equal(Object.keys(JSON.parse(exported).extensions[EXT].links).length,4);
   const other=await env.browser.newContext({viewport:{width:1440,height:900}}),p2=await other.newPage();await p2.route('https://cdn.jsdelivr.net/**',r=>r.abort());await p2.goto(env.base);await require('./editor-fixture.cjs')(p2);
   await p2.locator('#uploadIn').setInputFiles({name:'proyecto.json',mimeType:'application/json',buffer:Buffer.from(exported)});await p2.waitForFunction(id=>FloorPlanApp.project.objects.some(o=>o.id===id),r1.id,{timeout:60000});

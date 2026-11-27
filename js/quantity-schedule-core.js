@@ -33,7 +33,8 @@
   for(const r of s.rooms)rows.push([labels.rooms,r.name,r.floorM2,'m2',`${labels.perimeter} ${n(r.perimeterM)} m · ${labels.wallNet} ${n(r.wallNetM2)} m2${r.floorMaterial?' · '+r.floorMaterial:''}${r.counted?'':' · '+labels.excluded}`,labels.statusText(r.status)]);
   for(const f of s.floors)rows.push([labels.floors,f.name,f.areaM2,'m2',f.rooms.join(', '),labels.statusText(f.status)]);
   for(const w of s.walls)rows.push([labels.walls,labels.wallStatus(w.lifecycle),w.lengthM,'m',`${w.count} ${labels.segments} · ${labels.faceNet} ${n(w.faceNetM2)} m2`,labels.statusText(w.status)]);
-  for(const o of s.openings)rows.push([labels.openings,`${labels.kind(o.kind)} ${o.widthCm}×${o.heightCm} cm`,o.count,'ud','','']);
+  // V06 (#324): un hueco de paso (kind 'opening') no es una carpintería; va en su propio apartado si hay etiqueta.
+  for(const o of s.openings)rows.push([o.kind==='opening'&&labels.passages?labels.passages:labels.openings,`${labels.kind(o.kind)} ${o.widthCm}×${o.heightCm} cm`,o.count,'ud','','']);
   for(const f of s.furniture)rows.push([labels.furniture,f.name,f.count,'ud','','']);
   return '﻿'+rows.map(r=>r.map(cell).join(';')).join('\r\n')+'\r\n';
  }

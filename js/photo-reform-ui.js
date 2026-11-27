@@ -200,15 +200,49 @@
  closeBtn.onclick=()=>{reset();dlg.close();};
  dlg.addEventListener('cancel',reset);
  dlg.addEventListener('close',reset);
- function open(){reset();dlg.showModal();file.focus();}
+ // §10: un caso de Entregar → Imágenes abre el flujo con la intención (y el acabado) ya elegidos; la persona puede cambiarlos.
+ function open(opts){reset();dlg.showModal();if(opts?.intent&&C.INTENTS.some(i=>i.id===opts.intent)){intentSel.value=opts.intent;intentSel.onchange();if(opts.finish&&[...finishSel.options].some(o=>o.value===opts.finish)){finishSel.value=opts.finish;finishSel.onchange?.();}dlg.dataset.case=opts.case||'';}else delete dlg.dataset.case;file.focus();}
 
  // ── Entradas ────────────────────────────────────────────────────────────────────────────────────────────────────
  const entryButton=id=>{const b=el('button',{type:'button',class:'btn photo-reform-open',id},undefined,'Reformar desde fotografía');b.dataset.es='Reformar desde fotografía';b.dataset.en='Renovate from a photo';b.dataset.zh='从照片改造';b.textContent=L3(b.dataset.es,b.dataset.en,b.dataset.zh);b.onclick=open;return b;};
  // Menú «Archivo» del editor.
- const menu=document.querySelector('details.menu .menu-pop');
+ // §9 · Crea un proyecto desde una foto: va al menú de proyecto si existe (cabecera PERLA); si no, al menú de siempre.
+ const menu=document.querySelector('#perlaProjectMenu .perla-pm-more')||document.querySelector('details.menu .menu-pop');
  if(menu){const b=entryButton('photoReformMenu');b.addEventListener('click',()=>{b.closest('details').open=false;});menu.append(b);}
  // Tarjeta «Imágenes» de «Entregar» (se vuelve a pintar al cambiar de área: se añade si falta).
- const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#photoReformCard')){const b=entryButton('photoReformCard');const wrap=el('div',{class:'photo-reform-card-entry'});wrap.append(b);el('small',{},wrap,'Propuesta visual ilustrativa sobre una foto (simulación; sin envíos).');card.append(wrap);}};
- let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addToCard();});}).observe(document.body,{childList:true,subtree:true});addToCard();
+ // §10 · dos casos con ejemplo PROPIO (vistas reales del 3D de RUBIK, proyecto de ejemplo) y acceso al flujo real con la
+ // intención equivalente. El ejemplo no es una foto procesada: se dice. Con la foto de la persona, hoy las alternativas son
+ // una SIMULACIÓN local (proveedor real bloqueado, GOV-05/IMG-04).
+ const CASES=[
+  {id:'photoReformRealEstate',case:'inmobiliaria',intent:'light',img:['salon-original','salon-despejado'],
+   t:['Inmobiliaria · la estancia más luminosa y ordenada','Real estate · a brighter, tidier room','房产 · 更明亮整洁的房间'],
+   b:['Original · salón con muebles (3D de RUBIK)','Original · living room furnished (RUBIK 3D)','原始 · 有家具的客厅（RUBIK 三维）'],
+   a:['Alternativa ilustrativa · salón despejado (3D de RUBIK)','Illustrative alternative · living room cleared (RUBIK 3D)','示意方案 · 清空的客厅（RUBIK 三维）'],
+   how:['Con tu foto, RUBIK aplica «Más luz y orden»: aclara y ordena la imagen. Hoy no retira muebles de una fotografía.','With your photo, RUBIK applies «More light and order»: it brightens and tidies the image. It does not remove furniture from a photo today.','使用您的照片时，RUBIK 应用「更多光线与整洁」：提亮并整理画面。目前不会从照片中移除家具。'],
+   rev:['Qué revisar con el cliente: luz y sensación de amplitud (no medidas ni coste).','Review with the client: light and sense of space (not measurements or cost).','与客户核对：光线与空间感（不含尺寸或费用）。']},
+  {id:'photoReformInterior',case:'interiorismo',intent:'floor',finish:'light-oak',img:['salon-original','salon-suelo'],
+   t:['Interiorismo y reformas · cambio de acabado','Interior design and renovation · finish change','室内设计与翻新 · 更换饰面'],
+   b:['Original · suelo porcelánico 80×80 (3D de RUBIK)','Original · 80×80 porcelain floor (RUBIK 3D)','原始 · 80×80 瓷砖地面（RUBIK 三维）'],
+   a:['Alternativa ilustrativa · suelo de roble (3D de RUBIK)','Illustrative alternative · oak floor (RUBIK 3D)','示意方案 · 橡木地面（RUBIK 三维）'],
+   how:['Con tu foto: «Cambiar el suelo · Roble claro» (puedes elegir otro suelo o pintar las paredes).','With your photo: «Change the floor · Light oak» (you can pick another floor or paint the walls).','使用您的照片：「更换地面 · 浅色橡木」（也可选择其他地面或粉刷墙面）。'],
+   rev:['Qué revisar con el cliente: tono y continuidad del acabado (no medidas ni coste).','Review with the client: tone and continuity of the finish (not measurements or cost).','与客户核对：饰面的色调与连续性（不含尺寸或费用）。']}];
+ const T3=a=>L3(a[0],a[1],a[2]);
+ const caseBlock=c=>{const w=el('section',{class:'photo-reform-case','data-case':c.case});el('h4',{},w,T3(c.t));
+  const fig=el('div',{class:'photo-reform-pair'},w);
+  for(const [k,cap,cls] of [[c.img[0],c.b,'is-before'],[c.img[1],c.a,'is-after']]){const f=el('figure',{class:cls,'data-img':k,'data-alt':T3(cap)},fig);el('figcaption',{},f,T3(cap));}
+  el('p',{class:'photo-reform-badge'},w,L3('Ejemplo hecho con el 3D de RUBIK, no con una foto procesada.','Example made with the RUBIK 3D view, not a processed photo.','示例由 RUBIK 三维视图制作，并非处理过的照片。'));
+  el('p',{},w,T3(c.how));el('p',{class:'photo-reform-review'},w,T3(c.rev));
+  el('button',{type:'button',class:'btn photo-reform-case-go',id:c.id,'data-case-go':c.case},w,L3('Probar con tu foto','Try it with your photo','用您的照片试试'));
+  el('small',{},w,L3('Con tu foto, hoy las alternativas son una SIMULACIÓN rotulada (no generada por IA) y no se envía nada.','With your photo, alternatives are a labelled SIMULATION today (not AI-generated) and nothing is sent.','使用您的照片时，目前的方案为带标注的模拟（非 AI 生成），不会发送任何内容。'));return w;};
+ // Delegación: el botón funciona en la tarjeta y en su copia dentro de la ficha de Entregar.
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-case-go]');if(!b)return;const c=CASES.find(x=>x.case===b.dataset.caseGo);if(c)open({intent:c.intent,finish:c.finish,case:c.case});});
+ const addToCard=()=>{const card=document.querySelector('.professional-card[data-module="images"]');if(card&&!card.querySelector('#photoReformCard')){const b=entryButton('photoReformCard');const wrap=el('div',{class:'photo-reform-card-entry'});
+  const d=el('details',{class:'photo-reform-showcase',id:'photoReformShowcase','data-panel-extra':''},wrap);el('summary',{},d,L3('Reformar desde fotografía · dos casos con ejemplo','Renovate from a photo · two cases with examples','从照片改造 · 两个示例'));
+  for(const c of CASES)d.append(caseBlock(c));wrap.append(b);el('small',{},wrap,L3('Propuesta visual ilustrativa sobre una foto (simulación; sin envíos).','Illustrative visual proposal on a photo (simulation; nothing sent).','基于照片的示意视觉方案（模拟；不发送）。'));card.append(wrap);}};
+ // La tarjeta guarda solo la referencia (data-img): sus imágenes de ejemplo se crean en la ficha abierta, nunca en la tarjeta
+ // (Project-First A1: «Imágenes» no muestra miniaturas que parezcan vistas preparadas antes de pulsar).
+ const hydrate=()=>{for(const f of document.querySelectorAll('.photo-reform-pair figure[data-img]')){if(f.closest('.professional-card')||f.querySelector('img'))continue;
+  const i=document.createElement('img');Object.assign(i,{src:'assets/photo-reform/'+f.dataset.img+'.webp',alt:f.dataset.alt||'',loading:'eager',width:640,height:360});f.prepend(i);}};
+ let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;addToCard();hydrate();});}).observe(document.body,{childList:true,subtree:true});addToCard();hydrate();
  window.RubikPhotoReform={open,get state(){return runState&&structuredClone({status:runState.status,items:runState.items.map(i=>({index:i.index,status:i.status,kind:i.result?.kind||null}))});}};
 })();

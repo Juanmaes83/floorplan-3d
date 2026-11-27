@@ -290,6 +290,7 @@ async function openEditor(context){
  return page;
 }
 const downloadJson=async(page,selector)=>{
+ if(selector==='#pmDownloadJson')await page.locator('#perlaProjectMenu > summary').click();
  const [,download]=await Promise.all([page.locator(selector).click(),page.waitForEvent('download')]);
  return JSON.parse(await fs.readFile(await download.path(),'utf8'));
 };
@@ -321,7 +322,7 @@ test('editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-t
   });
   assert.equal(await a.locator('#persistenceStatus').getAttribute('data-state'),'pending');
   phase('download project JSON with the transaction blocked');
-  const json=await downloadJson(a,'#exportJsonQuick');
+  const json=await downloadJson(a,'#pmDownloadJson');
   assert.equal(json.name,'Revisión A');
   assert.equal((await seed.evaluate(()=>authority())).revision,1,'the download does not confirm the blocked transaction');
   phase('release the Web Lock and confirm revision 2');

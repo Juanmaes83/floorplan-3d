@@ -38,8 +38,9 @@
   const row=(k,val,cls)=>{const w=el('div',undefined,box,cls);el('dt',k,w);el('dd',val,w);return w;};
   row(tx('Base imponible','Net amount','税前'),s.net.complete?eur(s.net.amount):eur(s.net.amount)+' · '+tx('parcial','partial','部分'),s.net.complete?'':'econ-partial');
   row(taxText(s.tax),s.tax.complete?eur(s.tax.amount):tx('No definido','Undefined','未定义'),s.tax.complete?'':'econ-partial');
-  if(s.gross.final)row(tx('Total con IVA','Total incl. VAT','含税总额'),eur(s.gross.amount),'econ-gross');
-  else row(tx('Total con IVA','Total incl. VAT','含税总额'),tx('No definitivo','Not final','非最终'),'econ-gross econ-partial');
+  const sc=window.FloorPlanBudgetScope?.(),gl=tx('Total con IVA','Total incl. VAT','含税总额')+(sc?' · '+sc.short:'');
+  if(s.gross.final)row(gl,eur(s.gross.amount),'econ-gross');
+  else row(gl,tx('No definitivo','Not final','非最终'),'econ-gross econ-partial');
   return box;}
  function counts(v,parent){const s=v.summary;if(s.empty)return;const p=el('p',undefined,parent,'econ-counts');
   p.textContent=[tx(`${s.chapters} capítulo(s)`,`${s.chapters} chapter(s)`,`${s.chapters} 章`),tx(`${s.items} partida(s)`,`${s.items} item(s)`,`${s.items} 项`),
@@ -75,6 +76,7 @@
   const v=E.view(report,{variant}),pro=variant==='professional';
   const head=el('header',undefined,paper,'econ-head');el('small',pro?tx('Dossier económico · Profesional','Economic dossier · Professional','经济资料 · 专业'):tx('Dossier económico · Cliente','Economic dossier · Client','经济资料 · 客户'),head,'econ-kicker');
   el('h1',local(app.project.name),head);el('p',local(v.title)||'',head,'econ-sub');
+  {const sc=window.FloorPlanBudgetScope?.();if(sc)el('p',sc.text,head,'econ-scope');} // V01: planta y alcance, en pantalla y al imprimir
   // H02: el snapshot de marca es {profile,title,intro,takenAt}; el nombre y el responsable están en profile (antes se leía brand.name, que no existe).
   const brand=window.FloorPlanBrandUI?.snapshot?.(),bp=brand?.profile||null;if(bp?.name)el('p',bp.name+(bp.person?' · '+bp.person:''),head,'econ-brand');
   el('p',tx('Documento generado el ','Document generated on ','文件生成于 ')+new Date().toLocaleDateString(loc(),{day:'numeric',month:'long',year:'numeric'}),head,'econ-date');

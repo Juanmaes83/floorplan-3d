@@ -646,7 +646,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
           </select>
           <output id="shot3dDims" aria-live="polite"></output>
         </div>
-        <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
+        <button class="btn" id="exportJson" data-en="Download project JSON" data-es="Descargar proyecto JSON">下载项目 JSON</button>
         <button class="btn" type="button" id="exportDxf" data-en="Export active plan DXF" data-es="Exportar planta activa en DXF">导出当前楼层 DXF</button>
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
@@ -823,7 +823,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/project-variants.js"></script>
 <!-- UX-07 · el editor solo necesita el adaptador para construir la dirección del comparador (comparar/); el resto vive allí -->
 <script src="js/revision-compare-core.js"></script>
-<script src="js/variants-compare-adapter.js"></script>
+<script src="js/variants-compare-adapter.js"></script><script src="js/story-layers-core.js"></script><script src="js/story-proposal-core.js"></script><script src="js/story-assist-core.js"></script><script src="js/story-layers-ui.js" defer></script>
 <!-- R02-A · techos y elementos altos (EXPERIMENTAL, integración pendiente de GO): núcleo #193/#203, contrato candidato x-r02a-ceiling, puente #217 y su panel -->
 <script src="js/r02a-donor-extracts.js"></script>
 <script src="js/r02a-ceiling-core.js"></script>
@@ -2922,6 +2922,31 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     const href=g=>'comparar/?'+FloorPlanVariantsCompare.handoff({beforeId:root.id,afterId:g.id})+'&anchor='+encodeURIComponent(library.activeId());
     const ordered=active&&active.variantOf?[active,...variants.filter(g=>g!==active)]:variants;
     return {state:'ready',original:{id:root.id,name:root.name},activeIsVariant:!!active?.variantOf,pairs:ordered.map(g=>({id:g.id,name:g.name,href:href(g)}))};
+  },
+  /* StoryLayersV1 · los mismos pares que compareTargets, con los proyectos de cada entrada (solo lectura, clonados por
+     library.group). La historia se construye sobre ellos en js/story-layers-ui.js. */
+  storyTargets(){
+    const t=this.compareTargets();if(t.state!=='ready')return {state:t.state,pairs:[]};
+    let group;try{group=library.group(library.activeId());}catch{return {state:'not-eligible',pairs:[]};}
+    const root=group[0],byId=new Map(group.map(g=>[g.id,g]));
+    return {state:'ready',pairs:t.pairs.map(p=>{const g=byId.get(p.id);return {id:p.id,before:{id:root.id,name:root.name,project:root.project},after:{id:g.id,name:g.name,project:g.project}};})};
+  },
+  /* §7.2 · del P10 a Diseñar y vuelta: crear la variante del proyecto abierto (el mismo paso que «Proyectos → Crear variante
+     del proyecto abierto», con el original conservado) y abrir una entrada concreta de la biblioteca. Nada más se escribe. */
+  // §9 · Copia independiente del proyecto activo con la duplicación existente de la biblioteca (id nuevo; el original no cambia).
+  async duplicateActive(userEvent){
+    if(!library)throw Error(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'));
+    const e=library.list().find(x=>x.id===library.activeId()),name=L3(`${e?.name||project.name} · copia`,`${e?.name||project.name} · copy`,`${e?.name||project.name} · 副本`);
+    switchProject(library.duplicate(library.activeId(),name));await persistence.requireSaved(userEvent);
+    const c=library.list().find(x=>x.id===library.activeId());toast(L3(`Copia creada: «${nm(c.name)}». El original no cambia.`,`Copy created: «${nm(c.name)}». The original is unchanged.`,`已创建副本。原项目不变。`),5000);return {id:c.id,name:c.name};
+  },
+  async createVariant(userEvent){
+    if(!library)throw Error(L3('Colección local no disponible; exporta tu proyecto.','Local collection not available; export your project.','本地项目库不可用；请导出你的项目。'));
+    switchProject(library.variant(project));await persistence.requireSaved(userEvent);
+    const e=library.list().find(x=>x.id===library.activeId());return {id:e.id,name:e.name,variantOf:e.variantOf};
+  },
+  openEntry(id){if(!library)return false;if(library.activeId()!==id)switchProject(library.open(id));return library.activeId()===id;},
+  entryInfo(id){const e=library?.list().find(x=>x.id===(id||library.activeId()));return e?{id:e.id,name:e.name,variantOf:e.variantOf||null}:null;
   },get viewMode(){return viewMode;},
   // A failed identity migration leaves old shared project ids in storage. Economic writers must fail closed.
   get identityMigration(){return library?.migration?.()||null;},
@@ -6172,7 +6197,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 }});
 </script>
 <link rel="stylesheet" href="css/professional-workspace.css">
-<link rel="stylesheet" href="css/perla-entregar.css">
+<link rel="stylesheet" href="css/perla-entregar.css"><link rel="stylesheet" href="css/story-layers.css">
 <link rel="stylesheet" href="css/perla-semaforo.css">
 <link rel="stylesheet" href="css/perla-presupuestar.css">
 <link rel="stylesheet" href="css/project-first.css">
@@ -6185,7 +6210,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/ai-render-ui.js"></script>
 <script src="js/site-visual-core.js"></script>
 <script src="js/site-preview-ui.js"></script>
-<script src="js/project-dossier-ui.js"></script>
+<script src="js/dossier-client-core.js"></script><script src="js/dossier-client-ui.js"></script><script src="js/project-dossier-ui.js"></script>
 <script src="js/client-share-ui.js"></script>
 <!-- SIMULATOR B · recorrido cinematográfico por tiempo (guion, contrato de suavidad, exportación fotograma a fotograma con el muxer de RUBIK) -->
 <script src="js/shot-timeline-core.js"></script><script src="js/film-plan-core.js"></script><script src="js/motion-quality-core.js"></script><script src="js/construction-mp4-muxer.js"></script><script src="js/plan-validation-core.js"></script><script src="js/plan-sun-drone-core.js"></script><script src="js/plan-analysis-ui.js"></script><script src="js/presentation-film.js"></script>
@@ -6202,6 +6227,7 @@ Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
 <script src="js/budget-core.js"></script>
 <script src="js/budget-presentation.js"></script>
 <script src="js/budget-draft-core.js"></script>
+<script src="js/revision-budget-core.js"></script>
 <script src="js/fiebdc3-codec.js"></script>
 <script src="js/cost-provider.js"></script>
 <script src="js/budget-cost-bridge.js"></script>

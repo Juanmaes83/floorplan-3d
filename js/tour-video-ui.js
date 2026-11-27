@@ -158,7 +158,7 @@
   try{const r=cine?await Film.exportar({signal:controller.signal,onProgress:avance,drone}):await Recorder.record({holdMs:HOLD_MS,signal:controller.signal});
    if(leaving)return;
    if(!r.blob.size)throw Error(tx('El navegador no generó ningún fotograma. Vuelve a intentarlo.','The browser produced no frames. Try again.','浏览器未生成任何帧，请重试。'));
-   clear();result=r;url=URL.createObjectURL(r.blob);controller=null;draw('done');dialog.querySelector('#tourVideoDownload')?.focus();}
+   clear();result=Object.assign(r,{entryId:app.entryId,revision:window.FloorPlanGuide?.revision?.(app.project)??null})/* §8.2: el vídeo sabe de qué entrada y revisión es */;url=URL.createObjectURL(r.blob);controller=null;draw('done');dialog.querySelector('#tourVideoDownload')?.focus();}
   catch(error){const aborted=error?.name==='AbortError';controller=null;if(!leaving){draw(result?'done':'intro',aborted?tx('Grabación cancelada. No se ha guardado nada.','Recording cancelled. Nothing was kept.','录制已取消，未保留任何内容。'):error.message);dialog.querySelector('#tourVideoGo')?.focus();}}
   finally{controller=null;sync();}
  }

@@ -27,7 +27,8 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
  S.check('N.1','La portada ofrece un punto de partida claro (subir plano, crear o probar el ejemplo)',await page.getByText('Probar el ejemplo').first().isVisible());
  await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(1200);
  await rotulo(page,'Abro el ejemplo. La app me sugiere crear mi copia para guardar cambios.');
- const copy=page.locator('#guideCopyExample');S.check('N.2','El ejemplo invita a crear una copia propia',await copy.isVisible());await copy.click();await page.waitForTimeout(1200);
+ // §9 Cabecera: «Crear copia» del ejemplo vive en el menú Proyecto ▾; mostrar() lo abre como una persona y devuelve la entrada visible.
+ const copy=await require('./helpers-perla-editor.cjs').mostrar(page,'#guideCopyExample');S.check('N.2','El ejemplo invita a crear una copia propia',await copy.isVisible());await copy.click();await page.waitForTimeout(1200);
  // Presupuestar
  await rotulo(page,'Voy a «Presupuestar», donde empieza la parte de obra.');await area(page,'budget');await page.waitForSelector('#obraJourney');await page.waitForTimeout(500);
  let j=await journey(page);await shot(page,'v5-02-recorrido-obra',{escenario:'Recorrido de obra',observado:j?.sum});
@@ -127,7 +128,7 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
 
 test('V5 · el recorrido de obra también guía en el móvil (390×844)',{timeout:300000},()=>run('V5-movil','Recorrido de obra en móvil',async S=>{
  const s=await boot({state:{},viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true}),{page,log}=s;
- try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await page.locator('#guideCopyExample').click().catch(()=>{});await page.waitForTimeout(800);
+ try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await (await require('./helpers-perla-editor.cjs').mostrar(page,'#guideCopyExample')).click().catch(()=>{});await page.waitForTimeout(800);
   await area(page,'budget');await page.waitForSelector('#obraJourney');await page.locator('#obraJourney').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
   const m=await page.evaluate(()=>{const j=document.getElementById('obraJourney'),r=j.getBoundingClientRect();return {w:Math.round(r.width),overflow:j.scrollWidth>j.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,
    btns:[...j.querySelectorAll('button')].map(b=>Math.round(b.getBoundingClientRect().height))};});

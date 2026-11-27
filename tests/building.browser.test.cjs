@@ -128,7 +128,7 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  assert.equal(digest(await building()),digest(beforeReload),'reload restores the building byte-identical');assert.equal((await ctx(page))?.levels,2);
 
  // 7. Export: whole building JSON (menu) and ZIP; level export as a valid 1.x with a warning.
- await page.locator('details.menu summary').click();const json=await download(page,()=>page.locator('#exportJson').click());
+ await page.locator('#perlaProjectMenu > summary').click();const json=await download(page,()=>page.locator('#pmDownloadJson').click());
  const exported=B.prepare(json.bytes.toString('utf8'));assert.equal(digest(exported),digest(beforeReload));
  await openLevels(page,mobile);const zip=await download(page,()=>press(page,'#buildingExportZip',mobile));
  const entries=await P.unzip(zip.bytes.buffer.slice(zip.bytes.byteOffset,zip.bytes.byteOffset+zip.bytes.length),{check:B.packagePath,required:'building.json',maxEntries:B.MAX_ENTRIES,jsonNames:['building.json','manifest.json']});

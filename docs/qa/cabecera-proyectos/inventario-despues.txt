@@ -1,0 +1,133 @@
+# === 1440
+# R1|V|y=9|BUTTON\#welcomeBtn|Ir a Inicio
+# R1|V|y=10|BUTTON\#projectsBtn|Proyecto activo: Proyecto de ejemplo. Abrir la bib
+# R1|V|y=10|SUMMARY\#|Acciones del proyecto
+# R1|V|y=55|BUTTON\#pmOpenOther|Abrir otro proyecto…. Biblioteca de este navegador
+# R1|V|y=131|BUTTON\#pmUpload|Subir plano o proyecto…. Imagen, PDF o proyecto: c
+# R1|V|y=206|BUTTON\#pmCopy|Crear copia. Copia independiente del ejemplo para 
+# R1|V|y=264|BUTTON\#pmVariant|Crear variante. Vinculada al original para compara
+# R1|V|y=339|BUTTON\#pmDownloadJson|Descargar proyecto JSON. Archivo editable a tu equ
+# R1|V|y=408|BUTTON\#importJson|Importar proyecto JSON
+# R1|V|y=440|BUTTON\#newProjectBtn|Nuevo proyecto
+# R1|V|y=440|BUTTON\#joinRoomPlan|Unir escaneo RoomPlan…
+# R1|V|y=8|BUTTON\#workArea-design|Diseñar
+# R1|V|y=8|BUTTON\#workArea-analyze|Analizar
+# R1|V|y=8|BUTTON\#workArea-budget|Presupuestar
+# R1|V|y=8|BUTTON\#workArea-deliver|Entregar
+# R1|V|y=10|BUTTON\#actionSearchBtn|Buscar una acción
+# R1|V|y=8|BUTTON\#workArea-studio|Mi estudio
+# R1|V|y=10|BUTTON\#perlaHelp|Ayuda y atajos
+# R1|V|y=10|BUTTON\#langBtn|Idioma: español. Cambiar a inglés
+# R1|V|y=10|SUMMARY\#|Más opciones
+# R1|V|y=97|BUTTON\#fullscreen|⛶ Pantalla completa
+# R1|V|y=55|BUTTON\#perlaLegal|Legal y uso
+# R2|V|y=65|SUMMARY\#|Archivo
+# R2|V|y=116|BUTTON\#territoryOpen|Contexto territorial
+# R2|V|y=158|BUTTON\#solarOpen|Orientación y solar
+# R2|V|y=200|BUTTON\#exportPng|Exportar imagen
+# R2|V|y=242|BUTTON\#openSheet|Abrir lámina
+# R2|V|y=284|BUTTON\#reviewNotesBtn|Observaciones del cliente…
+# R2|V|y=326|BUTTON\#openSurfaceSheet|Ficha de superficies
+# R2|V|y=368|BUTTON\#brandManage|Tu marca profesional…
+# R2|V|y=410|BUTTON\#exportJson|Exportar plano JSON
+# R2|V|y=452|BUTTON\#exportDxf|Exportar planta activa en DXF
+# R2|V|y=554|BUTTON\#reset|Restablecer diseño inicial
+# R2|V|y=596|BUTTON\#photoReformMenu|Reformar desde fotografía
+# R2|V|y=69|BUTTON\#|Plano 2D
+# R2|V|y=69|BUTTON\#|Escena 3D
+# R2|V|y=71|BUTTON\#undo|Deshacer
+# R2|V|y=71|BUTTON\#redo|Rehacer
+# R2|V|y=73|BUTTON\#|Prepara tu proyecto: hecho
+# R2|V|y=73|BUTTON\#|Crea o revisa las estancias: hecho
+# R2|V|y=73|BUTTON\#|Revisa la distribución en 3D: empezado, sin termin
+# R2|V|y=65|BUTTON\#perlaTasks|Tareas del proyecto
+# R2|V|y=64|BUTTON\#presentationBtn|Presentar vivienda
+# R2|V|y=63|BUTTON\#perlaPrimary|Revisar en 3D (paso)
+# MENUS [
+#  {
+#   "sum": "",
+#   "items": [
+#    "BUTTON\#pmOpenOther:Abrir otro proyecto…Biblioteca de este n",
+#    "BUTTON\#pmUpload:Subir plano o proyecto…Imagen, PDF o pro",
+#    "BUTTON\#pmCopy:Crear copiaCopia independiente del ejemp",
+#    "BUTTON\#pmVariant:Crear varianteVinculada al original para",
+#    "BUTTON\#pmDownloadJson:Descargar proyecto JSONArchivo editable ",
+#    "BUTTON\#importJson:Importar proyecto JSON",
+#    "BUTTON\#newProjectBtn:Nuevo proyecto",
+#    "BUTTON\#joinRoomPlan:Unir escaneo RoomPlan…",
+#    "BUTTON\#exportJsonQuick:Guardar proyecto JSON",
+#    "BUTTON\#guideCopyExample:Crear copia",
+#    "BUTTON\#uploadPlanBtn:Subir plano",
+#    "BUTTON\#roomPlanJoinQuick:Unir escaneo",
+#    "BUTTON\#importImage:Subir plano o proyecto"
+#   ]
+#  },
+#  {
+#   "sum": "Archivo",
+#   "items": [
+#    "BUTTON\#territoryOpen:Contexto territorial",
+#    "BUTTON\#solarOpen:Orientación y solar",
+#    "BUTTON\#exportPng:Exportar imagen",
+#    "BUTTON\#openSheet:Abrir lámina",
+#    "BUTTON\#reviewNotesBtn:Observaciones del cliente…",
+#    "BUTTON\#openSurfaceSheet:Ficha de superficies",
+#    "BUTTON\#brandManage:Tu marca profesional…",
+#    "LABEL\#:Tamaño",
+#    "LABEL\#:Proporción",
+#    "BUTTON\#exportJson:Exportar plano JSON",
+#    "BUTTON\#exportDxf:Exportar planta activa en DXF",
+#    "BUTTON\#clearAll:Vaciar distribución",
+#    "BUTTON\#reset:Restablecer diseño inicial",
+#    "BUTTON\#photoReformMenu:Reformar desde fotografía"
+#   ]
+#  }
+# ]
+# Subtest: inv 1440
+# === 390
+# R1|V|y=4|BUTTON\#welcomeBtn|Ir a Inicio
+# R1|V|y=6|BUTTON\#projectsBtn|Proyecto activo: Proyecto de ejemplo. Abrir la bib
+# R1|V|y=6|SUMMARY\#|Acciones del proyecto
+# R1|V|y=101|BUTTON\#pmOpenOther|Abrir otro proyecto…. Biblioteca de este navegador
+# R1|V|y=143|BUTTON\#pmUpload|Subir plano o proyecto…. Imagen, PDF o proyecto: c
+# R1|V|y=185|BUTTON\#pmCopy|Crear copia. Copia independiente del ejemplo para 
+# R1|V|y=227|BUTTON\#pmVariant|Crear variante. Vinculada al original para compara
+# R1|V|y=269|BUTTON\#pmDownloadJson|Descargar proyecto JSON. Archivo editable a tu equ
+# R1|V|y=322|BUTTON\#importJson|Importar proyecto JSON
+# R1|V|y=390|BUTTON\#newProjectBtn|Nuevo proyecto
+# R1|V|y=440|BUTTON\#joinRoomPlan|Unir escaneo RoomPlan…
+# R1|V|y=50|BUTTON\#workArea-design|Diseñar
+# R1|V|y=50|BUTTON\#workArea-analyze|Analizar
+# R1|V|y=50|BUTTON\#workArea-budget|Presupuestar
+# R1|V|y=50|BUTTON\#workArea-deliver|Entregar
+# R1|V|y=6|BUTTON\#actionSearchBtn|Buscar una acción
+# R1|V|y=4|BUTTON\#workArea-studio|Mi estudio
+# R1|V|y=6|BUTTON\#langBtn|Idioma: español. Cambiar a inglés
+# R1|V|y=6|SUMMARY\#|Más opciones
+# R1|V|y=-600|BUTTON\#fullscreen|⛶ Pantalla completa
+# R1|V|y=-254|BUTTON\#perlaLegal|Legal y uso
+# R2|V|y=106|SUMMARY\#|Archivo
+# R2|V|y=-643|BUTTON\#territoryOpen|Contexto territorial
+# R2|V|y=-601|BUTTON\#solarOpen|Orientación y solar
+# R2|V|y=-559|BUTTON\#exportPng|Exportar imagen
+# R2|V|y=-517|BUTTON\#openSheet|Abrir lámina
+# R2|V|y=-475|BUTTON\#reviewNotesBtn|Observaciones del cliente…
+# R2|V|y=-433|BUTTON\#openSurfaceSheet|Ficha de superficies
+# R2|V|y=-391|BUTTON\#brandManage|Tu marca profesional…
+# R2|V|y=-349|BUTTON\#exportJson|Exportar plano JSON
+# R2|V|y=-307|BUTTON\#exportDxf|Exportar planta activa en DXF
+# R2|V|y=366|BUTTON\#reset|Restablecer diseño inicial
+# R2|V|y=408|BUTTON\#photoReformMenu|Reformar desde fotografía
+# R2|V|y=105|BUTTON\#|Plano 2D
+# R2|V|y=105|BUTTON\#|Escena 3D
+# R2|V|y=106|BUTTON\#perlaTasks|Tareas del proyecto
+# R2|V|y=105|BUTTON\#presentationBtn|Presentar vivienda
+# R2|V|y=155|BUTTON\#perlaPrimary|Revisar en 3D (paso)
+# Subtest: inv 390
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5233.976454

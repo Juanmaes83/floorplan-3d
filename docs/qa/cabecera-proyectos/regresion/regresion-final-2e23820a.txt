@@ -1,0 +1,67 @@
+# Regresión final §9 · código 2e23820a (44 archivos, Chromium local)
+# tests 401
+# pass 395
+# fail 2
+# skipped 4
+
+## Fallos en la rama (2e23820a)
+not ok 89 - G-02 downloads only the active building level without changing the editor or saved project
+  ---
+  duration_ms: 2782.482857
+  type: 'test'
+  location: '/home/user/hdr/tests/g02-dxf.browser.test.cjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(file.name.endsWith(level.name+'.dxf'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+not ok 266 - R2 P16 long HTML-like room name stays text and controls fit 1440x900
+  ---
+  duration_ms: 24262.607462
+  type: 'test'
+  location: '/home/user/hdr/tests/presentation.browser.test.cjs:269:118'
+  failureType: 'testCodeFailure'
+  error: 'selected stop remains visible within card {"viewport":{"width":1440,"height":900},"card":{"x":1108,"y":62,"width":320,"height":820,"top":62,"right":1428,"bottom":882,"left":1108},"close":{"x":1125,"y":107,"width":108.65625,"height":44,"top":107,"right":1233.65625,"bottom":151,"left":1125},"stop":{"x":1125,"y":824,"width":286,"height":70.5,"top":824,"right":1411,"bottom":894.5,"left":1125},"stopContentFits":true,"overflow":false}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+
+## Los mismos fallos en la base cd694e88 (contraste)
+not ok 51 - G-02 downloads only the active building level without changing the editor or saved project
+  ---
+  duration_ms: 2604.414721
+  type: 'test'
+  location: '/home/user/story/tests/g02-dxf.browser.test.cjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(file.name.endsWith(level.name+'.dxf'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+not ok 194 - R2 P16 long HTML-like room name stays text and controls fit 1440x900
+  ---
+  duration_ms: 18195.987036
+  type: 'test'
+  location: '/home/user/story/tests/presentation.browser.test.cjs:269:118'
+  failureType: 'testCodeFailure'
+  error: 'selected stop remains visible within card {"viewport":{"width":1440,"height":900},"card":{"x":1108,"y":62,"width":320,"height":820,"top":62,"right":1428,"bottom":882,"left":1108},"close":{"x":1125,"y":107,"width":108.65625,"height":44,"top":107,"right":1233.65625,"bottom":151,"left":1125},"stop":{"x":1125,"y":824,"width":286,"height":70.5,"top":824,"right":1411,"bottom":894.5,"left":1125},"stopContentFits":true,"overflow":false}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-

@@ -1,0 +1,91 @@
+TAP version 13
+# Subtest: E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; verify distingue íntegro de vigente; cero escrituras
+ok 1 - E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; verify distingue íntegro de vigente; cero escrituras
+# Subtest: E2.5 · orden de cambio: motivo obligatorio; con presupuestos completos lleva delta; incoherentes no; sin plazo; sin firma
+ok 2 - E2.5 · orden de cambio: motivo obligatorio; con presupuestos completos lleva delta; incoherentes no; sin plazo; sin firma
+# Subtest: E2.4 · escritorio: contexto visible y sin desplazamiento horizontal
+ok 3 - E2.4 · escritorio: contexto visible y sin desplazamiento horizontal
+# Subtest: E2.4 · tableta: contexto visible y sin desplazamiento horizontal
+ok 4 - E2.4 · tableta: contexto visible y sin desplazamiento horizontal
+# Subtest: E2.4 · movil: contexto visible y sin desplazamiento horizontal
+ok 5 - E2.4 · movil: contexto visible y sin desplazamiento horizontal
+# Subtest: E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el comparador existente con el mismo handoff
+ok 6 - E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el comparador existente con el mismo handoff
+# Subtest: E2 · asistente presente en toda la plataforma: acceso dentro del diálogo de presupuesto y panel encima, sin contaminar el diálogo
+ok 7 - E2 · asistente presente en toda la plataforma: acceso dentro del diálogo de presupuesto y panel encima, sin contaminar el diálogo
+# Subtest: E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»
+ok 8 - E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»
+# Subtest: E2 · asistente 390×844: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 9 - E2 · asistente 390×844: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+# Subtest: E2 · asistente 844×390: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 10 - E2 · asistente 844×390: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+# Subtest: E2 · asistente 1440×900: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 11 - E2 · asistente 1440×900: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+# Subtest: A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente
+ok 12 - A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente
+# Subtest: A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta
+ok 13 - A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta
+# Subtest: Marca · los borradores del comparador no llevan la marca: cambiarla no los desfasa ni altera su contenido
+ok 14 - Marca · los borradores del comparador no llevan la marca: cambiarla no los desfasa ni altera su contenido
+# Subtest: sin chino visible en ES: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+ok 15 - sin chino visible en ES: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+# Subtest: sin chino visible en EN: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+ok 16 - sin chino visible en EN: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+# Subtest: E3: ten previews decode and navigation stays clear of the Assistant on small screens
+    # Subtest: 393×659
+    ok 1 - 393×659
+    # Subtest: 844×390
+    ok 2 - 844×390
+    1..2
+ok 17 - E3: ten previews decode and navigation stays clear of the Assistant on small screens
+# Subtest: selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control
+ok 18 - selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control
+# Subtest: FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original
+ok 19 - FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original
+# Subtest: U9 «Volver» devuelve al origen 1440x900
+ok 20 - U9 «Volver» devuelve al origen 1440x900
+# Subtest: U9 «Volver» devuelve al origen 390x844
+ok 21 - U9 «Volver» devuelve al origen 390x844
+# Subtest: Point9 human tasks A–E, real routes and keyboard 1440x900
+ok 22 - Point9 human tasks A–E, real routes and keyboard 1440x900
+# Subtest: Point9 human tasks A–E, real routes and keyboard 1280x800
+ok 23 - Point9 human tasks A–E, real routes and keyboard 1280x800
+# Subtest: Point9 human tasks A–E, real routes and keyboard 390x844
+ok 24 - Point9 human tasks A–E, real routes and keyboard 390x844
+# Subtest: Point9 human tasks A–E, real routes and keyboard 844x390
+ok 25 - Point9 human tasks A–E, real routes and keyboard 844x390
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 1440x900
+ok 26 - Point9 human review 2: context, layers, hierarchy and preserved flow 1440x900
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 1280x800
+ok 27 - Point9 human review 2: context, layers, hierarchy and preserved flow 1280x800
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 390x844
+ok 28 - Point9 human review 2: context, layers, hierarchy and preserved flow 390x844
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 844x390
+ok 29 - Point9 human review 2: context, layers, hierarchy and preserved flow 844x390
+# Subtest: Point9 global controls remain interactive and editor context returns 1440x900
+ok 30 - Point9 global controls remain interactive and editor context returns 1440x900
+# Subtest: Point9 global controls remain interactive and editor context returns 1280x800
+ok 31 - Point9 global controls remain interactive and editor context returns 1280x800
+# Subtest: Point9 global controls remain interactive and editor context returns 390x844
+ok 32 - Point9 global controls remain interactive and editor context returns 390x844
+# Subtest: Point9 global controls remain interactive and editor context returns 844x390
+ok 33 - Point9 global controls remain interactive and editor context returns 844x390
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 1440x900
+ok 34 - Point9 visual layer: honest project context, contrast and reduced motion 1440x900
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 1280x800
+ok 35 - Point9 visual layer: honest project context, contrast and reduced motion 1280x800
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 390x844
+ok 36 - Point9 visual layer: honest project context, contrast and reduced motion 390x844
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 844x390
+ok 37 - Point9 visual layer: honest project context, contrast and reduced motion 844x390
+# Subtest: Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route
+ok 38 - Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route
+1..38
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 471537.67758

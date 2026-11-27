@@ -1,0 +1,301 @@
+{
+ "schema": "rubik-sota.story-layers.export",
+ "version": "1.0.0",
+ "revisions": {
+  "before": {
+   "side": "before",
+   "entryId": "prj_ebab2aee48264a3e944ce04335f5e53d",
+   "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2",
+   "updatedAt": "2026-10-01T09:00:00Z"
+  },
+  "after": {
+   "side": "after",
+   "entryId": "prj_d72972b9193e4f0ab4fd30efe8e805c6",
+   "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b",
+   "updatedAt": "2026-10-15T09:00:00Z"
+  }
+ },
+ "relation": "library-variant",
+ "frame": {
+  "viewBox": [
+   -3867,
+   -840,
+   19584,
+   12240
+  ],
+  "statement": "Misma planta, mismo encuadre y misma escala para las dos revisiones (marco común)."
+ },
+ "limits": [
+  "Comparación por identificador: un elemento redibujado con otro identificador aparece como quitado y añadido.",
+  "Escala no confirmada en alguna revisión: las medidas son orientativas."
+ ],
+ "chapters": [
+  {
+   "n": 1,
+   "id": "room-rom_living",
+   "kind": "room-area",
+   "title": "Superficie de Salón",
+   "text": "Revisado por el estudio: la reforma amplía el salón.",
+   "data": [
+    {
+     "id": "area-before",
+     "label": "Superficie de Salón",
+     "value": 21.53,
+     "unit": "m²",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "rooms[rom_living].polygon → área"
+     },
+     "revision": {
+      "side": "before",
+      "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2"
+     }
+    },
+    {
+     "id": "area-after",
+     "label": "Superficie de Salón",
+     "value": 23.11,
+     "unit": "m²",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "rooms[rom_living].polygon → área"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    }
+   ],
+   "image": {
+    "chapterId": "room-rom_living",
+    "file": "historia/01-room-rom-living.png",
+    "sha256": "8d85fa6d774b5368f4eaa8a94c180f4fb729040cc4cb3ee7c3c9e2068bf62422",
+    "bytes": 102495
+   }
+  },
+  {
+   "n": 2,
+   "id": "overview",
+   "kind": "overview",
+   "title": "Qué cambia",
+   "text": "Comparamos «Proyecto inicial» con «Reforma A» con la misma planta, el mismo encuadre y la misma escala.",
+   "data": [
+    {
+     "id": "net-before",
+     "label": "Superficie útil total",
+     "value": 87.18,
+     "unit": "m²",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "metrics.before.netAreaM2"
+     },
+     "revision": {
+      "side": "before",
+      "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2"
+     }
+    },
+    {
+     "id": "net-after",
+     "label": "Superficie útil total",
+     "value": 88.76,
+     "unit": "m²",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "metrics.after.netAreaM2"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    },
+    {
+     "id": "rooms-before",
+     "label": "Estancias",
+     "value": 13,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "metrics.before.rooms"
+     },
+     "revision": {
+      "side": "before",
+      "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2"
+     }
+    },
+    {
+     "id": "rooms-after",
+     "label": "Estancias",
+     "value": 13,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "metrics.after.rooms"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    }
+   ],
+   "image": {
+    "chapterId": "overview",
+    "file": "historia/02-overview.png",
+    "sha256": "55fab0a852dead480c14c0ab96f01d17a8dea265f2df4fa0dccae3aa64fa2b72",
+    "bytes": 113406
+   }
+  },
+  {
+   "n": 3,
+   "id": "layout",
+   "kind": "layout",
+   "title": "Distribución",
+   "text": "Cambia la distribución: 1 muro(s) nuevo(s) y 1 quitado(s) o a demoler.",
+   "data": [
+    {
+     "id": "walls-added",
+     "label": "Muros añadidos o quitados",
+     "value": 1,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "changes[entity=wall, change=added]"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    },
+    {
+     "id": "walls-gone",
+     "label": "Muros añadidos o quitados",
+     "value": 1,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "changes[entity=wall, change=removed|demolished]"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    }
+   ],
+   "image": {
+    "chapterId": "layout",
+    "file": "historia/03-layout.png",
+    "sha256": "df7747d0321d10e91690a5fc9aa04cdfeadeba6db616c05d9c3f04ae99998570",
+    "bytes": 99508
+   }
+  },
+  {
+   "n": 4,
+   "id": "finish-rom_kitchen",
+   "kind": "finish",
+   "title": "Suelo de Cocina",
+   "text": "Cambia el acabado del suelo de «Cocina».",
+   "data": [
+    {
+     "id": "floor-before",
+     "label": "Suelo de Cocina",
+     "value": "Baldosa 60×60",
+     "unit": "acabado",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "rooms[rom_kitchen].floorMaterialId"
+     },
+     "revision": {
+      "side": "before",
+      "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2"
+     }
+    },
+    {
+     "id": "floor-after",
+     "label": "Suelo de Cocina",
+     "value": "Terrazo",
+     "unit": "acabado",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "rooms[rom_kitchen].floorMaterialId"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    }
+   ],
+   "image": {
+    "chapterId": "finish-rom_kitchen",
+    "file": "historia/04-finish-rom-kitchen.png",
+    "sha256": "1215f4fceec3a4fb9aca8a59732835410bedfcec1d1bb5e1502c31f70cb7cf4d",
+    "bytes": 102192
+   }
+  },
+  {
+   "n": 5,
+   "id": "openings",
+   "kind": "openings",
+   "title": "Puertas y ventanas",
+   "text": "1 hueco(s) nuevo(s) y 0 quitado(s).",
+   "data": [
+    {
+     "id": "openings-added",
+     "label": "Huecos nuevos",
+     "value": 1,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "changes[entity=opening, change=added]"
+     },
+     "revision": {
+      "side": "after",
+      "fingerprint": "842a17d0047455f8fb50916916bf092c520c0a57e2bd006b780e9016cd1b467b"
+     }
+    },
+    {
+     "id": "openings-gone",
+     "label": "Huecos quitados",
+     "value": 0,
+     "unit": "u",
+     "state": "calculated",
+     "source": {
+      "module": "FloorPlanRevisionCompare",
+      "schema": "rubik-sota.revision-comparison@1.0.0",
+      "field": "changes[entity=opening, change=removed]"
+     },
+     "revision": {
+      "side": "before",
+      "fingerprint": "646d175bbee3ee6168c6bde20b1b9a9f08722fe7824f612a284717ef5c28bfc2"
+     }
+    }
+   ],
+   "image": {
+    "chapterId": "openings",
+    "file": "historia/05-openings.png",
+    "sha256": "7551e61fc1880c8cc5f61b8611bde6a18f37ab7d313c4f2225c56240c0256766",
+    "bytes": 98250
+   }
+  }
+ ]
+}

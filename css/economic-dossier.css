@@ -32,3 +32,4 @@
 @media (max-width:640px){.econ-paper{margin:8px;padding:18px 14px}.econ-tools{padding:8px 10px}.econ-table thead{display:none}.econ-table tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--surface-hover,#e6e9ea)}.econ-table td{border:0;padding:0}.econ-table .econ-desc,.econ-table .econ-state{grid-column:1/-1}.econ-table td.num{text-align:left}.econ-table td[data-label]::before{content:attr(data-label) ': ';color:var(--e-muted);font-size:11px}.econ-table td.econ-amount{font-weight:600}}
 .econ-print-button{position:fixed;top:12px;right:12px;padding:8px 14px}.econ-print .econ-paper{margin:0;box-shadow:none}
 @media print{.econ-print-button{display:none}.econ-print .econ-paper{padding:0}.econ-chapter{break-inside:avoid-page}@page{size:A4;margin:14mm}}
+.econ-scope{margin:6px 0 0;padding:4px 8px;border-left:3px solid #184e52;font-weight:600}

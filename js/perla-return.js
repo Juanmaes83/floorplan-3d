@@ -40,6 +40,7 @@
   if(head){if(pending&&pending.area!==a){head.textContent='← '+tx('Volver a ','Back to ','返回 ')+label(pending.area);head.dataset.perlaReturn=pending.area;}else if(head.dataset.perlaReturn){delete head.dataset.perlaReturn;head.textContent=tx('← Volver a Diseñar','← Return to Design','← 返回设计');}}
   // En el editor: «← Volver a <origen>» al principio de la segunda fila.
   const r2=$('.perla-r2'),b=ensureBtn();
+  const story=document.getElementById('storyReturn');if(story&&!story.hidden&&a==='design'){b.hidden=true;return;}
   if(a==='design'&&pending&&r2){if(b.parentElement!==r2)r2.prepend(b);b.textContent='← '+tx('Volver a ','Back to ','返回 ')+label(pending.area);b.hidden=false;}
   else b.hidden=true;}
  function goBack(){const p=pending;if(!p)return;pending=null;origin=null;// volver no crea un retorno nuevo (evita el vaivén entre dos áreas)

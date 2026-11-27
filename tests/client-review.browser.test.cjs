@@ -9,7 +9,7 @@ before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolv
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function person(t,viewport){const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow,acceptDownloads:true});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
- const press=async s=>{const l=page.locator(s).first();await l.waitFor({state:'visible',timeout:8000});await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
+ const press=async s=>{/* §9: «Observaciones del cliente…» está en «Más» › Entrega */const l=(await page.locator(s).first().isVisible())?page.locator(s).first():await require('./helpers-perla-editor.cjs').mostrar(page,s);await l.waitFor({state:'visible',timeout:8000});await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanReviewUI);await require('./editor-fixture.cjs')(page);
  const openMenu=async()=>{await press('details.menu summary');};
  return {page,errors,press,openMenu,project:()=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project))};}

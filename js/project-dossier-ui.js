@@ -8,7 +8,9 @@
  const app=window.FloorPlanApp,Visual=window.FloorPlanProjectVisual,Preview=window.FloorPlanProjectPreview;if(!app||!Visual||!Preview)return;
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
- const name=()=>typeof nm==='function'?nm(app.project.name):app.project.name;
+ const local=v=>typeof nm==='function'?nm(v):v;
+ // V02 (#324): si el documento abarca varias plantas, el título es el del edificio, no el del proyecto de una planta.
+ const name=()=>{const c=app.levelContext,multi=c&&(typeof c.levels==='number'?c.levels:c.levels?.length||0)>1&&c.buildingName;return local(multi&&(window.FloorPlanBuildingUI?.presentationSources?.()?.levels?.length||0)>1?c.buildingName:app.project.name);};
  const locale=()=>({es:'es-ES',en:'en-GB',zh:'zh-CN'})[typeof LANG==='string'?LANG:'es']||'es-ES';
  // Styles: which sections, in which order, and the visual tone. Same data for every style.
  const STYLES={
@@ -45,10 +47,18 @@
      const overview=c.views.find(v=>v.kind==='overview');const visual=el('figure',undefined,p,'dossier-cover-visual');
      if(overview){const i=el('img',undefined,visual);i.src=overview.dataUrl;i.alt=tx('Vista general real de la vivienda en 3D','Real 3D overview of the home','住宅真实三维总览');}
      else Preview.plan(visual,{label:tx('Planta de la vivienda','Floor plan of the home','住宅平面'),cls:'project-plan dossier-plan'});
+     // V02: en un documento de varias plantas, la imagen dice qué muestra (el plano es solo de la planta activa).
+     {const c=app.levelContext;if(s.level?.all&&c?.levelName){const v3=window.View3D?.levelView==='all';el('figcaption',overview?(v3?tx(`Vista 3D con las ${s.level.count} plantas`,`3D view with all ${s.level.count} levels`,`含全部 ${s.level.count} 层的三维视图`):tx(`Vista 3D hasta «${local(c.levelName)}»; el cómputo incluye las ${s.level.count} plantas`,`3D view up to «${local(c.levelName)}»; the total includes all ${s.level.count} levels`,`三维视图至「${local(c.levelName)}」；汇总包含全部 ${s.level.count} 层`)):tx(`Plano de «${local(c.levelName)}» (1 de ${s.level.count} plantas); el cómputo incluye las ${s.level.count}`,`Plan of «${local(c.levelName)}» (1 of ${s.level.count} levels); the total includes all ${s.level.count}`,`「${local(c.levelName)}」平面（共 ${s.level.count} 层中的 1 层）；汇总包含全部 ${s.level.count} 层`),visual,'dossier-cover-scope');}}
      const facts=el('dl',undefined,p,'dossier-facts');const fact=(k,v,cls)=>{const g=el('div',undefined,facts,cls);el('dt',k,g);el('dd',v,g);};
      fact(tx('Superficie útil','Net area','使用面积'),area);fact(tx('Certeza','Certainty','可信度'),status+(s.complete?'':tx(' · cómputo incompleto',' · incomplete total',' · 汇总不完整')));
-     fact(tx('Estancias','Rooms','房间'),String(s.roomsCounted));fact(tx('Planta','Level','楼层'),s.level?`${s.level.name}`:tx('Planta única','Single level','单层'));
+     fact(tx('Estancias en el cómputo','Rooms in the total','计入房间'),String(s.roomsCounted)+(s.roomsExcluded?tx(` · ${s.roomsExcluded} no suman superficie`,` · ${s.roomsExcluded} not in the area`,` · ${s.roomsExcluded} 个不计面积`):''));fact(s.level?.all?tx('Plantas','Levels','楼层'):tx('Planta','Level','楼层'),s.level?.all?tx(`${s.level.count} plantas · `,`${s.level.count} levels · `,`${s.level.count} 层 · `)+s.level.names.map(n=>local(n)).join(', '):s.level?`${local(s.level.name)}`+(s.level.count>1&&s.level.index?tx(` (${s.level.index} de ${s.level.count})`,` (${s.level.index} of ${s.level.count})`,`（${s.level.index}/${s.level.count}）`):''):tx('Planta única','Single level','单层'));
      fact(tx('Fecha','Date','日期'),new Date().toLocaleDateString(locale(),{day:'numeric',month:'long',year:'numeric'}));
+     // §8 D3: la ficha del cliente y la elección de contacto deciden qué sale; sin ese módulo, el contacto completo como antes.
+     const dc=window.FloorPlanDossierClientUI?.cover?.(b);
+     if(dc){if(dc.contact.length)fact(tx('Contacto','Contact','联系方式'),dc.contact.join(' · '),'is-wide');
+      if(dc.addressee)fact(tx('Preparado para','Prepared for','编制对象'),dc.addressee,'is-wide dossier-for');
+      for(const r of dc.requests)fact(r.key==='preferences'?tx('Lo que nos pidió','What you asked for','您的要求'):tx('Requisito','Requirement','要求'),r.text,'is-wide');
+      if(dc.note){const n=el('p',dc.note,p,'dossier-cover-note');n.dataset.dossierNote='';}continue;}
      if(b&&(b.email||b.phone||b.web))fact(tx('Contacto','Contact','联系方式'),[b.email,b.phone,b.web].filter(Boolean).join(' · '),'is-wide');continue;}
    if(key==='sheet'){const p=page('dossier-sheet',tx('Plano de distribución','Floor plan','平面布置图'));if(!(c.sections.sheet&&sheetImage(el('div',undefined,p,'dossier-sheet-frame'),bag)))el('p',tx('El plano no está preparado: abre la planta 2D para generarlo.','The plan is not ready: open the 2D floor to generate it.','平面图未就绪：请打开二维楼层生成。'),p,'dossier-note');continue;}
    if(key==='surfaces'){const p=page('dossier-surfaces',tx('Superficies','Areas','面积'));
@@ -59,9 +69,9 @@
       for(const r of l.rooms){const row=el('tr',undefined,body,r.counted?'':'is-excluded');el('td',(typeof nm==='function'?nm(r.name):r.name)+(r.counted?'':tx(' (fuera del cómputo)',' (outside the total)',' (不计入)')),row);el('td',r.areaM2===null?tx('No disponible','Unavailable','暂无'):Preview.areaNumber({areaM2:r.areaM2}),row);}}
      el('p',tx('Superficies orientativas a partir del plano; verifica medidas in situ.','Indicative areas from the plan; verify on site.','面积仅供参考，请实地核验。'),p,'dossier-note');continue;}
    if(key==='orientation'){if(!c.sections.orientation)continue;const SP=FloorPlanSitePreview,d=c.site,p=page('dossier-orientation',tx('Orientación y sol','Orientation and sun','朝向与日照')),g=el('div',undefined,p,'dossier-grid');
-     SP.orientedPlan(g,d.site.northOffsetDeg);const side=el('div',undefined,g);if(d.facades.sectors)SP.rose(side,d.facades);el('p',SP.facadeLine(d.facades),side,'dossier-note');
+     SP.orientedPlan(g,d.site.northOffsetDeg);const side=el('div',undefined,g);if(d.facades.sectors)SP.rose(side,d.facades);el('p',st==='client'?SP.facadeLine(d.facades).replace(/\s*(Configura el norte|Set north)[^.]*\./,''):SP.facadeLine(d.facades),side,'dossier-note');
      if(d.sun.status==='available-orientative'){const g2=el('div',undefined,p,'dossier-grid');SP.sunChart(g2,d.sun);const st=el('div',undefined,g2);SP.sunTable(st,d.sun);el('p',tx('Recorrido orientativo del sol (SunCalc). No considera relieve ni edificios vecinos.','Orientative sun path (SunCalc). Terrain and neighbouring buildings are not considered.','参考太阳轨迹（SunCalc）。'),st,'dossier-note');}
-     else el('p',tx('Sin ubicación o norte configurados: no se incluye el recorrido del sol.','Location or north not configured: the sun path is not included.','未配置位置或北向：不含太阳轨迹。'),p,'dossier-note');continue;}
+     else if(st!=='client')el('p',tx('Sin ubicación o norte configurados: no se incluye el recorrido del sol.','Location or north not configured: the sun path is not included.','未配置位置或北向：不含太阳轨迹。'),p,'dossier-note');continue;}
    if(key==='site'){if(!c.sections.site)continue;const SP=FloorPlanSitePreview,v=c.site.siteView,p=page('dossier-site',tx('Emplazamiento','Site','场地')),g=el('div',undefined,p,'dossier-grid');SP.siteDiagram(g,v);
      el('p',tx(`Parcela de ${v.parcelAreaM2.toLocaleString(locale(),{maximumFractionDigits:1})} m². `,`${v.parcelAreaM2} m² parcel. `,`地块 ${v.parcelAreaM2} m²。`)+(v.building?tx('Huella colocada por el profesional.','Footprint placed by the professional.','轮廓由专业人员定位。'):tx('El edificio no está colocado.','The building is not placed.','建筑未定位。'))+' '+tx('No es un informe urbanístico ni catastral certificado.','Not a certified planning or cadastral report.','非经认证的规划或地籍报告。'),g,'dossier-note');
      if(appendix?.location){
@@ -82,7 +92,7 @@
    if(key==='exterior'){const p=page('dossier-exterior',tx('Exterior','Exterior','外部'));let roof=null;try{roof=FloorPlanRoof.deriveProject(app.project,FloorPlanExterior);}catch{}
      const facades=FloorPlanExterior.derive(app.project).walls.filter(w=>w.status==='facade').length;el('p',tx(`${facades} muros de fachada identificados a partir del plano. Cubierta: ${roof?.status==='available'?'derivada de la huella':'no disponible con la geometría actual'}.`,`${facades} facade walls identified from the plan. Roof: ${roof?.status==='available'?'derived from the footprint':'not available with the current geometry'}.`,`识别出 ${facades} 面立面墙。`),p,'dossier-note');continue;}
    if(key==='views'){const p=page('dossier-views',tx('Imágenes de la vivienda','Images of the home','住宅图片'));
-     if(!c.sections.views){el('p',tx('Sin vistas preparadas. Prepáralas en Entregar → Imágenes para incluirlas.','No views prepared. Prepare them in Deliver → Images to include them.','尚未准备视图。'),p,'dossier-note');continue;}
+     if(!c.sections.views){el('p',st==='client'?tx('Sin vistas preparadas.','No views prepared.','尚未准备视图。'):tx('Sin vistas preparadas. Prepáralas en Entregar → Imágenes para incluirlas.','No views prepared. Prepare them in Deliver → Images to include them.','尚未准备视图。'),p,'dossier-note');continue;} // Cliente: sin instrucciones de trabajo
      const g=el('div',undefined,p,'dossier-gallery');for(const v of c.views){const f=el('figure',undefined,g);const i=el('img',undefined,f);i.src=v.dataUrl;i.alt=tx('Vista 3D real: ','Real 3D view: ','真实三维视图：')+v.label;el('figcaption',v.label,f);}
      el('p',tx('Vistas de la vista 3D real del proyecto. Imágenes orientativas.','Views from the project\'s real 3D view. Indicative images.','来自项目真实三维视图，仅供参考。'),p,'dossier-note');continue;}
    if(key==='review'){if(!c.sections.review)continue;const p=page('dossier-review',tx('Observaciones','Observations','意见'));el('p',c.review.pending?tx(`${c.review.pending} observaciones del cliente pendientes de decisión.`,`${c.review.pending} client observations pending a decision.`,`${c.review.pending} 条客户意见待决定。`):tx(`${c.review.written} observaciones redactadas para el cliente.`,`${c.review.written} observations written for the client.`,`已为客户撰写 ${c.review.written} 条意见。`),p,'dossier-note');continue;}
@@ -103,6 +113,7 @@
  const linkLabel=el('label',undefined,options),linkCheck=el('input',undefined,linkLabel),linkText=el('span',undefined,linkLabel);
  mapCheck.type=linkCheck.type='checkbox';mapCheck.id='dossierIncludeIgn';linkCheck.id='dossierIncludeLocation';
  const siteStatus=el('p',undefined,options);siteStatus.setAttribute('role','status');
+ window.FloorPlanDossierClientUI?.mount?.(dialog,options,()=>renderDialog());
  let appendix=null,siteRequest=null;
  const parcelOf=()=>window.FloorPlanBuildingUI?.site?.parcel||app.project.site?.parcel;
  const parcelKey=parcel=>parcel&&JSON.stringify([app.entryId,parcel.reference,parcel.sourceCrs,parcel.frame,parcel.sourceGeometry]);
@@ -146,11 +157,11 @@
  }
  mapCheck.onchange=linkCheck.onchange=loadSiteOptions;
  const paper=el('article',undefined,dialog,'dossier-paper');paper.id='dossierDocument';
- function relang(){heading.textContent=tx('Dossier del proyecto','Project dossier','项目资料');styleText.textContent=tx('Estilo','Style','风格');printButton.textContent=tx('Imprimir / Guardar PDF','Print / Save PDF','打印 / 保存 PDF');closeButton.textContent=tx('Cerrar','Close','关闭');
+ function relang(){heading.textContent=tx('Dossier del proyecto','Project dossier','项目资料');styleText.textContent=tx('Estilo','Style','风格');printButton.textContent=tx('Imprimir / Guardar PDF','Print / Save PDF','打印 / 保存 PDF');closeButton.textContent=document.querySelector('#professionalWorkspace:not([hidden])')?tx('← Volver a Entregar','← Back to Deliver','← 返回交付'):tx('Cerrar','Close','关闭');
   mapText.textContent=tx('Incluir mapa base IGN','Include IGN basemap','包含 IGN 底图');linkText.textContent=tx('Compartir enlace a la ubicación','Share location link','分享位置链接');
   select.replaceChildren(...Object.entries(STYLES).map(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label();return o;}));select.value=style;}
- select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();};
- function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
+ select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';window.FloorPlanDossierClientUI?.onStyle?.(style);if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();window.FloorPlanDossierClientUI?.refresh?.();};
+ function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();window.FloorPlanDossierClientUI?.onStyle?.(style);window.FloorPlanDossierClientUI?.refresh?.();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
  async function print(){
   if(appendix&&appendix.key!==parcelKey(parcelOf())){resetOptions();renderDialog();}
   const win=window.open('','_blank');if(!win){toast(tx('El navegador bloqueó la ventana de impresión.','The browser blocked the print window.','浏览器阻止了打印窗口。'),5000);return;}

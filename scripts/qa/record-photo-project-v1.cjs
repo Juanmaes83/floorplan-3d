@@ -1,4 +1,5 @@
 'use strict';
+const {mostrar}=require('../../tests/helpers-perla-editor.cjs');
 /* De fotografía a proyecto V1 (MUE-01 + FOT-01) · grabación de los recorridos en el editor REAL (Playwright + Chromium,
    recordVideo). Solo se actúa con los controles visibles (formularios, archivos, clics, dedo por CDP, teclado, menús);
    las lecturas de estado son comprobaciones POSTERIORES. Fotos SINTÉTICAS dibujadas por Chromium (formas y colores, sin
@@ -109,8 +110,9 @@ async function mueDesktop(env,jpg){
     await R.shot(page,'mue01-escritorio-06-reabierto.png','Tras guardar y reabrir: medidas y foto siguen');
     R.check('guardar y reabrir conserva medidas y foto',sizeBefore===sizeAfter,`${sizeBefore} → ${sizeAfter} · foto: ${await page.locator('#ownFurnPhotoState').innerText()}`);
     // 8 · Exportar JSON: viaja la referencia, no la foto.
-    await page.locator('details.menu summary').first().click();await pause(page,500);
-    const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);exported=fs.readFileSync(await dl.path(),'utf8');
+    // §9 Cabecera: la descarga del proyecto vive en Proyecto ▾ («Descargar proyecto JSON»), como la haría una persona.
+    const dlJson=await mostrar(page,'#exportJson');await pause(page,500);
+    const [dl]=await Promise.all([page.waitForEvent('download'),dlJson.click()]);exported=fs.readFileSync(await dl.path(),'utf8');
     const json=JSON.parse(exported);
     R.check('exportar: viaja la referencia, no la foto',json.extensions?.[EXT]?.items?.some(i=>i.objectId===o.id)&&!/data:image|IMG_0042|Exif/.test(exported),`${exported.length} bytes; sin bytes de imagen`);
     R.check('R03 y R02-A intactos',await page.evaluate(()=>JSON.stringify([FloorPlanApp.project.extensions?.['x-r03-cabinet']??null,FloorPlanApp.project.extensions?.['x-r02a-ceiling']??null]))===r03r02,'extensiones ajenas sin cambios');
@@ -203,7 +205,7 @@ async function fotDesktop(env,room){
   const {context,page,w,api}=await openContext(env,{viewport,scale:2});
   try{
     const before=await K.snapshot(page);
-    await page.locator('details.menu summary').first().click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
+    await (await mostrar(page,'#photoReformMenu')).click();await page.locator('#photoReformDialog[open]').waitFor();
     R.check('acceso desde Archivo → «Reformar desde fotografía» (distinto de «Desde una imagen»)',/«Desde una imagen»/.test(await page.locator('.photo-reform-truth').innerText()),'aviso de diferencia');
     await page.locator('#photoReformFile').setInputFiles(K.file('IMG_9876.jpg',room,'image/jpeg'));await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.locator('#photoReformIntent').selectOption('floor');await page.locator('#photoReformFinish').selectOption('walnut');await page.locator('#photoReformAlternatives').selectOption('3');

@@ -107,3 +107,5 @@ button{font:inherit;color:inherit}
 a.btn{text-decoration:none;color:inherit}
 .app[data-theme="studio"] .demo-tag{color:var(--graphite)}
 .vigencia .vig{display:inline-block;font:600 12px/1.4 var(--mono);padding:4px 8px;border-radius:8px}.vig.ok{background:rgb(31 122 77 / .12);color:#1f6b45}.vig.obs{background:rgb(160 40 40 / .12);color:#8a2626}
+/* V09 (#324): ningún botón de la barra de intenciones es más estrecho que su etiqueta. */
+.seg .btn{flex:0 0 auto;min-width:max-content;overflow:visible}

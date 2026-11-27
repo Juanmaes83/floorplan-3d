@@ -1,0 +1,75 @@
+{
+ "schema": "rubik-sota.story-client",
+ "version": "1.0.0",
+ "title": "Salón más cálido: moqueta de lana en la zona de estar",
+ "preparedBy": "Estudio Norte Interiorismo",
+ "date": "2026-11-26",
+ "summary": "Proponemos sustituir la baldosa del salón por moqueta de lana. El resto de la vivienda, la superficie y la distribución no cambian.",
+ "changes": [
+  "Suelo de Salón: Baldosa 80×80 → Moqueta."
+ ],
+ "kept": [
+  "La superficie útil se conserva: 87,18 m².",
+  "Se conservan las 13 estancias.",
+  "La distribución se conserva: no se añade ni se quita ningún muro.",
+  "Puertas y ventanas se conservan."
+ ],
+ "sections": [
+  {
+   "title": "Por qué y qué mejora busca",
+   "text": "El salón es la estancia de mayor uso y hoy resulta frío y con eco. La moqueta de lana mejora el confort térmico y acústico y hace la zona de estar más acogedora.\nValoramos también un parqué flotante: lo descartamos porque no mejora la acústica en la misma medida.",
+   "lines": null,
+   "pending": false
+  },
+  {
+   "title": "Cómo se haría y qué implica",
+   "text": "Retirada de la baldosa existente y regularización del soporte con mortero autonivelante. Colocación de moqueta de lana sobre fieltro, con perfil de transición en la puerta de la cocina. Plazo estimado: 3 días laborables.\nQueda por definir el color definitivo y el tipo de rodapié.",
+   "lines": null,
+   "pending": false
+  },
+  {
+   "title": "Cuánto cuesta y qué incluye",
+   "text": null,
+   "lines": [],
+   "pending": [
+    "No hay un presupuesto guardado que corresponda a esta propuesta.",
+    "Pendiente de valorar."
+   ]
+  },
+  {
+   "title": "Qué debes decidir ahora",
+   "text": "Aprobar la propuesta para pedir muestras de color y cerrar el presupuesto.",
+   "lines": null,
+   "pending": false
+  }
+ ],
+ "notes": [
+  "Durante la obra el salón no podrá usarse; el resto de la vivienda, sí.",
+  "Muestra de moqueta color arena disponible en el estudio."
+ ],
+ "pages": [
+  {
+   "file": "propuesta/01-portada.png",
+   "sha256": "8a22e16c4f3894cc36e7438abe0f1ac49723c01bb4443fddbf3c1b2367e2db03",
+   "bytes": 209426,
+   "content": [
+    "Salón más cálido: moqueta de lana en la zona de estar",
+    "Qué se propone y dónde",
+    "Suelo de Salón"
+   ]
+  },
+  {
+   "file": "propuesta/02-pagina.png",
+   "sha256": "2c2de09168ff2dff8d646c84b9d5aea6c4e856b451237fce1f5829eca52eec5c",
+   "bytes": 298226,
+   "content": [
+    "Suelo de Salón",
+    "Por qué y qué mejora busca",
+    "Cómo se haría y qué implica",
+    "Cuánto cuesta y qué incluye",
+    "Qué debes decidir ahora",
+    "Notas"
+   ]
+  }
+ ]
+}

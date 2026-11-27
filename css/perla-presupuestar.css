@@ -128,3 +128,4 @@
 }
 @media (prefers-reduced-motion:reduce){#professionalWorkspace.perla-pres .pres-card{transition:none}}
 #budgetDialog .budget-bar::before,#budgetDialog .budget-bar::after{display:none!important}
+.budget-scope{margin:8px 0 4px;padding:6px 10px;border-left:3px solid #184e52;background:#f1f7f6;font-weight:600}

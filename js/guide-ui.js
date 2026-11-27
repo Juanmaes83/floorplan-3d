@@ -3,6 +3,7 @@
  'use strict';
  const G=FloorPlanGuide,KEY='rubik-sota-guide-v1',label=a=>G.text(a,LANG),tx=(es,en,zh)=>label([es,en,zh||es]);
  const hadLibrary=(()=>{try{return originalStorage.getItem(FloorPlanLibrary.KEY)!==null;}catch{return false;}})();
+ let review3dArmed=false;
  let navigationEpoch=0,roomReturnToWelcome=false;
  let data={version:1,seen:false,entries:{}},storageError='',currentId=null,lastSnapshot='',lastResult=null,pendingEntry=null,entryOrigin=null,pendingIds=[],afterCopy=null,fullEditor=false;
  const audienceKey='rubik-professional-audience-v1';
@@ -220,10 +221,13 @@
    ['video',['Vídeo','Video','视频'],['Vídeo cinematográfico','Cinematic video','电影感视频'],['Del plano a la escena y la entrada en una estancia, grabado como MP4 desde la presentación.','From the plan to the scene and into a room, recorded as MP4 from the presentation.','从平面到场景再进入房间，从演示中录制为 MP4。'],['Fotogramas de un MP4 real de RUBIK.','Frames from a real RUBIK MP4.','来自 RUBIK 真实 MP4 的帧。'],['Ver vídeo de ejemplo','See the example video','查看示例视频']],
    ['comparativa',['Render','Render','渲染'],['Visualización profesional','Professional visualisation','专业可视化'],['La misma cámara en RUBIK y en Blender Cycles: luz y materiales del salón con calidad de render.','The same camera in RUBIK and in Blender Cycles: living-room light and materials at render quality.','RUBIK 与 Blender Cycles 中的同一相机：客厅的光线与材料达到渲染品质。'],['Render real de Cycles · flujo actual de imágenes fijas.','Real Cycles render · current still-image workflow.','真实 Cycles 渲染 · 当前静态图像流程。'],['Ver comparativa de render','See the render comparison','查看渲染对比']],
    ['asistente',['Asistente','Assistant','助手'],['Asistente RUBIK','RUBIK assistant','RUBIK 助手'],['Pregunta por tu proyecto y recibe la respuesta con la fuente del dato.','Ask about your project and get the answer with the source of the data.','询问你的项目，获得带数据来源的回答。'],['Consulta guiada: sin modelo de lenguaje y sin enviar nada. Ilustración editorial.','Guided query: no language model and nothing sent. Editorial illustration.','引导查询：不使用语言模型，不发送任何内容。编辑插画。'],['Probar la consulta guiada','Try the guided query','试用引导查询']],
-   ['estilos',['Render IA','AI render','AI 渲染'],['Enseña el después de tu proyecto antes de empezar','Show the after of your project before you start','开工前就展示项目的完成效果'],['Transforma una vista de tu proyecto con distintos estilos. Compara cómo cambian la luz, los materiales y el ambiente desde el mismo encuadre.','Transform a view of your project with different styles. Compare how light, materials and atmosphere change from the same framing.','用不同风格转换项目的一个视图。从同一构图比较光线、材料和氛围的变化。'],['Usa las variantes para explicar tu propuesta, explorar acabados y ayudar al cliente a elegir antes de la obra.','Use the variants to explain your proposal, explore finishes and help the client choose before the works.','用这些变体说明你的方案、探索饰面，并在施工前帮助客户做出选择。'],['Comparar estilos','Compare styles','比较风格']],
+   ['estilos',['Estilos · muestra ilustrativa','Styles · illustrative sample','风格 · 示意样本'],['Enseña el después de tu proyecto antes de empezar','Show the after of your project before you start','开工前就展示项目的完成效果'],['Transforma una vista de tu proyecto con distintos estilos. Compara cómo cambian la luz, los materiales y el ambiente desde el mismo encuadre.','Transform a view of your project with different styles. Compare how light, materials and atmosphere change from the same framing.','用不同风格转换项目的一个视图。从同一构图比较光线、材料和氛围的变化。'],['Usa las variantes para explicar tu propuesta, explorar acabados y ayudar al cliente a elegir antes de la obra.','Use the variants to explain your proposal, explore finishes and help the client choose before the works.','用这些变体说明你的方案、探索饰面，并在施工前帮助客户做出选择。'],['Ver la muestra de estilos','See the style sample','查看风格样本']],
    ['entrega',['Entregar','Deliver','交付'],['Entrega con tu firma','Delivery with your signature','带你签名的交付'],['Lámina, dossier y presentación de la misma vivienda, firmados con tu estudio.','Sheet, dossier and presentation of the same home, signed with your studio.','同一住宅的图纸、档案与演示，带你的事务所签名。'],['Firma de demostración. No publica ningún enlace.','Demo signature. No link is published.','演示签名。不会发布任何链接。'],['Ver una entrega de ejemplo','See an example delivery','查看交付示例']]]){
    const card=el('article',undefined,demoCards,'demo-card');card.dataset.demo=id;
    const fig=el('figure',undefined,card);realImg(fig,'assets/welcome/en-accion/'+id+'.webp',label(title),'welcome-demo-shot');
+   // Revisión 27/11: en la muestra de estilos se ve junto a cada imagen cuál es la vista original de RUBIK y cuáles son
+   // alternativas ilustrativas de un generador externo (no Render IA del producto). Orden de la rejilla 2×2 (PROCEDENCIA.md).
+   if(id==='estilos'){fig.classList.add('welcome-demo-tagged');for(const [q,t] of [['tl',tx('Original · vista real de RUBIK','Original · real RUBIK view','原始 · RUBIK 真实视图')],['tr',tx('Ilustrativa externa','External illustration','外部示意')],['bl',tx('Ilustrativa externa','External illustration','外部示意')],['br',tx('Ilustrativa externa','External illustration','外部示意')]]){const tg=el('span',t,fig,'welcome-demo-tag');tg.dataset.q=q;if(q==='tl')tg.dataset.kind='rubik';}}
    const body=el('div',undefined,card,'demo-card-body');el('p',label(kicker),body,'demo-card-kicker');el('h3',label(title),body);el('p',label(text),body);el('p',label(note),body,'demo-card-note');
    const go=btn('welcomeDemo-'+id,label(action),()=>window.RubikHomeEnAccion?.open(id,go),body,true);go.classList.add('demo-card-go');}
   const PORTRAIT={architecture:'arquitectura','real-estate':'inmobiliaria',developer:'promotora',renovation:'reformas',interior:'decoracion',construction:'constructora'};
@@ -557,7 +561,7 @@
   switch(a.id){
    case 'scale':return runTask(progress().tasks.find(t=>t.id==='scale')||{id:'scale',action:'scale',blockers:[]});
    case 'furniture':await setView('2d');if(!ui.sel||ui.sel.kind!=='room'){const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];if(room)select({kind:'room',id:room.id});}libSearch.query=a.filter||'';libSearch.room='';libSearch.family='';$('#furnitureSearch').value=libSearch.query;$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();window.FloorPlanBuildPalette?.select('furnish');drawer('lib',true);$('#furnitureSearch').focus();state().current='furniture';break;
-   case '3d':state().current='view3d';await setView('3d');if(is3D())record('view3d');break;
+   case '3d':state().current='view3d';review3dArmed=true;await setView('3d');if(is3D()&&review3dArmed){review3dArmed=false;record('view3d');}break;
    case 'save':state().current='save';if(save()){await persistence.requireSaved();announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));}break;
    case 'export':state().current='export';exportPNG();break;
    case 'drawWall':await window.FloorPlanBuildPalette.drawWall();break;
@@ -582,7 +586,7 @@
   return execute({id:task.action,...G.actions[task.action==='3d'?'3d':task.action],goal:undefined});
  }
  function primaryLabel(t){if(!t)return '';if(t.blockers.length)return tx('Resolver requisito','Resolve requirement','完成前置任务');if(t.id==='image'&&project.sourceImages?.length&&!facts().imagesReady)return tx('Recuperar imágenes (ZIP)','Restore images (ZIP)','恢复图片 (ZIP)');if(t.id==='start')return state().kind==='example'&&state().goal!=='review'?tx('Crear mi copia','Create my copy','创建副本'):tx('Volver al inicio','Return home','返回首页');if(t.id==='scale'){const c=project.scale.calibration,v=project.scale.verification;return tx(!c?'Empezar a ajustar':v?.status==='consistent'&&!c.confirmedByUser?'Confirmar escala':!v?'Comprobar segunda cota':'Revisar escala',!c?'Start adjusting':v?.status==='consistent'&&!c.confirmedByUser?'Confirm scale':!v?'Check second dimension':'Review scale','检查比例');}
-  return label(({image:['Subir plano','Upload plan','上传平面图'],geometry:['Abrir dibujo','Open drawing','打开绘图'],furniture:['Buscar muebles','Find furniture','搜索家具'],view3d:['Abrir 3D','Open 3D','打开 3D'],save:['Confirmar guardado','Confirm saving','确认保存'],export:['Generar PNG','Generate PNG','生成 PNG']})[t.id]);}
+  return label(({image:['Subir plano','Upload plan','上传平面图'],geometry:['Abrir dibujo','Open drawing','打开绘图'],furniture:['Buscar muebles','Find furniture','搜索家具'],view3d:['Revisar en 3D','Review in 3D','在 3D 中检查'],save:['Confirmar guardado','Confirm saving','确认保存'],export:['Generar PNG','Generate PNG','生成 PNG']})[t.id]);}
  function outcome(parent,p){if(!p.finished)return;const box=el('div',undefined,parent,'guide-outcome');el('strong',tx('✓ Objetivo completado','✓ Goal complete','✓ 目标已完成'),box);el('p',label(G.goals[p.goal]),box);el('p',saved()?tx(`Guardado en este navegador · Proyectos → ${project.name}.`,`Saved in this browser · Projects → ${project.name}.`,`保存在此浏览器 · 项目 → ${project.name}。`):tx('El resultado está abierto. Confirma el guardado para conservarlo.','The result is open. Confirm saving to keep it.','结果已打开。请确认保存。'),box);
   if(state().evidence.export===p.rev)el('p',tx(`PNG generado: ${state().exportName||'PNG'}. El destino final depende de las descargas de tu navegador.`,`PNG generated: ${state().exportName||'PNG'}. The final location depends on your browser downloads.`,'已生成 PNG。最终位置取决于浏览器下载设置。'),box);
   const row=el('div',undefined,box,'actions');btn('guideExportCopy',tx('Exportar copia JSON / ZIP','Export JSON / ZIP copy','导出 JSON / ZIP'),()=>safe(exportCopy),row);btn('guideExportImage',tx('Exportar imagen PNG','Export PNG image','导出 PNG 图片'),()=>exportPNG(),row);}
@@ -633,7 +637,7 @@
  function runJourney(id,r){
   const s=state();
   switch(id){
-   case 'view3d':return setView('3d');
+   case 'view3d':review3dArmed=true;return (async()=>{await setView('3d');if(is3D()&&review3dArmed){review3dArmed=false;record('view3d');}})();
    case 'plan2d':return setView('2d');
    case 'copy':return copyExample();
    case 'calibrate':case 'recalibrate':case 'verify':case 'reverify':case 'trace':return (async()=>{await setView('2d');if(!$('#tracePanel')||$('#tracePanel').hidden)$('#traceBtn').click();await FloorPlanTraceUI.start(id==='trace'?'room':/verify/.test(id)?'verify':'calibrate');render();})();
@@ -680,7 +684,7 @@
  }
  function render(){
   applyCompact();bar.setAttribute('aria-label',tx('Objetivo y progreso','Goal and progress','目标与进度'));
-  const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
+  const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'&&!window.FloorPlanApp?.entryInfo?.()?.variantOf?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
   searchPrompt.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');
   searchCompact.textContent=tx('⌕ Buscar','⌕ Search','⌕ 搜索');
   resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
@@ -702,7 +706,9 @@
   const p=progress();if(p.current.status==='completed'&&!s.manualTask){s.current=(p.pending[0]||p.current).id;}render();store();
  }
  window.FloorPlanGuideUI={sync,progress,state,record,captureImport,importRouteCurrent,imported,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
- addEventListener('floorplan-view-ready',()=>record('view3d'));
+ // V05 (#324): abrir «Escena 3D» (selector 2D/3D, capturas internas, volver de un entregable) NO da la revisión por hecha.
+ // Solo la acción explícita «Revisar en 3D» (tarea view3d de la guía) la arma; se registra cuando la vista 3D está lista.
+ addEventListener('floorplan-view-ready',()=>{if(review3dArmed){review3dArmed=false;record('view3d');}});
  // Presenting is a 3D view of the same plan: it reviews this version and marks it as presented.
  // Kept apart from the guide entry (rubik-sota-journey-v1): a presentation restores the guide state exactly.
  addEventListener('floorplan-presentation-started',()=>{const id=library?.activeId()||project.id,rev=G.revision(project);try{const all=JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}');all[id]={presented:rev};originalStorage.setItem(JOURNEY_KEY,JSON.stringify(all));}catch{}});
