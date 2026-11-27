@@ -58,6 +58,18 @@
   (A) ampliar el ZIP con terreno MDT05 + ortofoto PNOA de la parcela (con atribución CC BY 4.0 en el informe y en el vídeo) y
   elegir un proyecto situado; o (B) limitar la primera entrega a exteriores del propio modelo y declararlo.
 
+### Decisión del propietario (27/11, noche) · opción A autorizada
+- **Autorizado** ampliar la exportación «Escena para Blender» para el ensayo de «Desde el paisaje», en `claude/pelicula-efectos`,
+  fuera de #324. Claude elige o prepara un proyecto de demostración con **emplazamiento confirmado, terreno y un acceso real**.
+- Objetivo: que el cliente sitúe la vivienda, reconozca su acceso durante el acercamiento y entienda la continuidad hasta el interior.
+- Terreno y ortofoto **del emplazamiento**, alineados con la posición, escala y orientación del proyecto. Cada capa se verifica
+  con la política existente (`territory-export-policy.js`); fuente y atribución en el informe **y** en el vídeo.
+- Si falta un dato imprescindible: explicar cuál y dejar el estado visible en Entregar.
+- Aceptación: MP4 continuo > 20 s + informe + evidencia de que emplazamiento y acceso coinciden con el proyecto en RUBIK;
+  y prueba de que la exportación habitual sigue igual con un proyecto **sin** emplazamiento.
+- Red: añadidos al entorno `servicios.idee.es` y `www.catastro.hacienda.gob.es` (antes, 403 del proxy).
+- Cola: Maqueta abierta y Pieza a pieza avanzan en paralelo; la preparación de este caso no las bloquea.
+
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
 - 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
