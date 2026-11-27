@@ -35,3 +35,41 @@ Con una GPU NVIDIA o AMD compatible, Cycles la usa si está activada en Blender;
 - Receta de tapicería v3: **aprobada visualmente por el propietario** (26/11/2026).
 - MP4 completo de f2 (2 s, 1440p): en render; se publica en `docs/qa/rodaje/tapiceria-v3/`.
 - Límites: sin costuras ni vivos en los modelos de mobiliario (ver `tapiceria-v3/README.md`).
+
+## Entrega 27/11/2026 · Película del proyecto · clip 720p «Del plano a la vivienda» (primera entrega de rodaje para revisión)
+- **MP4:** `docs/qa/pelicula-proyecto/clip-720/pelicula-del-plano-a-la-vivienda-720p.mp4`.
+  - SHA-256 `f4e7538638845dd9ca07a064fb902b0f33fb8ad303b6ec68d37efab068f66d01`.
+  - 1280×720, 24 fps, 720 fotogramas, 30 s, h264, sin sonido; decodifica sin errores.
+- **Proyecto:** `prj_op10-f5-furniture` (vivienda de ejemplo).
+  - Revisión identificada por la huella observada `20c1a79b…f849`: el ZIP no trae número de revisión.
+  - ZIP de entrada `04e9fe78…`, kit en `90d38d54`.
+- **Informe:** `clip-720/INFORME-CLIP-720.json`, con la secuencia, las huellas y las observaciones.
+- **Técnico:** `rodaje-report.json` y `preflight.json`.
+- **Revisión de la secuencia completa:** `clip-720/hoja-contactos.png`, un fotograma por segundo.
+- **Observaciones:**
+  - Los últimos ~5 s son un plano sostenido.
+  - Tras la ventana el fondo es azul oscuro: la escena no trae entorno.
+  - Sin texto chino.
+- **Pendiente:** revisión humana de la secuencia completa (ritmo, movimiento de cámara y rótulos).
+
+## Decisiones aprobadas 27/11/2026 · tres efectos de película (implementación y aceptación visual pendientes; fuera de #324)
+Fuente: `aeeef513` · `docs/qa/auditoria-324-villa-linde/PELICULA-PROPUESTA-HOME-ENTREGAR.md` (rama `codex/auditoria-324-villa-linde`).
+- **Pieza a pieza** (referencia: Courtyard house): el croquis o la planta queda de referencia mientras las piezas reales
+  encajan por grupos reconocibles.
+- **Maqueta abierta** (referencia: Apartment): una planta legible gana volumen; vista desde arriba y descenso a una
+  estancia. El clip de esta entrega es su material de partida.
+- **Desde el paisaje** (referencia: Cliff villa): la vivienda en su entorno representado, con entrada por un hueco real.
+  Si falta el entorno, el profesional lo sabe antes de prepararlo.
+
+Los tres parten de una revisión real del proyecto. Si se usa la planta de RUBIK, se rotula como tal. P8 Blueprint 3D sigue
+siendo un entregable aparte.
+
+Dónde viven:
+- **Home:** módulo propio junto a Dibujo vivo.
+- **Entregar → Vídeo:** elegir efecto → revisión y plantas → vista previa ligera de la transición completa → estimación
+  («Estimación no disponible» si faltan datos) → confirmar el render. Si cancela, no se inicia el render completo.
+
+Aceptación:
+- un clip continuo por efecto con su revisión, SHA e informe;
+- grabación del flujo con un proyecto propio;
+- la vista previa y la salida, con el mismo guion y la misma revisión.
