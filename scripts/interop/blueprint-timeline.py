@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""§11 Blueprint · cronología y anexo de report para la película «del plano a la vivienda» (primer corte 720p, sin sonido).
+
+Python puro (sin bpy): lee el manifest.json del ZIP «Escena para Blender» exportado por RUBIK (`rubik-sota.scene-delivery`)
+y escribe `blueprint-timeline.json` con los 7 planos del storyboard aprobado para revisión
+(docs/qa/blueprint/README.md), sus rangos de fotogramas y los grupos de aparición por `rubik_role` QUE EXISTEN en el ZIP.
+Lo ausente se omite y se registra; ninguna cifra sale en un rótulo sin su fuente. El kit de rodaje (blender-rodaje.py) lee
+este archivo para cámara y tiempos dentro de RUBIK_derived; la escena de entrada no se modifica.
+
+Estructura adaptada (no copiada) del donante MIT `blueprint-A-pen-…` @ 2d3463e4 (`houses/courtyard/timeline.json`:
+cronología por sistemas con fases y filas de aparición).
+
+Uso:
+  python3 blueprint-timeline.py MANIFEST.json OUT.json [--zip-sha256 HEX] [--area "87,18 m²" --area-source "Ficha de superficies"]
+                                [--fps 24] [--width 1280 --height 720]
+"""
+import argparse, hashlib, json, sys
+
+SCHEMA = "rubik-sota.blueprint-timeline"
+VERSION = "1.0.0"
+# (id, inicio s, fin s, cámara, grupos que aparecen en el plano, rótulo)
+SHOTS = [
+    ("plan", 0.0, 2.0, "cenital fijo", [], "project"),
+    ("floors", 2.0, 5.0, "descenso diagonal suave", ["room"], "rooms"),
+    ("walls", 5.0, 9.0, "órbita lenta", ["wall"], "walls"),
+    ("openings", 9.0, 12.0, "órbita", ["opening", "opening-leaf"], "openings"),
+    ("furniture", 12.0, 16.0, "acercamiento al salón", ["object"], None),
+    ("enter", 16.0, 20.0, "inmersión a altura de ojos por la puerta del salón", [], None),
+    ("living", 20.0, 24.0, "giro lento en el salón", [], "studio"),
+]
+# Roles que la película no anima y por qué (se registran como omisiones, nunca se esconden en silencio).
+NOT_ANIMATED = {"ceiling": "techo oculto para ver el interior (se conserva en la escena de entrada)"}
+EXPECTED = ["room", "wall", "opening", "opening-leaf", "object"]
+
+
+def build(manifest, *, zip_sha256=None, area=None, area_source=None, fps=24, width=1280, height=720):
+    if manifest.get("format") != "rubik-sota.scene-delivery":
+        raise ValueError("manifest: formato inesperado (se espera rubik-sota.scene-delivery)")
+    scene = manifest.get("scene") or {}
+    roles = (scene.get("stats") or {}).get("roles") or {}
+    present = {r: n for r, n in roles.items() if isinstance(n, int) and n > 0}
+    omissions = [{"role": r, "reason": "no existe en el ZIP"} for r in EXPECTED if r not in present]
+    omissions += [{"role": r, "reason": why, "count": present[r]} for r, why in NOT_ANIMATED.items() if r in present]
+    unknown = sorted(r for r in present if r not in EXPECTED and r not in NOT_ANIMATED)
+    omissions += [{"role": r, "reason": "rol sin regla de aparición: visible desde el inicio", "count": present[r]} for r in unknown]
+    labels_src = {
+        "rooms": ("estancias", present.get("room"), "manifest.scene.stats.roles.room"),
+        "walls": ("muros", present.get("wall"), "manifest.scene.stats.roles.wall"),
+        "openings": ("huecos", present.get("opening"), "manifest.scene.stats.roles.opening"),
+    }
+    shots, f0 = [], 0
+    for sid, t0, t1, cam, groups, label in SHOTS:
+        a, b = round(t0 * fps), round(t1 * fps) - 1
+        g = [{"role": r, "count": present[r]} for r in groups if r in present]
+        missing = [r for r in groups if r not in present]
+        lab = None
+        if label == "project":
+            lab = {"text": "nombre del proyecto", "source": "manifest.source.projectId"}
+            if area and area_source:
+                lab = {"text": f"nombre del proyecto · {area}", "source": f"manifest.source.projectId · {area_source}"}
+        elif label in labels_src:
+            word, n, src = labels_src[label]
+            lab = {"text": f"{n} {word}", "source": src} if n else None
+        elif label == "studio":
+            lab = {"text": "logo de Mi estudio (si el profesional lo elige)", "source": "Mi estudio · opcional"}
+        shots.append({"id": sid, "seconds": [t0, t1], "frames": [a, b], "camera": cam, "appear": g,
+                      "skippedGroups": missing, "label": lab})
+        f0 = b + 1
+    return {
+        "schema": SCHEMA, "version": VERSION,
+        "output": {"width": width, "height": height, "fps": fps, "frames": f0, "seconds": f0 / fps, "audio": None},
+        "input": {"format": manifest.get("format"), "version": manifest.get("version"),
+                  "projectId": (manifest.get("source") or {}).get("projectId"),
+                  "observedProjectSha256": (manifest.get("source") or {}).get("observedProjectSha256"),
+                  "sceneGlbSha256": ((manifest.get("files") or {}).get("scene.glb") or {}).get("sha256"),
+                  "zipSha256": zip_sha256, "bounds": (scene.get("stats") or {}).get("bounds"), "units": scene.get("units")},
+        "groups": [{"role": r, "count": present[r]} for r in EXPECTED if r in present],
+        "shots": shots, "omissions": omissions,
+        "approximations": [], "derived": "RUBIK_derived · cámara, tiempos, luz editorial y rótulos; la escena de entrada no se escribe",
+        "check": "al cerrar, huella de geometría y posiciones finales = escena de entrada (blender-rodaje.py)",
+        "donor": {"repo": "Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-", "commit": "2d3463e4", "license": "MIT",
+                  "reused": "estructura de cronología por sistemas (adaptada); sin código, texturas, música ni modelos"},
+    }
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("manifest"); ap.add_argument("out")
+    ap.add_argument("--zip-sha256"); ap.add_argument("--zip", help="ruta del ZIP para calcular su huella")
+    ap.add_argument("--area"); ap.add_argument("--area-source")
+    ap.add_argument("--fps", type=int, default=24); ap.add_argument("--width", type=int, default=1280); ap.add_argument("--height", type=int, default=720)
+    a = ap.parse_args(argv)
+    sha = a.zip_sha256
+    if a.zip:
+        h = hashlib.sha256()
+        with open(a.zip, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""): h.update(chunk)
+        sha = h.hexdigest()
+    with open(a.manifest, encoding="utf-8") as f: m = json.load(f)
+    t = build(m, zip_sha256=sha, area=a.area, area_source=a.area_source, fps=a.fps, width=a.width, height=a.height)
+    with open(a.out, "w", encoding="utf-8") as f: json.dump(t, f, ensure_ascii=False, indent=2)
+    print(f"{a.out}: {len(t['shots'])} planos · {t['output']['frames']} fotogramas a {a.fps} fps · omisiones {len(t['omissions'])}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

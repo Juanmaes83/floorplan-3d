@@ -40,3 +40,16 @@ Primer corte revisable: fotogramas de los planos 1, 3 y 7 + clip a **720p** + re
 ## Decisiones del propietario
 - Confirmar el storyboard y si los rótulos llevan cifras (requieren su fuente en el report) o solo nombres.
 - Sonido: el donante sincroniza con `timeline.json`; ¿se incluye sonido? (requiere revisar licencias de `sfx/` o usar uno propio).
+
+## Preparado para el clip 720p (27/11) · cronología y report
+`scripts/interop/blueprint-timeline.py` (Python puro, sin bpy) lee el `manifest.json` del ZIP de «Escena para Blender» y escribe
+`blueprint-timeline.json`: salida 1280×720, 24 fps, 576 fotogramas (24 s), **sin audio**; los 7 planos con rango de fotogramas,
+cámara, grupos que aparecen por `rubik_role` (solo los que existen en el ZIP) y rótulos **con su fuente** (sin fuente no hay cifra;
+la superficie solo entra con `--area` y `--area-source`). Las omisiones se registran (p. ej. `ceiling`: techo oculto para ver el
+interior; roles ausentes; roles sin regla). Entrada identificada por proyecto, huella observada, huella de `scene.glb` y huella
+del ZIP (`--zip`). Comprobado con un ZIP real del rodaje (`pkg3`: 2 estancias · 27 muros · 18 huecos · 43 objetos; omisión del techo).
+```bash
+python3 scripts/interop/blueprint-timeline.py manifest.json blueprint-timeline.json --zip escena.zip --area "87,18 m²" --area-source "Ficha de superficies"
+```
+Siguiente paso (necesita CPU libre, tras la regresión y sin render en paralelo): que `blender-rodaje.py` lea esta cronología en
+`RUBIK_derived` y renderice el clip 720p del proyecto de ejemplo. Sonido: ninguno (decisión pendiente del propietario).
