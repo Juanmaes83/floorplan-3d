@@ -29,3 +29,14 @@ siguiente paso en la misma pantalla; los textos solo describen lo disponible en 
    «Más luz y orden» y decirlo así. Opción B: añadir la intención «Despejar la estancia» al contrato cerrado de FOT-01 (afecta a
    gobierno GOV-05/IMG-04 y al proveedor cuando se autorice).
 2. Confirmar que los ejemplos se hagan con capturas/renders de RUBIK (propios, sin licencias de terceros) y no con fotos externas.
+
+## Implementación (27/11) · decisión del propietario aplicada
+Inmobiliaria abre **«Más luz y orden»** y lo dice tal cual; interiorismo y reformas abre **«Cambiar el suelo · Roble claro»**.
+- `js/photo-reform-ui.js`: `open({intent, finish, case})` abre FOT-01 con la intención y el acabado ya elegidos (la persona puede
+  cambiarlos). En **Entregar → Imágenes**, el desplegable «Reformar desde fotografía · dos casos con ejemplo» muestra cada caso
+  con su par original / alternativa ilustrativa (rotulados), la marca «Ejemplo hecho con el 3D de RUBIK, no con una foto
+  procesada», qué hace la intención con la foto de la persona, qué revisar con el cliente (no medidas ni coste) y «Probar con tu
+  foto». Bajo el botón: «hoy las alternativas son una SIMULACIÓN rotulada (no generada por IA) y no se envía nada».
+- Ejemplos propios: vistas reales del 3D de RUBIK del salón del proyecto de ejemplo (`assets/photo-reform/`): original; salón
+  sin muebles; suelo porcelánico 80×80 → madera de roble del catálogo del proyecto (`mat_tile800` → `mat_wood`).
+- Estado: código listo; ejemplos, prueba y vídeo desde Entregar → Imágenes **pendientes** de ejecutar con la CPU libre.
