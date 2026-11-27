@@ -763,7 +763,9 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     for i, o in enumerate(ws):
         a = w0 + int(span * i / n); base = o.location.z < .05
         grow(o, a, a + int(1.2 * fps), (1, 1, .03) if base else (1, 1, 0.0005))
-    for role, sh, drop in (("opening", "openings", .0), ("opening-leaf", "openings", .0), ("object", "furniture", .45)):
+    EFF = ((TL.get("guion") or {}).get("effect")) or "maqueta-abierta"
+    PIEZA = EFF == "pieza-a-pieza"  # «Pieza a pieza»: las piezas reales caen y encajan sobre su huella; el plano sigue visible
+    for role, sh, drop in (("opening", "openings", .9 if PIEZA else .0), ("opening-leaf", "openings", .9 if PIEZA else .0), ("object", "furniture", 1.2 if PIEZA else .45)):
         a0, a1 = S[sh]; xs = sorted(by.get(role, []), key=lambda o: (ang(o), o.name)); n = max(1, len(xs)); span = a1 - a0 - int(.8 * fps)
         for i, o in enumerate(xs):
             a = a0 + int(span * i / n); grow(o, a, a + int(.8 * fps), (.0005, .0005, .0005), drop)
@@ -806,9 +808,13 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     aprox = lc + back * (1.7 * Rr + 1.5) + V((0, 0, h + 2.4)); umbral = lc + back * (.95 * Rr) + V((0, 0, h - .15))
     tg_mid = (lc + V((0, 0, .5))).lerp(tg0, .55)
     eye1 = lc + back * (.32 * Rr) + V((0, 0, 1.4)); tg1 = tg0 + side * 1.5  # final: avance lento (≈ 0,3 R) y paneo suave
-    K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .985), ctr, lens_top), (S["floors"][1], orbit(-22, 60, 1.25), ctr, 40),
+    if not PIEZA: K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .985), ctr, lens_top), (S["floors"][1], orbit(-22, 60, 1.25), ctr, 40),
          (S["walls"][1], orbit(-9, 50, 1.16), ctr, 36), (S["openings"][1], orbit(2, 46, 1.1), ctr, 35),
          (S["furniture"][1], aprox, lc + V((0, 0, .3)), 28), (S["enter"][0] + int(3.8 * fps), umbral, tg_mid, 22), (S["enter"][1], eye0, tg0, 18), (nframes - 1, eye1, tg1, 18)]
+    if PIEZA:  # órbita alta y continua: volumen y huella siempre a la vista; nunca entra (sin techo ni luminarias)
+        K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .985), ctr, lens_top), (S["floors"][1], orbit(-28, 64, 1.3), ctr, 40),
+             (S["walls"][1], orbit(-10, 54, 1.2), ctr, 36), (S["openings"][1], orbit(6, 50, 1.16), ctr, 35),
+             (S["furniture"][1], orbit(20, 47, 1.14), ctr, 35), (nframes - 1, orbit(38, 44, 1.2), ctr, 34)]
     def cr(p0, p1, p2, p3, t): return .5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3)
     def at(f, idx):
         for k in range(len(K) - 1):
@@ -820,7 +826,7 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     for f in range(0, nframes, 6): cd.lens = at(f, 3); cd.keyframe_insert("lens", frame=f)
     cd.clip_start = .05; cd.clip_end = diag * 10
     # Techos y luminarias: entran cuando la cámara ya está por debajo del techo, fuera del encuadre.
-    f_in = next((f for f in range(S["furniture"][1], nframes) if at(f, 1).z < h - .25), S["enter"][1])
+    f_in = nframes + 10 if PIEZA else next((f for f in range(S["furniture"][1], nframes) if at(f, 1).z < h - .25), S["enter"][1])
     for o in by.get("ceiling", []) + by.get("fixture", []): grow(o, f_in, f_in + 2, (.0005, .0005, .0005))
     # Continuidad de luz (auditoría 27/11, salto en 532→533): techo y luminarias no proyectan sombra ni rebotan en ningún momento;
     # solo los ve la cámara. La luz de la escena es la misma antes y después de entrar.
@@ -846,7 +852,7 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     declared.append(f"Película del proyecto · «Del plano a la vivienda»: {nframes} fotogramas a {fps} fps sin sonido; cronología {TL['_sha256'][:12]}")
     declared.append(f"planta legible: cenital con objetivo de {lens_top} mm, suelos del ZIP, huella de los muros al 3 % y {nlab} rótulos con el nombre visible de cada estancia (se retiran al girar)")
     declared.append(f"aparición en su posición: {len(ws)} muros crecen desde su huella; {len(by.get('opening', []))} huecos, {len(by.get('opening-leaf', []))} hojas y {len(by.get('object', []))} muebles crecen en su sitio (muebles desde 0,45 m por encima); techos y luminarias al entrar (fotograma {f_in})")
-    declared.append(f"estancia final «{labels.get(room['id'], room['id'])}» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m")
+    declared.append("Pieza a pieza: piezas reales del ZIP caen (huecos 0,9 m, muebles 1,2 m) y encajan sobre su huella; órbita alta continua; sin entrada al interior (techo y luminarias fuera)") if PIEZA else declared.append(f"estancia final «{labels.get(room['id'], room['id'])}» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m")
     return lambda f: (at(f, 1), at(f, 2))
 
 def main():
@@ -869,7 +875,7 @@ def main():
     shot = arg("--shot", "aereo"); light = arg("--light", "dia"); fps = int(arg("--fps", "24")); secs = float(arg("--seconds", "2"))
     nframes = max(1, int(round(fps * secs)))
     TL = None
-    EFECTOS_KIT = {"maqueta-abierta"}  # coreografías disponibles en este kit; las demás se declaran pendientes (sin inventar)
+    EFECTOS_KIT = {"maqueta-abierta", "pieza-a-pieza"}  # coreografías disponibles en este kit; las demás se declaran pendientes (sin inventar)
     if GUION:
         if GUION["effect"] not in EFECTOS_KIT:
             raise SystemExit(f"El efecto «{GUION['effect']}» aún no tiene coreografía en este kit (pendiente); no se renderiza nada.")
