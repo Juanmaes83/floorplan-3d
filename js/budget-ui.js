@@ -23,6 +23,14 @@
   // XR-01: label of an item whose unit changed while it carried a price (budget-draft-core keeps the old unit and price).
   unitConflict:(from,to)=>{const n=u=>({unit:tx('ud','pcs','件'),m2:'m²',m:'m'})[u]||u;return tx(`La unidad ha cambiado (${n(from)} → ${n(to)}): se conserva tu precio por ${n(from)} con su origen y la cantidad queda pendiente. Revisa la partida o quita el precio para usar la nueva unidad`,`The unit changed (${n(from)} → ${n(to)}): your price per ${n(from)} is kept with its source and the quantity stays pending. Review the item or remove the price to use the new unit`,`单位已变更（${n(from)} → ${n(to)}）：保留按 ${n(from)} 的价格及其来源，数量待定。请审核该条目或移除价格以使用新单位`);},
   chapters:{floors:tx('Pavimentos y rodapiés','Floors and skirting','地面与踢脚'),walls:tx('Acabados de paredes','Wall finishes','墙面'),partitions:tx('Tabiquería','Partitions','隔墙'),carpentry:tx('Carpintería','Doors and windows','门窗')}});
+ // V01 (#324): el presupuesto es de la planta activa. En un edificio de varias plantas, cada total y cada salida dicen qué
+ // planta se paga y que las demás no entran; con una sola planta o sin edificio, nada cambia (null).
+ const scope=()=>{const c=window.FloorPlanBuildingUI?.context;if(!c||!(c.levels>1))return null;const lv=local(c.levelName),bd=local(c.buildingName||'')||local(app.project.name);
+  return {levelId:c.levelId,levelName:lv,buildingName:bd,levels:c.levels,
+   short:tx(`Planta «${lv}»`,`Level «${lv}»`,`楼层「${lv}」`),
+   text:tx(`Alcance: solo la planta «${lv}» · 1 de ${c.levels} plantas del edificio «${bd}». Las demás plantas no están incluidas.`,`Scope: level «${lv}» only · 1 of ${c.levels} levels of the building «${bd}». The other levels are not included.`,`范围：仅楼层「${lv}」· 建筑「${bd}」共 ${c.levels} 层中的 1 层。其他楼层不包括在内。`),
+   file:'-'+String(lv).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,30)};};
+ window.FloorPlanBudgetScope=scope;
  const slug=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase().slice(0,50)||'proyecto';
  let state=null,returnFocus=null,base=null,baseColumn=0,openRef=null;
  const X=window.FloorPlanBc3Budget,Bridge=window.FloorPlanBudgetCostBridge;
@@ -106,6 +114,7 @@
     if(base.labels.length>1){const cl=el('label',undefined,ref);el('span',tx('Columna de precio','Price column','价格列'),cl);const cs=el('select',undefined,cl);cs.id='budgetBc3Column';base.labels.forEach((l,i)=>{const o=el('option',l||String(i+1),cs);o.value=String(i);});cs.value=String(baseColumn);cs.onchange=()=>{baseColumn=+cs.value;draw('budgetBc3Column');};}
     el('p',tx('Usa «Buscar referencia» en cada partida.','Use «Find reference» on each item.','在每个条目使用“查找参考”。'),ref,'budget-bc3-note');}}
   // Totals, exactly as the budget core computes them, with what is missing said plainly.
+  {const sc=scope();if(sc){const p=el('p',sc.text,dialog,'budget-scope');p.id='budgetScope';}}
   const tot=el('dl',undefined,dialog,'quantity-summary budget-totals');tot.id='budgetTotals';const fact=(k,v)=>{const g=el('div',undefined,tot);el('dt',k,g);el('dd',v,g);};
   fact(tx('Base imponible','Net','净额'),eur(c.totals.net.amount));fact(tx('IVA','VAT','增值税'),c.taxRatePercent===null&&!c.lines.some(l=>l.effectiveTaxRatePercent!==null)?'—':eur(c.totals.tax.amount));const nu=c.totals.unpricedItemIds.length,nq=c.totals.unavailableQuantityItemIds.length,ntxN=c.lines.filter(l=>l.effectiveTaxRatePercent===null).length,ntx=ntxN>0;fact(!c.totals.gross.complete?tx(`Total parcial (${[nu?`${nu} sin precio`:'',nq?`${nq} con cantidad pendiente`:'',ntx?(ntxN<c.lines.length?`${ntxN} sin IVA`:'IVA sin definir'):''].filter(Boolean).join(' · ')||'datos incompletos'})`,`Partial total (${[nu?`${nu} unpriced`:'',nq?`${nq} quantity pending`:'',ntx?(ntxN<c.lines.length?`${ntxN} without VAT`:'VAT not set'):''].filter(Boolean).join(' · ')||'incomplete data'})`,'部分合计'):tx('Total','Total','合计'),eur(c.totals.gross.amount));
   const warn=el('ul',undefined,dialog,'budget-warnings');warn.id='budgetWarnings';
@@ -126,15 +135,15 @@
   const keep=btn(tx('Guardar mis precios en la tarifa del estudio','Save my prices to the studio tariff','保存到工作室价目'),row);keep.id='budgetTariff';
   keep.onclick=()=>{const tariff=read(TARIFF);let n=0;for(const it of state.budget.items)if(it.unitPrice!==null&&state.tariffKeys[it.id]){tariff[state.tariffKeys[it.id]]={unitPrice:it.unitPrice,asOf:new Date().toISOString().slice(0,10)};n++;}write(TARIFF,tariff);say(tx(`${n} precios guardados en tu tarifa: se propondrán (sin revisar) en tus próximos presupuestos.`,`${n} prices saved to your tariff.`,`已保存 ${n} 个价格。`));};
   const csv=btn(tx('Descargar presupuesto (CSV)','Download budget (CSV)','下载预算 (CSV)'),row,'btn primary');csv.id='budgetCsv';
-  csv.onclick=()=>download(new Blob([P.toCsv(state.budget,{delimiter:';',bom:true})],{type:'text/csv;charset=utf-8'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.csv`);
+  csv.onclick=()=>{const sc=scope();download(new Blob([P.toCsv(state.budget,{delimiter:';',bom:true,scope:sc?.text})],{type:'text/csv;charset=utf-8'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}${sc?sc.file:''}.csv`);};
   const js=btn(tx('Descargar presupuesto (JSON)','Download budget (JSON)','下载预算 (JSON)'),row);js.id='budgetJson';
-  js.onclick=()=>download(new Blob([B.serializeBudget(state.budget)],{type:'application/json'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.json`);
+  js.onclick=()=>{const sc=scope(),b=sc?{...state.budget,title:`${state.budget.title} · ${sc.short} (1 de ${sc.levels} plantas)`}:state.budget;download(new Blob([B.serializeBudget(b)],{type:'application/json'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}${sc?sc.file:''}.json`);};
   // CON-03: the reader of that same JSON. Preview first; the budget only changes on «Importar» (same document, same draft).
   const imp=btn(tx('Importar presupuesto (JSON)…','Import budget (JSON)…','导入预算 (JSON)…'),row);imp.id='budgetImport';const impFile=el('input',undefined,row);impFile.type='file';impFile.id='budgetImportFile';impFile.accept='.json,application/json';impFile.hidden=true;
   imp.onclick=()=>impFile.click();impFile.onchange=()=>{const f=impFile.files[0];impFile.value='';if(f)importFile(f);};
   if(state.catalogError)imp.disabled=true;
   if(pendingImport)importPreview();
-  if(X){const bc=btn(tx('Descargar presupuesto (BC3)','Download budget (BC3)','下载预算 (BC3)'),row);bc.id='budgetBc3Export';bc.onclick=()=>{try{const out=X.exportBudget(state.budget,{title:local(app.project.name)});download(new Blob([out.bytes],{type:'application/octet-stream'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.bc3`);say(tx(`BC3 generado: ${out.check.concepts.length} conceptos. Las partidas sin precio van sin precio.`,`BC3 generated: ${out.check.concepts.length} concepts.`,'BC3 已生成。'));}catch(e){say(e.message);}};}
+  if(X){const bc=btn(tx('Descargar presupuesto (BC3)','Download budget (BC3)','下载预算 (BC3)'),row);bc.id='budgetBc3Export';bc.onclick=()=>{try{const out=X.exportBudget(state.budget,{title:local(app.project.name)+(scope()?' · '+scope().short:'')});download(new Blob([out.bytes],{type:'application/octet-stream'}),`rubik-sota-presupuesto-${slug(local(app.project.name))}.bc3`);say(tx(`BC3 generado: ${out.check.concepts.length} conceptos. Las partidas sin precio van sin precio.`,`BC3 generated: ${out.check.concepts.length} concepts.`,'BC3 已生成。'));}catch(e){say(e.message);}};}
   const status=el('p','',dialog,'ai-render-status');status.id='budgetStatus';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   if(identityUnsafe())for(const control of dialog.querySelectorAll('button,input,select,textarea'))if(control!==close)control.disabled=true;
   dialog.scrollTop=scroll;

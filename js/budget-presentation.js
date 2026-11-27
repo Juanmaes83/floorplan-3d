@@ -163,14 +163,17 @@
     return /["\r\n]/.test(text) || text.includes(delimiter) ? `"${text.replace(/"/g,'""')}"` : text;
   }
 
-  function toCsv(budget,{delimiter=',',newline='\r\n',bom=false}={}){
+  // `scope` (V01 #324): texto del alcance de planta en un edificio; añade la columna final `scope`. Sin él, la salida no cambia.
+  function toCsv(budget,{delimiter=',',newline='\r\n',bom=false,scope=null}={}){
     if (![',',';','\t'].includes(delimiter)) fail('delimiter must be comma, semicolon or tab');
     if (!['\n','\r\n'].includes(newline)) fail('newline must be LF or CRLF');
     if (typeof bom !== 'boolean') fail('bom must be boolean');
     const report = buildReport(budget);
-    const rows = [csvColumns.map(([name]) => csvCell(name,delimiter)).join(delimiter)];
+    if (scope !== null && typeof scope !== 'string') fail('scope must be a string or null');
+    const cols = scope ? [...csvColumns, ['scope',() => scope]] : csvColumns;
+    const rows = [cols.map(([name]) => csvCell(name,delimiter)).join(delimiter)];
     for (const line of report.lines){
-      rows.push(csvColumns.map(([,getter]) => csvCell(getter(report,line),delimiter)).join(delimiter));
+      rows.push(cols.map(([,getter]) => csvCell(getter(report,line),delimiter)).join(delimiter));
     }
     return `${bom ? '\uFEFF' : ''}${rows.join(newline)}${newline}`;
   }
