@@ -2,7 +2,81 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
-## ▶ CHECKPOINT · 27/11/2026, 19:00 (leer primero; sustituye al de las 12:10 donde lo contradiga)
+## ▶ CHECKPOINT DE COMPACTACIÓN · 27/11/2026, 20:15 (leer primero)
+
+**Estado de la máquina al escribir esto:**
+- Ningún proceso vivo: no hay render ni pruebas.
+- Los cinco worktrees `/home/user/{integ,hdr,ent,gest,rodaje}` coinciden con el remoto, sin cambios útiles en local (en `ent`
+  solo `qa-results/`, que no se publica).
+- `/home/user/base53` = `master` `dacb5d39`.
+
+### Commits publicados en esta sesión (desde las 19:00)
+| Rama | SHA | Qué |
+|---|---|---|
+| `claude/rodaje-cierre-1440` | `91b4ced9` | Clip 720p «Del plano a la vivienda»: MP4 `f4e75386…6d01`, informe, hoja de contactos y tres efectos aprobados en el handoff |
+| `claude/rodaje-cierre-1440` | `fd3c4a8e` | **Auditoría del propietario** del clip (4 hallazgos con tramos) para la tanda nocturna |
+| `claude/integracion-cabecera-entregar` | `93339c8a` | CI `contract`: story-assist/flow/proposal sin el desplazamiento explícito frágil (10/10 local) |
+| `claude/integracion-cabecera-entregar` | `c7093d62` | **HEAD actual de #324.** Ejecutor y sondas de la auditoría versionados (`docs/qa/integracion-324/auditoria-codex/sondas/`) |
+
+### #324: CI de `cfabe252`, clasificada (verificado)
+| Fallo | Evidencia | Clasificación |
+|---|---|---|
+| `walk-controls-vs-master` · desktop controls 1440 | Local 4/4 en candidata y 4/4 en master. **Relanzado en CI sobre el mismo `cfabe252` → éxito** en master y en HEAD | **entorno** (intermitente en CI) |
+| `ux08` · 820×1180 táctil | Local 3/3 y 3/3. En CI alterna verde/rojo en SHAs que no tocan ese código (verde en `5a061725`, `f70891aa`, `917d80e9`, `b05676f2`, `6434b0b4`; rojo en `cfabe252`, que solo cambia documentación) | **entorno** |
+| `contract` · story-assist §8.3 | «scrollIntoViewIfNeeded: Element is not attached». Primera ejecución en CI de esa prueba | **candidata (prueba frágil)**, corregido en `93339c8a` sin tocar aserciones. Si se quita el desplazamiento en story-layers se rompe su prueba de posición (2/2), así que ese archivo lo conserva |
+
+`full-regression` figura como **omitida** en la CI.
+**Pendiente:** CI y Preview de `c7093d62` (o del SHA final) sin consultar todavía.
+
+### Pendiente de #324, en orden (una tanda pesada cada vez)
+1. Comprobar la CI y la Preview del HEAD vigente.
+2. **Auditoría:**
+   - V09 integrado: la sonda `probe-v09e.js` no llegaba a abrir Blueprint en Entregar con el render activo; reintentar
+     con la máquina libre;
+   - grabar V03, V05, V07 y V09 en escritorio y móvil;
+   - comprobar si cambia el ID del ejemplo al recargar;
+   - V08 sigue como diagnóstico.
+   Fila por hallazgo en `docs/qa/integracion-324/auditoria-codex/README.md` y en #324.
+3. Regresión completa local del SHA final (`reanudacion/integ-regr.sh`, añadiendo `auditoria-324` y
+   `quantity-schedule`), con la CI y la Preview de ese mismo SHA y un recorrido breve.
+4. Separar las Previews ya aprobadas (§9 `fccda24b`, Entregar `7b2e01ab`) de la revisión pendiente de la candidata
+   conjunta.
+5. **Borrador hasta** la revisión de Claude, Codex y Juanma y la autorización expresa de Juanma sobre ese SHA.
+
+### Gesture Labs (fuera de #324)
+- `claude/gesture-labs` `c585dda4`: núcleo 11/11, confirmado por Codex.
+- **Pendiente:** la prueba de navegador (`tests/gesture-lab.browser.test.cjs`, con el ensayo de giro añadido y sin
+  ejecutar). Va después de la validación de #324, nunca a la vez.
+- Después, el guion para que Juanma grabe con la cámara frontal del móvil:
+  1. entrar por P11;
+  2. ver las viñetas de cada paso con su botón equivalente;
+  3. desplegar el plano;
+  4. pasar a la misma estancia en 3D;
+  5. orientar la maqueta con la palma moviéndose despacio;
+  6. salir y comprobar que la cámara se apaga.
+
+### Tanda NOCTURNA · nueva versión de la película (fuera de #324)
+Corregir los 4 hallazgos de la auditoría (`fd3c4a8e`):
+- luz a 22,21 s;
+- descenso de 18 a 25 s;
+- ritmo;
+- nitidez, vidrio y entorno.
+
+Misma revisión (`prj_op10-f5-furniture`, huella `20c1a79b…`). Entregar el MP4 con su SHA, su informe, su resolución y su
+perfil, y los tramos de cada corrección. El MP4 `f4e75386…` queda de referencia.
+
+**Tras un reinicio:**
+- kit = `$S/rodaje` (`kit5-f5`) y `$S/bpy52` (bpy 5.2.1);
+- si faltan, reconstruirlos con `docs/qa/pelicula-proyecto/README.md` (rama `claude/rodaje-cierre-1440`; ZIP y cronología en
+  `entrada/`);
+- script base: `reanudacion/pel-clip.sh`.
+
+### Dependencias de /tmp (`$S` = `/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad`)
+- `$S/audit/ws/output/auditoria-324` (material de Codex): se recrea con `git archive 87f4661b docs/qa/auditoria-324-villa-linde`.
+- `$S/rodaje/kit5-f5`, `$S/bpy52`: se recrean con el README de la película.
+- Ejecutor y sondas: ya versionados en `c7093d62`.
+
+## CHECKPOINT · 27/11/2026, 19:00 (decisiones, servicios e inventario siguen vigentes)
 
 **Regla de carga:** una tanda pesada cada vez. Mientras renderiza Blender, solo trabajo ligero: lectura, documentos y
 pruebas puras de Node.
