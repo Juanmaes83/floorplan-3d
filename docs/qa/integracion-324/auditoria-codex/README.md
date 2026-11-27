@@ -27,3 +27,10 @@ fallo.
 
 **Fuera de esta PR, como se pidió:** presupuesto global, visita privada multiplanta, Gesture Labs y Película del
 proyecto.
+
+### ID del proyecto de ejemplo al recargar (27/11, 21:0x)
+Sonda `sondas/probe-id-recarga.js` sobre `ac2fe1ba`: abrir el ejemplo → `prj_reference-home` («Proyecto de ejemplo»); recargar → la app reabre sola el mismo proyecto con el **mismo ID** `prj_reference-home`, editor listo, 0 errores de página. El ID **no cambia** al recargar.
+
+### CI de `c7093d62` (ejecución 20:32)
+- `app-m2-gate-d`: **entorno**. El runner no pudo instalar Chromium (`packages.microsoft.com … 403 Forbidden`, «Failed to install browsers»); las 7 pruebas fallan por `Cannot find module 'playwright'` sin llegar a ejecutarse. El workflow no cambia en #324.
+- `walk-controls-vs-master`: falla «desktop controls … 1440x900» en HEAD (pasa en master); todos sus pasos medidos pasan («Pasos nuevos rotos: 0»). En local, en el mismo árbol, 3/3 en verde. Segunda vez que aparece en CI: lo trato como **intermitente** y no como entorno cerrado; queda vigilado en el SHA final.
