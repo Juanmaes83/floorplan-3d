@@ -73,3 +73,29 @@ Siguiente paso (necesita CPU libre, tras la regresión y sin render en paralelo)
   2. Render 720p de 576 fotogramas: **pendiente de implementar** la lectura de `pelicula-timeline.json` en `blender-rodaje.py`
      (planos, cámaras y aparición por `rubikIds` dentro de `RUBIK_derived`). Hasta entonces no existe un comando de render de la
      película; no se presenta uno que no funcione.
+
+## Revisión visual (27/11) · fotogramas de control y clip 720p
+**Entrada:** ZIP real de Entregar → «Escena para Blender» de la **vivienda de ejemplo** (`prj_op10-f5-furniture`, 13
+estancias · 70 muros · 20 de 22 huecos con malla · 47 muebles), con el kit Blender existente (`blender-rodaje.py
+--shot pelicula`). Cronología de 30 s: [`evidencia/pelicula-timeline-f5-vivienda.json`](evidencia/pelicula-timeline-f5-vivienda.json).
+
+| # | Fotograma | Qué acredita | Imagen |
+|---|---|---|---|
+| 1 | f0060 (2,5 s) | planta **legible y alineada** con el plano de RUBIK (norte del dibujo arriba): suelos del ZIP, huella de los muros y rótulos con el nombre visible de cada estancia (las de menos de 2,5 m², los miradores, no se rotulan) | [`control-720/1-planta-legible-f0060.png`](control-720/1-planta-legible-f0060.png) |
+| 2 | f0330 (13,75 s) | **volumen** con los muros crecidos desde su huella y los huecos en su sitio (los muebles aparecen después) | [`control-720/2-volumen-f0330.png`](control-720/2-volumen-f0330.png) |
+| 3 | f0700 (29,2 s) | **interior reconocible**: el salón (rotulado en la planta), con sus muebles y los acabados del ZIP; techo y luminarias presentes | [`control-720/3-interior-salon-f0700.png`](control-720/3-interior-salon-f0700.png) |
+
+- **Report:** [`control-720/report-f0060.json`](control-720/report-f0060.json) y
+  [`control-720/report-f0330-f0700.json`](control-720/report-f0330-f0700.json). Incluyen cronología, planos, omisiones,
+  conciliación, materiales y la comprobación final «posiciones y dimensiones finales = escena de entrada» (0 cambios).
+  f0330 y f0700 se renderizaron antes de los dos últimos ajustes de rótulos (miradores y dos líneas), que solo afectan a la
+  planta.
+- **Coste medido (CPU de 4 núcleos, Cycles 8 muestras + OIDN, 1280×720):** ≈ 10–13 s por fotograma en la planta, ≈ 22–27 s en
+  el volumen y ≈ 63–75 s en el interior.
+- **Clip 720p sin sonido (720 fotogramas, 24 fps):** render en cola en este contenedor, detrás de las regresiones; se estiman
+  4–6 h. Comando:
+  `python blender-rodaje.py -- <escena-preparada> <kit> <salida> --shot pelicula --timeline pelicula-timeline.json --res 1280x720 --samples 8`,
+  y después
+  `ffmpeg -framerate 24 -i frames/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 20 -an pelicula-del-plano-a-la-vivienda-720p.mp4`.
+  El MP4 se publicará con su SHA y su report.
+- El MP4 pendiente de 2 s a 1440p sigue separado y en pausa; la versión 1440p de la película espera la aprobación del clip.

@@ -783,7 +783,9 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     for r in rooms:
         t = labels.get(r["id"]) or ""
         if not t or re.search(r"[㐀-鿿]", t): continue
-        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = t; cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.24, min(.55, (max(xs_) - min(xs_)) / 1000 / max(4, len(t)) * 1.5, wmin * .3)); cu.extrude = .002
+        if area(r) / 1e6 < 2.5: continue  # p. ej. miradores: el rótulo no cabe; la estancia sigue visible en la planta
+        lines = t.split(" ", 1) if len(t) > 11 and " " in t else [t]; longest = max(len(x) for x in lines)
+        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.26, min(.55, (max(xs_) - min(xs_)) / 1000 / max(4, longest) * 1.6, wmin * .28 / len(lines) * 1.4)); cu.extrude = .002
         ob = bpy.data.objects.new(cu.name, cu); ob.data.materials.append(mat); derived.objects.link(ob); cc = R.centroid(r["polygon"])
         L = R.to_blender(cc["x"], cc["y"], origin, .03); key(ob, 0, L, V((1, 1, 1))); key(ob, f_out, L, V((1, 1, 1))); key(ob, f_out + int(.6 * fps), L, V((.0005, .0005, .0005))); nlab += 1
     # Cámara: puntos clave y Catmull-Rom (velocidad continua: sin cortes entre 2D y volumen).
@@ -1004,7 +1006,15 @@ def main():
         declared.append(f"plano interior: travelling de {round((a1 - a0).length, 2)} m hacia el centro de «{labels.get(rid, rid)}» a 1,35 m; holgura inicial {round(free, 2)} m")
     for f in range(nframes):
         t = f / max(1, nframes - 1); t = t * t * (3 - 2 * t)  # suavizado
-        loc, look = pose_f(f) if shot == "pelicula" else pose(t); cam.location = loc; cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
+        loc, look = pose_f(f) if shot == "pelicula" else pose(t); cam.location = loc
+        if shot == "pelicula":  # orientación explícita: con la cámara cenital, el norte del dibujo de RUBIK queda arriba
+            from mathutils import Matrix
+            zc = (loc - look).normalized(); k = min(1.0, max(0.0, (0.985 - zc.z) / 0.25)); k = k * k * (3 - 2 * k)
+            hint = (Vector((0, 1, 0)) * (1 - k) + Vector((0, 0, 1)) * k).normalized(); xc = hint.cross(zc)
+            xc = xc.normalized() if xc.length > 1e-6 else Vector((1, 0, 0)); yc = zc.cross(xc)
+            cam.rotation_euler = Matrix((xc, yc, zc)).transposed().to_euler()
+        else:
+            cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
         cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f)
     if shot == "pelicula":  # al final de la película todo está en su sitio: huella = escena de entrada
         sc.frame_set(nframes - 1); geo2 = huella_geometria(); dif = sorted(k for k in geo0 if geo2.get(k) != geo1.get(k))
