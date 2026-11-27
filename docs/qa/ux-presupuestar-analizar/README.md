@@ -104,3 +104,10 @@ Pruebas locales: `presupuestar-analizar-corte2` 2/2 (escritorio y móvil), `pres
 El propietario revisó y aprobó la Preview de §5.3 con las correcciones publicadas del segundo corte. Siguen pendientes las imágenes de fichas, los estados e inventario del segundo corte, su regresión completa y el contraste de Point9 contra la base. La edición manual de altura libre sigue como decisión separada.
 
 [Preview revisada](https://floorplan-3d-54812ljcx-juanma-espinosas-projects.vercel.app/) · SHA de la aplicación: `7a5db569b39bbc339f4dbefaf090fdca65934435`. Esta aprobación corresponde a la revisión humana del corte y no equivale a CI, fusión ni activación.
+
+## Regresión completa del corte 2 (`852e0f44`; vídeo en `a901452e`)
+Local, Chromium (Playwright), 23 archivos (perla*, professional-workspace/Point9, no-chinese, m2-s4, qa-m2*, ux07*, obr02/03,
+bpdp, m13, welcome y las tres pruebas de §5.3): **153 / 153 superadas · 0 fallos · 0 omitidas** (27/11/2026).
+CI de GitHub: no se ejecuta en ramas `claude/…`. Vercel: Preview de `852e0f44` en verde.
+Vídeo del recorrido (plan vacío → borrador → revisado sin recargar; imágenes de Cantidades y Exterior): `corte2/video/`.
+Altura libre: «Ver estancia» se mantiene; la edición manual es otro corte. Pendiente: revisión humana del corte 2.
