@@ -114,7 +114,7 @@ async function reviewPage(t,width,height){
 async function openPerlaImport(page){
  // §9: las formas de importar o empezar viven en el menú de proyecto (#perlaProjectMenu); #perlaImport queda oculto.
  const menu=page.locator('#perlaProjectMenu');
- if(await menu.count()&&await menu.getAttribute('open')===null)await menu.locator('summary').click();
+ if(await menu.count()&&await menu.getAttribute('open')===null)await menu.locator(':scope > summary').click();
 }
 const joinFile=path.join(FX,'roomplan-capturedroom.json');
 const joinSnapshot=page=>page.evaluate(()=>({

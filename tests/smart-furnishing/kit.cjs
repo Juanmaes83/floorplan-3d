@@ -17,10 +17,10 @@ async function read(page, fn, arg) {
 const state = page => read(page, () => ({ undo: undoStack.length, redo: redoStack.length, json: JSON.stringify(window.FloorPlanApp.project), stored: Object.keys(localStorage).sort().map(k => k + '=' + localStorage.getItem(k)).join('\n'),
   objects: window.FloorPlanApp.project.objects.length, sf: window.FloorPlanApp.project.objects.filter(o => o.id.startsWith('obj_sf')).map(o => o.id) }));
 
-// «Archivo ▸ Importar proyecto JSON» con el selector de archivos real.
+// «Proyecto ▾ ▸ Más ▸ Importar proyecto JSON» (§9: antes, «Archivo») con el selector de archivos real.
 async function importFixture(page) {
-  await page.locator('details.menu > summary').click();
-  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.locator('#importJson').click()]);
+  const btn = await require('../helpers-perla-editor.cjs').mostrar(page, '#importJson');
+  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), btn.click()]);
   await chooser.setFiles(FIXTURE);
   await page.waitForFunction(() => window.FloorPlanApp.project.id === 'prj_qa-ux12-demo');
   await page.waitForTimeout(400);

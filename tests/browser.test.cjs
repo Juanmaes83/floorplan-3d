@@ -324,9 +324,10 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
  const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
  await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
- (await fresh.locator('#perlaProjectMenu > summary').click(),assert.ok(await fresh.locator('#pmUpload').isVisible()),await fresh.locator('#perlaProjectMenu > summary').click());await fresh.locator('#uploadPlanBtn').scrollIntoViewIfNeeded();
+ // §9: la entrada visible para subir es «Subir plano o proyecto…» del menú de proyecto; se exige que quepa en pantalla.
+ await fresh.locator('#perlaProjectMenu > summary').click();assert.ok(await fresh.locator('#pmUpload').isVisible());await fresh.locator('#pmUpload').scrollIntoViewIfNeeded();
  assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const box=await fresh.locator('#uploadPlanBtn').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
+  const box=await fresh.locator('#pmUpload').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
  await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
  const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
  const message=await fresh.locator('#toast').boundingBox();assert.ok(message.x>=0&&message.x+message.width<=viewport.width&&message.y>=0&&message.y+message.height<=viewport.height);assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeError);await fresh.screenshot({path:`/tmp/image-import-error-${viewport.width}.png`});
