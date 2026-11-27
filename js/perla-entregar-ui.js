@@ -190,6 +190,7 @@
   P7:[['Un HTML que abre sin conexión y le permite dejarte observaciones.','An HTML file that opens offline and lets them leave you comments.','可离线打开并可留下意见的 HTML。'],['Publicar el enlace requiere tu confirmación','Publishing the link requires your confirmation','发布链接需你确认'],['Portada real del archivo descargado','Real cover of the downloaded file','下载文件的真实封面']],
   P8:[['Planta, cotas, alzados y secciones sobre el 3D del proyecto.','Plan, dimensions, elevations and sections on the project 3D.','基于项目三维的平面、尺寸、立面与剖面。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Blueprint 3D','Home cover · real Blueprint 3D capture','首页封面 · Blueprint 3D 真实截图']],
   P9:[['Cómo se separa y se monta la vivienda, pieza a pieza.','How the home comes apart and goes together, piece by piece.','住宅如何逐件拆分与组装。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Portada de la Home · captura real de Despiece 3D','Home cover · real Exploded 3D capture','首页封面 · 拆解三维真实截图']],
+  P10:[['Explica a tu cliente qué cambia entre el original y una variante guardada.','Explain to your client what changes between the original and a saved variant.','向客户说明原始方案与已保存变体之间的变化。'],['Una variante guardada con algún cambio','A saved variant with some change','一个已保存且有改动的变体'],['Comparación real de la vivienda de ejemplo (StoryLayers)','Real comparison of the example home (StoryLayers)','示例住宅的真实对比（StoryLayers）']],
   S1:[['Partidas desde las cantidades del proyecto, con tus precios.','Items from the project quantities, with your prices.','根据项目数量与你的价格生成条目。'],['Tus precios','Your prices','你的价格'],['Presupuestar real','Real Budget area','真实的预算区']],
   S2:[['Lo que te devuelve el cliente, anclado al plano.','What your client sends back, pinned to the plan.','客户反馈，锚定在平面上。'],['El cliente responde desde P7','The client replies from P7','客户通过 P7 回复'],['Gestor real (sin comentarios inventados)','Real manager (no invented comments)','真实管理器（无虚构意见）']],
   T1:[['Paquete técnico ZIP con la escena 3D, medidas e identificadores. No es un vídeo.','Technical ZIP package with the 3D scene, dimensions and identifiers. It is not a video.','含三维场景、尺寸与标识的技术 ZIP 包。不是视频。'],['La vista 3D abierta','The 3D view open','打开三维视图'],['Render Cycles real de la vivienda de ejemplo','Real Cycles render of the example home','示例住宅的真实 Cycles 渲染']],
@@ -200,14 +201,15 @@
  const narrow=()=>matchMedia('(max-width:1100px)').matches;
  const bodyOf=c=>c.querySelector(':scope>.body, :scope>.bpdp-card-body');
  // Todas las acciones de la ficha, también las que otros módulos añaden fuera de su cuerpo (Reformar desde fotografía, Estudio de imágenes…)
- const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn')&&!b.closest('.thumb')&&!b.closest('[data-panel-extra]'));
+ const actionsOf=c=>$$('button, a[href]',c).filter(b=>!b.matches('.perla-card-selector,.perla-more-btn,.perla-p2-open')&&!b.closest('.thumb')&&!b.closest('[data-panel-extra]'));
  // Vistas del proyecto preparadas y vigentes (si el proyecto cambió después, no cuentan como listas)
  const viewsReady=()=>{try{const V=window.FloorPlanProjectViews;return !!(V?.current?.()||[]).length&&V?.status?.()!=='stale';}catch{return false;}};
  function pillOf(code,card){const st=(card.querySelector('.professional-state')?.textContent||'').trim();
   if(code==='D5'){let n=0;try{n=(window.RubikE3Entregables?.catalogo?.()||[]).filter(i=>i.disponible).length;}catch{}return ['ok',tx(`${n} entregables disponibles`,`${n} deliverables available`,`${n} 项交付物可用`)];}
   if(code==='P3')return ['pend',tx('Prueba privada · no se publica','Private test · not published','私密测试 · 不发布')];
   if(code==='T1'||code==='P8'||code==='P9'){const ok3d=document.body.classList.contains('m3d')&&!/Requiere la vista 3D|Requires the 3D/.test(st);return ['pend',ok3d?tx('Se prepara al pulsar','Prepared on demand','点击时准备'):tx('Requiere la vista 3D abierta','Requires the 3D view open','需要打开三维视图')];}
-  if(code==='P2')return [viewsReady()?'ok':'pend',st];
+  // P2 · el estado informa («5 vistas preparadas»); la acción vive aparte («Ver imágenes y opciones»).
+  if(code==='P2'){if(viewsReady()){let n=5;try{n=(window.FloorPlanProjectViews?.current?.()||[]).length||5;}catch{}return ['ok',tx(`${n} vistas preparadas`,`${n} views prepared`,`已准备 ${n} 个视图`)];}return ['pend',st];}
   if(/Requiere|Necesita|Requires|Needs|Sin presupuesto|No budget|Sin firma|No signature|Sin variantes|No variants|^0 de|^0 of|no disponible|not available|sin precio|without price|unpriced|需要|没有|未选|尚未准备|尚未选择|无价格/i.test(st))return ['req',st];
   if(/Lista|Listo|Ready|disponible|available|m²|estancias|rooms|suelos|floors|就绪|房间|可供|可发送|单层|地面/i.test(st))return ['ok',st];
   return ['pend',st];}
@@ -224,8 +226,13 @@
   // U9 sin duplicados: si la cabecera ya ofrece esta acción como principal, la ficha muestra otra de las suyas.
   const heroT=new Set([...document.querySelectorAll('#professionalWorkspace .hero-ent .acciones button')].map(b=>b.textContent.trim()));
   const all=actionsOf(card),own=all.filter(b=>!heroT.has(b.textContent.trim())),acts=own.length?own:all;
-  const pri=acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
-  for(const b of all)b.classList.toggle('perla-go',b===pri);
+  // P2 con vistas listas: la acción de la tarjeta abre su ficha (imágenes y opciones), con ratón, teclado o táctil.
+  let p2o=code==='P2'?body.querySelector(':scope>.perla-p2-open'):null;
+  if(code==='P2'&&viewsReady()){if(!p2o){p2o=el('button','btn perla-p2-open',body);p2o.type='button';p2o.onclick=e=>{e.stopPropagation();openPanel(card);};}const t=tx('Ver imágenes y opciones','See images and options','查看图像与选项');if(p2o.textContent!==t)p2o.textContent=t;}
+  else if(p2o){p2o.hidden=true;p2o.classList.remove('perla-go');p2o=null;}
+  if(p2o)p2o.hidden=false;
+  const pri=p2o||acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
+  for(const b of all)b.classList.toggle('perla-go',b===pri);if(p2o)p2o.classList.add('perla-go');
   let sel=body.querySelector(':scope>.perla-card-selector');
   if(!sel){sel=el('button','btn perla-card-selector professional-card-details',body,tx('Ver detalles','View details','查看详情'));sel.type='button';}
   const label=tx('Ver detalles','View details','查看详情')+' · '+code+' '+(card.querySelector('h3')?.textContent||'')+': '+txt;if(sel.getAttribute('aria-label')!==label)sel.setAttribute('aria-label',label);
@@ -255,20 +262,22 @@
  function openPanel(card,restore=false){const p=deskPanel();if(!p||!card)return;selCard=card;pressed();const code=card.dataset.entregaCode,r=REF[code]||[];
   const head=el('div','panel-h');el('span','code perla-panel-code',head,code);const h=el('h2',undefined,head,card.querySelector('h3')?.textContent||'');h.id='perlaPanelT';
   const x=el('button','panel-x',head,'✕');x.type='button';x.setAttribute('aria-label',tx('Volver al índice','Return to index','返回索引'));x.onclick=()=>closePanel(true);
-  const b=el('div','panel-b');const th=card.querySelector(':scope>.thumb');if(th){const prev=el('div','prev',b),c=th.cloneNode(true);c.querySelector('.code')?.remove();c.querySelectorAll('img').forEach(i=>i.loading='eager');prev.append(c);}
+  const b=el('div','panel-b');if(code==='P2')el('h3','perla-panel-sec',b,tx('Vistas del proyecto','Project views','项目视图'));const th=card.querySelector(':scope>.thumb');if(th){const prev=el('div','prev',b),c=th.cloneNode(true);c.querySelector('.code')?.remove();c.querySelectorAll('img').forEach(i=>i.loading='eager');prev.append(c);}
   if(r[0])el('p','perla-panel-desc',b,T(r[0]));
-  const seen=new Set();const pillTxt=card.querySelector('.perla-pill')?.textContent.trim();for(const n of $$('p:not(.perla-desc):not(.perla-pill), figcaption, small',card)){const t=n.textContent.trim();if(!t||t===pillTxt||seen.has(t)||n.closest('.perla-meta,.thumb,[data-panel-extra]'))continue;seen.add(t);el('p','perla-panel-more',b,t);}
+  const seen=new Set();const pillTxt=card.querySelector('.perla-pill')?.textContent.trim();for(const n of $$('p:not(.perla-desc):not(.perla-pill), figcaption, small',card)){const t=n.textContent.trim();if(!t||t===pillTxt||seen.has(t)||n.closest('.perla-meta,.thumb,[data-panel-extra]'))continue;if(code==='P2'&&(/^\d+ (vistas preparadas|views prepared)\.?$/.test(t)||/^\d+ (vistas reales preparadas|real views prepared) · /.test(t)||/^Propuesta visual|^Illustrative visual|^Visual proposal/.test(t)))continue;seen.add(t);el('p','perla-panel-more',b,t);}
   // Contenido propio de una tarjeta para su ficha (p. ej. §10 FOT-01: casos con su ejemplo): se copia entero, con imágenes;
   // sus botones funcionan por delegación en el módulo que los crea. Los id se pasan a data-panel-id (sin duplicados).
-  for(const x of $$('[data-panel-extra]',card)){const cl=x.cloneNode(true);for(const n of [cl,...cl.querySelectorAll('[id]')]){if(n.id){n.dataset.panelId=n.id;n.id='';}}if(cl.tagName==='DETAILS')cl.open=true;b.append(cl);}
+  if(code==='P2'&&$$('[data-panel-extra]',card).length)el('h3','perla-panel-sec',b,tx('Reformar desde fotografía','Renovate from a photo','从照片改造'));
+  for(const x of $$('[data-panel-extra]',card)){const cl=x.cloneNode(true);for(const n of [cl,...cl.querySelectorAll('[id]')]){if(n.id){n.dataset.panelId=n.id;n.id='';}}if(cl.tagName==='DETAILS')cl.open=true;if(code==='P2'){const sm=cl.querySelector(':scope>summary');if(sm)sm.textContent=tx('Dos casos con ejemplo','Two cases with examples','两个示例');}b.append(cl);}
   const dl=el('dl',undefined,b);const row=(k,v,node)=>{el('dt',undefined,dl,k);const dd=el('dd',undefined,dl);node?dd.append(node):dd.textContent=v;};
   row(tx('Estado','Status','状态'),null,card.querySelector('.perla-pill')?.cloneNode(true));
   if(r[1])row(tx('Necesita','Needs','需要'),T(r[1]));
   const m=CARD_META[card.dataset.module||''];if(m)row(tx('Formato','Format','格式'),T(m[0]));
   if(r[2])row(tx('Imagen','Image','图像'),T(r[2]));
   row(tx('Al cerrar','On close','关闭后'),tx('Vuelves a esta tarjeta del índice','You return to this index card','返回此索引卡片'));
-  const f=el('div','panel-f');const acts=actionsOf(card);acts.sort((a,c)=>(c.classList.contains('perla-go')?1:0)-(a.classList.contains('perla-go')?1:0));
-  for(const a of acts){const mb=el('button','btn'+(a.classList.contains('perla-go')?' primary':''),f,a.textContent.trim());mb.type='button';mb.disabled=!!a.disabled;mb.dataset.perlaMirror=a.dataset.route||a.id||'';
+  const f=el('div','panel-f');const acts=actionsOf(card);const p2r=code==='P2'&&viewsReady();
+  const isPri=a=>p2r?a.dataset.route==='images':a.classList.contains('perla-go');acts.sort((a,c)=>(isPri(c)?1:0)-(isPri(a)?1:0));
+  for(const a of acts){const label=p2r&&a.dataset.route==='prepare-views'?tx('Volver a preparar las vistas','Prepare the views again','重新准备视图'):a.textContent.trim();const mb=el('button','btn'+(isPri(a)?' primary':''),f,label);mb.type='button';mb.disabled=!!a.disabled;mb.dataset.perlaMirror=a.dataset.route||a.id||'';
    // En teléfono y tableta la hoja se cierra antes de lanzar la acción (no queda un velo encima); al volver, foco en la ficha.
    mb.onclick=()=>{lastMirror={text:mb.textContent,route:mb.dataset.perlaMirror};if(narrow()){returnCard=card;closePanel(false);}
    a.perlaActionOrigin=narrow()?card.querySelector('.perla-card-selector'):mb;

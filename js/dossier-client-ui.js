@@ -14,7 +14,8 @@
   const save = s => { const a = all(KEY); a[app.entryId] = C.normalize(s); try { localStorage.setItem(KEY, JSON.stringify(a)); } catch { } };
   // Ficha de la historia (StoryLayers) del mismo proyecto: la más reciente con nombre.
   const storyClient = () => { const a = all(PKEY); const k = Object.keys(a).reverse().find(k => k.startsWith(app.entryId + '→') && a[k]?.client?.name); return k ? a[k].client : null; };
-  let panel = null, rerender = () => { }, draftBox = null;
+  let panel = null, rerender = () => { }, draftBox = null, dlg = null, step = 'client', nav = null;
+  const STEPS = [['client', () => L('Cliente y contacto', 'Client and contact', '客户与联系方式')], ['note', () => L('Nota de presentación', 'Cover note', '封面说明')], ['review', () => L('Revisar el dossier', 'Review the dossier', '审阅资料')]];
 
   function cover(brand) { return C.cover(load(), brand); }
 
@@ -32,40 +33,60 @@
 
   function render() {
     if (!panel) return; const s = load(), b = window.FloorPlanBrandUI?.snapshot?.() || null;
-    panel.replaceChildren();
-    el('summary', {}, panel, L('Preparado para · cliente, contacto y nota', 'Prepared for · client, contact and note', '编制对象 · 客户、联系方式与说明'));
+    panel.replaceChildren(); paintNav();
     const body = el('div', { class: 'dc-body' }, panel);
-    const src = el('div', { class: 'dc-row' }, body);
+    const part = (name, node) => { node.dataset.dcPart = name; return node; };
+    const src = part('client', el('div', { class: 'dc-row' }, body));
     const file = el('input', { type: 'file', accept: 'application/json,.json', id: 'dcClientFile', hidden: '' }, src);
     const loadBtn = el('button', { type: 'button', class: 'btn', id: 'dcLoadClient' }, src, L('Cargar ficha del cliente (JSON)', 'Load client file (JSON)', '载入客户资料（JSON）'));
     loadBtn.onclick = () => file.click();
     file.onchange = async () => { const f = file.files[0]; file.value = ''; if (!f) return; try { const r = C.clientFromFile(await f.text()); const st = load(); st.client = r.client; save(st); render(); rerender(); window.toast?.(L('Ficha cargada. Marca qué se usa y qué se muestra.', 'File loaded. Choose what is used and what is shown.', '已载入。请选择使用与显示的字段。') + (r.ignored.length ? ' ' + L('Campos ignorados: ', 'Ignored fields: ', '已忽略：') + r.ignored.join(', ') : ''), 5000); } catch (e) { window.toast?.(L('La ficha no se pudo leer: ', 'The file could not be read: ', '无法读取：') + e.message, 6000); } };
     const sc = storyClient();
     if (sc) { const u = el('button', { type: 'button', class: 'btn', id: 'dcStoryClient' }, src, L('Usar la ficha de la historia', 'Use the story client file', '使用说明中的客户资料')); u.onclick = () => { const st = load(); st.client = sc; save(st); render(); rerender(); }; }
+    el('p', { class: 'dc-step-intro', 'data-dc-part': 'client' }, body, L('Quién recibe el dossier y qué datos salen en la portada. Cada dato: «Usar para redactar» (ayuda a escribir la nota) y «Mostrar en el dossier» (sale impreso), por separado.', 'Who receives the dossier and which data go on the cover. Each item: «Use for writing» and «Show in the dossier», separately.', '谁收到资料以及封面显示哪些数据。'));
     field(body, s, 'name', L('Nombre del cliente', 'Client name', '客户名称'));
-    const tw = el('div', { class: 'dc-field' }, body); el('label', { for: 'dc-treatment' }, tw, L('Tratamiento (opcional)', 'Title (optional)', '称谓（可选）'));
+    const tw = part('client', el('div', { class: 'dc-field' }, body)); el('label', { for: 'dc-treatment' }, tw, L('Tratamiento (opcional)', 'Title (optional)', '称谓（可选）'));
     const ti = el('input', { id: 'dc-treatment', type: 'text' }, tw); ti.value = s.client.treatment || ''; ti.oninput = () => { const st = load(); st.client.treatment = ti.value; save(st); rerender(); };
     field(body, s, 'preferences', L('Lo que pidió el cliente', 'What the client asked for', '客户要求'), 2);
     field(body, s, 'requirements', L('Requisitos', 'Requirements', '要求'), 2);
     // Contacto de Mi estudio: se elige qué aparece; nada se vuelve a teclear.
-    const cw = el('fieldset', { class: 'dc-contact' }, body); el('legend', {}, cw, L('Contacto de Mi estudio en la portada', 'My studio contact on the cover', '封面上的工作室联系方式'));
+    const cw = part('client', el('fieldset', { class: 'dc-contact' }, body)); el('legend', {}, cw, L('Contacto de Mi estudio en la portada', 'My studio contact on the cover', '封面上的工作室联系方式'));
     const names = { email: L('Correo', 'Email', '邮箱'), phone: L('Teléfono', 'Phone', '电话'), web: 'Web' };
     for (const k of C.CONTACT) { const l = el('label', {}, cw), cb = el('input', { type: 'checkbox', 'data-dc-contact': k }, l); el('span', {}, l, names[k] + (b?.[k] ? ' · ' + b[k] : ' · ' + L('sin dato en Mi estudio', 'not set in My studio', '工作室未设置'))); cb.disabled = !b?.[k]; cb.checked = !cb.disabled && s.contact.fields.includes(k);
       cb.onchange = () => { const st = load(); st.contact.fields = C.CONTACT.filter(x => x === k ? cb.checked : st.contact.fields.includes(x)); save(st); rerender(); }; }
+    if (C.CONTACT.some(k => !b?.[k])) { const r = el('div', { class: 'dc-row' }, cw);
+      el('span', { class: 'dc-hint' }, r, L('Los datos que faltan se completan en Mi estudio → «Tu marca profesional».', 'Missing data are completed in My studio → «Your professional brand».', '缺少的数据在“我的工作室”中补充。'));
+      const ms = el('button', { type: 'button', class: 'btn', id: 'dcOpenStudio' }, r, L('Abrir Mi estudio', 'Open My studio', '打开我的工作室'));
+      ms.onclick = () => { const m = document.getElementById('brandManage'); if (!m) return; m.click(); const d = [...document.querySelectorAll('dialog[open]')].pop(); if (d && d !== dlg) d.addEventListener('close', () => { render(); rerender(); }, { once: true }); }; }
     // Nota de presentación con ayuda local.
-    const nw = el('div', { class: 'dc-field' }, body); el('label', { for: 'dc-note' }, nw, L('Nota de presentación (sale en la portada)', 'Cover note (printed on the cover)', '封面说明'));
+    const nw = part('note', el('div', { class: 'dc-field' }, body)); el('label', { for: 'dc-note' }, nw, L('Nota de presentación (sale en la portada)', 'Cover note (printed on the cover)', '封面说明'));
     const note = el('textarea', { id: 'dc-note', rows: '3' }, nw); note.value = s.note; note.oninput = () => { const st = load(); st.note = note.value; save(st); rerender(); };
     const help = el('button', { type: 'button', class: 'btn', id: 'dcAssist' }, nw, L('Ayuda para redactar', 'Writing help', '写作帮助'));
     draftBox = el('div', { class: 'dc-draft', id: 'dcDraft', hidden: '' }, nw);
     help.onclick = () => showDraft(note);
-    const iw = el('div', { class: 'dc-field dc-internal' }, body); el('label', { for: 'dc-internal' }, iw, L('Notas internas (no salen en el dossier)', 'Internal notes (never printed)', '内部备注（不打印）'));
+    const iw = part('note', el('div', { class: 'dc-field dc-internal' }, body)); el('p', { class: 'dc-hint' }, iw, L('Solo para tu estudio: nunca salen en el dossier ni en el PDF.', 'For your studio only: never in the dossier or the PDF.', '仅供工作室使用。')); el('label', { for: 'dc-internal' }, iw, L('Notas internas (no salen en el dossier)', 'Internal notes (never printed)', '内部备注（不打印）'));
     const internal = el('textarea', { id: 'dc-internal', rows: '2' }, iw); internal.value = s.internal; internal.oninput = () => { const st = load(); st.internal = internal.value; save(st); };
     const D = window.FloorPlanDossier; if (D) { const c = D.contents(), miss = C.missing(c.sections, D.STYLES[D.style].sections);
-      const mw = el('div', { class: 'dc-missing', id: 'dcMissing', role: 'status' }, body);
+      const mw = part('review', el('div', { class: 'dc-missing', id: 'dcMissing', role: 'status' }, body));
       const lbl = { sheet: L('lámina del plano', 'plan sheet', '平面图'), surfaces: L('superficies', 'areas', '面积'), orientation: L('orientación', 'orientation', '朝向'), site: L('emplazamiento', 'site', '场地'), views: L('vistas 3D preparadas', 'prepared 3D views', '三维视图'), review: L('revisión del cliente', 'client review', '客户审阅'), economic: L('presupuesto preparado', 'prepared budget', '预算') };
-      mw.textContent = miss.length ? L('Antes de imprimir · falta: ', 'Before printing · missing: ', '打印前 · 缺少：') + miss.map(k => lbl[k] || k).join(', ') + L('. Esas páginas dicen qué falta; no se inventa nada.', '. Those pages say what is missing; nothing is invented.', '。') : L('Todas las secciones de este estilo tienen contenido real.', 'Every section of this style has real content.', '此风格所有部分均有真实内容。'); }
+      mw.textContent = miss.length ? L('Antes de imprimir · falta: ', 'Before printing · missing: ', '打印前 · 缺少：') + miss.map(k => lbl[k] || k).join(', ') + L('. Esas páginas dicen qué falta; no se inventa nada.', '. Those pages say what is missing; nothing is invented.', '。') : L('Todas las secciones de este estilo tienen contenido real.', 'Every section of this style has real content.', '此风格所有部分均有真实内容。');
+      // Datos pendientes con una entrada real para completarlos: se ofrece desde el aviso y se vuelve al dossier con lo escrito.
+      if (miss.includes('views') && document.querySelector('#professionalWorkspace [data-route="prepare-views"]')) { const pv = el('button', { type: 'button', class: 'btn', id: 'dcPrepareViews' }, mw, L('Preparar imágenes', 'Prepare images', '准备图像')); pv.onclick = prepareViews; } }
+    // Pie del paso: una acción principal por vista.
+    const foot = el('div', { class: 'dc-foot' }, body);
+    const idx = STEPS.findIndex(x => x[0] === step);
+    if (idx > 0) el('button', { type: 'button', class: 'btn', id: 'dcPrev' }, foot, '← ' + STEPS[idx - 1][1]()).onclick = () => go(STEPS[idx - 1][0]);
+    if (idx < STEPS.length - 1) el('button', { type: 'button', class: 'btn primary', id: 'dcNext' }, foot, L('Siguiente: ', 'Next: ', '下一步：') + STEPS[idx + 1][1]().toLowerCase()).onclick = () => go(STEPS[idx + 1][0]);
   }
 
+  function paintNav() { if (!nav) return; nav.replaceChildren();
+    STEPS.forEach(([k, t], i) => { const li = el('li', {}, nav); const b = el('button', { type: 'button', 'data-dc-step': k }, li, (i + 1) + ' · ' + t()); if (k === step) b.setAttribute('aria-current', 'step'); b.onclick = () => go(k); }); }
+  function go(k) { step = k; if (dlg) dlg.dataset.dcStep = k; render(); rerender(); (panel.querySelector('[data-dc-part="' + k + '"] input, [data-dc-part="' + k + '"] textarea') || nav.querySelector('[aria-current]'))?.focus({ preventScroll: true }); if (k === 'review') dlg?.querySelector('#dossierDocument')?.scrollIntoView({ block: 'start' }); }
+  // «Preparar imágenes» desde el aviso: se cierra el dossier, se preparan las vistas reales y se vuelve al paso de revisión.
+  // Lo escrito ya está guardado (se guarda al teclear), así que nada se pierde.
+  function prepareViews() { const style = window.FloorPlanDossier?.style || 'client'; const r = document.querySelector('#professionalWorkspace [data-route="prepare-views"]'); if (!r) return;
+    dlg.close(); r.click(); window.toast?.(L('Preparando las vistas reales… volverás al dossier.', 'Preparing the real views… you will return to the dossier.', '正在准备视图…'), 4000); let n = 0;
+    const t = setInterval(() => { n++; const st = window.FloorPlanProjectViews?.status?.(); if (st === 'ready' || n > 400) { clearInterval(t); setTimeout(() => { window.FloorPlanDossier?.open?.(style); go('review'); }, 400); } }, 500); }
   function showDraft(note) {
     const D = window.FloorPlanDossier, c = D?.contents?.(), s = load();
     const area = c?.metrics?.areaM2 != null ? (lang() === 'en' ? c.metrics.areaM2.toFixed(2) : c.metrics.areaM2.toFixed(2).replace('.', ',')) + ' m²' : null;
@@ -81,5 +102,9 @@
     ta.focus();
   }
 
-  window.FloorPlanDossierClientUI = { cover, mount(dialog, after, onChange) { panel = document.createElement('details'); panel.className = 'dossier-client'; panel.id = 'dossierClient'; after.after(panel); rerender = () => { onChange(); }; }, refresh() { render(); } };
+  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, go,
+    mount(dialog, after, onChange) { dlg = dialog; dialog.dataset.dcStep = step;
+      nav = el('ol', { class: 'dc-steps', 'aria-label': L('Pasos del dossier', 'Dossier steps', '步骤') }); dialog.querySelector('.dossier-tools').after(nav);
+      panel = document.createElement('section'); panel.className = 'dossier-client'; panel.id = 'dossierClient'; after.after(panel); rerender = () => { onChange(); }; },
+    refresh() { render(); } };
 })();

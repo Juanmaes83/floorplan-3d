@@ -83,7 +83,7 @@
     Entregar: firma → lo que recibirá tu cliente → índice (con códigos y recuentos) → Recorrido de obra → cinco fases.
     Mi estudio: identidad → más ajustes → personalización HERO → cinco fases («Tu marca en RUBIK»). */
  const INDICE=()=>[['documentation',null,[['surface-sheet','D1'],['sheet','D2'],['dossier','D3'],['economic-dossier','D4'],['e3-entregas','D5']]],
-  ['experience',null,[['presentation','P1'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7'],['story-layers','P10']]],
+  ['experience',null,[['presentation','P1'],['images','P2'],['client-3d','P3'],['construction-delivery','P4'],['moodboard','P5'],['studio-hero-acceso','P6'],['client-file','P7'],['bpdp-blueprint','P8'],['bpdp-despiece','P9'],['story-layers','P10']]],
   ['coordination',null,[['budget','S1'],['review','S2']]],
   ['tools',tx('Herramientas de trabajo (no son para el cliente)','Working tools (not for the client)','工作工具（不交给客户）'),[['blender-scene','T1'],['compare','T2']]]];
  const moduleOf=c=>c.dataset.compareState!==undefined?'compare':c.dataset.module;
@@ -101,7 +101,7 @@
   if(!g){g=el('section',undefined,parent,cls);g.dataset.group=key;const h=el('h2',title,g);h.id='delivery-group-'+key;g.setAttribute('aria-labelledby',h.id);el('div',undefined,g,'professional-group-items');}
   return g;}
  // Encadres y orden de la maqueta PERLA V3, c96888ac. Los estados y acciones viven en las fichas del producto.
- const perlaCovers={"D1":{"images":["d1-ficha.jpg"],"document":true,"sample":false},"D2":{"images":["d2-lamina.jpg"],"document":true,"sample":false},"D3":{"images":["d3-dossier.jpg"],"document":true,"sample":false},"D4":{"images":[],"document":false,"sample":false},"D5":{"images":["d5-entregables.jpg"],"document":true,"sample":false},"P1":{"images":["vista-general.jpg"],"document":false,"sample":false},"P2":{"images":["vista-salon.jpg","vista-dormitorio-principal.jpg","vista-dormitorio-infantil.jpg"],"document":false,"sample":false},"P3":{"images":["fase-recorrer.jpg"],"document":false,"sample":false},"P4":{"images":["demo-evolucion.jpg"],"document":false,"sample":true},"P5":{"images":["p5-material-board.jpg"],"document":true,"sample":false},"P6":{"images":["fase-hero.jpg"],"document":false,"sample":true},"P7":{"images":["p7-archivo-cliente.jpg"],"document":true,"sample":false},"P10":{"images":[],"document":true,"sample":false},"S1":{"images":["s1-presupuesto.jpg"],"document":true,"sample":false},"S2":{"images":["s2-observaciones.jpg"],"document":true,"sample":false},"T1":{"images":["t1-render-cycles.jpg"],"document":false,"sample":false},"T2":{"images":["vista-general.jpg"],"document":false,"sample":false}};
+ const perlaCovers={"D1":{"images":["d1-ficha.jpg"],"document":true,"sample":false},"D2":{"images":["d2-lamina.jpg"],"document":true,"sample":false},"D3":{"images":["d3-dossier.jpg"],"document":true,"sample":false},"D4":{"images":[],"document":false,"sample":false},"D5":{"images":["d5-entregables.jpg"],"document":true,"sample":false},"P1":{"images":["vista-general.jpg"],"document":false,"sample":false},"P2":{"images":["vista-salon.jpg","vista-dormitorio-principal.jpg","vista-dormitorio-infantil.jpg"],"document":false,"sample":false},"P3":{"images":["fase-recorrer.jpg"],"document":false,"sample":false},"P4":{"images":["demo-evolucion.jpg"],"document":false,"sample":true},"P5":{"images":["p5-material-board.jpg"],"document":true,"sample":false},"P6":{"images":["fase-hero.jpg"],"document":false,"sample":true},"P7":{"images":["p7-archivo-cliente.jpg"],"document":true,"sample":false},"P10":{"images":["p10-historia.jpg"],"document":false,"sample":false},"S1":{"images":["s1-presupuesto.jpg"],"document":true,"sample":false},"S2":{"images":["s2-observaciones.jpg"],"document":true,"sample":false},"T1":{"images":["t1-render-cycles.jpg"],"document":false,"sample":false},"T2":{"images":["vista-general.jpg"],"document":false,"sample":false}};
  function perlaImage(parent,file){
   const img=el('img',undefined,parent);
   img.src='assets/delivery/perla/'+file;img.alt='';img.loading='lazy';
@@ -463,7 +463,8 @@ const sumB=window.FloorPlanBudgetUI?.summary(),tot=sumB?.totals;const c=card(par
   // StoryLayersV1 (P10) · «Historia del cambio» (§7.2): tres pasos visibles y la acción principal según el estado del par.
   if(window.FloorPlanStoryLayersUI){const m=FloorPlanStoryLayersUI.cardModel();
    const sl=card(grid,tx('Historia del cambio','Story of the change','变更说明'),m.status);sl.dataset.module='story-layers';sl.dataset.storyState=m.state;sl.dataset.storyStep=String(m.step);
-   const steps=document.createElement('ol');steps.className='sl-card-steps';sl.append(steps);
+   // Tarjeta = estado + siguiente acción; los tres pasos y sus explicaciones viven en el detalle (ficha).
+   const steps=document.createElement('ol');steps.className='sl-card-steps';steps.dataset.panelExtra='';sl.append(steps);
    m.steps.forEach((t,i)=>{const li=document.createElement('li');li.textContent=t;if(i+1<m.step)li.dataset.done='true';if(i+1===m.step)li.setAttribute('aria-current','step');steps.append(li);});
    detail(sl,m.detail);route(sl,m.action.label,'story-layers',m.action.run);}
   const review=card(grid,tx('Observaciones del cliente','Client observations','客户意见'),reviewState());route(review,tx('Gestionar observaciones','Manage observations','管理意见'),'review',()=>FloorPlanReviewUI.open());identity(grid);

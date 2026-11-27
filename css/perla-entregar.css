@@ -277,3 +277,9 @@
 #professionalWorkspace[data-area=deliver] .perla-ref #deliveryState[data-result=match]{color:var(--ok)}
 /* UX-312 PERLA · U9: la barra fija del móvil no duplica la acción principal mientras la de la cabecera está a la vista. */
 #professionalWorkspace.perla-hero-cta-in-view .professional-dock{visibility:hidden;pointer-events:none}
+
+/* Revisión 27/11 · P2: secciones en la ficha; cada caso a ancho completo para comparar; la acción de la tarjeta es un botón. */
+#professionalWorkspace .panel .perla-panel-sec{margin:14px 0 4px;font-size:15px;font-weight:700;color:var(--ink,#1f2326)}
+#professionalWorkspace .panel .photo-reform-pair{grid-template-columns:1fr}
+#professionalWorkspace .panel .photo-reform-case-go{justify-self:stretch;min-height:44px}
+#professionalWorkspace[data-area=deliver] .perla-ref .perla-p2-open[hidden]{display:none!important}
