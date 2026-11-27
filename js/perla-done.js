@@ -17,6 +17,8 @@
  const clicked=new WeakMap();
  const byClick=el=>{const r=clicked.get(el);return !!r&&r===String(rev());};
  const RULES=[
+  // §9: la descarga vive en Proyecto ▾; su texto lo pinta el menú (label:null), aquí la señal real y el color.
+  {match:el=>el.id==='pmDownloadJson',done:byClick,label:null,onClick:true},
   {match:el=>el.id==='exportJsonQuick',done:byClick,label:['Proyecto JSON guardado','Project JSON saved','项目 JSON 已保存'],onClick:true},
   {match:el=>/^(Descargar archivo para el cliente|Download client file)$/.test(orig(el)),done:byClick,label:['Archivo para el cliente descargado','Client file downloaded','客户文件已下载'],onClick:true},
   {match:el=>/^e3-descargar-/.test(el.dataset.route||''),done:byClick,label:['Descargado','Downloaded','已下载'],onClick:true},

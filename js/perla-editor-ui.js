@@ -55,7 +55,8 @@
  const pmUpload=pmItem('pmUpload',()=>$('#importImage').click());
  const pmCopy=pmItem('pmCopy',()=>{if($('#guideBar')?.getAttribute('data-project-kind')==='example'&&$('#guideCopyExample'))return $('#guideCopyExample').click();return window.FloorPlanApp.duplicateActive();});
  const pmVariant=pmItem('pmVariant',ev=>window.FloorPlanStoryLayersUI?.createVariant?window.FloorPlanStoryLayersUI.createVariant(ev):window.FloorPlanApp.createVariant(ev));
- const pmJson=pmItem('pmDownloadJson',()=>$('#exportJsonQuick').click());
+ const pmJson=pmItem('pmDownloadJson',()=>{$('#exportJsonQuick').click();window.toast?.(tx('Proyecto JSON descargado','Project JSON downloaded','项目 JSON 已下载'),4000);});
+ new MutationObserver(()=>paintProjectMenu()).observe(pmJson,{attributes:true,attributeFilter:['data-perla-done']});
  el('hr',{class:'perla-pm-sep','aria-hidden':'true'},pmPop);
  const pmMore=el('div',{class:'perla-pm-more',role:'group'},pmPop);
  for(const id of ['newProjectBtn','importJson','joinRoomPlan'])move('#'+id,pmMore);
@@ -66,7 +67,8 @@
   set(pmUpload,tx('Subir plano o proyecto…','Upload plan or project…','上传平面图或项目…'),tx('Imagen, PDF o proyecto: crea un proyecto nuevo; el abierto no cambia','Image, PDF or project: creates a new project; the open one is unchanged','图片、PDF 或项目：新建项目；当前项目不变'));
   set(pmCopy,tx('Crear copia','Create copy','创建副本'),ex?tx('Copia independiente del ejemplo para editarla','Independent copy of the example to edit','可编辑的示例独立副本'):tx('Proyecto independiente con id propio; el original no cambia','Independent project with its own id; the original is unchanged','独立项目（新 ID）；原项目不变'));
   set(pmVariant,tx('Crear variante','Create variant','创建变体'),tx('Vinculada al original para comparar y contar el cambio','Linked to the original to compare and tell the change','与原项目关联，用于比较与说明'));
-  set(pmJson,tx('Descargar proyecto JSON','Download project JSON','下载项目 JSON'),tx('Archivo editable a tu equipo','Editable file to your computer','可编辑文件下载到电脑'));
+  if(pmJson.dataset.perlaDone==='1')set(pmJson,'✓ '+tx('Proyecto JSON descargado','Project JSON downloaded','项目 JSON 已下载'),tx('Descargar proyecto JSON de nuevo','Download project JSON again','再次下载项目 JSON'));
+  else set(pmJson,tx('Descargar proyecto JSON','Download project JSON','下载项目 JSON'),tx('Archivo editable a tu equipo','Editable file to your computer','可编辑文件下载到电脑'));
   pmSave.textContent=tx('«Guardado local» = se guarda solo en este navegador. Para llevarlo a otro equipo, descarga el JSON.','«Saved locally» = kept only in this browser. To take it to another computer, download the JSON.','“本地保存”仅保存在此浏览器。要带到其他电脑，请下载 JSON。');
   pmSum.innerHTML=svg('chev',14);pmSum.setAttribute('aria-label',tx('Acciones del proyecto','Project actions','项目操作'));pmSum.title=pmSum.getAttribute('aria-label');projWrap.setAttribute('aria-label',tx('Proyecto','Project','项目'));};
  pmenu.addEventListener('toggle',()=>{if(pmenu.open){paintProjectMenu();pmOpen.focus({preventScroll:true});}});
@@ -122,9 +124,9 @@
   const paintGroups=()=>{for(const [k,t] of groups){const g=morePop.querySelector(`[data-group="${k}"]`);if(!g)continue;g.setAttribute('aria-label',t());const h=g.querySelector('.perla-more-title');if(h)h.textContent=t();}};
   new MutationObserver(()=>setTimeout(paintGroups,0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   for(const [k,titleOf,ids] of groups){const title=titleOf();const g=el('div',{class:'perla-more-group',role:'group','data-group':k},morePop);const h=el('p',{class:'perla-more-title'},g);h.textContent=title;g.setAttribute('aria-label',title);for(const id of ids){const b=$('#'+id);if(b)g.append(b);}if(!g.querySelector('button'))g.remove();}}
- move('#exportJsonQuick',r2);
- // «Guardar proyecto JSON» (⤓) sigue en la fila 2: UX-BETA-001 (descarga desde la cabecera con el mismo exportador del
- // menú) y U11 (marca de «hecho») están aprobados. El menú de proyecto ofrece la misma descarga con su texto.
+ // §9 (decisión del propietario): «Descargar proyecto JSON» vive en Proyecto ▾. El botón original se conserva oculto como
+ // fuente única del exportador (mismo manejador que UX-BETA-001); la confirmación U11 pasa al elemento del menú.
+ {const q=move('#exportJsonQuick',pmMore);if(q)q.classList.add('perla-pm-dup-btn');}
  const view=move('#viewSeg',r2);
  // §9 · Deshacer/rehacer son de la tarea actual: van tras la vista (en pantalla compacta siguen en «Más»).
  if(hist&&view&&!matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)').matches)view.after(hist);

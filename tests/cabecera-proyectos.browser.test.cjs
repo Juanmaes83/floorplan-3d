@@ -39,6 +39,12 @@ test('§9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada
   await menu(page);const [chooser]=await Promise.all([page.waitForEvent('filechooser',{timeout:10000}),page.locator('#pmUpload').click()]);assert.ok(chooser);
   // Descargar proyecto JSON → descarga del archivo editable.
   await menu(page);const [dl]=await Promise.all([page.waitForEvent('download',{timeout:15000}),page.locator('#pmDownloadJson').click()]);assert.match(dl.suggestedFilename(),/\.json$/);
+  assert.deepEqual(JSON.parse(require('node:fs').readFileSync(await dl.path(),'utf8')).walls,await page.evaluate(()=>FloorPlanApp.project.walls),'el JSON descargado es el proyecto activo');
+  await page.waitForFunction(()=>/Proyecto JSON descargado/.test(document.querySelector('#toast').textContent)&&document.querySelector('#toast').classList.contains('show'));
+  await menu(page);await page.waitForFunction(()=>document.querySelector('#pmDownloadJson').dataset.perlaDone==='1');
+  assert.equal(await page.locator('#pmDownloadJson b').innerText(),'✓ Proyecto JSON descargado','el menú confirma la descarga');
+  assert.equal(await page.locator('.perla-r2 #exportJsonQuick:visible').count(),0,'la descarga no se duplica en la fila 2');
+  await page.keyboard.press('Escape');
   // Importar ese mismo JSON: el flujo existente lo abre como proyecto activo.
   const jsonPath=await dl.path();const before=await active(page);await menu(page);
   const [fc]=await Promise.all([page.waitForEvent('filechooser',{timeout:10000}),page.locator('#importJson').click()]);await fc.setFiles(jsonPath);

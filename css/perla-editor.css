@@ -542,7 +542,7 @@ body.perla .perla-left>#perlaSaved{font-size:0;min-width:28px;padding:0;justify-
 button[data-perla-done="1"],button.btn[data-perla-done="1"]{background:#e9f5ee!important;color:#1d6b3f!important;border-color:#9fd0b2!important;box-shadow:none!important}
 button[data-perla-done="1"]:hover{background:#dcefe3!important}
 body.perla .perla-r2>#exportJsonQuick[data-perla-done="1"]::before,body.perla .perla-r2:has(>#levelBar:not([hidden])) #exportJsonQuick[data-perla-done="1"]::before{content:'✓' / '';color:#1d6b3f}
-button[data-perla-done="1"]:not([data-perla-orig])::before{content:"✓ " / ""}
+button[data-perla-done="1"]:not([data-perla-orig]):not(#pmDownloadJson)::before{content:"✓ " / ""}
 /* UX-312 PERLA · tableta estrecha (761–900 px, también el escritorio con zoom al 200 %): las dos filas caben enteras.
    Deshacer/Rehacer van a la barra del lienzo (como en el móvil); idioma, proyecto y áreas se compactan; «Guardar proyecto
    JSON» queda como icono con su nombre accesible. */

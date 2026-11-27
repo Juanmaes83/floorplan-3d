@@ -125,19 +125,23 @@ test('IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y 
  }finally{await context.close();}
 });
 
-test('UX-BETA-001 · descarga JSON desde la cabecera con el mismo exportador del menú',{timeout:90000},async()=>{
+test('UX-BETA-001 · §9 · descarga JSON desde Proyecto ▾ con el mismo exportador; confirma y no duplica en la cabecera',{timeout:90000},async()=>{
  const {context,page}=await K.editor(env,{acceptDownloads:true});
  try{
   for(const viewport of [{width:1440,height:900},{width:390,height:844}]){
-   await page.setViewportSize(viewport);
-   const button=page.getByRole('button',{name:'Guardar proyecto JSON'});
-   assert.equal(await button.isVisible(),true);
+   await page.setViewportSize(viewport);await page.waitForTimeout(300);
+   assert.equal(await page.locator('#exportJsonQuick').isVisible(),false,'sin botón duplicado en la cabecera');
+   await page.locator('#perlaProjectMenu > summary').click();
+   const button=page.getByRole('menuitem',{name:/Descargar proyecto JSON/});
+   await button.waitFor({state:'visible'});
    const bounds=await button.boundingBox();
-   assert.ok(bounds.x>=0&&bounds.x+bounds.width<=viewport.width,'visible sin abrir Archivo ni desplazar la cabecera');
+   assert.ok(bounds.x>=0&&bounds.x+bounds.width<=viewport.width,'visible dentro de la pantalla al abrir Proyecto ▾');
    const expected=await page.evaluate(()=>structuredClone(FloorPlanApp.project));
    const [download]=await Promise.all([page.waitForEvent('download'),button.press('Enter')]);
-   assert.deepEqual(JSON.parse(fs.readFileSync(await download.path(),'utf8')),expected);
-   assert.equal(await page.locator('details.menu[open]').count(),0);
+   assert.match(download.suggestedFilename(),/\.json$/);
+   assert.deepEqual(JSON.parse(fs.readFileSync(await download.path(),'utf8')),expected,'mismo exportador: el archivo es el proyecto');
+   assert.equal(await page.locator('#perlaProjectMenu').evaluate(d=>d.open),false,'el menú se cierra tras la acción');
+   await page.waitForFunction(()=>/Proyecto JSON descargado/.test(document.querySelector('#toast').textContent));
   }
  }finally{await context.close();}
 });
