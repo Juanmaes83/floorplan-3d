@@ -2,7 +2,99 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
-## ▶ CHECKPOINT DE COMPACTACIÓN · 27/11/2026, 12:10 (leer primero)
+## ▶ CHECKPOINT · 27/11/2026, 19:00 (leer primero; sustituye al de las 12:10 donde lo contradiga)
+
+**Regla de carga:** una tanda pesada cada vez. Mientras renderiza Blender, solo trabajo ligero: lectura, documentos y
+pruebas puras de Node.
+
+### Estado real de cada entrega
+| Entrega | Rama · SHA | Estado | Pendiente |
+|---|---|---|---|
+| **#324** · candidata conjunta §9 + Entregar + StoryLayersV1 + auditoría V01–V09 | `claude/integracion-cabecera-entregar` · `cfabe252` | **Borrador.** V01–V07 corregidos con prueba. V08 diagnosticado. V09 con corrección aplicada, sin verificar integrado. | Ver «Validación de #324». Sin fusión hasta la revisión de Claude, Codex y Juanma y la autorización expresa de Juanma sobre el SHA final. |
+| §9 Cabecera (aprobada en `fccda24b`) | `claude/cabecera-proyectos` · `9a44e870` | Incluida en #324 | — |
+| Entregar D3 · P2 · FOT-01 · cuadrícula (aprobada en `7b2e01ab`) | `claude/entregar-asistencia` · `09b1440b` | Incluida en #324 | — |
+| StoryLayersV1 (dependencia autorizada) | `claude/storylayers-v1` · `cd694e88` | Incluida en #324; **no está en master** | Entra con #324 |
+| Película del proyecto §11 · clip 720p | `claude/rodaje-cierre-1440` · `90d38d54` | Renderizando: fotograma ~653/720 a las 18:52 | Revisar la secuencia completa y publicar MP4, SHA e informe en el [handoff de rodaje](https://github.com/Juanmaes83/floorplan-3d/blob/claude/rodaje-cierre-1440/docs/qa/rodaje/HANDOFF-RODAJE-WINDOWS.md) |
+| Gesture Labs §6 · giro con la palma lenta | `claude/gesture-labs` · `c585dda4` | Núcleo 11/11, confirmado también por Codex. Fuera de #324 | Prueba de navegador después del render. Recorrido preparado para que Juanma lo grabe con la cámara frontal del móvil (P11 → salir) |
+
+### Validación de #324 (después del render, en este orden)
+1. **CI de `cfabe252`:** fallan `walk-controls-vs-master` (controles 3D de escritorio: pasan en master y fallan en la candidata),
+   `ux08` (cotas durante el arrastre táctil) y `contract` (P10, con un elemento que se desprende del DOM durante el recorrido).
+   La regresión completa de CI figura como omitida. Reproducir cada fallo en la base y en la candidata, clasificarlo y conservar
+   las aserciones de comportamiento.
+2. **Auditoría de Codex:**
+   - verificar V09 integrado;
+   - grabar V03, V05, V07 y V09 en escritorio y móvil;
+   - comprobar si el ID del ejemplo cambia al recargar;
+   - V08 queda como diagnóstico.
+   Tabla: [auditoria-codex/README.md](https://github.com/Juanmaes83/floorplan-3d/blob/claude/integracion-cabecera-entregar/docs/qa/integracion-324/auditoria-codex/README.md)
+   · fuente: [handoff de Codex `87f4661b`](https://github.com/Juanmaes83/floorplan-3d/blob/87f4661b353d8a906435b99bdc9cb75c08ddf10b/docs/qa/auditoria-324-villa-linde/README.md).
+3. **Candidata verificable:** regresión completa local, CI y Preview del MISMO SHA final, con un recorrido breve.
+   Separar las Previews que Juanma ya aprobó (§9 `fccda24b`, Entregar `7b2e01ab`) de la revisión pendiente de la candidata
+   conjunta.
+
+### Decisiones aprobadas registradas (27/11)
+**Tres efectos de película** · fuente: [`aeeef513` · PELICULA-PROPUESTA-HOME-ENTREGAR.md](https://github.com/Juanmaes83/floorplan-3d/blob/aeeef513/docs/qa/auditoria-324-villa-linde/PELICULA-PROPUESTA-HOME-ENTREGAR.md).
+Trabajo propio, **fuera de #324**. Implementación y aceptación visual pendientes.
+
+| Efecto | Qué debe entender el cliente | Referencia |
+|---|---|---|
+| Pieza a pieza | El croquis o la planta queda de referencia mientras las piezas reales entran y encajan por grupos; se entiende cómo se forma la vivienda sobre el plano | Courtyard house |
+| Maqueta abierta | Una planta legible gana volumen; vista desde arriba de cómo se conectan las estancias y descenso a una para verla por dentro | Apartment |
+| Desde el paisaje | La vivienda en su entorno representado; la cámara se acerca y entra por un hueco real. Si falta el entorno, el profesional lo sabe antes de prepararlo | Cliff villa |
+
+Condiciones:
+- **Origen:** los tres parten de una revisión real (geometría, huecos, materiales y plantas). El croquis aparece si está
+  disponible y alineado; la planta de RUBIK se rotula como tal. P8 Blueprint 3D sigue siendo un entregable técnico aparte.
+- **Home:** módulo propio junto a Dibujo vivo, con ejemplos reproducibles que muestran qué diferencia a cada efecto.
+- **Entregar → Vídeo:** junto a Dibujo vivo. Elegir efecto → ver la revisión y las plantas → vista previa ligera de la
+  transición completa → estimación para el perfil (si faltan datos, «Estimación no disponible») → confirmar el render.
+  Si cancela, el render completo no se inicia.
+- **Aceptación:**
+  - un clip continuo por efecto (inicio, transición y llegada) con su revisión, SHA e informe; los tres fotogramas solo sirven
+    para comprobar encuadres;
+  - grabar el flujo con un proyecto propio, desde la elección hasta el MP4 y el informe;
+  - comprobar que la vista previa y la salida usan el mismo guion y la misma revisión.
+
+**Servicios técnicos pendientes** · fuente: [`f53e95b2` · GUIA-IMPLEMENTACION-SERVICIOS-TECNICOS.md](https://github.com/Juanmaes83/floorplan-3d/blob/f53e95b2e483eaa74fb8baa814597a5841856f65/docs/qa/auditoria-324-villa-linde/GUIA-IMPLEMENTACION-SERVICIOS-TECNICOS.md)
+(publicación documental de Codex). Fuera de #324; cada uno tendrá su encargo.
+
+| Servicio | Dependencias | Aceptación (resumen de la guía) |
+|---|---|---|
+| 1 · Ficha de inmueble, parcela y orientación | Parcela confirmada y su fuente (Catastro), autoridad de superficies, D3 estilo Cliente, V01/V02 cerrados para casos de varias plantas | PDF Cliente con plano, superficies por planta y ficha territorial con fuente y fecha. Casos: con referencia, sin parcela, error de fuente, norte vacío y capa no exportable. Con 2 plantas, nunca «Planta única» |
+| 2 · Reforma comparada (premium) | P10 StoryLayers en la base, presupuesto por planta, contraste previo con EnvolventeCTE (commit, licencia y tolerancia fijados) | Original frente a ventanas frente a ventanas + aislamiento, con elementos, cantidades, importe por planta y prestaciones. Coincide con EnvolventeCTE dentro de la tolerancia; cambiar una ventana no altera el resto |
+| 3 · Revisión previa de habitabilidad (piloto) | Un municipio y una actuación definidos; medidas declaradas con fuente; validación de un técnico | Por regla: ámbito, fuente, medida y estado (comprobado / requiere revisión / faltan datos / fuera de alcance). Lo que falte aparece pendiente |
+
+### Inventario de tareas antiguas (14 partidas; antes dije 13 por error)
+| # | Partida | Dónde está | En PR | En master | Falta |
+|---|---|---|---|---|---|
+| 1 | Kit de rodaje: reglas genéricas | `claude/rodaje-cierre-1440` `8900be59` | — | No | Integrar tras revisar la evidencia visual |
+| 2 | Comparativas 1440p | `rodaje-cierre-1440` (`docs/qa/rodaje/comparativas-1440`) | — | No | Ídem |
+| 3 | Lanzador Windows | `rodaje-cierre-1440` (`HANDOFF-RODAJE-WINDOWS.md`) | — | No | Ídem |
+| 4 | Geometría A0 y asa de muros | `claude/geometria-composicion` `eb5723d4` · `claude/muros-asa-accesible` `b35a6cc3` · `claude/muros-sobre-a0-2c7e7739` `52737606` | — | No | Comparar con la base vigente; validar Firefox/WebKit |
+| 5 | StoryLayersV1 vertical | `claude/storylayers-v1` `cd694e88` | **#324** | No | Entra con #324 |
+| 6 | Carta de materiales (10 casos sintéticos) | **sin implementar** | — | — | En cola; depende de Material Tokens (hecho) y del kit de rodaje |
+| 7 | §5.1 Visita 3D | `claude/ux-visita-3d` `e20644b9` (regresión completa del corte aprobado) | — | No | Decidir integración comparando con la base |
+| 8 | §5.2 BC3 comparar → aplicar | `claude/ux-bc3` `a9bac718` | — | No | Ídem |
+| 9 | §5.3 Presupuestar y Analizar | `claude/ux-presupuestar-analizar` `32de044c` (regresión 153/153) | — | No | Ídem |
+| 10 | Tapicería v3 | `rodaje-cierre-1440` `86fb8f7f` (aprobada por Juanma) | — | No | Integrar con el rodaje |
+| 11 | §7.3 StoryLayers, plantilla comercial | en `cd694e88` | **#324** | No | Entra con #324 |
+| 12 | §7.2 StoryLayers, de la variante a la descarga | en `cd694e88` | **#324** | No | Entra con #324 |
+| 13 | §7.1 Muros descubribles | `claude/muros-forma-descubrible` `94f5b981` (aprobación de la cota registrada) | — | No | Decidir integración |
+| 14 | §7.4 Tapicería en otra escena | `rodaje-cierre-1440` `bb78fca0` | — | No | Integrar con el rodaje |
+
+**Cola, al final:** carta de materiales (pendiente de implementar) y examen de cinco proyectos sobre la candidata común
+(depende de que #324 esté fusionado). Para las ramas antiguas, la integración se decide comparando cada mejora con la base
+vigente y revisando su evidencia visual.
+
+### Fuentes
+- Guía y handoff Gesture: `c532877a` (rama `codex/encargo-reutilizacion-cinco-repos`).
+- Auditoría: `87f4661b`.
+- Efectos: `aeeef513`.
+- Servicios: `f53e95b2`.
+- Todo en `codex/auditoria-324-villa-linde`, salvo la guía y el handoff Gesture.
+
+## CHECKPOINT DE COMPACTACIÓN · 27/11/2026, 12:10 (histórico)
 **Hecho que cambia el estado:** el contenedor se **reinició hacia las 12:05**. Todos los procesos murieron. El scratchpad
 (`/tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad`, en adelante `$S`) sobrevivió, pero no es
 fiable: todo lo necesario está en GitHub. **No hay nada en ejecución.**
