@@ -73,3 +73,36 @@ Aceptación:
 - un clip continuo por efecto con su revisión, SHA e informe;
 - grabación del flujo con un proyecto propio;
 - la vista previa y la salida, con el mismo guion y la misma revisión.
+
+## Auditoría del propietario (27/11/2026) del clip 720p `f4e75386…6d01` · corrección y render en la tanda NOCTURNA
+El MP4 actual ([commit `91b4ced9`](https://github.com/Juanmaes83/floorplan-3d/blob/91b4ced9644953b4668725112898d17b5c21890d/docs/qa/pelicula-proyecto/clip-720/pelicula-del-plano-a-la-vivienda-720p.mp4))
+queda como **referencia para comparar**. Fuera de #324.
+
+| Tramo | Hallazgo | Resultado esperado |
+|---|---|---|
+| 22,21 s (fotogramas 532→533) | **Salto de iluminación:** aparece una sombra dura sobre la mesa y la alfombra al entrar el techo y las luminarias | Continuidad de luz y sombras en la llegada al salón; si se cambia de plano, que el corte se sienta deliberado |
+| 18–25 s | **Entrada desorientadora:** cae casi en vertical, gira sobre la mesa y levanta la mirada muy rápido | Se entiende dónde está el salón desde la maqueta hasta la altura de los ojos; el movimiento mantiene referencias reconocibles |
+| 0–6 s · 6–18 s · 25–30 s | **Ritmo desigual:** la planta tarda en arrancar; la órbita compite con la aparición de elementos; el final se sostiene casi fijo 5 s | La planta se lee con claridad, se distinguen las etapas de construcción y el tiempo de pantalla ayuda a entender la transición y el interior |
+| global | **Nitidez y acabado:** rótulos pequeños poco legibles; moteado en el ventanal final; fondo azul de una escena sin entorno | Rótulos legibles al tamaño previsto; vidrio estable; el acabado respeta el entorno disponible en el proyecto |
+
+**Entrega nocturna esperada:**
+- Una versión completa y continua de «Del plano a la vivienda» sobre la **misma revisión** (`prj_op10-f5-furniture`, huella
+  `20c1a79b…`, ZIP `04e9fe78…`).
+- Enlace directo al MP4, SHA e informe, con la resolución y el perfil usados.
+- Los tramos donde se comprueba cada corrección.
+- Una sola tanda pesada a la vez: no coincidir con la regresión de #324.
+
+**Puntos de partida en el kit (`scripts/interop/blender-rodaje.py --shot pelicula` y `pelicula-timeline.py`):**
+- Luz: la sombra dura aparece cuando entran techo y luminarias. Fijar luminarias y techo desde el principio con intensidad
+  en rampa, o cortar el plano de forma deliberada.
+- Descenso: limitar el cabeceo y la velocidad angular; mantener a la vista una referencia (puerta o ventanal del salón).
+- Ritmo: replantear la cronología. Arranque de la planta más corto, etapas separadas de la órbita, y final con un movimiento
+  lento en lugar de 5 s fijos.
+- Acabado:
+  - más muestras o denoise en el interior (el moteado del vidrio);
+  - rótulos más grandes y con contraste;
+  - entorno: usar el del proyecto si existe; si no, un fondo neutro declarado en el informe.
+
+**Receta para reanudar tras un reinicio:** `docs/qa/pelicula-proyecto/README.md` (bpy 5.2.1 en un venv de Python 3.13,
+ZIP y cronología versionados en `entrada/`) y `docs/qa/cabecera-proyectos/reanudacion/pel-clip.sh` (rama
+`claude/cabecera-proyectos`).
