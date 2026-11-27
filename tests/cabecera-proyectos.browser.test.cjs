@@ -53,7 +53,7 @@ test('§9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada
   // «Exportar diseño» = solo salidas; lo demás en «Más», agrupado por tarea.
   assert.match(await page.locator('#perlaFile > summary').innerText(),/Exportar diseño/);
   const outs=await page.locator('#perlaFile .menu-pop').evaluate(p=>[...p.querySelectorAll('button')].map(b=>b.id).filter(Boolean));
-  for(const id of ['territoryOpen','solarOpen','reviewNotesBtn','brandManage','clearAll','reset','photoReformMenu','importJson'])assert.ok(!outs.includes(id),id+' no es una salida');
+  for(const id of ['territoryOpen','solarOpen','reviewNotesBtn','brandManage','clearAll','reset','photoReformMenu','importJson','exportJson','exportJsonQuick'])assert.ok(!outs.includes(id),id+' no es una salida');
   for(const id of ['exportPng','openSheet','exportDxf'])assert.ok(outs.includes(id),id+' es una salida');
   assert.deepEqual(await page.locator('#perlaMore .perla-more-group').evaluateAll(g=>g.map(x=>x.dataset.group)),['ctx','del','des']);
   // Crear copia (del ejemplo) → proyecto propio con id independiente; el nombre de la cabecera cambia.

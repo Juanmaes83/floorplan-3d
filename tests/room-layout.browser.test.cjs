@@ -22,7 +22,7 @@ async function newRoom(page){
 }
 async function confirm(page){await click(page,'#roomDesignReview');assert.equal(await page.locator('#roomDesignError').textContent(),'');await click(page,'#roomDesignConfirm');}
 async function rooms(page){return page.evaluate(()=>structuredClone(FloorPlanApp.project));}
-async function exportFile(page,selector){await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.locator(selector).click();const dl=await pending,s=await dl.createReadStream(),chunks=[];for await(const c of s)chunks.push(c);return Buffer.concat(chunks);}
+async function exportFile(page,selector){/* §9: el JSON editable se descarga desde Proyecto ▾ */if(selector==='#exportJson'){selector='#pmDownloadJson';await page.locator('#perlaProjectMenu > summary').click();}else await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.locator(selector).click();const dl=await pending,s=await dl.createReadStream(),chunks=[];for await(const c of s)chunks.push(c);return Buffer.concat(chunks);}
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`new home / room dimensions / history / software 3D ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const {page,errors}=await setup(t,viewport),original=await rooms(page);
  await page.evaluate(()=>{const d=document.getElementById('perlaImport');if(d)d.open=true;});await click(page,'#newProjectBtn');await page.fill('#newProjectName','Casa vacía');await click(page,'#newProjectBlank');assert.equal((await rooms(page)).rooms.length,0);assert.equal(await page.locator('#roomDesignTitle').textContent(),'Nueva estancia');

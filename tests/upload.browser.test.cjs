@@ -369,7 +369,7 @@ test('drag and drop uploads the first file and keeps explicit JSON and ZIP expor
  const overlay=await page.evaluate(bytes=>{const dt=new DataTransfer();dt.items.add(new File([new Uint8Array(bytes)],'plano.pdf',{type:'application/pdf'}));document.dispatchEvent(new DragEvent('dragenter',{dataTransfer:dt,bubbles:true}));const shown=document.querySelector('#dropOverlay').classList.contains('show');document.dispatchEvent(new DragEvent('drop',{dataTransfer:dt,bubbles:true,cancelable:true}));return shown;},pdf);
  assert.ok(overlay);await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),before.id,{timeout:30000});
  assert.equal(await page.locator('#dropOverlay').evaluate(n=>n.classList.contains('show')),false);assert.equal((await state(page)).images.length,1);
- await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.locator('#exportJson').click();const dl=await pending;assert.match(dl.suggestedFilename(),/\.json$/);
+ await page.locator('#perlaProjectMenu > summary').click();const pending=page.waitForEvent('download');await page.locator('#pmDownloadJson').click();const dl=await pending;assert.match(dl.suggestedFilename(),/\.json$/);
  const zipPending=page.waitForEvent('download');await page.evaluate(()=>FloorPlanTraceUI.exportZip());const zip=await zipPending;assert.equal(zip.suggestedFilename(),'proyecto-plano.zip');
  assert.deepEqual(errors,[]);
 });

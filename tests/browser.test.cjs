@@ -30,7 +30,7 @@ async function pageFor(t,options={},legacy){
   await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await require('./editor-fixture.cjs')(page);return {page,errors,context};
 }
 async function readDownload(page,selector){
-  await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.click(selector);
+  /* §9: el JSON editable se descarga desde Proyecto ▾ */if(selector==='#exportJson'){selector='#pmDownloadJson';await page.locator('#perlaProjectMenu > summary').click();}else await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.click(selector);
   const dl=await pending,stream=await dl.createReadStream(),chunks=[];for await(const c of stream)chunks.push(c);return Buffer.concat(chunks);
 }
 test('2D reference drawing and actual edit/duplicate/history/persistence remain functional',async t=>{

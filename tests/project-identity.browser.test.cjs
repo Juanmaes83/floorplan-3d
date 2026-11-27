@@ -37,7 +37,7 @@ test('IDENTIDAD · el mismo archivo importado dos veces: proyectos independiente
  const {context,page}=await K.editor(env,{acceptDownloads:true}),w=K.watch(page,env.base);
  try{
   const A=await original(page);await ask(page,'¿Qué partidas siguen sin precio?');assert.ok((await facts(page)).log>0);
-  await page.locator('details.menu summary').first().click();const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]),file=fs.readFileSync(await d.path(),'utf8');assert.equal(JSON.parse(file).id,A.pid);
+  await page.locator('#perlaProjectMenu > summary').click();const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]),file=fs.readFileSync(await d.path(),'utf8');assert.equal(JSON.parse(file).id,A.pid);
   const savedA=await page.evaluate(([k,id])=>JSON.stringify(JSON.parse(localStorage.getItem(k))[id]),[BUD,A.pid]);
   await importFile(page,'copia-1.json',file);const B1=await facts(page);await importFile(page,'copia-2.json',file);const C1=await facts(page);
   assert.equal(new Set([A.pid,B1.pid,C1.pid]).size,3,'three identities');assert.equal((await unique(page)).length,3);

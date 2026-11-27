@@ -90,7 +90,7 @@ test('MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con co
     await page.keyboard.press('Control+z');
     const gb=await page.locator(`#plan g.furn[data-fid="${o.id}"]`).boundingBox();await page.mouse.click(gb.x+gb.width/2,gb.y+gb.height/2);
     // Exportar: viaja la referencia, no la foto.
-    await page.locator('details.menu summary').first().click();const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#exportJson').click()]);
+    await page.locator('#perlaProjectMenu > summary').click();const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#pmDownloadJson').click()]);
     const exported=fs.readFileSync(await dl.path(),'utf8'),json=JSON.parse(exported);
     assert.ok(json.extensions[EXT].items.some(i=>i.objectId===o.id),'la referencia viaja');assert.ok(!/data:image|IMG_0042|Exif/.test(exported),'la foto no viaja en el archivo');
     // Otro navegador (sin la foto): se importa, el volumen funciona y el panel avisa de que falta la foto.

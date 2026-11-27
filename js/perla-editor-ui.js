@@ -127,6 +127,9 @@
  // §9 (decisión del propietario): «Descargar proyecto JSON» vive en Proyecto ▾. El botón original se conserva oculto como
  // fuente única del exportador (mismo manejador que UX-BETA-001); la confirmación U11 pasa al elemento del menú.
  {const q=move('#exportJsonQuick',pmMore);if(q)q.classList.add('perla-pm-dup-btn');}
+ // §9 (revisión 27/11): el JSON editable no se duplica en «Exportar diseño» (solo salidas de diseño). #exportJson queda
+ // oculto junto al anterior (mismo exportador); la entrada visible es Proyecto ▾ → «Descargar proyecto JSON».
+ {const q=move('#exportJson',pmMore);if(q)q.classList.add('perla-pm-dup-btn');}
  const view=move('#viewSeg',r2);
  // §9 · Deshacer/rehacer son de la tarea actual: van tras la vista (en pantalla compacta siguen en «Más»).
  if(hist&&view&&!matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)').matches)view.after(hist);
