@@ -6130,7 +6130,15 @@ function navFocusRoom(id){
   const roofHidden=!!opt.roof;if(roofHidden){opt.roof=false;syncRoofVisibility();}
   flyToRoom(id);return {ok:true,how:'frame',roofHidden};
 }
-Object.assign(window.View3D,{setWhiteModel:navSetWhite,setAllDoors:navSetAllDoors,setNavMode:navSetMode,focusRoom:navFocusRoom,refreshWhiteModel:navWhiteApply});
+// Gesture Labs · ensayo «palma que se desplaza despacio»: gira la cámara alrededor de su objetivo (la estancia enfocada se
+// mantiene en el centro). Solo en vista orbital; en recorrido o durante una animación no hace nada.
+function navOrbitBy(rad){
+  if(!active||contextLost||!orbit)return {ok:false,reason:'3d-unavailable'};if(anim)return {ok:false,reason:'busy'};if(opt.mode==='walk')return {ok:false,reason:'walk'};
+  const a=Number(rad);if(!Number.isFinite(a)||!a)return {ok:false,reason:'no-angle'};
+  const off=camera.position.clone().sub(orbit.target);off.applyAxisAngle(new THREE.Vector3(0,1,0),Math.max(-0.35,Math.min(0.35,a)));
+  camera.position.copy(orbit.target).add(off);camera.lookAt(orbit.target);orbit.update();window.View3D.invalidate?.();return {ok:true};
+}
+Object.assign(window.View3D,{setWhiteModel:navSetWhite,setAllDoors:navSetAllDoors,setNavMode:navSetMode,focusRoom:navFocusRoom,refreshWhiteModel:navWhiteApply,orbitBy:navOrbitBy});
 Object.defineProperty(window.View3D,'navState',{get:()=>({active,available:active&&!contextLost,mode:opt.mode,roof:!!opt.roof,roofStatus:roofResult?.status||'unavailable',roofReason:roofResult?.reason||null,
   furniture:!!opt.furn,white:navWhite,whiteMeshes:navWhiteSaved.size,cut:opt.cut,levelView,doors:navDoors(),busy:!!anim||!!fly,presentation:!!window.FloorPlanPresentation?.active})});
 window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};

@@ -42,3 +42,25 @@ test('presentación: enrollado → plano → 3D con una revisión; «antes y des
   assert.equal(p.toggle('right'), 'after'); assert.equal(p.toggle('left'), 'before'); assert.equal(p.prev(), '3d');
   p.enableCompare(false); assert.equal(p.go('compare'), '3d');
 });
+
+// Ensayo «palma que se desplaza despacio» (guía c532877a): orienta la maqueta; el barrido rápido no gira; la mano quieta
+// sigue siendo «siguiente». En espejo: mover la mano en cámara a la izquierda (dx<0) es girar a la derecha en pantalla.
+const runEv = seq => { const c = G.create(), ev = []; for (const [lm, t] of seq) ev.push(...c.frame(lm, t).events); return ev; };
+test('palma abierta que se desplaza despacio: eventos «orbit» continuos y ningún «next»', () => {
+  const ev = runEv(frames('open', 0, 60, 33, 0.65, -0.004)); // ~0,12/s, por debajo de 0,45/s
+  const orb = ev.filter(e => e.type === 'orbit');
+  assert.ok(orb.length >= 20, 'giro continuo'); assert.ok(orb.every(e => e.dx > 0), 'en espejo, hacia la derecha de pantalla');
+  assert.equal(ev.filter(e => e.type === 'next').length, 0, 'moverse no es «mano quieta»');
+});
+test('barrido rápido con la palma abierta: no gira', () => {
+  const ev = runEv(frames('open', 0, 14, 33, 0.8, -0.03)); // ~0,9/s
+  assert.equal(ev.filter(e => e.type === 'orbit').length, 0);
+});
+test('la mano abierta QUIETA sigue disparando «next» una vez (sin giro)', () => {
+  const ev = runEv(frames('open', 0, 30, 33, 0.5, 0));
+  assert.equal(ev.filter(e => e.type === 'next').length, 1); assert.equal(ev.filter(e => e.type === 'orbit').length, 0);
+});
+test('temblor pequeño (< zona muerta) no gira y no impide «next»', () => {
+  const seq = frames('open', 0, 30, 33, 0.5, 0).map(([lm, t], i) => [G.syntheticHand('open', 0.5 + (i % 2 ? 0.006 : -0.006), 0.5), t]);
+  const ev = runEv(seq); assert.equal(ev.filter(e => e.type === 'orbit').length, 0); assert.equal(ev.filter(e => e.type === 'next').length, 1);
+});

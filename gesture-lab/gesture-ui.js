@@ -69,18 +69,19 @@
   const STATE_TXT = { OPEN: 'mano abierta detectada', FIST: 'puño detectado', HOLDING: 'mano detectada, sin gesto' };
   let ackT = 0; const confirmGesture = t => { ack.textContent = '✓ Gesto detectado: ' + t; ack.hidden = false; clearTimeout(ackT); ackT = setTimeout(() => { ack.hidden = true; }, 1800); note('ack', { t }); };
   // Cada gesto se enseña en el paso en que sirve.
-  const TEACH = { rolled: 'Gesto para desplegar: mano abierta, palma a la cámara, quieta 1 segundo.', plan: 'Gesto para ver la vivienda en 3D: mano abierta quieta 1 segundo.', '3d': 'Puedes girar el 3D con el ratón o el dedo. Gesto: mano abierta quieta 1 segundo para pasar a antes y después (si lo has elegido).', compare: 'Gesto para comparar: puño cerrado y deslizar rápido a un lado → antes / después. Retirar la mano no cambia nada.' };
+  let orbitN = 0;
+  const TEACH = { rolled: 'Gesto para desplegar: mano abierta, palma a la cámara, quieta 1 segundo.', plan: 'Gesto para ver la vivienda en 3D: mano abierta quieta 1 segundo.', '3d': 'Gira la maqueta moviendo despacio la mano abierta a un lado (o con el ratón o el dedo). Mano abierta quieta 1 segundo: antes y después, si lo has elegido. Tras girar, cierra y vuelve a abrir la mano para avanzar.', compare: 'Gesto para comparar: puño cerrado y deslizar rápido a un lado → antes / después. Retirar la mano no cambia nada.' };
   const NEXT_TXT = { rolled: 'Desplegar el plano', plan: 'Ver en 3D →', '3d': 'Siguiente →' };
   // Viñetas (handoff ampliado 27/11): cada paso enseña la mano, el movimiento o el tiempo, el resultado y el botón equivalente.
   const PALM = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M20 58c-6-6-10-14-10-22V26c0-2 2-4 4-4s4 2 4 4v8M18 34V12c0-2 2-4 4-4s4 2 4 4v20M26 30V8c0-2 2-4 4-4s4 2 4 4v22M34 30V12c0-2 2-4 4-4s4 2 4 4v24M42 36V22c0-2 2-4 4-4s4 2 4 4v14c0 10-6 22-16 22H24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const FIST = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 30c0-4 3-6 6-6h18c4 0 7 3 7 7v9c0 9-7 16-16 16h-2c-8 0-13-6-13-14z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M24 24v8M32 24v8M40 24v8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M4 44h8M56 44h-8M8 40l-4 4 4 4M52 40l4 4-4 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const VIN = { rolled: [PALM, 'Mano abierta, palma a la cámara, quieta 1 segundo', 'se despliega el plano', '«Desplegar el plano»'],
     plan: [PALM, 'Mano abierta quieta 1 segundo (vuelve a abrirla si la cerraste)', 'pasas al 3D de esta estancia', '«Ver en 3D →»'],
-    '3d': [FIST, 'Solo si eliges «Antes y después»: puño y deslizar rápido a un lado', 'cambias entre antes y después', '«Antes y después»'],
+    '3d': [PALM, 'Mano abierta moviéndose DESPACIO a un lado (un barrido rápido no gira)', 'la maqueta gira sin perder la estancia', '', ' Sin cámara: arrastra con el ratón o el dedo.'],
     compare: [FIST, 'Puño cerrado y deslizar rápido a un lado (unos 15–20 cm)', 'antes / después', '«Ver después» / «Ver antes»'] };
   const vin = el('figure', { class: 'gl-vin', id: 'glVin', 'aria-label': 'Cómo hacer el gesto de este paso' }, dlg);
   function paintVin() { const v = VIN[P.step]; vin.hidden = showIntro || !v; if (!v) return; vin.replaceChildren(); const ic = el('span', { class: 'gl-vin-hand' }, vin); ic.innerHTML = v[0];
-    const t = el('figcaption', {}, vin); el('b', {}, t, v[1]); el('span', {}, t, ' → ' + v[2] + '.'); el('small', {}, t, ' Sin cámara: botón ' + v[3] + '.'); vin.dataset.step = P.step; }
+    const t = el('figcaption', {}, vin); el('b', {}, t, v[1]); el('span', {}, t, ' → ' + v[2] + '.'); el('small', {}, t, v[4] || ' Sin cámara: botón ' + v[3] + '.'); vin.dataset.step = P.step; }
 
   let showIntro = false, origin = null, entry0 = null;
   function planSvg(target, mini) { const w = el('div', { class: mini ? 'gl-mini' : 'gl-plan' }, target); w.innerHTML = R.planSvg(single, 'before', rev.project, { title: '' }); if (room) mark(w, room.id); return w; }
@@ -175,6 +176,7 @@
     const r = det.frame(lm, t);
     for (const e of r.events) {
       if (e.type === 'next') { if (showIntro) begin('gesture'); else if (P.step === '3d' && !P.compare) { confirmGesture('mano abierta → (fin del recorrido; elige «Antes y después» para seguir)'); continue; } else next('gesture'); confirmGesture(P.step === 'plan' ? 'mano abierta → plano desplegado' : P.step === '3d' ? 'mano abierta → vista 3D' : 'mano abierta → siguiente'); }
+      else if (e.type === 'orbit') { if (P.step !== '3d' || showIntro) continue; const r = window.View3D?.orbitBy?.(-e.dx * Math.PI * 1.6); if (r?.ok) { orbitN = (orbitN || 0) + 1; if (orbitN === 1) note('orbit', { source: 'gesture' }); } }
       else if (e.type === 'swipe') { if (P.step !== 'compare') continue; setSide(e.dir === 'right' ? 'after' : 'before'); confirmGesture('deslizar → ' + (P.side === 'after' ? 'después' : 'antes')); note('side', { side: P.side, source: 'gesture' }); }
       else if (e.type === 'lost') camState('lost', 'Mano perdida · gestos en pausa, no se ha cambiado nada; vuelve a mostrar la mano o sigue con los botones');
       else if (e.type === 'found') camState('on', 'Cámara activa · ' + (STATE_TXT[r.state] || 'buscando la mano'));
@@ -235,6 +237,6 @@
   // Lanzador del laboratorio (atajo de ensayo).
   const launch = el('button', { type: 'button', class: 'btn gl-launch', id: 'gestureLabOpen' }, document.body, 'Presentar con gestos · laboratorio'); launch.onclick = () => open({ origin: 'launcher' });
   // Gancho de ensayo: alimenta fotogramas SINTÉTICOS (rotulado; no simula una cámara real).
-  window.RubikGestureLab = { open, begin, demo, chooseCompare, get intro() { return showIntro; }, get origin() { return origin; }, feed: (lm, t) => onGesture(lm, t), get step() { return P.step; }, get side() { return P.side; }, get compare() { return P.compare; }, get room() { return roomName(); }, get camera() { return { state: dot.dataset.cam, tracks: stream ? stream.getTracks().map(t => t.readyState) : [] }; }, get log() { return log.slice(); }, synthetic: G.syntheticHand };
+  window.RubikGestureLab = { get orbits() { return orbitN; }, open, begin, demo, chooseCompare, get intro() { return showIntro; }, get origin() { return origin; }, feed: (lm, t) => onGesture(lm, t), get step() { return P.step; }, get side() { return P.side; }, get compare() { return P.compare; }, get room() { return roomName(); }, get camera() { return { state: dot.dataset.cam, tracks: stream ? stream.getTracks().map(t => t.readyState) : [] }; }, get log() { return log.slice(); }, synthetic: G.syntheticHand };
   document.dispatchEvent(new CustomEvent('rubik:gesture-lab-ready'));
 })();

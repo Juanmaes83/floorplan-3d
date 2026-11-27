@@ -11,14 +11,18 @@
 (function (root, factory) { const api = factory(); if (typeof module === 'object' && module.exports) module.exports = api; else root.RubikGestureCore = api; })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
   const P = Object.freeze({ emaKeep: 0.52, required: { OPEN: 2, FIST: 4, HOLDING: 5 }, holdOpenMs: 600, lostMs: 700,
-    swipe: { windowMs: 520, dx: 0.18, dy: 0.11, velocity: 0.55, cooldownMs: 850 } });
+    swipe: { windowMs: 520, dx: 0.18, dy: 0.11, velocity: 0.55, cooldownMs: 850 },
+    // Ensayo «palma que se desplaza despacio» (guía c532877a): con la mano ABIERTA, un desplazamiento horizontal lento orienta
+    // la maqueta. Zona muerta acumulada antes de empezar (no se confunde con la mano quieta de «siguiente»), y por encima de
+    // maxVelocity es un barrido rápido: no gira nada.
+    orbit: { startDx: 0.035, maxVelocity: 0.45, maxDy: 0.08 } });
   const d2 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const palmOf = lm => { const ids = [0, 5, 9, 13, 17]; const s = ids.reduce((a, i) => ({ x: a.x + lm[i].x, y: a.y + lm[i].y }), { x: 0, y: 0 }); return { x: s.x / ids.length, y: s.y / ids.length }; };
 
   function create(params = {}) {
     const p = { ...P, ...params };
-    const s = { ema: null, candidate: 'HOLDING', frames: 0, stable: 'HOLDING', openSince: null, openFired: false, history: [], lastSwipe: -Infinity, lastHand: null, lost: true };
-    function reset() { s.ema = null; s.candidate = 'HOLDING'; s.frames = 0; s.stable = 'HOLDING'; s.openSince = null; s.openFired = false; s.history.length = 0; }
+    const s = { ema: null, candidate: 'HOLDING', frames: 0, stable: 'HOLDING', openSince: null, openFired: false, history: [], lastSwipe: -Infinity, lastHand: null, lost: true, orb: null };
+    function reset() { s.ema = null; s.candidate = 'HOLDING'; s.frames = 0; s.stable = 'HOLDING'; s.openSince = null; s.openFired = false; s.history.length = 0; s.orb = null; }
     function classify(lm) {
       const palm = palmOf(lm), scale = Math.max(0.04, d2(lm[0], lm[9]));
       let extended = 0, open = 0;
@@ -39,7 +43,17 @@
       s.lastHand = t;
       const info = classify(lm), g = stabilize(info.gesture);
       // Gesto 1 · mano abierta sostenida.
-      if (g === 'OPEN') { if (s.openSince === null) s.openSince = t; if (!s.openFired && t - s.openSince >= p.holdOpenMs) { s.openFired = true; events.push({ type: 'next' }); } s.history.length = 0; }
+      // Gesto 3 (ensayo) · palma abierta que se desplaza despacio → 'orbit' con el desplazamiento horizontal de pantalla.
+      // Va ANTES de «siguiente»: si la palma se mueve, la espera de mano quieta se reinicia y «siguiente» no se dispara.
+      if (g === 'OPEN') {
+        const x = 1 - info.palm.x, y = info.palm.y;
+        if (!s.orb) s.orb = { x0: x, y0: y, x, y, t, moving: false };
+        else { const dx = x - s.orb.x, dt = Math.max(1, t - s.orb.t), v = Math.abs(dx) / (dt / 1000);
+          if (!s.orb.moving && Math.abs(x - s.orb.x0) >= p.orbit.startDx && Math.abs(y - s.orb.y0) <= p.orbit.maxDy) s.orb.moving = true;
+          if (s.orb.moving) { s.openSince = t; if (v <= p.orbit.maxVelocity && dx !== 0) events.push({ type: 'orbit', dx }); }
+          s.orb.x = x; s.orb.y = y; s.orb.t = t; }
+      } else s.orb = null;
+      if (g === 'OPEN') { if (s.openSince === null) s.openSince = t; if (!s.openFired && !s.orb?.moving && t - s.openSince >= p.holdOpenMs) { s.openFired = true; events.push({ type: 'next' }); } s.history.length = 0; }
       else { s.openSince = null; if (g === 'FIST') s.openFired = false; }
       // Gesto 2 · deslizar con la mano cerrada (en espejo: x de pantalla = 1 - x de cámara).
       if (g === 'FIST' && t - s.lastSwipe >= p.swipe.cooldownMs) {

@@ -64,6 +64,14 @@ for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390,
     assert.match(await page.locator('#glKind').innerText(), new RegExp('Visor 3D interactivo de la misma revisión «.+».* · encuadre: ' + room));
     assert.match(await page.locator('#glInset figcaption').innerText(), new RegExp(room + ' · la estancia que viste en planta')); assert.ok(await page.locator('#glInset .gl-mark').count() >= 1);
     await pause(page, 2800); await shot(page, `gl-3-3d-${vp.tag}.png`);
+    // Ensayo «palma que se desplaza despacio» (guía c532877a): la maqueta gira y la estancia sigue en el encuadre; un barrido
+    // rápido no gira; moverse no cuenta como «mano quieta» (sigue en 3D).
+    assert.match(await page.locator('#glVin').innerText(), /Mano abierta moviéndose DESPACIO a un lado/);
+    await hold(page, 'fist', 200); const az0 = await page.evaluate(() => RubikGestureLab.orbits);
+    await hold(page, 'open', 1800, 0.65, -0.004); const az1 = await page.evaluate(() => RubikGestureLab.orbits);
+    assert.ok(az1 - az0 >= 20, 'giro continuo con la palma lenta: ' + (az1 - az0)); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d', 'girar no avanza');
+    await hold(page, 'fist', 200); await hold(page, 'open', 460, 0.8, -0.03); assert.equal(await page.evaluate(() => RubikGestureLab.orbits), az1, 'el barrido rápido no gira');
+    await pause(page, 1600); await shot(page, `gl-3b-giro-${vp.tag}.png`);
     // Perder la mano: pausa sin acción; el punto se conserva y se sigue con botones.
     await page.evaluate(() => { RubikGestureLab.feed(null, performance.now() + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d');
     assert.match(await page.locator('#glCamText').innerText(), /Mano perdida · gestos en pausa, no se ha cambiado nada/); await pause(page, 1600);
