@@ -40,12 +40,12 @@ Grabadas con la propia prueba bloqueante (`AUD_REC=<carpeta>`, con `slowMo` de 3
 
 | Archivo | Tamaño de pantalla | Duración | SHA-256 |
 |---|---|---|---|
-| `grabaciones/v03-escritorio.mp4` |  | 8.48 s | `2885b06bc54c5f22…` |
-| `grabaciones/v03-movil.mp4` |  | 8.00 s | `fa0d0fed5db0ba9a…` |
-| `grabaciones/v05-escritorio.mp4` |  | 31.0 s | `66f01043f61e328e…` |
-| `grabaciones/v05-movil.mp4` |  | 24.4 s | `7f4aba7d29767526…` |
-| `grabaciones/v07-escritorio.mp4` |  | 6.16 s | `c1a7ce15a9f9da2d…` |
-| `grabaciones/v07-movil.mp4` |  | 5.80 s | `fbc90d08005c3ddb…` |
-| `grabaciones/v09-entregar-5-tamanos.mp4` |  | 31.1 s | `48b55a0e5be1f843…` |
+| `grabaciones/v03-escritorio.mp4` | 1440×900 | 8.48 s | `2885b06bc54c5f22…` |
+| `grabaciones/v03-movil.mp4` | 390×844 | 8.00 s | `fa0d0fed5db0ba9a…` |
+| `grabaciones/v05-escritorio.mp4` | 1440×900 | 31.0 s | `66f01043f61e328e…` |
+| `grabaciones/v05-movil.mp4` | 390×844 | 24.4 s | `7f4aba7d29767526…` |
+| `grabaciones/v07-escritorio.mp4` | 1440×900 | 6.16 s | `c1a7ce15a9f9da2d…` |
+| `grabaciones/v07-movil.mp4` | 390×844 | 5.80 s | `fbc90d08005c3ddb…` |
+| `grabaciones/v09-entregar-5-tamanos.mp4` | 1440×900 (lienzo) | 31.1 s | `48b55a0e5be1f843…` |
 
 **Límites:** V03, V05 y V07 usan el edificio sintético de dos plantas (`tests/fixtures/auditoria-324`); V05 y V09, el proyecto de ejemplo. Ninguna usa Villa Linde, cuya cubierta sigue en V08 (solo diagnóstico). V09 graba los 5 tamaños dentro de un lienzo de 1440×900. **Observación** (no es un hallazgo de la auditoría): en V07 móvil, el botón flotante «Asistente» tapa el borde inferior del diálogo «Presentar mi vivienda». Lo anoto para el SHA final.
