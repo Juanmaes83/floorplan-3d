@@ -18,6 +18,8 @@ Lee el [protocolo de coordinación](../agents/PROTOCOLO-COORDINACION-MULTIAGENTE
 
 Objetivo: determinar el beneficio de cada mejora frente a master y preparar únicamente candidatas comprobables. Este documento define auditoría, evidencia y decisión. El propietario autoriza la fusión del SHA exacto tras la revisión de Claude, Codex y el propietario.
 
+**Continuidad del 27/11.** La base remota sigue en `dacb5d39` (árbol `0ba3d186b70e965c4dd2ec1ec4f4c79ba5efaefd`). La [PR #324](https://github.com/Juanmaes83/floorplan-3d/pull/324) reúne Cabecera, D3, P2, cuadrícula P8–P10 y la muestra de estilos, con las aprobaciones visuales de las Previews originales. Consulta el [dictamen y los pasos de reanudación](HANDOFF-GESTURE-LABS-Y-CANDIDATAS.md#estado-de-integración) para la dependencia de StoryLayers y la validación conjunta. Gesture Labs queda en su rama, con cámara física pendiente. Su objetivo, donantes y aceptación están en el [handoff ampliado de Gesture Labs](HANDOFF-GESTURE-LABS-Y-CANDIDATAS.md).
+
 ## A. Ramas publicadas y qué comparar
 
 ### 1. BC3 §5.2
@@ -65,9 +67,10 @@ El corte publica D3 en tres pasos, una acción real de P2 y tarjetas P8 → P9 �
 Comprueba las regresiones de Entregar y photo-project sobre la candidata conjunta.
 
 ### 8. Gesture Labs / Presentación con gestos
-Rama: claude/gesture-labs · 3f1a72f88a989c137790d40b2040057827104188 (recorrido y entradas). El sucesor e72f34ddf9e24c4e2afdb78500e41dd26c99fdc2 modifica también la cuadrícula de Entregar y P10. Contrasta ese solape con la rama de Entregar antes de combinar.
-Handoff: docs/qa/gesture-labs/README.md.
-Este corte ya implementa plano enrollado → despliegue → 3D con una revisión, demo propia en Home, ficha P11 y entrada contextual desde P1. Contrasta presencia y navegación con el estilo actual. Graba Home con vivienda de ejemplo y Entregar con un proyecto, sin obligar a crear variante para Plano → 3D. «Antes y después» sí requiere dos revisiones. Comprueba los controles equivalentes sin cámara, la continuidad al perder seguimiento y la salida. Las pruebas sintéticas acreditan la lógica y el recorrido; la revisión con cámara frontal física sigue pendiente del propietario.
+Rama: `claude/gesture-labs` · `9238429cae294ee6f88fbaa95d11fd0e52873650` (handoff), código de Preview `e72f34ddf9e24c4e2afdb78500e41dd26c99fdc2`.
+Consulta el [handoff de Claude](https://github.com/Juanmaes83/floorplan-3d/blob/9238429c/docs/qa/gesture-labs/README.md) y el [handoff ampliado](HANDOFF-GESTURE-LABS-Y-CANDIDATAS.md). El objetivo de P11 es que el profesional pueda ensayar y el cliente completar el recorrido sin ayuda, con una viñeta por paso y un botón equivalente. La ruta principal usa una revisión para pasar de plano enrollado a plano abierto y al 3D de la misma estancia. «Antes y después» es opcional y requiere una variante. Home y P1 dan acceso a la experiencia.
+
+El siguiente ensayo recomendado es el giro de la maqueta a partir de Bola de Imagen. El pulgar arriba, la distancia entre manos, el marco de dedos y los recorridos inmobiliarios tienen fuentes verificadas y alcances propios en el handoff ampliado. La prueba de aceptación es una grabación continua con cámara frontal física desde P11 hasta salir. En su futura candidata, conserva la cuadrícula P8–P10 aprobada y valida P11 dentro de la misma maquetación.
 
 ### 9. Rodaje: tapicería v3 y Película del proyecto
 Rama: claude/rodaje-cierre-1440 · 6e59b6a397fab78ba917ad6c820dca0910ba71ac (cronología y modo de rodaje). El sucesor 67e147e9eb45946acacb51a2368be6f3d64f6e22 publica tres fotogramas de control, con el clip aún en cola.
