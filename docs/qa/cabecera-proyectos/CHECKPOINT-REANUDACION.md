@@ -2,6 +2,28 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ ESTADO · 27/11/2026, 22:20 (leer primero; el bloque de las 20:15 queda como histórico)
+
+**#324** (`claude/integracion-cabecera-entregar`, borrador) · HEAD **`2f1c0ee4`**:
+- `ac2fe1ba` V09 verificado integrado en Entregar (5 tamaños, sin recorte; ejemplo, no Villa Linde).
+- `8cff66b7` ID del ejemplo estable al recargar (`prj_reference-home`); CI de `c7093d62` clasificada:
+  `app-m2-gate-d` = entorno (apt de Microsoft 403, Chromium sin instalar); `walk-controls` = intermitente (local 3/3; vigilar).
+- `675db8cd`/`32e76db7` grabaciones V03/V05/V07 (escritorio y móvil) y V09 en `auditoria-codex/grabaciones/` (con SHA);
+  grabación opcional `AUD_REC`/`AUD_VP` en la prueba (aserciones intactas; 8/8 sin grabar).
+- `2f1c0ee4` acceso del Asistente que tapa el pie de diálogos en móvil = **anterior a #324** (master), mejora propia.
+- **En curso:** regresión completa del SHA final `scratchpad/integ-regr-final.sh` → `integ-regr-final.log` (+ `master-final.log`
+  con g02, presentation y visual-studio en `dacb5d39`). Lanzada con límite de 2 h: si se corta, retomar los archivos que falten.
+- Después: CI + Preview de `2f1c0ee4`, comentario en #324 por hallazgo, Previews aprobadas (fccda24b, 7b2e01ab) aparte.
+
+**Gesture Labs** `92ffb5f1`: prueba de navegador 6/6 ×2 (reloj sintético monótono en la prueba) y core 11/11; guion de
+cámara frontal en `docs/qa/gesture-labs/GUION-GRABACION-CAMARA-FRONTAL.md`. Pendiente: grabación de Juanma.
+
+**Película v1.1** (`claude/rodaje-cierre-1440` `230c7316`): kit con los 4 hallazgos corregidos y cronología
+`docs/qa/pelicula-proyecto/entrada/pel-f5-timeline-v1.1.json` (misma revisión; conciliación idéntica a v1.0).
+Cadena desligada `scratchpad/pel-v11.sh` (espera a la regresión): previa 426×240 → `rodaje/pel-v11-prev/previa.mp4`, luego
+720p 12 muestras → `rodaje/pel-v11/…-v1.1.mp4`. Crear `scratchpad/pel-v11-STOP` para no lanzar el 720p si la previa falla.
+Revisar la previa (tramos 17–24,5 s y 22 s) antes de dar por bueno el 720p.
+
 ## ▶ CHECKPOINT DE COMPACTACIÓN · 27/11/2026, 20:15 (leer primero)
 
 **Estado de la máquina al escribir esto:**
