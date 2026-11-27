@@ -75,3 +75,25 @@ C. Mientras una prueba corre o una Preview espera revisión: §§8.1–8.2 (inve
    análisis de Blueprint §11. El render de Blender, después.
 Si algo requiere aprobación o decisión de alcance, deja la Preview o la propuesta lista y sigue con lo siguiente. Conserva las
 aprobaciones; examen de cinco proyectos al final; trabaja desde las ramas propias; al terminar, actualiza este checkpoint.
+
+
+## Actualización 27/11 · 00:30 — noche de trabajo continuo (instrucción del propietario)
+| Objetivo | Entrada en RUBIK | Rama · SHA | Evidencia | Pruebas | Revisar al volver |
+|---|---|---|---|---|---|
+| A · §5.3 plan vacío → borrador → revisado sin recargar; imágenes; inventario | Presupuestar → Plan de obra · Analizar → Exterior | `claude/ux-presupuestar-analizar` · `a901452e` | `docs/qa/ux-presupuestar-analizar/corte2/video/` (MP4 escritorio y móvil + hoja de contactos), inventario en `corte2/` | regresión completa EN CURSO (136 superadas, 0 fallos) · `p53-regr2.log` | vídeo y Preview `852e0f44` |
+| B · §9 cabecera: JSON y P10 con una vuelta | menú de proyecto ▾ · Entregar → P10 | `claude/cabecera-proyectos` · `5acb40dc` | `docs/qa/cabecera-proyectos/video/` (4 MP4; **aún sin revisar fotograma a fotograma**) | `cabecera-proyectos` 2/2 local; **regresión pendiente** | vídeos y Preview del último SHA |
+| Rodaje MP4 | — | `claude/rodaje-cierre-1440` · `6c7a214e` | comando completo fuera de /tmp: `docs/qa/rodaje/mp4-completo/README.md` | — | en pausa: `f0003` primero pendiente |
+Gesture Labs (E): **EN ESPERA por orden del propietario** («espera»). Donantes clonados en solo lectura y fijados:
+`/home/user/rubik-sota-director-de-orquesta` (`dcf4b7ac`) y `/home/user/map-gesture-controls` (`6939d43a`). Director de Orquesta
+no tiene archivo LICENSE: el propietario indica que son suyos y que puede publicarlos para reutilizar las piezas; antes de copiar
+código, registrar esa autorización (o la licencia) en el handoff. Patrón analizado del donante principal (before-after-reforma
+v2.1.2): clasificación por dedos extendidos + EMA de apertura, estabilización por fotogramas (OPEN 2 · FIST 4 · HOLDING 5),
+deslizamiento con |dx|≥0,18, |dy|≤0,11, velocidad ≥0,55/s y 850 ms entre disparos, pérdida de mano a 700 ms sin disparo, parada
+de pistas al salir. Base propuesta del laboratorio: el comparador `comparar/` de StoryLayers (dos revisiones reales, cortina).
+
+### REANUDACIÓN (esta noche)
+1. Consulta `p53-regr2.log`; si terminó, publica el resultado en el handoff de §5.3 (Preview `852e0f44`/`a901452e`).
+2. Revisa los 4 vídeos de §9 (fotogramas) y lanza la regresión de §9 (`claude/cabecera-proyectos`, adaptar las pruebas que pulsaban
+   «Subir plano» en la fila 2 para que abran el menú de proyecto); publica resultado y Preview.
+3. C · §8 D3 Dossier (Mi estudio + ficha de cliente + asistencia local, salida sin notas internas) → D · §10 casos FOT-01 →
+   F · §11 Blueprint (escena y report para 720p). Gesture Labs solo cuando el propietario lo libere.
