@@ -32,3 +32,15 @@ Añadir **«Tu proyecto cobra vida» como sección propia de Vídeo** para elegi
 2. Comparar los guiones en una misma escena cuando sea viable y usar un proyecto que tenga entorno representado para el tercer efecto. Comprobar que alguien que ve los clips sin conocer los donantes puede explicar qué cambia en cada uno. Comparar además con P1 Cinematográfico para confirmar que la opción aporta un resultado reconocible.
 3. Usar la geometría, huecos, materiales y plantas de la exportación real. Documentar elementos omitidos o aproximados y comprobar las posiciones finales. Si falta una condición del guion elegido, explicar cuál antes de preparar el ZIP.
 4. Tras la aprobación, validar Home en escritorio y móvil. En Entregar, grabar la elección, preparación y revisión de la salida sobre proyecto propio. Comprobar una planta, dos plantas y una revisión posterior. Registrar qué efectos quedan aprobados y cuáles siguen pendientes de grabación o ajuste.
+
+## Acuerdo de continuidad · junto a Dibujo vivo
+
+Juanma aprueba las **descripciones de los tres efectos**. Los nombres quedan pendientes. Esta actualización precisa la agrupación anterior. En Home, el módulo conserva presencia propia dentro del bloque visual junto a **Dibujo vivo**. En Entregar, ubicar los tres guiones junto a Dibujo vivo en el mismo espacio de **Presentación 3D y vídeo**, con un selector común para las tres películas. En cada opción, indicar si se reproduce en el visor o se prepara para render en Blender. Mantener los accesos vigentes.
+
+| Nombre candidato | Efecto aprobado |
+|---|---|
+| **Pieza a pieza** | La casa se monta sobre el papel. |
+| **Maqueta abierta** | El plano gana volumen y la cámara baja a las estancias. |
+| **Desde el paisaje** | La cámara se acerca a la casa y pasa del exterior al interior. |
+
+Preparar la escena, el guion y el ZIP antecede al render. El modo actual se procesa en Blender. El handoff estimó **4–6 horas** para un clip de 30 segundos a 720p en el equipo de pruebas. Cada proyecto, perfil y equipo requiere su propia medición. La preparación debe explicar estos pasos antes de iniciar el trabajo. Validar una prueba de baja calidad que muestre la transición completa y el estado de reanudación antes de ofrecer un render final propio. El clip en curso sigue siendo evidencia para la comparación. Los nombres y la agrupación en la interfaz no requieren volver a renderizarlo.
