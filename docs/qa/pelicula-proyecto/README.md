@@ -1,4 +1,10 @@
-# §11 · Blueprint · del plano real de RUBIK a una película de la vivienda — análisis y storyboard
+# §11 · Película del proyecto · formato «Del plano a la vivienda»
+
+> **Nombre (decisión del propietario, 27/11):** el módulo audiovisual se llama **«Película del proyecto»**; su primer formato,
+> **«Del plano a la vivienda»**. «Blueprint» es solo la referencia al repositorio donante. No confundir con **P8 «Blueprint 3D»**
+> de Entregar (visor técnico de planta, cotas, alzados y secciones), que conserva su nombre, ficha y visor. Son módulos distintos
+> con entradas y salidas propias; ambos pueden leer la misma revisión de RUBIK. Entrada de este módulo: el ZIP de Entregar
+> («Escena para Blender») + el kit Blender existente; salida: un vídeo (primero 720p sin sonido para aprobación; después 1440p).
 
 **Rama:** `claude/rodaje-cierre-1440` (kit de rodaje). Estado: **análisis y propuesta**; sin código ni render todavía (el
 render de Blender queda para después, por decisión del propietario).
@@ -42,14 +48,14 @@ Primer corte revisable: fotogramas de los planos 1, 3 y 7 + clip a **720p** + re
 - Sonido: el donante sincroniza con `timeline.json`; ¿se incluye sonido? (requiere revisar licencias de `sfx/` o usar uno propio).
 
 ## Preparado para el clip 720p (27/11) · cronología y report
-`scripts/interop/blueprint-timeline.py` (Python puro, sin bpy) lee el `manifest.json` del ZIP de «Escena para Blender» y escribe
-`blueprint-timeline.json`: salida 1280×720, 24 fps, 576 fotogramas (24 s), **sin audio**; los 7 planos con rango de fotogramas,
+`scripts/interop/pelicula-timeline.py` (Python puro, sin bpy) lee el `manifest.json` del ZIP de «Escena para Blender» y escribe
+`pelicula-timeline.json`: salida 1280×720, 24 fps, 576 fotogramas (24 s), **sin audio**; los 7 planos con rango de fotogramas,
 cámara, grupos que aparecen por `rubik_role` (solo los que existen en el ZIP) y rótulos **con su fuente** (sin fuente no hay cifra;
 la superficie solo entra con `--area` y `--area-source`). Las omisiones se registran (p. ej. `ceiling`: techo oculto para ver el
 interior; roles ausentes; roles sin regla). Entrada identificada por proyecto, huella observada, huella de `scene.glb` y huella
 del ZIP (`--zip`). Comprobado con un ZIP real del rodaje (`pkg3`: 2 estancias · 27 muros · 18 huecos · 43 objetos; omisión del techo).
 ```bash
-python3 scripts/interop/blueprint-timeline.py manifest.json blueprint-timeline.json --zip escena.zip --area "87,18 m²" --area-source "Ficha de superficies"
+python3 scripts/interop/pelicula-timeline.py manifest.json pelicula-timeline.json --zip escena.zip --area "87,18 m²" --area-source "Ficha de superficies"
 ```
 Siguiente paso (necesita CPU libre, tras la regresión y sin render en paralelo): que `blender-rodaje.py` lea esta cronología en
 `RUBIK_derived` y renderice el clip 720p del proyecto de ejemplo. Sonido: ninguno (decisión pendiente del propietario).
@@ -61,9 +67,9 @@ Siguiente paso (necesita CPU libre, tras la regresión y sin render en paralelo)
 - **Correspondencia objeto ↔ `rubik_id`:** cada grupo de aparición lista sus `rubikIds`; `reconcile` (con `--project`) concilia
   proyecto ↔ escena por rol. pkg3: estancias 2/2; muros 8 en el proyecto, 7 en la escena (`wal_removed`, retirado);
   huecos 4/3 (`opn_east-void`, vacío sin malla); ninguno en la escena que no esté en el proyecto. Evidencia:
-  [`evidencia/blueprint-timeline-pkg3.json`](evidencia/blueprint-timeline-pkg3.json) (ZIP `ab127002abd1…`).
+  [`evidencia/pelicula-timeline-pkg3.json`](evidencia/pelicula-timeline-pkg3.json) (ZIP `ab127002abd1…`).
 - **Comando reproducible (siguiente ventana, con la CPU libre):**
-  1. Cronología: `python3 scripts/interop/blueprint-timeline.py <zip>/manifest.json blueprint-timeline.json --zip escena.zip --glb <zip>/scene.glb --project <zip>/project.json`
-  2. Render 720p de 576 fotogramas: **pendiente de implementar** la lectura de `blueprint-timeline.json` en `blender-rodaje.py`
+  1. Cronología: `python3 scripts/interop/pelicula-timeline.py <zip>/manifest.json pelicula-timeline.json --zip escena.zip --glb <zip>/scene.glb --project <zip>/project.json`
+  2. Render 720p de 576 fotogramas: **pendiente de implementar** la lectura de `pelicula-timeline.json` en `blender-rodaje.py`
      (planos, cámaras y aparición por `rubikIds` dentro de `RUBIK_derived`). Hasta entonces no existe un comando de render de la
      película; no se presenta uno que no funcione.

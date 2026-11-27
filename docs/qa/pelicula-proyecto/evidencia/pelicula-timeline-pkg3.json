@@ -1,5 +1,5 @@
 {
-  "schema": "rubik-sota.blueprint-timeline",
+  "schema": "rubik-sota.pelicula-timeline",
   "version": "1.0.0",
   "output": {
     "width": 1280,

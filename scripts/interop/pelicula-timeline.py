@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""§11 Blueprint · cronología y anexo de report para la película «del plano a la vivienda» (primer corte 720p, sin sonido).
+"""§11 Película del proyecto · formato «Del plano a la vivienda» · cronología y anexo de report (primer corte 720p, sin sonido).
 
 Python puro (sin bpy): lee el manifest.json del ZIP «Escena para Blender» exportado por RUBIK (`rubik-sota.scene-delivery`)
-y escribe `blueprint-timeline.json` con los 7 planos del storyboard aprobado para revisión
-(docs/qa/blueprint/README.md), sus rangos de fotogramas y los grupos de aparición por `rubik_role` QUE EXISTEN en el ZIP.
+y escribe `pelicula-timeline.json` con los 7 planos del storyboard aprobado para revisión
+(docs/qa/pelicula-proyecto/README.md), sus rangos de fotogramas y los grupos de aparición por `rubik_role` QUE EXISTEN en el ZIP.
 Lo ausente se omite y se registra; ninguna cifra sale en un rótulo sin su fuente. El kit de rodaje (blender-rodaje.py) lee
 este archivo para cámara y tiempos dentro de RUBIK_derived; la escena de entrada no se modifica.
 
@@ -11,12 +11,12 @@ Estructura adaptada (no copiada) del donante MIT `blueprint-A-pen-…` @ 2d3463e
 cronología por sistemas con fases y filas de aparición).
 
 Uso:
-  python3 blueprint-timeline.py MANIFEST.json OUT.json [--zip-sha256 HEX] [--area "87,18 m²" --area-source "Ficha de superficies"]
+  python3 pelicula-timeline.py MANIFEST.json OUT.json [--zip-sha256 HEX] [--area "87,18 m²" --area-source "Ficha de superficies"]
                                 [--fps 24] [--width 1280 --height 720]
 """
 import argparse, hashlib, json, sys
 
-SCHEMA = "rubik-sota.blueprint-timeline"
+SCHEMA = "rubik-sota.pelicula-timeline"
 VERSION = "1.0.0"
 # (id, inicio s, fin s, cámara, grupos que aparecen en el plano, rótulo)
 SHOTS = [
