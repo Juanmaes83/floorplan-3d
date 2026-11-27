@@ -98,3 +98,13 @@ Escritorio 1440×900 y móvil 390×844. Script: `tests/zz-rec9b.browser.test.cjs
   (b) la descarga vive solo en el menú y UX-BETA-001/U11 se adaptan al menú, perdiendo el estado visible en la fila.
   Recomendación: (a). Es la acción más repetida y su confirmación visual ya está aprobada.
   **Histórico · decidido por el propietario (27/11):** la descarga vive solo en Proyecto ▾ con «Proyecto JSON descargado»; aplicado en `2e23820a`.
+
+## Regresión final sobre `fccda24b` (50 archivos, 27/11, noche)
+418 pruebas · 403 superadas · 4 omitidas · 11 fallos, clasificados:
+- **Base (2):** G-02 y R2 P16. El mismo error aparece en `cd694e88` (`regresion/regresion-final-2e23820a.txt`); su
+  comportamiento en `master` `dacb5d39` se ejecuta tras la regresión del conjunto (#324).
+- **Candidata, solo pruebas (9):**
+  - `guide-navigation` (5): pulsaba «Crear copia» donde ya no está.
+  - `premium-shell` (4): el inventario no reconocía «Descargar proyecto JSON» en Proyecto ▾.
+
+  Corregidas sin relajar aserciones en `ec45639d` (14/14) y `98a6d3a1` (5/5). El producto no cambia.
