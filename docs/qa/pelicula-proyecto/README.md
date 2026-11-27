@@ -105,3 +105,24 @@ estancias · 70 muros · 20 de 22 huecos con malla · 47 muebles), con el kit Bl
   repartir la CPU. El script espera a que terminen y después renderiza los 720 fotogramas (`--samples 8`, 1280×720) y
   monta el MP4 sin sonido.
 - La aprobación visual llegará con el **MP4 continuo de 720p**, publicado con enlace directo, SHA del kit y report.
+
+### Reproducir el clip desde cero (si se pierde el scratchpad)
+**Entrada versionada:**
+- `entrada/rubik-escena-blender-prj_op10-f5-furniture.zip`: ZIP real de «Escena para Blender» de la vivienda de ejemplo,
+  sha256 `04e9fe78d7e2…`.
+- `entrada/pel-f5-timeline.json`: la cronología de 30 s.
+
+```bash
+W=<carpeta de trabajo>; python3.13 -m venv $W/bpy52 && $W/bpy52/bin/pip install bpy==5.2.1
+mkdir -p $W/kit && cd $W/kit && unzip -q <repo>/docs/qa/pelicula-proyecto/entrada/rubik-escena-blender-prj_op10-f5-furniture.zip
+$W/bpy52/bin/python rubik_blender_prepare.py -- . escena-preparada
+$W/bpy52/bin/python <repo>/scripts/interop/blender-rodaje.py -- escena-preparada . $W/pel-clip --shot pelicula --timeline <repo>/docs/qa/pelicula-proyecto/entrada/pel-f5-timeline.json --res 1280x720 --samples 8 --tex rodaje-texturas --fetch
+ffmpeg -framerate 24 -i $W/pel-clip/frames/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 20 -an $W/pel-clip/pelicula-del-plano-a-la-vivienda-720p.mp4
+```
+
+- El render es **reanudable**: al relanzar la misma orden se salta los fotogramas ya hechos.
+- `--fetch` descarga las texturas declaradas (`rubik_rodaje_recursos.json`).
+- Ojo: el kit que viene en el ZIP lleva su propio `rubik_blender_rodaje.py`; el modo película está en
+  `scripts/interop/blender-rodaje.py` de esta rama.
+
+**Estado al compactar (27/11, 12:06):** el contenedor se reinició y el render **no llegó a empezar** (0 fotogramas).
