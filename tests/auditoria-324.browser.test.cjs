@@ -107,3 +107,13 @@ test('V05 · abrir «Escena 3D» no da por hecha la revisión; «Revisar en 3D»
  await page.waitForFunction(()=>window.FloorPlanGuideUI.progress().tasks.find(x=>x.id==='view3d')?.status==='completed');
  await page.getByRole('button',{name:'Plano 2D',exact:true}).click();await page.waitForFunction(()=>window.FloorPlanApp.viewMode!=='3d');
  assert.equal(await done(),true,'el paso guardado se conserva');assert.deepEqual(errors,[]);});
+
+test('V07 · P3 con dos plantas: dice el límite junto a la acción y ofrece P1, que abre la presentación del edificio',{timeout:240000},async t=>{
+ const {page,errors}=await open(t);
+ await page.getByRole('button',{name:'Entregar',exact:true}).click();await page.locator('#delivery3dPreview').waitFor({state:'attached'});
+ assert.equal(await page.locator('#delivery3dPreview').isDisabled(),true);
+ const msg=await page.locator('#delivery3dMessage').textContent();
+ assert.match(msg,/recorre una sola planta, y este proyecto tiene 2\. Para enseñar el edificio completo usa P1 Presentación 3D/);assert.doesNotMatch(msg,/Proyecto de ejemplo/);
+ await page.locator('#delivery3dUseP1').evaluate(b=>b.click());
+ await page.waitForFunction(()=>document.querySelector('#presentationConfig')?.open||window.FloorPlanPresentation?.active);
+ assert.deepEqual(errors,[]);});
