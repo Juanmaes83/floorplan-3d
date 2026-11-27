@@ -3,6 +3,8 @@
 **Destinatario:** Claude Code, en la sesión que ya está trabajando en Blender, Geometría/A0 y StoryLayersV1.  
 **Decisión que sustituye al mensaje anterior:** usa las fuentes de abajo para reforzar las tareas ya asignadas. Conserva tu avance y decide en qué corte encaja cada pieza. Este encargo fija el resultado y la evidencia de aceptación.
 
+**Para recuperar cambios pendientes y preparar integraciones**, sigue la [guía de auditoría, laboratorios e integración](GUIA-AUDITORIA-INTEGRACION-Y-LABORATORIOS.md). Contiene el inventario por rama y SHA, las fuentes locales y de laboratorio, la identidad del proyecto madre y el punto de reanudación para Claude Code y Codex.
+
 ## Estado y próximos cierres · 26/11/2026
 
 ### Aprobado por el propietario
