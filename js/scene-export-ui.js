@@ -113,7 +113,7 @@
    const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,materials,site,film:filmScript(),lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
    const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
    result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
-   filmTake();set('ready');siteNote(site);primary.focus();
+   const usedFilm=filmTake();set('ready');siteNote(site);filmNote();if(usedFilm){const n=document.getElementById('sceneExportFilm');const en=typeof LANG==='string'&&LANG==='en';n.hidden=false;n.dataset.film='included';n.textContent=(en?'Film script included: ':'Guion de la película incluido: ')+usedFilm.effect+' · '+(en?'profile ':'perfil ')+usedFilm.profile;}primary.focus();
   }catch(e){if(e.code==='CANCELLED'){set('cancelled');}else{error=explain(e);set('error');}primary.focus();}
   finally{abort=null;filmTaken=null;}
  }
@@ -121,9 +121,11 @@
  // proyecto lo tiene. Sin emplazamiento no se añade nada. La parcela catastral (licencia restringida) nunca se exporta.
  // Guion del efecto elegido en Entregar → Vídeo (si se llegó desde allí); se consume una vez.
  // Solo vale para la MISMA entrada y proyecto en que se eligió; se consume al empaquetar (filmTake) y nunca pasa a otro proyecto.
- let filmTaken=null;
+ let filmTaken=null,filmDropped=null;
  function filmScript(){if(filmTaken)return filmTaken;const P=window.RubikPeliculaEfectos,l=P?._last,app=window.FloorPlanApp;if(!l)return null;
-  if(l.entryId!==(app?.entryId||null)||l.projectId!==(app?.project?.id||null)){P._last=null;return null;}
+  if(l.entryId!==(app?.entryId||null)||l.projectId!==(app?.project?.id||null)){P._last=null;filmDropped='project';return null;}
+  // El proyecto se editó tras elegir el efecto: el guion describiría otra revisión. Se descarta y se dice.
+  if(l.fingerprint&&D.canonical(app.project)!==l.fingerprint){P._last=null;filmDropped='edited';return null;}
   filmTaken={...l.script,profile:l.profile,revision:{...(l.script.revision||{}),entryId:l.entryId}};return filmTaken;}
  function filmTake(){if(window.RubikPeliculaEfectos)window.RubikPeliculaEfectos._last=null;const f=filmTaken;filmTaken=null;return f;}
  async function sceneSite(project){const S=window.FloorPlanSceneSite,R=window.FloorPlanTerritorySession;if(!S||!project?.site?.parcel)return null;
@@ -143,7 +145,13 @@
  }
  dlg.addEventListener('close',()=>{abort?.abort();});
  dlg.addEventListener('cancel',e=>{if(state==='working'){e.preventDefault();abort?.abort();}});
- function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';render();dlg.showModal();(primary.hidden?secondary:primary).focus();}
+ // Película pendiente (elegida en Entregar → Vídeo): se ve en este diálogo; sigue vigente si se cierra sin preparar.
+ function filmNote(){const en=typeof LANG==='string'&&LANG==='en',P=window.RubikPeliculaEfectos,l=P?._last;let n=document.getElementById('sceneExportFilm');
+  if(!n){n=el('p',{id:'sceneExportFilm',role:'status'},status.parentNode);status.after(n);}
+  if(filmDropped){n.textContent=filmDropped==='edited'?(en?'The film choice was discarded: the project changed after choosing the effect. Choose it again in Deliver › Video.':'La elección de película se descartó: el proyecto cambió después de elegir el efecto. Vuelve a elegirlo en Entregar › Vídeo.'):(en?'The film choice belonged to another project and was discarded.':'La elección de película era de otro proyecto y se descartó.');n.dataset.film='dropped';n.hidden=false;return;}
+  const f=l&&l.projectId===(window.FloorPlanApp?.project?.id||null)?l:null;n.hidden=!f;n.dataset.film=f?'pending':'none';
+  if(f){const name=window.FloorPlanPeliculaEfectos?.byId(f.effect)?.name;n.textContent=(en?'Includes the film script: ':'Incluye el guion de la película: ')+(name?(en?name.en:name.es):f.effect)+' · '+f.script.seconds+' s · '+(en?'profile ':'perfil ')+f.profile;}}
+ function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';filmDropped=null;render();filmNote();dlg.showModal();(primary.hidden?secondary:primary).focus();}
  // Entrada: «Entregar» → grupo «Documentación». Botón SECUNDARIO, como las demás tarjetas (sin acciones primarias en tarjetas).
  const addCard=()=>{const items=document.querySelector('[data-group="documentation"] .professional-group-items');if(!items||document.getElementById('sceneExportCard'))return; // una sola tarjeta: Entregar puede colocarla en otro grupo (UX-312 F3)
   const card=el('article',{class:'professional-card scene-export-card',id:'sceneExportCard','data-module':'blender-scene'},items);el('h3',{},card,tx('Escena para Blender','Scene for Blender','Blender 场景'));
