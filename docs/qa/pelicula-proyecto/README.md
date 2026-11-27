@@ -99,3 +99,9 @@ estancias · 70 muros · 20 de 22 huecos con malla · 47 muebles), con el kit Bl
   `ffmpeg -framerate 24 -i frames/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 20 -an pelicula-del-plano-a-la-vivienda-720p.mp4`.
   El MP4 se publicará con su SHA y su report.
 - El MP4 pendiente de 2 s a 1440p sigue separado y en pausa; la versión 1440p de la película espera la aprobación del clip.
+
+### Estado del render (27/11, noche)
+- **Sin empezar todavía:** el clip 720p está en cola detrás de dos tandas de prueba de la integración (#324), para no
+  repartir la CPU. El script espera a que terminen y después renderiza los 720 fotogramas (`--samples 8`, 1280×720) y
+  monta el MP4 sin sonido.
+- La aprobación visual llegará con el **MP4 continuo de 720p**, publicado con enlace directo, SHA del kit y report.
