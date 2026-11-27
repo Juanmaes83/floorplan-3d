@@ -71,7 +71,8 @@
       const lbl = { sheet: L('lámina del plano', 'plan sheet', '平面图'), surfaces: L('superficies', 'areas', '面积'), orientation: L('orientación', 'orientation', '朝向'), site: L('emplazamiento', 'site', '场地'), views: L('vistas 3D preparadas', 'prepared 3D views', '三维视图'), review: L('revisión del cliente', 'client review', '客户审阅'), economic: L('presupuesto preparado', 'prepared budget', '预算') };
       mw.textContent = miss.length ? L('Antes de imprimir · falta: ', 'Before printing · missing: ', '打印前 · 缺少：') + miss.map(k => lbl[k] || k).join(', ') + L('. Esas páginas dicen qué falta; no se inventa nada.', '. Those pages say what is missing; nothing is invented.', '。') : L('Todas las secciones de este estilo tienen contenido real.', 'Every section of this style has real content.', '此风格所有部分均有真实内容。');
       // Datos pendientes con una entrada real para completarlos: se ofrece desde el aviso y se vuelve al dossier con lo escrito.
-      if (miss.includes('views') && document.querySelector('#professionalWorkspace [data-route="prepare-views"]')) { const pv = el('button', { type: 'button', class: 'btn', id: 'dcPrepareViews' }, mw, L('Preparar imágenes', 'Prepare images', '准备图像')); pv.onclick = prepareViews; } }
+      if (prepError) el('p', { class: 'dc-prep-error', id: 'dcPrepError', role: 'alert' }, mw, L('No se pudieron preparar las imágenes: ', 'The images could not be prepared: ', '无法准备图像：') + prepError + L(' Tu borrador está guardado; puedes volver a intentarlo.', ' Your draft is saved; you can try again.', ''));
+      if (miss.includes('views') && window.FloorPlanProjectViews) { const pv = el('button', { type: 'button', class: 'btn', id: 'dcPrepareViews' }, mw, L('Preparar imágenes', 'Prepare images', '准备图像')); pv.onclick = prepareViews; } }
     // Pie del paso: una acción principal por vista.
     const foot = el('div', { class: 'dc-foot' }, body);
     const idx = STEPS.findIndex(x => x[0] === step);
@@ -82,11 +83,22 @@
   function paintNav() { if (!nav) return; nav.replaceChildren();
     STEPS.forEach(([k, t], i) => { const li = el('li', {}, nav); const b = el('button', { type: 'button', 'data-dc-step': k }, li, (i + 1) + ' · ' + t()); if (k === step) b.setAttribute('aria-current', 'step'); b.onclick = () => go(k); }); }
   function go(k) { step = k; if (dlg) dlg.dataset.dcStep = k; render(); rerender(); (panel.querySelector('[data-dc-part="' + k + '"] input, [data-dc-part="' + k + '"] textarea') || nav.querySelector('[aria-current]'))?.focus({ preventScroll: true }); if (k === 'review') dlg?.querySelector('#dossierDocument')?.scrollIntoView({ block: 'start' }); }
-  // «Preparar imágenes» desde el aviso: se cierra el dossier, se preparan las vistas reales y se vuelve al paso de revisión.
-  // Lo escrito ya está guardado (se guarda al teclear), así que nada se pierde.
-  function prepareViews() { const style = window.FloorPlanDossier?.style || 'client'; const r = document.querySelector('#professionalWorkspace [data-route="prepare-views"]'); if (!r) return;
-    dlg.close(); r.click(); window.toast?.(L('Preparando las vistas reales… volverás al dossier.', 'Preparing the real views… you will return to the dossier.', '正在准备视图…'), 4000); let n = 0;
-    const t = setInterval(() => { n++; const st = window.FloorPlanProjectViews?.status?.(); if (st === 'ready' || n > 400) { clearInterval(t); setTimeout(() => { window.FloorPlanDossier?.open?.(style); go('review'); }, 400); } }, 500); }
+  // «Preparar imágenes» desde el aviso. Lo escrito ya está guardado (se guarda al teclear), así que nada se pierde.
+  // - Al terminar, el dossier vuelve a «Revisar» SOLO si la persona sigue en Entregar y no ha abierto otra cosa.
+  // - Si se ha ido a otra área o diálogo, no se le interrumpe: un aviso dice que las imágenes están y dónde sigue el dossier.
+  // - Si la preparación falla, el motivo se muestra en el aviso del dossier y en un toast; el borrador sigue guardado.
+  let prepError = null, preparing = false;
+  const inDeliver = () => { const w = document.getElementById('professionalWorkspace'); return !!w && !w.hidden && w.dataset.area === 'deliver' && !document.querySelector('dialog[open]'); };
+  async function prepareViews() {
+    const V = window.FloorPlanProjectViews; if (!V || preparing) return; const style = window.FloorPlanDossier?.style || 'client';
+    preparing = true; prepError = null; step = 'review'; dlg.close();
+    window.toast?.(L('Preparando las vistas reales… Tu borrador del dossier está guardado.', 'Preparing the real views… Your dossier draft is saved.', '正在准备视图…草稿已保存。'), 4000);
+    try { await V.prepare(); } catch (e) { prepError = e?.message || String(e); }
+    preparing = false;
+    if (inDeliver()) { window.FloorPlanDossier?.open?.(style); go('review'); if (prepError) window.toast?.(L('No se pudieron preparar las imágenes: ', 'The images could not be prepared: ', '无法准备图像：') + prepError, 7000); return; }
+    window.toast?.(prepError ? L('No se pudieron preparar las imágenes: ', 'The images could not be prepared: ', '无法准备图像：') + prepError + L(' · Tu borrador del dossier sigue guardado en Entregar → D3.', ' · Your dossier draft is still saved in Deliver → D3.', '')
+      : L('Imágenes preparadas · tu dossier sigue en Entregar → D3, con lo que escribiste.', 'Images prepared · your dossier is still in Deliver → D3, with what you wrote.', '图像已准备'), 7000);
+  }
   function showDraft(note) {
     const D = window.FloorPlanDossier, c = D?.contents?.(), s = load();
     const area = c?.metrics?.areaM2 != null ? (lang() === 'en' ? c.metrics.areaM2.toFixed(2) : c.metrics.areaM2.toFixed(2).replace('.', ',')) + ' m²' : null;
@@ -105,7 +117,7 @@
   // Los pasos «Cliente y contacto» y «Nota de presentación» son del estilo Cliente; los demás estilos abren en «Revisar».
   let wasClient = null;
   function onStyle(st) { if (!dlg) return; const client = st === 'client'; dlg.toggleAttribute('data-dc-client', client); if (!client) step = 'review'; else if (wasClient !== true) step = 'client'; wasClient = client; dlg.dataset.dcStep = step; if (panel) render(); }
-  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, go, onStyle,
+  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, get preparing() { return preparing; }, get prepError() { return prepError; }, go, onStyle,
     mount(dialog, after, onChange) { dlg = dialog; dialog.dataset.dcStep = step;
       nav = el('ol', { class: 'dc-steps', 'aria-label': L('Pasos del dossier', 'Dossier steps', '步骤') }); dialog.querySelector('.dossier-tools').after(nav);
       panel = document.createElement('section'); panel.className = 'dossier-client'; panel.id = 'dossierClient'; after.after(panel); rerender = () => { onChange(); }; },
