@@ -3,6 +3,7 @@
  'use strict';
  const G=FloorPlanGuide,KEY='rubik-sota-guide-v1',label=a=>G.text(a,LANG),tx=(es,en,zh)=>label([es,en,zh||es]);
  const hadLibrary=(()=>{try{return originalStorage.getItem(FloorPlanLibrary.KEY)!==null;}catch{return false;}})();
+ let review3dArmed=false;
  let navigationEpoch=0,roomReturnToWelcome=false;
  let data={version:1,seen:false,entries:{}},storageError='',currentId=null,lastSnapshot='',lastResult=null,pendingEntry=null,entryOrigin=null,pendingIds=[],afterCopy=null,fullEditor=false;
  const audienceKey='rubik-professional-audience-v1';
@@ -560,7 +561,7 @@
   switch(a.id){
    case 'scale':return runTask(progress().tasks.find(t=>t.id==='scale')||{id:'scale',action:'scale',blockers:[]});
    case 'furniture':await setView('2d');if(!ui.sel||ui.sel.kind!=='room'){const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];if(room)select({kind:'room',id:room.id});}libSearch.query=a.filter||'';libSearch.room='';libSearch.family='';$('#furnitureSearch').value=libSearch.query;$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();window.FloorPlanBuildPalette?.select('furnish');drawer('lib',true);$('#furnitureSearch').focus();state().current='furniture';break;
-   case '3d':state().current='view3d';await setView('3d');if(is3D())record('view3d');break;
+   case '3d':state().current='view3d';review3dArmed=true;await setView('3d');if(is3D()&&review3dArmed){review3dArmed=false;record('view3d');}break;
    case 'save':state().current='save';if(save()){await persistence.requireSaved();announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));}break;
    case 'export':state().current='export';exportPNG();break;
    case 'drawWall':await window.FloorPlanBuildPalette.drawWall();break;
@@ -636,7 +637,7 @@
  function runJourney(id,r){
   const s=state();
   switch(id){
-   case 'view3d':return setView('3d');
+   case 'view3d':review3dArmed=true;return (async()=>{await setView('3d');if(is3D()&&review3dArmed){review3dArmed=false;record('view3d');}})();
    case 'plan2d':return setView('2d');
    case 'copy':return copyExample();
    case 'calibrate':case 'recalibrate':case 'verify':case 'reverify':case 'trace':return (async()=>{await setView('2d');if(!$('#tracePanel')||$('#tracePanel').hidden)$('#traceBtn').click();await FloorPlanTraceUI.start(id==='trace'?'room':/verify/.test(id)?'verify':'calibrate');render();})();
@@ -705,7 +706,9 @@
   const p=progress();if(p.current.status==='completed'&&!s.manualTask){s.current=(p.pending[0]||p.current).id;}render();store();
  }
  window.FloorPlanGuideUI={sync,progress,state,record,captureImport,importRouteCurrent,imported,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
- addEventListener('floorplan-view-ready',()=>record('view3d'));
+ // V05 (#324): abrir «Escena 3D» (selector 2D/3D, capturas internas, volver de un entregable) NO da la revisión por hecha.
+ // Solo la acción explícita «Revisar en 3D» (tarea view3d de la guía) la arma; se registra cuando la vista 3D está lista.
+ addEventListener('floorplan-view-ready',()=>{if(review3dArmed){review3dArmed=false;record('view3d');}});
  // Presenting is a 3D view of the same plan: it reviews this version and marks it as presented.
  // Kept apart from the guide entry (rubik-sota-journey-v1): a presentation restores the guide state exactly.
  addEventListener('floorplan-presentation-started',()=>{const id=library?.activeId()||project.id,rev=G.revision(project);try{const all=JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}');all[id]={presented:rev};originalStorage.setItem(JOURNEY_KEY,JSON.stringify(all));}catch{}});

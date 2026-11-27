@@ -93,3 +93,17 @@ test('V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura 
  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('rubik-dossier-client-v1'))[FloorPlanApp.entryId]);
  assert.equal(stored.client.name,'Cliente QA sintético');assert.equal(stored.note,'Nota QA');
  assert.deepEqual(errors,[]);});
+
+test('V05 · abrir «Escena 3D» no da por hecha la revisión; «Revisar en 3D» sí, y volver a 2D la conserva',{timeout:240000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));
+ await page.route('**/*',r=>{const u=r.request().url();return u.startsWith(url)||u.startsWith('blob:')||u.startsWith('data:')?r.continue():r.abort();});
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanGuideUI&&document.documentElement.dataset.editorReady==='true');
+ const done=()=>page.evaluate(()=>window.FloorPlanGuideUI.progress().tasks.find(x=>x.id==='view3d')?.status==='completed');
+ assert.equal(await done(),false);
+ await page.getByRole('button',{name:'Escena 3D',exact:true}).click();await page.waitForFunction(()=>window.FloorPlanApp.viewMode==='3d');await page.waitForTimeout(1500);
+ assert.equal(await done(),false,'abrir la escena no es revisar');
+ await page.getByRole('button',{name:'Plano 2D',exact:true}).click();await page.waitForFunction(()=>window.FloorPlanApp.viewMode!=='3d');
+ const primary=page.getByRole('button',{name:'Revisar en 3D',exact:true}).filter({visible:true}).first();await primary.click();
+ await page.waitForFunction(()=>window.FloorPlanGuideUI.progress().tasks.find(x=>x.id==='view3d')?.status==='completed');
+ await page.getByRole('button',{name:'Plano 2D',exact:true}).click();await page.waitForFunction(()=>window.FloorPlanApp.viewMode!=='3d');
+ assert.equal(await done(),true,'el paso guardado se conserva');assert.deepEqual(errors,[]);});
