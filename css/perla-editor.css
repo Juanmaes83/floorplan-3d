@@ -616,3 +616,10 @@ body.perla .perla-projpop .perla-pm-dup,body.perla .perla-projpop .perla-pm-dup-
 body.perla .perla-more .perla-more-group{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--perla-line);padding-top:4px;margin-top:4px}
 body.perla .perla-more .perla-more-title{margin:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted,#5c544a)}
 body.perla .perla-more .perla-more-group>button{justify-content:flex-start;text-align:start;width:100%;min-height:40px}
+/* §9 · aviso de variante en línea: frase completa aprobada en escritorio ancho; corta en el resto (la completa, en el título). */
+body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-full{display:none}
+@media (min-width:1280px){
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-full{display:inline}
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-short{display:none}
+ body.perla .perla-r2 #storyReturn.sl-return-inline .sl-return-txt{max-width:520px;white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+}

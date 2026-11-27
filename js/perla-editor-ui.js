@@ -114,10 +114,14 @@
   // su tarea: crear proyecto desde foto → menú de proyecto; contexto, entrega y acciones de diseño → «Más», en grupos con título.
   // Mismos ids y manejadores (las pruebas y atajos que abren su menú siguen funcionando).
   const photo=$('#photoReformMenu');if(photo)pmMore.append(photo);
-  const groups=[['ctx',tx('Contexto del proyecto','Project context','项目环境'),['territoryOpen','solarOpen']],['del',tx('Entrega','Delivery','交付'),['reviewNotesBtn','brandManage']],['des',tx('Diseño','Design','设计'),['clearAll','reset']]];
-  for(const [k,title,ids] of groups){const g=el('div',{class:'perla-more-group',role:'group','data-group':k},morePop);const h=el('p',{class:'perla-more-title'},g);h.textContent=title;g.setAttribute('aria-label',title);for(const id of ids){const b=$('#'+id);if(b)g.append(b);}if(!g.querySelector('button'))g.remove();}}
- // «Guardar proyecto JSON» es la descarga: su entrada visible es «Descargar proyecto JSON» del menú de proyecto.
- move('#exportJsonQuick',pmMore);$('#exportJsonQuick')?.classList.add('perla-pm-dup-btn');
+  const groups=[['ctx',()=>tx('Contexto del proyecto','Project context','项目环境'),['territoryOpen','solarOpen']],['del',()=>tx('Entrega','Delivery','交付'),['reviewNotesBtn','brandManage']],['des',()=>tx('Diseño','Design','设计'),['clearAll','reset']]];
+  // El título y el rótulo accesible se repintan al cambiar de idioma (como una carga nueva en ese idioma).
+  const paintGroups=()=>{for(const [k,t] of groups){const g=morePop.querySelector(`[data-group="${k}"]`);if(!g)continue;g.setAttribute('aria-label',t());const h=g.querySelector('.perla-more-title');if(h)h.textContent=t();}};
+  new MutationObserver(()=>setTimeout(paintGroups,0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  for(const [k,titleOf,ids] of groups){const title=titleOf();const g=el('div',{class:'perla-more-group',role:'group','data-group':k},morePop);const h=el('p',{class:'perla-more-title'},g);h.textContent=title;g.setAttribute('aria-label',title);for(const id of ids){const b=$('#'+id);if(b)g.append(b);}if(!g.querySelector('button'))g.remove();}}
+ move('#exportJsonQuick',r2);
+ // «Guardar proyecto JSON» (⤓) sigue en la fila 2: UX-BETA-001 (descarga desde la cabecera con el mismo exportador del
+ // menú) y U11 (marca de «hecho») están aprobados. El menú de proyecto ofrece la misma descarga con su texto.
  const view=move('#viewSeg',r2);
  // §9 · Deshacer/rehacer son de la tarea actual: van tras la vista (en pantalla compacta siguen en «Más»).
  if(hist&&view&&!matchMedia('(max-width:760px), (max-width:1100px) and (max-height:500px)').matches)view.after(hist);

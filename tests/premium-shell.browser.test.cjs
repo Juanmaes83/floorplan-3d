@@ -42,6 +42,11 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
  const filledWithAction=()=>page.evaluate(new Function(`${COLOR_FNS} return [...document.querySelectorAll('header button,header summary,aside button,#fab button')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&rgb(getComputedStyle(e).backgroundColor)===action).map(e=>e.id||e.textContent.trim());`));
 
  // 1. Capability inventory: nothing removed, everything reachable.
+ // §9 (cabecera y proyectos): dos botones de siempre se fusionan en UNA entrada visible del menú de proyecto que acciona el
+ // mismo flujo (pick → #uploadIn). La capacidad se exige igual: el original debe existir y su entrada visible ser alcanzable.
+ const MERGED={uploadPlanBtn:'pmUpload',importImage:'pmUpload'};
+ const inv=inventory.map(c=>MERGED[c.id]?{...c,id:MERGED[c.id],mergedFrom:c.id}:c);
+ for(const id of Object.keys(MERGED))assert.ok(await page.evaluate(i=>!!document.getElementById(i),id),id+' conserva id y manejador');
  const reach=async(c,in3d)=>page.evaluate(([c,mobile])=>{
   const e=c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '));if(!e)return {exists:false};
   if(e.closest('[hidden]'))return {exists:true,state:'hidden-by-state'};
@@ -56,11 +61,11 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
     return {exists:true,state:inView&&hit&&(hit===e||e.contains(hit)||hit.contains(e)||hit.closest('label')?.contains(e))?'reachable':'covered',by:hit?.id||hit?.className||hit?.tagName};},c);});
  const close=()=>page.evaluate(()=>{for(const d of document.querySelectorAll('details[open]'))d.open=false;drawer(null);});
  const problems=[];
- for(const c of inventory.filter(c=>!c.only3d)){const r=await reach(c);if(!r.exists||!['reachable','hidden-by-state'].includes(r.state))problems.push(`${c.id||c.selector}: ${r.exists?r.state+' by '+r.by:'missing'}`);await close();await page.waitForTimeout(mobile?350:20);}
+ for(const c of inv.filter(c=>!c.only3d)){const r=await reach(c);if(!r.exists||!['reachable','hidden-by-state'].includes(r.state))problems.push(`${c.id||c.selector}: ${r.exists?r.state+' by '+r.by:'missing'}`);await close();await page.waitForTimeout(mobile?350:20);}
  if(process.env.THREE_LOCAL_DIR){await page.evaluate(()=>setView('3d'));await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});
-  for(const c of inventory.filter(c=>c.only3d)){const r=await reach(c);if(!r.exists||!['reachable','hidden-by-state'].includes(r.state))problems.push(`3D ${c.id||c.selector}: ${r.exists?r.state+' by '+r.by:'missing'}`);await close();await page.waitForTimeout(mobile?350:20);}
+  for(const c of inv.filter(c=>c.only3d)){const r=await reach(c);if(!r.exists||!['reachable','hidden-by-state'].includes(r.state))problems.push(`3D ${c.id||c.selector}: ${r.exists?r.state+' by '+r.by:'missing'}`);await close();await page.waitForTimeout(mobile?350:20);}
   await page.evaluate(()=>setView('2d'));await page.waitForFunction(()=>FloorPlanApp.viewMode==='2d'&&!document.body.classList.contains('busy'),null,{timeout:60000});}
- else for(const c of inventory.filter(c=>c.only3d))if(!await page.evaluate(c=>!!(c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '))),c))problems.push(`3D ${c.id||c.selector}: missing`);
+ else for(const c of inv.filter(c=>c.only3d))if(!await page.evaluate(c=>!!(c.id?document.getElementById(c.id):document.querySelector(c.selector.replace(/^header /,'.app '))),c))problems.push(`3D ${c.id||c.selector}: missing`);
  assert.deepEqual(problems,[],'every control recorded before the cut exists and is reachable');
 
  // 2. Phones: the essential controls are in the viewport without scrolling the header.

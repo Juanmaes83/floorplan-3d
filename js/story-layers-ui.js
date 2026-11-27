@@ -81,7 +81,9 @@
     if (r2) {} else if (st && innerWidth > 600) { b.style.left = Math.round(st.left + st.width / 2) + 'px'; b.style.maxWidth = Math.round(Math.min(760, st.width - 16)) + 'px'; } else { b.style.left = ''; b.style.maxWidth = ''; }
     const sig = [lang(), cur.id, cur.name, orig?.name].join('|'); b.hidden = false; if (b.dataset.sig === sig) { const bk = b.querySelector('[data-sl-return="back"]'); if (bk) bk.disabled = false; return; } b.dataset.sig = sig;
     b.setAttribute('aria-label', L('Historia del cambio', 'Story of the change', '变更说明')); b.replaceChildren();
-    const full = L(`Editando la variante «${projName(cur.name)}» · el original «${projName(orig?.name || '')}» se conserva`, `Editing the variant «${projName(cur.name)}» · the original «${projName(orig?.name || '')}» is kept`, `正在编辑变体「${projName(cur.name)}」· 原始方案「${projName(orig?.name || '')}」保持不变`); const tx2 = el('span', { class: 'sl-return-txt', 'data-sl-return': 'text', title: full }, b, r2 ? L(`Variante «${projName(cur.name)}»`, `Variant «${projName(cur.name)}»`, `变体「${projName(cur.name)}」`) : full);
+    const full = L(`Editando la variante «${projName(cur.name)}» · el original «${projName(orig?.name || '')}» se conserva`, `Editing the variant «${projName(cur.name)}» · the original «${projName(orig?.name || '')}» is kept`, `正在编辑变体「${projName(cur.name)}」· 原始方案「${projName(orig?.name || '')}」保持不变`); const tx2 = el('span', { class: 'sl-return-txt', 'data-sl-return': 'text', title: full }, b, r2 ? undefined : full);
+    // §9 en línea: frase completa aprobada donde cabe; en pantallas estrechas, la corta (la completa queda en el título).
+    if (r2) { el('span', { class: 'sl-return-full' }, tx2, full); el('span', { class: 'sl-return-short' }, tx2, L(`Variante «${projName(cur.name)}»`, `Variant «${projName(cur.name)}»`, `变体「${projName(cur.name)}」`)); }
     const back = el('button', { type: 'button', class: 'btn primary', 'data-sl-return': 'back' }, b, L('Volver a la historia', 'Back to the story', '返回说明'));
     back.onclick = async ev => { back.disabled = true; try { await a.persistence.requireSaved(ev); } catch (e) { back.disabled = false; window.toast?.(e.message, 6000); return; }
       const r2 = ret.get(); ret.clear(); window.FloorPlanProfessionalUI?.open('deliver');
@@ -91,7 +93,9 @@
     x.onclick = () => { ret.clear(); };
   }
   for (const ev of ['floorplan-project-switched', 'resize']) window.addEventListener(ev, () => bar());
-  new MutationObserver(() => bar()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  // El <body> puede no existir aún si una página carga este módulo en <head> sin defer (p. ej. la prueba F0.2b).
+  const watchBody = () => new MutationObserver(() => bar()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  if (document.body) watchBody(); else document.addEventListener('DOMContentLoaded', watchBody, { once: true });
   document.addEventListener('rubik:languagechange', () => queueMicrotask(bar));
   /* Desde el comparador (otra pestaña, solo lectura): «Preparar historia para el cliente» (?historia=antes~después) y
      «Editar variante» (?editar=antes~después). Se comprueba que el par existe y es original→variante; la dirección se limpia. */

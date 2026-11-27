@@ -127,7 +127,7 @@ test('V5 · un usuario novato completa el proceso de obra de principio a fin, gu
 
 test('V5 · el recorrido de obra también guía en el móvil (390×844)',{timeout:300000},()=>run('V5-movil','Recorrido de obra en móvil',async S=>{
  const s=await boot({state:{},viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true}),{page,log}=s;
- try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await page.locator('#guideCopyExample').click().catch(()=>{});await page.waitForTimeout(800);
+ try{await page.getByText('Probar el ejemplo').first().click();await page.waitForTimeout(800);await (await require('./helpers-perla-editor.cjs').mostrar(page,'#guideCopyExample')).click().catch(()=>{});await page.waitForTimeout(800);
   await area(page,'budget');await page.waitForSelector('#obraJourney');await page.locator('#obraJourney').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
   const m=await page.evaluate(()=>{const j=document.getElementById('obraJourney'),r=j.getBoundingClientRect();return {w:Math.round(r.width),overflow:j.scrollWidth>j.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,
    btns:[...j.querySelectorAll('button')].map(b=>Math.round(b.getBoundingClientRect().height))};});

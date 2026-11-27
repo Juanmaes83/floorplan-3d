@@ -169,7 +169,7 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
   try{
     const before=await K.snapshot(page);
     assert.equal(await page.locator('#photoReformDialog img, #ownFurnDialog img').count(),0,'sin <img> vacías al cargar');
-    await page.locator('details.menu summary').first().click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
+    await page.locator('details.menu summary').first().click();await (await require('./helpers-perla-editor.cjs').mostrar(page,'#photoReformMenu')).click();await page.locator('#photoReformDialog[open]').waitFor();
     assert.match(await page.locator('.photo-reform-truth').innerText(),/no cambia tu proyecto[\s\S]*«Desde una imagen»/);
     // Archivos no válidos.
     await page.locator('#photoReformFile').setInputFiles(K.file('plano.gif',Buffer.from('GIF89a sintético'),'image/gif'));await page.waitForFunction(()=>/Formato no admitido/.test(document.querySelector('#photoReformFileError').textContent));
@@ -225,7 +225,7 @@ test('FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones,
     assert.deepEqual(await page.evaluate(()=>{document.querySelector('#photoReformClose').click();const d=document.querySelector('#photoReformDialog');return {open:d.open,imgs:document.querySelectorAll('#photoReformDialog img').length};}),{open:false,imgs:0});
     await page.locator('#photoReformDialog').waitFor({state:'hidden'});
     // Escape (cancel): tampoco deja la foto.
-    await page.locator('details.menu summary').first().click();await page.locator('#photoReformMenu').click();await page.locator('#photoReformDialog[open]').waitFor();
+    await page.locator('details.menu summary').first().click();await (await require('./helpers-perla-editor.cjs').mostrar(page,'#photoReformMenu')).click();await page.locator('#photoReformDialog[open]').waitFor();
     await page.locator('#photoReformFile').setInputFiles(K.file('IMG_9876.jpg',jpg,'image/jpeg'));await page.locator('#photoReformOriginal:not([hidden])').waitFor();
     await page.keyboard.press('Escape');await page.locator('#photoReformDialog').waitFor({state:'hidden'});
     assert.equal(await page.evaluate(()=>document.querySelectorAll('#photoReformDialog img').length),0,'Escape no deja la foto en el diálogo');

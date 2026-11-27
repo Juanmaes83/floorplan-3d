@@ -542,10 +542,10 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
   assert.deepEqual(await state(page),before);
  }
- await page.locator('#guideCopyExample').click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
+ await (await require('./helpers-perla-editor.cjs').mostrar(page,'#guideCopyExample')).click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await verify('own');
  const ownId=await page.evaluate(()=>FloorPlanApp.project.id);
- await page.locator('#uploadPlanBtn').click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
+ await (await require('./helpers-perla-editor.cjs').mostrar(page,'#uploadPlanBtn')).click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
  await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:budget(30000)});
  await page.evaluate(()=>window.FloorPlanPerla?.setGuide?.(true,{focus:false})).then(()=>page.locator('#guideClose').click());await verify('imported');
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);

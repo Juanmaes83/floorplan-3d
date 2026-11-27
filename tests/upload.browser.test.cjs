@@ -112,7 +112,8 @@ async function reviewPage(t,width,height){
  return page;
 }
 async function openPerlaImport(page){
- const menu=page.locator('#perlaImport');
+ // §9: las formas de importar o empezar viven en el menú de proyecto (#perlaProjectMenu); #perlaImport queda oculto.
+ const menu=page.locator('#perlaProjectMenu');
  if(await menu.count()&&await menu.getAttribute('open')===null)await menu.locator('summary').click();
 }
 const joinFile=path.join(FX,'roomplan-capturedroom.json');
@@ -291,7 +292,7 @@ test('OP-04 previews a RoomPlan door join without writing, commits once and reop
  const snapshot=()=>page.evaluate(()=>({entry:FloorPlanApp.entryId,project:FloorPlanApp.project}));
  const before=await snapshot();
  await page.locator('details.menu summary').click();
- await openPerlaImport(page);const chooser=page.waitForEvent('filechooser');await page.locator('#joinRoomPlan').click();await (await chooser).setFiles(file);
+ await openPerlaImport(page);const chooser=page.waitForEvent('filechooser');await (await require('./helpers-perla-editor.cjs').mostrar(page,'#joinRoomPlan')).click();await (await chooser).setFiles(file);
  const dialog=page.locator('#roomPlanJoinDialog[open]');await dialog.waitFor();
  const preview=dialog.locator('#roomPlanJoinPreview');
  assert.ok(await preview.isVisible(),'aligned scan preview is visible');
@@ -316,10 +317,14 @@ test('OP-04 previews a RoomPlan door join without writing, commits once and reop
 
 test('a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access',async t=>{
  const {page,errors}=await pageFor(t);
- assert.match(await page.locator('#uploadPlanBtn').textContent(),/Subir plano/);assert.ok(await page.locator('#uploadPlanBtn').isVisible());assert.equal(await page.locator('#uploadPlanBtn').count(),1);
- assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
- const fileMenu=page.locator('details.menu:has(#importJson)');await fileMenu.locator('summary').click();assert.match(await fileMenu.locator('.menu-pop').innerText(),/Importar proyecto JSON/);await fileMenu.locator('summary').click();await openPerlaImport(page);
- const picker=page.waitForEvent('filechooser');await page.locator('#importImage').click();assert.equal(await (await picker).element().getAttribute('id'),'uploadIn');
+ // §9 · menú de proyecto: UNA entrada visible para subir («Subir plano o proyecto…», #pmUpload) que acciona el mismo selector que
+ // #uploadPlanBtn/#importImage (conservan id y manejador, ocultos); «Importar proyecto JSON» sigue accesible en ese menú.
+ assert.equal(await page.locator('#uploadPlanBtn').count(),1);assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
+ await page.locator('#perlaProjectMenu > summary').click();
+ assert.match(await page.locator('#pmUpload').innerText(),/Subir plano o proyecto/);assert.ok(await page.locator('#pmUpload').isVisible());
+ assert.equal(await page.locator('#perlaProjectMenu').evaluate(m=>[...m.querySelectorAll('button')].filter(b=>b.getClientRects().length&&/Subir plano/.test(b.textContent)).length),1,'una sola entrada visible para subir');
+ assert.match(await page.locator('#perlaProjectMenu').innerText(),/Importar proyecto JSON/);
+ const picker=page.waitForEvent('filechooser');await page.locator('#pmUpload').click();assert.equal(await (await picker).element().getAttribute('id'),'uploadIn');
  assert.match(await page.locator('#uploadPlanHelp').textContent(),/PDF.*HEIC.*DXF/);
  const accept=await page.locator('#uploadIn').getAttribute('accept');for(const ext of ['.pdf','.heic','.tif','.dxf','.json','.zip'])assert.ok(accept.includes(ext),ext);
  await page.locator('#langBtn').click();assert.equal((await page.locator('#uploadPlanBtn').textContent()).trim(),'Upload a floor plan');
