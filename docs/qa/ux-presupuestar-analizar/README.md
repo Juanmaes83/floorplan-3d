@@ -111,3 +111,8 @@ bpdp, m13, welcome y las tres pruebas de §5.3): **153 / 153 superadas · 0 fall
 CI de GitHub: no se ejecuta en ramas `claude/…`. Vercel: Preview de `852e0f44` en verde.
 Vídeo del recorrido (plan vacío → borrador → revisado sin recargar; imágenes de Cantidades y Exterior): `corte2/video/`.
 Altura libre: «Ver estancia» se mantiene; la edición manual es otro corte. Pendiente: revisión humana del corte 2.
+
+
+## Aprobación humana del segundo corte completo · 27/11/2026
+
+El propietario ha revisado y aprobado visualmente Analizar y Presupuestar §5.3 sobre la [Preview de 852e0f44](https://floorplan-3d-ea48zyp68-juanma-espinosas-projects.vercel.app/). La regresión local de este corte, 153/153, está registrada en e31a9264. Esta aprobación cubre §5.3 y queda vinculada al SHA revisado. Las decisiones de integración y producción se mantienen por separado.
