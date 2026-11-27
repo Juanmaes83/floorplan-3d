@@ -87,3 +87,13 @@ La grabación anterior usaba una variante sin cambios (historia vacía: no demos
 capítulo «Mobiliario» visible («0 nuevos · 1 quitado», fuente y revisión) → «Editar variante» → Diseñar con «Volver a la
 historia» → una sola vuelta → **el mismo capítulo** «Mobiliario» con el foco (comprobado por `data-chapter` = `furniture`).
 Escritorio 1440×900 y móvil 390×844. Script: `tests/zz-rec9b.browser.test.cjs` (local, no se publica: `zz-*` está ignorado).
+
+## Regresión completa final (44 archivos, código `3bca7fcd`)
+401 pruebas · 394 superadas · 4 omitidas · **3 fallos**:
+- G-02 (descarga por planta) y R2 P16 (nombre largo en 1440×900): **preexistentes**, fallan igual en la base `cd694e88`.
+- `cabecera-proyectos` §9 escritorio, línea 27: «importar y descargar pasan al menú de proyecto». **Conflicto de diseño abierto, no corregido:**
+  para que UX-BETA-001/U11 (`perla-done`, `persistence`) sigan pasando se restauró `#exportJsonQuick` visible en la fila 2,
+  y eso contradice esta aserción de §9. No se ha relajado ninguna de las dos pruebas. Decisión del propietario:
+  (a) «Descargar ⤓» se queda en la fila 2 (con su estado «hecho») y la aserción de §9 se limita a importar, o
+  (b) la descarga vive solo en el menú y UX-BETA-001/U11 se adaptan al menú, perdiendo el estado visible en la fila.
+  Recomendación: (a). Es la acción más repetida y su confirmación visual ya está aprobada.
