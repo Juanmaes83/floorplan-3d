@@ -130,3 +130,5 @@
 .bpdp-host .vig.ok{background:rgb(31 122 77 / .12);color:#1f6b45}
 .bpdp-host .vig.obs{background:rgb(160 40 40 / .12);color:#8a2626}
 
+/* V09 (#324): ningún botón de la barra de intenciones es más estrecho que su etiqueta (en Villa Linde se truncaban «Visual limpio» e «Inspeccionar»). Si falta sitio, la barra se desplaza (escritorio) o salta de línea (móvil). */
+.bpdp-host .seg .btn{flex:0 0 auto;min-width:max-content;overflow:visible}
