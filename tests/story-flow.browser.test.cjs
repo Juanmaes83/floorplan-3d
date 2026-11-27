@@ -20,7 +20,7 @@ async function fresh(viewport){
 const deliver=async page=>{await page.evaluate(()=>FloorPlanProfessionalUI.open('deliver'));await page.waitForSelector('#professionalWorkspace [data-route="story-layers"]',{state:'attached'});};
 const card=page=>page.evaluate(()=>{const c=document.querySelector('#professionalWorkspace [data-module="story-layers"]');const b=c.querySelector('[data-route="story-layers"]');
  return {state:c.dataset.storyState,step:+c.dataset.storyStep,action:b.textContent.trim(),status:c.querySelector('.professional-state').textContent,steps:[...c.querySelectorAll('.sl-card-steps li')].map(l=>l.textContent)};});
-const P10=async page=>{const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');await b.scrollIntoViewIfNeeded();return b;};
+const P10=async page=>{const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');/* click() re-resuelve y desplaza (Entregar puede repintar la ficha) */return b;};
 const inDesign=page=>page.waitForFunction(()=>!document.body.classList.contains('professional-area')&&!document.querySelector('#storyLayersDialog[open]')&&!document.getElementById('storyReturn')?.hidden);
 const back=async page=>{await page.locator('[data-sl-return="back"]').click();await page.waitForSelector('#storyLayersDialog[open]');};
 const lib=page=>page.evaluate(k=>JSON.parse(FloorPlanApp.storage.getItem(k)),LIB);

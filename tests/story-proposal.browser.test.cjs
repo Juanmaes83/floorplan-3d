@@ -23,7 +23,7 @@ async function open(storage,viewport={width:1440,height:900}){
  const page=await ctx.newPage();const w=K.watch(page,env.base);await page.goto(env.base);await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');
  if(await page.locator('#welcomeDialog').evaluate(d=>d.open).catch(()=>false)){await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#welcomeDialog[open]'));}
  await page.evaluate(()=>FloorPlanProfessionalUI.open('deliver'));await page.waitForSelector('#professionalWorkspace [data-route="story-layers"]',{state:'attached'});
- const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');await b.scrollIntoViewIfNeeded();await b.click();await page.waitForSelector('#storyLayersDialog[open] [data-sl="state"]');
+ const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');/* click() re-resuelve y desplaza (Entregar puede repintar la ficha) */await b.click();await page.waitForSelector('#storyLayersDialog[open] [data-sl="state"]');
  return {ctx,page,w};}
 const fill=async(page,key,text)=>{const t=page.locator(`#storyLayersDialog [data-sl="p-${key}"]`);await t.fill(text);await t.dispatchEvent('change');};
 const LONG=('La moqueta de lana aporta confort acústico y térmico en la zona de estar, donde la familia pasa más horas. '.repeat(19)+'Se mantiene la baldosa en el paso hacia la cocina.').slice(0,2000);

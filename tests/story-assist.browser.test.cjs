@@ -25,7 +25,7 @@ function seed(){const m=new Map(),st={getItem:k=>m.has(k)?m.get(k):null,setItem:
  m.set('rubik-sota-brand-profiles-v1',JSON.stringify({version:1,profiles:[PROFILE]}));m.set('rubik-sota-brand-delivery-v1',JSON.stringify({version:1,entries:Object.fromEntries(group.map(g=>[g.id,{profileId:PROFILE.id}]))}));
  return Object.fromEntries(m);}
 const D='#storyLayersDialog ';
-async function story(page){await page.evaluate(()=>FloorPlanProfessionalUI.open('deliver'));const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');await b.scrollIntoViewIfNeeded();await b.click();await page.waitForSelector(D+'[data-sl="state"]');}
+async function story(page){await page.evaluate(()=>FloorPlanProfessionalUI.open('deliver'));const b=await accion(page,'#professionalWorkspace [data-route="story-layers"]');/* click() resuelve el localizador de nuevo y desplaza por sí mismo: Entregar puede repintar la ficha entre medias (CI de cfabe252, «not attached»); un scroll explícito sobre el nodo antiguo no se reintenta */await b.click();await page.waitForSelector(D+'[data-sl="state"]');}
 async function recordVideo(page){
  await page.evaluate(()=>FloorPlanProfessionalUI.open('deliver'));await page.locator('#professionalWorkspace').getByRole('button',{name:'Preparar presentación'}).click();
  const rows=page.locator('#presentationConfig .presentation-room-row input');const n=await rows.count();for(let i=2;i<n;i++)await rows.nth(i).uncheck();
