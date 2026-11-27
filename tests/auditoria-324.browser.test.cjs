@@ -5,7 +5,13 @@ const root=path.resolve(__dirname,'..'),FIX=path.join(__dirname,'fixtures','audi
 const types={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.glb':'model/gltf-binary','.wasm':'application/wasm'};
 before(async()=>{server=createServer(async(req,res)=>{try{const p=decodeURIComponent(new URL(req.url,'http://l').pathname),f=path.resolve(root,'.'+(p==='/'?'/index.html':p));if(!f.startsWith(root+path.sep))throw 0;res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');res.end(await fs.readFile(f));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
- browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});});
+ browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader'],slowMo:process.env.AUD_REC?350:0});
+ // Grabación opcional para la revisión (no cambia ninguna aserción): AUD_REC=<carpeta> graba cada contexto en vídeo;
+ // AUD_VP=390x844 repite en móvil las pruebas que solo fijan el escritorio.
+ if(process.env.AUD_REC){const nc=browser.newContext.bind(browser);let n=0;browser.newContext=async o=>{o={...o};const vp=process.env.AUD_VP&&!o.isMobile?process.env.AUD_VP.split('x').map(Number):null;
+  if(vp){o.viewport={width:vp[0],height:vp[1]};o.isMobile=vp[0]<1100;o.hasTouch=vp[0]<1100;}const v=o.viewport||{width:1440,height:900};o.recordVideo={dir:path.join(process.env.AUD_REC,String(++n).padStart(2,'0')),size:v};
+  const c=await nc(o),cl=c.close.bind(c);c.close=async()=>{await new Promise(r=>setTimeout(r,2500));return cl();};return c;};}
+});
 after(async()=>{await browser?.close();await new Promise(r=>server.close(r));});
 async function open(t,viewport={width:1440,height:900},file='edificio-dos-plantas.json'){
  const context=await browser.newContext({viewport,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.setDefaultTimeout(20000);
