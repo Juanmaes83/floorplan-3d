@@ -58,7 +58,7 @@ for(const [width,height] of [[1440,900],[820,1180],[390,844],[844,390]]){
   assert.deepEqual(await dialog.locator('svg text').allTextContents(),['A','B']);
   await page.keyboard.press('Escape');
   await dialog.waitFor({state:'hidden'});
-  await page.waitForFunction(()=>(document.activeElement.id==='roomPlanJoinQuick'||document.activeElement.parentElement?.id==='perlaImport')&&!document.body.classList.contains('uploading'));
+  await page.waitForFunction(()=>(document.activeElement.id==='roomPlanJoinQuick'||document.activeElement.parentElement?.id==='perlaImport'||document.activeElement.parentElement?.id==='perlaProjectMenu'/* §9: el menú que contiene «Unir escaneo» */)&&!document.body.classList.contains('uploading'));
   assert.deepEqual(await model(),before);
 
   await page.locator('#actionSearchBtn').click();

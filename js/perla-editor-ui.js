@@ -104,7 +104,10 @@
  for(const id of ['uploadPlanHelp','roomPlanJoinQuick','newProjectBtn','importImage','joinRoomPlan'])move('#'+id,impPop);
  // Una entrada visible por acción: «Subir plano o proyecto…» (pmUpload) acciona este mismo flujo; los botones de siempre
  // conservan id y manejador pero no se repiten en el menú. «Nuevo proyecto» y «Unir escaneo RoomPlan…» siguen visibles.
- impWrap.classList.add('perla-pm-dup');for(const id of ['newProjectBtn','joinRoomPlan'])move('#'+id,pmMore);
+ impWrap.classList.add('perla-pm-dup');move('#newProjectBtn',pmMore);
+ // OP-04 (aprobado): «Unir escaneo» (#roomPlanJoinQuick) debe estar a la vista y ser pulsable (≥ 44 px); es la entrada visible
+ // del menú. «Unir escaneo RoomPlan…» (#joinRoomPlan) acciona el mismo pickJoin: conserva id y manejador, oculto como duplicado.
+ {const q=$('#roomPlanJoinQuick');if(q){pmUpload.after(q);q.classList.add('perla-pm-join');}const j=move('#joinRoomPlan',pmMore);if(j)j.classList.add('perla-pm-dup-btn');}
  // Estado de las medidas en la barra de estado (V4: «Medidas orientativas»), con su id y su manejador.
  {const sc=$('#scaleConfidence'),foot=$('.app > footer');if(sc&&foot){sc.classList.add('perla-scale-state');foot.prepend(sc);}}
  move('#uploadCancel',r2);

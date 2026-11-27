@@ -8,7 +8,7 @@
 // manejador pero quedan ocultos porque el menú tiene UNA entrada visible que acciona el mismo flujo; mostrar() devuelve esa
 // entrada (lo que pulsaría una persona): «Crear copia» (pmCopy → #guideCopyExample) y «Subir plano o proyecto…»
 // (pmUpload → el mismo pick() de #uploadPlanBtn / #importImage).
-const MENU_EQUIVALENT = { '#guideCopyExample': '#pmCopy', '#uploadPlanBtn': '#pmUpload', '#importImage': '#pmUpload' };
+const MENU_EQUIVALENT = { '#guideCopyExample': '#pmCopy', '#uploadPlanBtn': '#pmUpload', '#importImage': '#pmUpload', '#joinRoomPlan': '#roomPlanJoinQuick' };
 
 async function mostrar(page, selector) {
   const target = page.locator(selector).first();
