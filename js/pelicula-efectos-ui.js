@@ -108,7 +108,7 @@
     dlg.replaceChildren(); dlg.dataset.state = 'confirm';
     el('h2', '', dlg, tx('Preparar el render', 'Prepare the render')).id = 'peliculaEfectosTitle';
     el('p', '', dlg, tx('El render se ejecuta en Blender en tu equipo, no en el navegador. RUBIK prepara el paquete con la escena, el guion y el kit; ', 'The render runs in Blender on your computer, not in the browser. RUBIK prepares the package with the scene, the script and the kit; ')
-      + tx('al terminar, el MP4 y su informe quedan en la carpeta «resultados/película» del paquete.', 'when finished, the MP4 and its report are in the package folder «resultados/película».'));
+      + tx('al terminar, el MP4 y su informe quedan en la carpeta «resultados/pelicula» (macOS/Linux: sh rodar.sh pelicula) del paquete.', 'when finished, the MP4 and its report are in the package folder «resultados/pelicula» (macOS/Linux: sh rodar.sh pelicula).'));
     el('p', '', dlg, tx('Efecto: ', 'Effect: ') + T(E.byId(s.effect).name) + ' · ' + s.seconds + ' s · ' + tx('perfil ', 'profile ') + profileId);
     const acts = el('div', 'pelicula-acts', dlg);
     btn('peliculaCancel', tx('Cancelar', 'Cancel'), acts, () => render());
