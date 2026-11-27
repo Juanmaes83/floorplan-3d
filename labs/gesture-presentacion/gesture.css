@@ -1,0 +1,33 @@
+/* Gesture Labs §6 · ensayo aislado (solo con ?gesture-lab=1) */
+.gl-launch{position:fixed;left:12px;bottom:72px;z-index:50;background:#184e52;color:#fff;border-color:#184e52}
+dialog.gl{width:min(1100px,100vw - 16px);max-width:none;max-height:calc(100vh - 16px);padding:12px 16px;border:0;border-radius:14px;display:none;flex-direction:column;gap:8px;background:#fbfaf7;color:#1d1d1b;overflow:auto}
+dialog.gl[open]{display:flex}
+dialog.gl::backdrop{background:rgba(20,20,20,.55)}
+dialog.gl.gl-see-through{background:rgba(251,250,247,.92);inset:auto 8px 8px 8px;margin:0;width:auto;max-height:46vh}
+dialog.gl.gl-see-through::backdrop{background:transparent}
+.gl-badge{margin:0;font-size:.75rem;color:#8a5a00;font-weight:600}
+.gl-head h2{margin:2px 0 4px;font-size:1.15rem}
+.gl-steps{display:flex;gap:6px;list-style:none;margin:0;padding:0;counter-reset:s}
+.gl-steps li{counter-increment:s;padding:3px 10px;border-radius:999px;background:#eceae4;font-size:.85rem}
+.gl-steps li::before{content:counter(s) " · "}
+.gl-steps li[data-on]{background:#184e52;color:#fff}
+.gl-stage{min-height:0;display:grid;place-items:center}
+.gl-plan,.gl-rev>div{width:min(100%,760px)}
+.gl-plan svg,.gl-rev svg{width:100%;height:auto;max-height:52vh;display:block}
+.gl-unfold{animation:gl-unfold .9s cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 50%}
+@keyframes gl-unfold{0%{clip-path:inset(48% 48% 48% 48% round 50%);transform:scale(.6) rotate(-4deg);opacity:.2}60%{clip-path:inset(0 0 0 0 round 24px);transform:scale(1.02)}100%{clip-path:inset(0 0 0 0 round 0);transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.gl-unfold{animation:none}}
+.gl-mark{stroke:#c0392b!important;stroke-width:60!important}
+.gl-compare{display:grid;width:100%;place-items:center}
+.gl-rev{grid-area:1/1;margin:0;transition:opacity .45s;display:grid;gap:4px;justify-items:center}
+dialog.gl[data-side="before"] .gl-rev[data-side="after"],dialog.gl[data-side="after"] .gl-rev[data-side="before"]{opacity:0;pointer-events:none}
+.gl-rev figcaption{font-weight:600}
+.gl-kind{margin:0;font-size:.9rem;font-weight:600;color:#184e52}
+.gl-calls{margin:0;padding-left:18px;display:grid;gap:2px;font-size:.88rem}
+.gl-calls small{color:#555}
+.gl-bar{display:flex;flex-wrap:wrap;gap:8px}
+.gl-hud{display:flex;align-items:center;gap:8px;font-size:.85rem}
+.gl-dot{width:10px;height:10px;border-radius:50%;background:#999}
+.gl-dot[data-cam="on"]{background:#1e9e5a}.gl-dot[data-cam="lost"]{background:#d89b00}.gl-dot[data-cam="denied"]{background:#c0392b}.gl-dot[data-cam="starting"]{background:#2f6fb0}
+.gl-help{margin:0;font-size:.8rem;color:#555}
+@media (max-width:600px){dialog.gl{padding:10px;width:calc(100vw - 8px)}.gl-bar .btn{flex:1 1 40%}}
