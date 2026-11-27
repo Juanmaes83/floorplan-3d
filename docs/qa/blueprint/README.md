@@ -53,3 +53,17 @@ python3 scripts/interop/blueprint-timeline.py manifest.json blueprint-timeline.j
 ```
 Siguiente paso (necesita CPU libre, tras la regresión y sin render en paralelo): que `blender-rodaje.py` lea esta cronología en
 `RUBIK_derived` y renderice el clip 720p del proyecto de ejemplo. Sonido: ninguno (decisión pendiente del propietario).
+
+### Comprobación contra el ZIP real (27/11, noche) — corrección de rótulos
+- **Hallazgo:** `manifest.scene.stats.roles` cuenta **mallas**, no entidades (pkg3: 27 mallas de muro para 7 muros). Un rótulo
+  «27 muros» habría sido falso. Corregido: los rótulos cuentan **`rubik_id` distintos del `scene.glb`** (`--glb`), con esa fuente
+  escrita en cada rótulo; sin GLB no hay cifra.
+- **Correspondencia objeto ↔ `rubik_id`:** cada grupo de aparición lista sus `rubikIds`; `reconcile` (con `--project`) concilia
+  proyecto ↔ escena por rol. pkg3: estancias 2/2; muros 8 en el proyecto, 7 en la escena (`wal_removed`, retirado);
+  huecos 4/3 (`opn_east-void`, vacío sin malla); ninguno en la escena que no esté en el proyecto. Evidencia:
+  [`evidencia/blueprint-timeline-pkg3.json`](evidencia/blueprint-timeline-pkg3.json) (ZIP `ab127002abd1…`).
+- **Comando reproducible (siguiente ventana, con la CPU libre):**
+  1. Cronología: `python3 scripts/interop/blueprint-timeline.py <zip>/manifest.json blueprint-timeline.json --zip escena.zip --glb <zip>/scene.glb --project <zip>/project.json`
+  2. Render 720p de 576 fotogramas: **pendiente de implementar** la lectura de `blueprint-timeline.json` en `blender-rodaje.py`
+     (planos, cámaras y aparición por `rubikIds` dentro de `RUBIK_derived`). Hasta entonces no existe un comando de render de la
+     película; no se presenta uno que no funcione.

@@ -33,7 +33,23 @@ NOT_ANIMATED = {"ceiling": "techo oculto para ver el interior (se conserva en la
 EXPECTED = ["room", "wall", "opening", "opening-leaf", "object"]
 
 
-def build(manifest, *, zip_sha256=None, area=None, area_source=None, fps=24, width=1280, height=720):
+def glb_entities(glb_bytes):
+    """rubik_id distintos por rubik_role en el JSON del GLB (lo que se verá en pantalla), y mallas por rol."""
+    import struct
+    n = struct.unpack("<I", glb_bytes[12:16])[0]; j = json.loads(glb_bytes[20:20 + n])
+    ids, meshes = {}, {}
+    for node in j.get("nodes", []):
+        e = node.get("extras") or {}; r = e.get("rubik_role")
+        if not r or r == "camera": continue
+        meshes[r] = meshes.get(r, 0) + 1
+        if e.get("rubik_id"): ids.setdefault(r, set()).add(e["rubik_id"])
+    return {r: sorted(v) for r, v in ids.items()}, meshes
+
+
+PROJECT_KEYS = {"room": "rooms", "wall": "walls", "opening": "openings", "object": "furniture"}
+
+
+def build(manifest, *, zip_sha256=None, area=None, area_source=None, fps=24, width=1280, height=720, glb=None, project=None):
     if manifest.get("format") != "rubik-sota.scene-delivery":
         raise ValueError("manifest: formato inesperado (se espera rubik-sota.scene-delivery)")
     scene = manifest.get("scene") or {}
@@ -43,15 +59,24 @@ def build(manifest, *, zip_sha256=None, area=None, area_source=None, fps=24, wid
     omissions += [{"role": r, "reason": why, "count": present[r]} for r, why in NOT_ANIMATED.items() if r in present]
     unknown = sorted(r for r in present if r not in EXPECTED and r not in NOT_ANIMATED)
     omissions += [{"role": r, "reason": "rol sin regla de aparición: visible desde el inicio", "count": present[r]} for r in unknown]
-    labels_src = {
-        "rooms": ("estancias", present.get("room"), "manifest.scene.stats.roles.room"),
-        "walls": ("muros", present.get("wall"), "manifest.scene.stats.roles.wall"),
-        "openings": ("huecos", present.get("opening"), "manifest.scene.stats.roles.opening"),
-    }
+    ent, meshes = glb_entities(glb) if glb else ({}, {})
+    # Rótulos: ENTIDADES (rubik_id distintos del GLB), nunca mallas. Sin GLB no hay cifra.
+    labels_src = {k: (w, len(ent[r]) if r in ent else None, f"scene.glb · rubik_id distintos con rubik_role={r}")
+                  for k, w, r in [("rooms", "estancias", "room"), ("walls", "muros", "wall"), ("openings", "huecos", "opening")]}
+    reconcile = []
+    if project is not None:
+        pr = project.get("project", project)
+        for role, key in PROJECT_KEYS.items():
+            if key not in pr: continue
+            pid = sorted(x.get("id") for x in pr[key] if isinstance(x, dict) and x.get("id"))
+            inglb = set(ent.get(role, []))
+            reconcile.append({"role": role, "project": len(pid), "glbEntities": len(inglb), "glbMeshes": meshes.get(role, 0),
+                              "manifestMeshes": present.get(role, 0), "missingInScene": [i for i in pid if i not in inglb],
+                              "notInProject": sorted(i for i in inglb if i not in pid)})
     shots, f0 = [], 0
     for sid, t0, t1, cam, groups, label in SHOTS:
         a, b = round(t0 * fps), round(t1 * fps) - 1
-        g = [{"role": r, "count": present[r]} for r in groups if r in present]
+        g = [{"role": r, "meshes": present[r], "rubikIds": ent.get(r, [])} for r in groups if r in present]
         missing = [r for r in groups if r not in present]
         lab = None
         if label == "project":
@@ -75,7 +100,7 @@ def build(manifest, *, zip_sha256=None, area=None, area_source=None, fps=24, wid
                   "sceneGlbSha256": ((manifest.get("files") or {}).get("scene.glb") or {}).get("sha256"),
                   "zipSha256": zip_sha256, "bounds": (scene.get("stats") or {}).get("bounds"), "units": scene.get("units")},
         "groups": [{"role": r, "count": present[r]} for r in EXPECTED if r in present],
-        "shots": shots, "omissions": omissions,
+        "shots": shots, "omissions": omissions, "reconcile": reconcile,
         "approximations": [], "derived": "RUBIK_derived · cámara, tiempos, luz editorial y rótulos; la escena de entrada no se escribe",
         "check": "al cerrar, huella de geometría y posiciones finales = escena de entrada (blender-rodaje.py)",
         "donor": {"repo": "Juanmaes83/blueprint-A-pen-sketch-a-floor-plan-or-3-references-", "commit": "2d3463e4", "license": "MIT",
@@ -88,6 +113,8 @@ def main(argv=None):
     ap.add_argument("manifest"); ap.add_argument("out")
     ap.add_argument("--zip-sha256"); ap.add_argument("--zip", help="ruta del ZIP para calcular su huella")
     ap.add_argument("--area"); ap.add_argument("--area-source")
+    ap.add_argument("--glb", help="scene.glb del ZIP: rótulos por entidad y lista de rubik_id por grupo")
+    ap.add_argument("--project", help="project.json del ZIP: conciliación proyecto ↔ escena")
     ap.add_argument("--fps", type=int, default=24); ap.add_argument("--width", type=int, default=1280); ap.add_argument("--height", type=int, default=720)
     a = ap.parse_args(argv)
     sha = a.zip_sha256
@@ -97,7 +124,9 @@ def main(argv=None):
             for chunk in iter(lambda: f.read(1 << 20), b""): h.update(chunk)
         sha = h.hexdigest()
     with open(a.manifest, encoding="utf-8") as f: m = json.load(f)
-    t = build(m, zip_sha256=sha, area=a.area, area_source=a.area_source, fps=a.fps, width=a.width, height=a.height)
+    glb = open(a.glb, "rb").read() if a.glb else None
+    prj = json.load(open(a.project, encoding="utf-8")) if a.project else None
+    t = build(m, zip_sha256=sha, area=a.area, area_source=a.area_source, fps=a.fps, width=a.width, height=a.height, glb=glb, project=prj)
     with open(a.out, "w", encoding="utf-8") as f: json.dump(t, f, ensure_ascii=False, indent=2)
     print(f"{a.out}: {len(t['shots'])} planos · {t['output']['frames']} fotogramas a {a.fps} fps · omisiones {len(t['omissions'])}")
 
