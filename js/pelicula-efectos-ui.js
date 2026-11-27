@@ -112,7 +112,7 @@
     el('p', '', dlg, tx('Efecto: ', 'Effect: ') + T(E.byId(s.effect).name) + ' · ' + s.seconds + ' s · ' + tx('perfil ', 'profile ') + profileId);
     const acts = el('div', 'pelicula-acts', dlg);
     btn('peliculaCancel', tx('Cancelar', 'Cancel'), acts, () => render());
-    btn('peliculaGo', tx('Descargar el paquete para Blender', 'Download the package for Blender'), acts, () => { window.RubikPeliculaEfectos._last = { effect: s.effect, profile: profileId, script: s }; dlg.close(); document.getElementById('sceneExportOpen')?.click(); }, true);
+    btn('peliculaGo', tx('Descargar el paquete para Blender', 'Download the package for Blender'), acts, () => { window.RubikPeliculaEfectos._last = { effect: s.effect, profile: profileId, script: s, entryId: window.FloorPlanApp?.entryId || null, projectId: window.FloorPlanApp?.project?.id || null }; dlg.close(); document.getElementById('sceneExportOpen')?.click(); }, true);
   }
   // Vista previa ligera: el guion sobre la planta real (estancias, muros, huecos, muebles por sistemas); la cámara del render
   // se resume como encuadre (zoom hacia la estancia de destino). Sirve para juzgar ritmo y montaje antes del render.
