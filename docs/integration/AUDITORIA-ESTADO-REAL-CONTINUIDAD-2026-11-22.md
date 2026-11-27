@@ -1,4 +1,77 @@
 # RUBIK SOTA · Auditoría independiente de estado real y punto de continuidad
+
+> **ACTUALIZACIÓN DE MÁXIMA PRIORIDAD · 22/11/2026 · ADENDA v1.2 — #313 NO-GO DE ACEPTACIÓN HUMANA.** Esta adenda **prevalece** sobre cualquier valoración anterior de «lista para merge», «GO técnico» o «aprobada visualmente» aplicada a Simulator B #313. El corte v1.1 y el cuerpo v1.0 se mantienen abajo **íntegros como historial**, no como autorización vigente. Revalidar GitHub/Preview antes de actuar.
+
+### Adenda v1.2: incidencia funcional y UX confirmada por revisión humana de Simulator B #313
+
+**Decisión del propietario tras revisión real: NO-GO para fusión y despliegue de #313.** Existe una incidencia de descubribilidad y acceso a **«Grabar vídeo»** en la experiencia de Presentación con escenas narrativas. La CI en verde **no levanta este bloqueo**. No corregir por desmarcar opciones ni atribuirlo al usuario.
+
+**Identidades comprobadas en GitHub al registrar el corte:**
+- Repositorio: `Juanmaes83/floorplan-3d`. `master@c355bdf8e5716a634a6c9835df4aec3c3b86ba3b` (contiene la auditoría #314); el contenido de este informe en `master` conserva v1.0 hasta la eventual fusión documental de #315.
+- [PR de producto #313](https://github.com/Juanmaes83/floorplan-3d/pull/313): `OPEN / DRAFT / NO MERGED`; HEAD `4d2eee7859ee0bc4922c2b0adb817678cbb99c66`; árbol citado y verificado en v1.1: `2692e9433e918c070f86db691a4db9fc035b9826`. El HEAD de Codex puede cambiar tras la corrección: no ejecutar operaciones usando estos SHAs sin volver a consultarlos.
+- CI publicada para ese HEAD: 30/30 workflows `success`; 93 check-runs = **92 `success` + 1 `skipped`**; no hay aceptación funcional humana solo por esa CI. [Preview del HEAD examinado](https://floorplan-3d-oy95100ew-juanma-espinosas-projects.vercel.app) estaba `READY`. **NO autoriza Production**.
+- [PR documental #315](https://github.com/Juanmaes83/floorplan-3d/pull/315): `OPEN / DRAFT`; esta actualización debe mantenerse en su **misma rama documental**, sin crear PR duplicadas y sin modificar la rama #313.
+
+**Caso de usuario (evidencia de revisión humana, no de suite automatizada):**
+1. Abrir la Preview de #313 y el proyecto de ejemplo desde el editor 3D.
+2. Pulsar **«Presentar mi vivienda»**.
+3. Activar las opciones narrativas disponibles: **«Empezar desde el plano»**, **«Incluir sección dinámica»**, **«Sección → visita espacial»** y **«Alzado/fachada narrativa»**, según disponibilidad de la configuración concreta.
+4. Pulsar **«Iniciar presentación»** y observar/recorrer la escena 3D.
+5. Buscar **«Grabar vídeo»** sin recurrir a herramientas de desarrollo.
+6. **Resultado observado por el propietario en vídeo aportado durante la revisión:** el acceso no se encuentra; la tarjeta/herramientas no resultan visibles en los momentos revisados. El archivo MP4 es evidencia humana proporcionada en la conversación, **no está alojado en el repo**; no declarar que su reproducción automatizada se haya ejecutado.
+
+**Hallazgos de código, verificados directamente sobre #313@4d2eee78 (distinguir causa y alcance):**
+- [`js/tour-video-ui.js` líneas 22–27](https://github.com/Juanmaes83/floorplan-3d/blob/4d2eee7859ee0bc4922c2b0adb817678cbb99c66/js/tour-video-ui.js#L22-L27): el botón `#presentationVideo` se crea dentro de `#presentationTools`. `open.hidden=!byStopsType` y, después de la detección asíncrona, `open.hidden=!cineOK&&!byStopsType`. **Confirmado en código:** puede desaparecer por falta de formatos; el `catch(()=>{})` no informa del motivo. **No demostrado:** que esa condición de códec sea la causa exacta del recorrido humano.
+- [`index.html` líneas 524–525](https://github.com/Juanmaes83/floorplan-3d/blob/4d2eee7859ee0bc4922c2b0adb817678cbb99c66/index.html#L524-L525): `.presentation-overlay[data-story="playing"] .presentation-card-body > :is(.presentation-controls,.presentation-stops){display:none}`. **Causa estructural demostrada:** los controles, incluido «Grabar vídeo», se ocultan durante `playing`.
+- [`js/presentation-ui.js` líneas 809–815](https://github.com/Juanmaes83/floorplan-3d/blob/4d2eee7859ee0bc4922c2b0adb817678cbb99c66/js/presentation-ui.js#L809-L815): el componente pone `data-story=playing/paused/end`; su texto pide pausar para ver herramientas. Eso **no satisface** la exigencia humana de acceso visible y comprensible durante la historia.
+- [`index.html` línea 423](https://github.com/Juanmaes83/floorplan-3d/blob/4d2eee7859ee0bc4922c2b0adb817678cbb99c66/index.html#L423): `data-walking=true` oculta la **tarjeta completa** mientras se usa la visita espacial. **Posible factor adicional, no causalidad demostrada para el vídeo concreto**. También deben inspeccionarse `data-route`, el contenedor `#stage`, CSS calculado, clipping y estados asíncronos.
+- [`js/tour-video-ui.js` líneas 31–34](https://github.com/Juanmaes83/floorplan-3d/blob/4d2eee7859ee0bc4922c2b0adb817678cbb99c66/js/tour-video-ui.js#L31-L34): cámara moviéndose, grabador ocupado, vista previa y lote activos bloquean el botón. **No se deben desactivar los bloqueos seguros**; sí explicar el estado y conservar la posibilidad de localizar la función.
+
+**Corrección acotada solicitada a Codex (NO consta ejecutada ni desplegada al publicar esta nota):**
+- Trabajar **solo sobre la rama existente de #313**, conservando historial, sin PR duplicada, reset ni force-push; verificar HEAD remoto inmediatamente antes de cada escritura.
+- Diagnosticar el recorrido anterior con Playwright + inspección de `#presentationOverlay`, `.presentation-card`, `#presentationTools`, `#presentationVideo`, ancestros ocultos, estilos calculados, viewport, foco, códecs y estados `playing/paused/end/walking/route/moving`. Separar **reproducido / confirmado en código / hipótesis / NOT_RUN**.
+- Mantener una acción reconocible **«Grabar vídeo»** durante la experiencia narrativa, con disponibilidad real y razón visible cuando esté temporalmente bloqueada; al faltar ambos formatos, explicar la incompatibilidad, no ocultar sin aviso. Una autoridad funcional, sin duplicaciones ni nueva barra flotante innecesaria.
+- Preservar los dos motores (**«Por paradas» y «Cinematográfico»**), H.264/MP4 1280×720 y 30 fps del modo cine cuando soportado, WebM cuando proceda, edición, cámara, Escape, regreso, descargas con los mismos bytes y restauración del proyecto.
+- Verificar: narración activada y desactivada, playback/pausa/final, visita y retorno, estados incompatibles, escritorio y móvil (incluidos 1440×900 y 390×844), teclado y accesibilidad; Chromium, Firefox y WebKit; reproducción/descarga real de cada modo compatible y casos negativos. CI con pruebas de interfaz **visibles**, no solo aserción de existencia en DOM.
+- Preparar **nueva Preview READY ligada al nuevo HEAD**, capturas/evidencias y aceptación humana explícita. **No fusionar #313 ni desplegar Production** por esta orden.
+
+**Gate concreto para levantar NO-GO:** (1) el usuario identifica el acceso sin indicaciones externas incluso al activar las cuatro opciones narrativas; (2) los estados de incompatibilidad/espera tienen causa visible; (3) cada modo compatible graba, previsualiza y descarga sin alterar el proyecto; (4) teclado/móvil funcionan; (5) CI, pruebas negativas, SHA, árbol, diff y Preview verificables; (6) el propietario aprueba **el HEAD corregido exacto**. Hasta entonces: `NO-GO FUNCIONAL + UX`, incluso si CI/Preview dicen `SUCCESS/READY`.
+
+**Coordinación y riesgos:** #310 A0 mantiene su **NO-GO de concurrencia** independiente; no tocar persistencia, migraciones o pruebas de A0. UX-312 PERLA sigue en LAB y puede solaparse con `index.html` / `js/presentation-ui.js`: documentar compatibilidad, no integrar PERLA en #313. No reabrir #311 HERO ni crear un grabador paralelo. Un eventual merge aprobado de #313 exige **nuevo corte de continuidad** con SHA real, CI/Preview y aceptación, no reescribir retroactivamente la incidencia.
+
+---
+
+
+> **ACTUALIZACIÓN POSTERIOR AL CORTE ORIGINAL · 22/11/2026 · POST-#314 / #313 / UX-312 / A0.** Esta entrada es la **fotografía operativa más reciente de este archivo**; el cuerpo de v1.0 que aparece después sigue íntegro como histórico y sus SHAs, contadores y estados de PR corresponden a su fecha. **Volver a consultar GitHub antes de ordenar un nuevo corte.**
+
+### Adenda v1.1: estado verificado tras la integración documental #314
+
+**Referencia nueva:** `master@c355bdf8e5716a634a6c9835df4aec3c3b86ba3b`. [PR documental #314](https://github.com/Juanmaes83/floorplan-3d/pull/314): **FUSIONADA** a 22/11/2026 15:35:37 UTC, con esta auditoría y los enlaces desde Continuidad y Handoff. El informe v1.0 partía de `3d3992c…`; no tratar ese SHA como master vigente. La fusión de documentación por sí sola no autoriza ninguna otra integración.
+
+**M11 / Simulator B — candidata nueva, NO fusionada al elaborar esta adenda:**
+- [PR #313](https://github.com/Juanmaes83/floorplan-3d/pull/313) `OPEN/DRAFT`, `mergeable=true`, base GitHub actual `master@c355bdf8e5716a634a6c9835df4aec3c3b86ba3b`, HEAD `4d2eee7859ee0bc4922c2b0adb817678cbb99c66`, árbol `2692e9433e918c070f86db691a4db9fc035b9826`. Padres del HEAD: `c355bdf8e5716a634a6c9835df4aec3c3b86ba3b` y `80911c6cdf11ac22c806b14bf324b2d9a6400a5c` (candidata aceptada visualmente). El SHA del objeto de merge prospectivo es `8d5a202c38867e1fef1b90dbe16f627ab5222368`; no confundir con un merge realizado.
+- **Verificación independiente vía GitHub:** 30/30 workflows `success` para el HEAD; **93 check-runs totales = 92 `success` + 1 `skipped` de `full-regression`** y 0 fallos o pendientes. La frase del agente «93 checks aprobados y 1 omisión» no coincide literalmente con el endpoint de checks; este documento adopta el recuento directo 92+1 sin desmerecer los 30 workflows.
+- **Comparación directa del master efectivo contra el HEAD:** 7 archivos de producto netos, 0 archivos de documentación netos: `index.html`, `js/film-plan-core.js`, `js/motion-quality-core.js`, `js/presentation-film.js`, `js/presentation-ui.js`, `js/shot-timeline-core.js`, `js/tour-video-ui.js`. La lista de la PR puede mostrar 17 archivos por la historia previa a la recomposición; para este corte se usa el compare `c355bdf8...4d2eee78`.
+- **Preview verificada en Vercel:** [`floorplan-3d-oy95100ew`](https://floorplan-3d-oy95100ew-juanma-espinosas-projects.vercel.app) deployment `dpl_J14X9qmGKYiwFSmCy8sH3JtFLZW7`, `READY` y Git SHA `4d2eee7859ee0bc4922c2b0adb817678cbb99c66`, **no Production**. La identidad de los siete blobs con lo aprobado visualmente está documentada en la PR [H]; esta adenda comprobó árbol, diff, CI y destino Vercel, no repitió los recorridos audiovisuales.
+- **Cierre de B:** [P/H] la aceptación visual anterior se registra en el cuerpo de PR; pendiente autorización específica para **merge commit** y despliegue automático habitual de Production **sobre ese HEAD y base exactos**. Si cambia alguno, revalidar. A0 no está en el delta de B y sigue bloqueado por separado.
+
+**UX-312 / PERLA — inspección independiente de LAB, NO producto integrado:**
+- Fuente congelada: [auditoría UX-312 H1/F4](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/blob/761bea377ede3993c1740bf10dfe3beebdd7aca4/AUDITORIAS/UX-312-H1-F4-20261122/AUDITORIA.md). [H] H1: inventario de 101 elementos, 606 verificaciones dirigidas en seis viewports; falta T3 paridad funcional en el producto y medición conjunta de las tres reducciones de altura.
+- Dos configuradores de Dibujo vivo/Evolución: 12 recorridos Linux HTTP de laboratorio, tres motores Chromium/Firefox/WebKit, escritorio y móvil emulado: **cero operaciones de almacenamiento detectadas**, sin nuevas claves; no equivale a garantía de no escritura en rutas productivas ni móvil físico.
+- La sonda original de capturas podía **no interceptar escrituras en Firefox y WebKit** al asignar `setItem` sobre objetos Storage. Una sonda independiente instrumentó prototipos, altas/borrados/vaciados y IndexedDB; detectó controles de escritura conocidos en los tres motores. No reutilizar la sonda defectuosa para un GO.
+- F2 puede proseguir aislado según su coordinación y decisiones aprobadas; **F3/F4** deben coordinar entradas con A0 y `js/presentation-ui.js` con B. Permanecen pendientes integración producto, QA de paridad, verificación de no escritura en demos conectadas y aceptación por SHA.
+
+**M01 / A0 #310 — NO-GO reforzado por reproducción real en LAB:**
+- Fuente: [escritura de documentos con testigos visibles](https://github.com/Juanmaes83/rubik-sculpt-simulator-lab/blob/323179f74158e56cf567d00266bc0e5be7923875/COMPONENTES/A-construccion-procedural/final-hero/integracion-ci-309/codex-a0-post311/escritura-documentos-testigos.md), prueba de edición sintética con dos pestañas y Firefox/WebKit persistentes.
+- Composición aislada `d45e579a587a527559789b83e8e90ef3435396f8` sobre master `c355bdf8...` y A0 #310 `2c7e773...`. **8 casos disconformes + 4 controles correctos**: testigos `rubik-sota-v2-switching` y `rubik-sota-v2-switched` permiten confirmación de escritura en origen normal y F0.2b; el marcador definitivo de época 2 sí bloquea. El proyecto permanece en memoria y no se han demostrado pérdidas de Production. Las pruebas cuentan dos clases de defecto distintas: reconocimiento de testigos y orden de barreras/visibilidad del marcador.
+- Criterio de cierre: rechazar testigos e ilegibles, proteger documentos+imágenes **antes** del marcador visible, no rechazar escrituras legítimas previas a la barrera; reproducir en Chromium/Firefox/WebKit y dispositivos prescritos. Hasta entonces **NO MERGE de A0; NO F0.2c/F0.3; NO MIGRACIÓN**. CI general verde de #310 no revoca el NO-GO.
+
+**Regla anti-solapamiento después de esta adenda:** Codex mantiene su rama #313 hasta decisión expresa. Claude conserva PERLA aislado y coordina F3/F4 para no sobrescribir `js/presentation-ui.js` ni los puntos críticos de persistencia. El defecto A0 tiene dueño/gate propio. Ningún agente debe reimplementar #311 ni asignar UX-312 como si fuera integrado en Production.
+
+**Autorizaciones de esta publicación:** se modifica solamente esta documentación. No se autoriza merge de #313, A0, F03 ni UX-312; tampoco gastos, migraciones ni Production. Para #313, el propietario debe pronunciarse explícitamente sobre la base `c355bdf8…`, HEAD `4d2eee78…` y árbol `2692e943…`. El próximo corte tras una eventual fusión de #313 debe registrar el merge SHA efectivo, CI y despliegue Production sin modificar retrospectivamente los hechos de este corte.
+
+---
+
 **Corte de referencia: 22/11/2026 · v1.0 · documento operativo, solo documentación.**
 
 > **IMPORTANTE PARA CUALQUIER AGENTE QUE RETOME EL PROYECTO:** este informe congela un corte verificable, **no es un estado en tiempo real**. Antes de actuar, volver a consultar `master`, las PR abiertas, sus HEAD y checks, y Production. No volver a ejecutar ni desarrollar una capacidad fusionada por el mero hecho de que una tabla histórica la describa como pendiente. Tampoco deducir autorización de una nota o una CI verde.
