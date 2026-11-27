@@ -228,7 +228,11 @@
   const all=actionsOf(card),own=all.filter(b=>!heroT.has(b.textContent.trim())),acts=own.length?own:all;
   // P2 con vistas listas: la acción de la tarjeta abre su ficha (imágenes y opciones), con ratón, teclado o táctil.
   let p2o=code==='P2'?body.querySelector(':scope>.perla-p2-open'):null;
-  if(code==='P2'&&viewsReady()){if(!p2o){p2o=el('button','btn perla-p2-open',body);p2o.type='button';p2o.onclick=e=>{e.stopPropagation();openPanel(card);};}const t=tx('Ver imágenes y opciones','See images and options','查看图像与选项');if(p2o.textContent!==t)p2o.textContent=t;}
+  // Foco: si «Preparar vistas» tiene el foco del teclado cuando terminan las vistas, sigue siendo la acción visible hasta que
+  // la persona sale de ella (no se esconde el control enfocado; el foco no cae al documento). Al salir, la tarjeta cambia.
+  const pv=code==='P2'?acts.find(b=>b.dataset.route==='prepare-views'):null,keepPv=!!pv&&document.activeElement===pv;
+  if(keepPv&&!pv._perlaWait){pv._perlaWait=true;pv.addEventListener('focusout',()=>{pv._perlaWait=false;tile(card);},{once:true});}
+  if(code==='P2'&&viewsReady()&&!keepPv){if(!p2o){p2o=el('button','btn perla-p2-open',body);p2o.type='button';p2o.onclick=e=>{e.stopPropagation();openPanel(card);};}const t=tx('Ver imágenes y opciones','See images and options','查看图像与选项');if(p2o.textContent!==t)p2o.textContent=t;}
   else if(p2o){p2o.hidden=true;p2o.classList.remove('perla-go');p2o=null;}
   if(p2o)p2o.hidden=false;
   const pri=p2o||acts.find(b=>code==='P2'&&b.dataset.route==='prepare-views')||acts.find(b=>PRIMARY[code]?.test(b.textContent))||acts[0];
