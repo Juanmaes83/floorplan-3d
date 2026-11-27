@@ -82,3 +82,4 @@
 .dossier-dialog[data-dc-step=review] .dossier-client .dc-foot{justify-content:flex-start}
 .dossier-dialog>#assistantAccess{position:static!important;margin:8px 16px 12px}
 .dossier-client .dc-row .btn{border:1px solid var(--line,#cfccc4)!important;background:#fff;min-height:40px;padding:6px 14px;border-radius:8px}
+.dossier-dialog:not([data-dc-client]) .dc-steps,.dossier-dialog:not([data-dc-client]) .dossier-client .dc-foot{display:none!important}

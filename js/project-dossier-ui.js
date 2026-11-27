@@ -156,8 +156,8 @@
  function relang(){heading.textContent=tx('Dossier del proyecto','Project dossier','项目资料');styleText.textContent=tx('Estilo','Style','风格');printButton.textContent=tx('Imprimir / Guardar PDF','Print / Save PDF','打印 / 保存 PDF');closeButton.textContent=document.querySelector('#professionalWorkspace:not([hidden])')?tx('← Volver a Entregar','← Back to Deliver','← 返回交付'):tx('Cerrar','Close','关闭');
   mapText.textContent=tx('Incluir mapa base IGN','Include IGN basemap','包含 IGN 底图');linkText.textContent=tx('Compartir enlace a la ubicación','Share location link','分享位置链接');
   select.replaceChildren(...Object.entries(STYLES).map(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label();return o;}));select.value=style;}
- select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();window.FloorPlanDossierClientUI?.refresh?.();};
- function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();window.FloorPlanDossierClientUI?.refresh?.();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
+ select.onchange=()=>{style=STYLES[select.value]?select.value:'technical';window.FloorPlanDossierClientUI?.onStyle?.(style);if(!STYLES[style].sections.includes('site'))resetOptions();renderDialog();window.FloorPlanDossierClientUI?.refresh?.();};
+ function open(initial){returnFocus=document.activeElement;if(initial&&STYLES[initial])style=initial;resetOptions();relang();window.FloorPlanDossierClientUI?.onStyle?.(style);window.FloorPlanDossierClientUI?.refresh?.();try{renderDialog();dialog.showModal();select.focus({preventScroll:true});}catch(e){toast(e.message||String(e),6000);}}
  async function print(){
   if(appendix&&appendix.key!==parcelKey(parcelOf())){resetOptions();renderDialog();}
   const win=window.open('','_blank');if(!win){toast(tx('El navegador bloqueó la ventana de impresión.','The browser blocked the print window.','浏览器阻止了打印窗口。'),5000);return;}

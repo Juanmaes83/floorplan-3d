@@ -331,4 +331,14 @@
   const a=document.activeElement,mine=$(`[data-perla-action="${catFocus}"]`);
   if(mine&&(launched===catFocus||!a||a===document.body||!a.isConnected)){mine.focus({preventScroll:true});mine.scrollIntoView({block:'nearest'});}launched=null;},60),true);
  new MutationObserver(()=>setTimeout(()=>{$('#perlaCatToggle')?._paint?.(true);for(const t of $$('.perla-more-btn'))t._label?.();if(deliverOpen()){const i=$('#professionalWorkspace .professional-index');if(i){mo.disconnect();try{maqueta(i);if(selCard)openPanel(selCard);}finally{mo.observe(document.body,{childList:true,subtree:true});}}}},0)).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+
+ // Revisión 27/11 · sin tarjetas aisladas: si la última fila de una cuadrícula queda incompleta, sus tarjetas se reparten el
+ // ancho de la fila (con auto-fill las columnas dependen del ancho, por eso se mide la cuadrícula real y se recalcula al cambiar).
+ function fillRows(){for(const g of document.querySelectorAll('#professionalWorkspace[data-area=deliver] .cards')){
+   const items=[...g.children].filter(c=>c.getClientRects().length&&getComputedStyle(c).display!=='none');for(const c of items){c.style.gridColumn='';delete c.dataset.perlaFill;}
+   const cols=getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length;if(cols<2||!items.length)continue;
+   const r=items.length%cols;if(!r)continue;const last=items.slice(-r),base=Math.floor(cols/r);let extra=cols-base*r;
+   for(const c of last){const span=base+(extra>0?1:0);if(extra>0)extra--;c.style.gridColumn='span '+span;c.dataset.perlaFill=String(span);}}}
+ let fillQ=0;const fillSoon=()=>{if(fillQ)return;fillQ=requestAnimationFrame(()=>{fillQ=0;fillRows();});};
+ new MutationObserver(fillSoon).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});addEventListener('resize',fillSoon);
 })();

@@ -102,7 +102,10 @@
     ta.focus();
   }
 
-  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, go,
+  // Los pasos «Cliente y contacto» y «Nota de presentación» son del estilo Cliente; los demás estilos abren en «Revisar».
+  let wasClient = null;
+  function onStyle(st) { if (!dlg) return; const client = st === 'client'; dlg.toggleAttribute('data-dc-client', client); if (!client) step = 'review'; else if (wasClient !== true) step = 'client'; wasClient = client; dlg.dataset.dcStep = step; if (panel) render(); }
+  window.FloorPlanDossierClientUI = { cover, get step() { return step; }, go, onStyle,
     mount(dialog, after, onChange) { dlg = dialog; dialog.dataset.dcStep = step;
       nav = el('ol', { class: 'dc-steps', 'aria-label': L('Pasos del dossier', 'Dossier steps', '步骤') }); dialog.querySelector('.dossier-tools').after(nav);
       panel = document.createElement('section'); panel.className = 'dossier-client'; panel.id = 'dossierClient'; after.after(panel); rerender = () => { onChange(); }; },

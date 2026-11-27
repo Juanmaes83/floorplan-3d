@@ -231,7 +231,7 @@
   for(const [k,cap,cls] of [[c.img[0],c.b,'is-before'],[c.img[1],c.a,'is-after']]){const f=el('figure',{class:cls},fig);const i=el('img',{src:'assets/photo-reform/'+k+'.webp',alt:T3(cap),loading:'lazy',width:'640',height:'360'},f);void i;el('figcaption',{},f,T3(cap));}
   el('p',{class:'photo-reform-badge'},w,L3('Ejemplo hecho con el 3D de RUBIK, no con una foto procesada.','Example made with the RUBIK 3D view, not a processed photo.','示例由 RUBIK 三维视图制作，并非处理过的照片。'));
   el('p',{},w,T3(c.how));el('p',{class:'photo-reform-review'},w,T3(c.rev));
-  el('button',{type:'button',class:'btn primary photo-reform-case-go',id:c.id,'data-case-go':c.case},w,L3('Probar con tu foto','Try it with your photo','用您的照片试试'));
+  el('button',{type:'button',class:'btn photo-reform-case-go',id:c.id,'data-case-go':c.case},w,L3('Probar con tu foto','Try it with your photo','用您的照片试试'));
   el('small',{},w,L3('Con tu foto, hoy las alternativas son una SIMULACIÓN rotulada (no generada por IA) y no se envía nada.','With your photo, alternatives are a labelled SIMULATION today (not AI-generated) and nothing is sent.','使用您的照片时，目前的方案为带标注的模拟（非 AI 生成），不会发送任何内容。'));return w;};
  // Delegación: el botón funciona en la tarjeta y en su copia dentro de la ficha de Entregar.
  document.addEventListener('click',e=>{const b=e.target.closest('[data-case-go]');if(!b)return;const c=CASES.find(x=>x.case===b.dataset.caseGo);if(c)open({intent:c.intent,finish:c.finish,case:c.case});});
