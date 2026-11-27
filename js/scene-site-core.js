@@ -57,8 +57,9 @@
       const m = T.parcelToModel(site, { x: v.xMm, y: v.yMm });
       return v.elevationM === null ? null : [r3(m.x), r3(m.y), r3(T.elevationToModel(site, v.elevationM))];
     });
-    // Ortofoto: esquinas de su extensión (CRS) → plano del modelo (mm); el importador la proyecta sobre el terreno.
-    const e = site.orthophoto.extent, corner = (x, y) => { const l = T.sourceToLocal(frame, x, y), m = T.parcelToModel(site, l); return [r3(m.x), r3(m.y)]; };
+    // Ortofoto: UV de cada vértice del terreno en su extensión (misma fórmula que el visor: FloorPlanTerritoryIntegration.uv);
+    // las esquinas de la extensión pasan también al plano del modelo (evidencia de alineación).
+    const e = site.orthophoto.extent, uvs = surf.vertices.map(v => { const q = T.uv(e, v.sourceX, v.sourceY); return [r3(q.u), r3(q.v)]; }), corner = (x, y) => { const l = T.sourceToLocal(frame, x, y), m = T.parcelToModel(site, l); return [r3(m.x), r3(m.y)]; };
     const attributions = P.attributions([layers.terrain.policy, layers.orthophoto.policy]);
     const doc = {
       format: FORMAT, version: VERSION, units: { plan: 'mm (RUBIK plan, same frame as rubik-estancias.json)', elevation: 'm above the model zero (ground floor finished level)' },
@@ -66,7 +67,7 @@
         sourceCrs: site.parcel.sourceCrs, parcelFrame: { originX: frame.originX, originY: frame.originY },
         meaning: 'site position, scale and orientation entered in RUBIK (Analyze › Territorial context); the cadastral parcel itself is not exported' },
       terrain: { source: site.terrain.source, product: site.terrain.productName || null, coverageId: site.terrain.coverageId || null, resolutionM: site.terrain.resolutionM || null,
-        verticalReference: 'orthometric', cols: session.terrain.grid.cols, rows: session.terrain.grid.rows, vertices, triangles: surf.triangles,
+        verticalReference: 'orthometric', cols: session.terrain.grid.cols, rows: session.terrain.grid.rows, vertices, uv: uvs, uvConvention: 'u east, v south (0,0 = north-west corner of the orthophoto)', triangles: surf.triangles,
         modelZeroElevationM: site.buildingPlacement.vertical.modelZeroElevationM },
       orthophoto: { file: ORTHO, source: site.orthophoto.source, mediaType: 'image/jpeg', widthPx: site.orthophoto.widthPx, heightPx: site.orthophoto.heightPx,
         sourceExtent: e, cornersPlanMm: { nw: corner(e.minX, e.maxY), ne: corner(e.maxX, e.maxY), se: corner(e.maxX, e.minY), sw: corner(e.minX, e.minY) } },

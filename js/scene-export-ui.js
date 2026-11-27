@@ -106,14 +106,27 @@
    status.textContent=tx('Empaquetando la escena…','Packaging the scene…','正在打包场景…');await new Promise(r=>setTimeout(r));if(abort.signal.aborted)throw Object.assign(Error('cancelled'),{code:'CANCELLED'});
    const prepareScript=await script(),kitBytes=await kit();ensureCurrent();
    const rooms=D.roomsDoc?D.roomsDoc({project,label:roomLabel}):null,glb=C.toGLB(capture.doc);
-   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
-   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
+   const site=await sceneSite(project);ensureCurrent();
+   const manifest=await D.manifest({capture,glb,project,digest,prepareScript,kit:kitBytes,rooms,reference,site,captureId:kitBytes&&prepareScript&&rooms?crypto.randomUUID():null,app:{revision:document.documentElement.dataset.appRevision||null}});
+   const pkg=D.packageFiles({manifest,glb,prepareScript,kit:kitBytes,rooms,reference,site,lang:typeof LANG==='string'?LANG:'es',zip:window.FloorPlanPackage.zip});
    const record=await D.record({manifest,digest,confirmed:null});ensureCurrent();
    result={manifest,bytes:pkg.bytes,name:pkg.name,record,stillCurrent};
-   set('ready');primary.focus();
+   set('ready');siteNote(site);primary.focus();
   }catch(e){if(e.code==='CANCELLED'){set('cancelled');}else{error=explain(e);set('error');}primary.focus();}
   finally{abort=null;}
  }
+ // «Desde el paisaje» (claude/pelicula-efectos): entorno del emplazamiento (terreno MDT05 + ortofoto PNOA de esta sesión) si el
+ // proyecto lo tiene. Sin emplazamiento no se añade nada. La parcela catastral (licencia restringida) nunca se exporta.
+ async function sceneSite(project){const S=window.FloorPlanSceneSite,R=window.FloorPlanTerritorySession;if(!S||!project?.site?.parcel)return null;
+  try{R?.sync?.(window.FloorPlanApp.entryId,project.site);}catch{}const t=R?.get?.('terrain'),o=R?.get?.('orthophoto');
+  const session={terrain:t?.grid?{grid:t.grid}:null,orthophoto:o?.blob?{bytes:new Uint8Array(await o.blob.arrayBuffer())}:null};
+  try{return S.build({site:project.site,session});}catch(e){return {status:'incomplete',missing:['error:'+(e.reason||e.message)]};}}
+ const SITE_MISSING={parcel:['la parcela','the parcel'],'buildingPlacement.horizontal':['la colocación de la vivienda en la parcela','the building placement on the parcel'],'buildingPlacement.vertical':['la cota cero del modelo','the model zero elevation'],
+  northOffsetDeg:['la orientación al norte','the north orientation'],terrain:['el terreno','the terrain'],'terrain.session':['cargar el terreno en esta sesión','loading the terrain in this session'],orthophoto:['la ortofoto','the orthophoto'],'orthophoto.session':['cargar la ortofoto en esta sesión','loading the orthophoto in this session']};
+ function siteNote(site){if(!site)return;const en=typeof LANG==='string'&&LANG==='en';let n=document.getElementById('sceneExportSite');if(!n){n=el('p',{id:'sceneExportSite',role:'status'},status.parentNode);status.after(n);}
+  if(site.status==='ready'){n.textContent=(en?'Includes the site: terrain and orthophoto aligned with the project · ':'Incluye el entorno: terreno y ortofoto alineados con el proyecto · ')+site.doc.attributions.join(' · ')+(en?'. The cadastral parcel stays in RUBIK.':'. La parcela catastral se queda en RUBIK.');n.dataset.site='ready';return;}
+  const list=(site.missing||[]).map(k=>{const v=SITE_MISSING[k];return v?(en?v[1]:v[0]):k.startsWith('terrain.licence')||k.startsWith('orthophoto.licence')?(en?'a layer whose licence does not allow export':'una capa cuya licencia no permite exportarla'):k;});
+  n.textContent=(en?'Site not included. Missing: ':'Entorno no incluido. Falta: ')+list.join(', ')+(en?'. Complete it in Analyze › Territorial context.':'. Complétalo en Analizar › Contexto territorial.');n.dataset.site='incomplete';}
  function download(){
   if(!result)return;if(!result.stillCurrent()){set('stale');return;}
   const url=URL.createObjectURL(result.bytes),a=el('a',{href:url,download:result.name},document.body);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);

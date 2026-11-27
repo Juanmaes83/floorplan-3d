@@ -40,3 +40,8 @@ test('la parcela catastral no sale; atribuciones y archivos declarados',()=>{
  const r=S.build({site:site(),session});const json=new TextDecoder().decode(r.files.get(S.FILE));
  assert.equal(r.doc.parcel.exported,false);assert.equal(r.doc.parcel.reference,null);assert.equal(json.includes('1907401VK4810H'),false);assert.equal(json.includes('4500020]]'),false,'sin anillos de la geometría catastral');
  assert.deepEqual(r.doc.attributions,['Sistema Cartográfico Nacional']);assert.deepEqual([...r.files.keys()],[S.FILE,S.ORTHO]);assert.equal(r.files.get(S.ORTHO),session.orthophoto.bytes);});
+
+test('UV de la ortofoto por vértice con la fórmula del visor (esquina noroeste = 0,0)',()=>{
+ const r=S.build({site:site(),session});const uv=r.doc.terrain.uv;assert.equal(uv.length,9);
+ // Primer vértice: muestra (500010, 4500015) en la extensión 500000–500030 × 4500000–4500020.
+ near(uv[0][0],10/30);near(uv[0][1],5/20);near(uv[8][0],20/30);near(uv[8][1],15/20);});
