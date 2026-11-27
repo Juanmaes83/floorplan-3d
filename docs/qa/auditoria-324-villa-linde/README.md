@@ -49,3 +49,7 @@ Las rutas y archivos de abajo orientan el diagnóstico. Verifica los consumidore
 - Los snippets de Playwright documentan el procedimiento. `AUDIT_WORKSPACE/` sustituye la carpeta local. En una copia temporal, ajusta el prefijo, puerto, ubicación de fixtures y carpeta de salida a tu entorno. No los añadas al producto como suite sin adaptarlos. Los archivos de resultados conservan el contexto del corte. Los ZIP de Blender permiten reproducir esas sesiones sin duplicar la geometría de trabajo.
 - Registra por hallazgo la reproducción en HEAD, commit de corrección, resultados en escritorio y móvil cuando proceda y CI. Para los flujos que necesitan explicación, enlaza una grabación continua desde el acceso hasta la salida, junto con captura del error o su corrección, SHA y Preview exacta. Conserva los controles ya superados que toquen tus cambios.
 
+
+## Película del proyecto · propuesta de continuidad
+
+[Ubicación propuesta en Home y Entregar y criterios de aceptación](PELICULA-PROPUESTA-HOME-ENTREGAR.md).
