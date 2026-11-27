@@ -15,9 +15,9 @@ async function boot(vp, camera) {
   if (await page.locator('#welcomeDialog').evaluate(d => d.open).catch(() => false)) await page.keyboard.press('Escape');
   // Segunda revisión guardada: variante del ejemplo sin una pieza de mobiliario (como la historia aprobada de P10).
   await page.evaluate(async () => { await FloorPlanApp.createVariant(); });
-  const n0 = await page.evaluate(() => FloorPlanApp.project.furniture.length);
-  await page.evaluate(() => { const f = FloorPlanApp.project.furniture[0]; select({ kind: 'furn', id: f.id }); }); await page.locator('#plan').focus().catch(() => {}); await page.keyboard.press('Delete');
-  await page.waitForFunction(n => FloorPlanApp.project.furniture.length === n - 1, n0); await page.evaluate(() => FloorPlanApp.persistence.requireSaved());
+  const n0 = await page.evaluate(() => FloorPlanApp.project.objects.length);
+  await page.evaluate(() => { const f = FloorPlanApp.project.objects[0]; select({ kind: 'furn', id: f.id }); deleteSel(); });
+  await page.waitForFunction(n => FloorPlanApp.project.objects.length === n - 1, n0); await page.evaluate(() => FloorPlanApp.persistence.requireSaved());
   await page.waitForFunction(() => window.RubikGestureLab && (FloorPlanApp.storyTargets().pairs || []).length > 0);
   return { ctx, page, errors };
 }
@@ -42,11 +42,13 @@ for (const vp of [{ width: 1440, height: 900, tag: 'escritorio' }, { width: 390,
     await page.evaluate(() => { RubikGestureLab.feed(null, performance.now() + 800); }); assert.equal(await page.evaluate(() => RubikGestureLab.camera.state), 'lost'); assert.equal(await page.evaluate(() => RubikGestureLab.step), '3d');
     // Continuidad con controles normales desde el mismo punto: botón «Siguiente».
     await page.locator('#glNext').click(); await page.waitForFunction(() => RubikGestureLab.step === 'compare'); await pause(page, 1400);
+    await page.waitForFunction(() => /Superficie útil/.test(document.querySelector('#glCalls').textContent));
     const calls = await page.locator('#glCalls').innerText(); assert.match(calls, /Superficie útil: [\d,.]+ → [\d,.]+ m²/); assert.match(calls, /Piezas de mobiliario: \d+ → \d+ ud\./); assert.match(calls, /fuente: RUBIK/); assert.match(calls, /estado: guardado/);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-3-antes-${vp.tag}.png`) });
     // Gesto 2: deslizar con la mano cerrada → después; teclado A → antes.
     await hold(page, 'fist', 300, 0.7); await hold(page, 'fist', 320, 0.7, -0.05); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'after'); await pause(page, 1600);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `gl-4-despues-${vp.tag}.png`) });
+    assert.ok(!/[\u3400-\u9fff]/.test(await page.locator('#gestureLab').innerText()), 'sin chino visible en el laboratorio abierto');
     await page.keyboard.press('a'); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'before'); await pause(page);
     await page.locator('#glSide').click(); assert.equal(await page.evaluate(() => RubikGestureLab.side), 'after'); await pause(page);
     // Salir: la cámara se apaga (pistas terminadas) y el proyecto guardado no cambia.

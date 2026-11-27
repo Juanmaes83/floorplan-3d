@@ -11,7 +11,7 @@ dialog.gl.gl-see-through::backdrop{background:transparent}
 .gl-steps li{counter-increment:s;padding:3px 10px;border-radius:999px;background:#eceae4;font-size:.85rem}
 .gl-steps li::before{content:counter(s) " · "}
 .gl-steps li[data-on]{background:#184e52;color:#fff}
-.gl-stage{min-height:0;display:grid;place-items:center}
+.gl-stage{flex:none;display:grid;place-items:center}
 .gl-plan,.gl-rev>div{width:min(100%,760px)}
 .gl-plan svg,.gl-rev svg{width:100%;height:auto;max-height:52vh;display:block}
 .gl-unfold{animation:gl-unfold .9s cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 50%}
@@ -31,3 +31,4 @@ dialog.gl[data-side="before"] .gl-rev[data-side="after"],dialog.gl[data-side="af
 .gl-dot[data-cam="on"]{background:#1e9e5a}.gl-dot[data-cam="lost"]{background:#d89b00}.gl-dot[data-cam="denied"]{background:#c0392b}.gl-dot[data-cam="starting"]{background:#2f6fb0}
 .gl-help{margin:0;font-size:.8rem;color:#555}
 @media (max-width:600px){dialog.gl{padding:10px;width:calc(100vw - 8px)}.gl-bar .btn{flex:1 1 40%}}
+dialog.gl>*{flex:none}

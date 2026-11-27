@@ -11,10 +11,12 @@
    corto, indicador de cámara y modo sin cámara). Adaptadas a acciones de presentación de RUBIK; sin copiar su interfaz.
    Nada se escribe en el proyecto; no se graba ni guarda imagen de la cámara. MediaPipe Hands (CDN) solo se descarga al
    activar la cámara. */
-(function () {
+(function boot(tries) {
   'use strict';
+  tries = tries || 0;
+  // La app publica FloorPlanApp al terminar de arrancar: el laboratorio espera a que exista (como mucho ~20 s).
   const app = window.FloorPlanApp, G = window.RubikGestureCore, R = window.FloorPlanRevisionCompare;
-  if (!app || !G || !R) return;
+  if (!app?.storyTargets || !G || !R) { if (tries < 200) setTimeout(() => boot(tries + 1), 100); return; }
   const nm2 = n => typeof nm === 'function' ? nm(n) : n;
   const el = (tag, attrs, parent, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); if (text !== undefined) n.textContent = text; parent?.append(n); return n; };
   const fmt = v => typeof v === 'number' ? v.toLocaleString('es-ES', { maximumFractionDigits: 2 }) : String(v);
@@ -78,8 +80,16 @@
       call('Superficie útil', m.before.netAreaM2, m.after.netAreaM2, 'm²');
       call('Piezas de mobiliario', m.before.objects, m.after.objects, 'ud.');
       if (m.delta.walls) call('Muros', m.before.walls, m.after.walls, 'ud.');
-      const ch = el('li', {}, calls); el('strong', {}, ch, 'Cambios detectados: '); el('span', {}, ch, `${cmp.counts.total} (${cmp.changes.slice(0, 3).map(c => c.summary).join(' · ')}${cmp.changes.length > 3 ? ' …' : ''})`);
+      const ch = el('li', {}, calls); el('strong', {}, ch, 'Cambios detectados: '); el('span', {}, ch, `${cmp.counts.total} (${changeList()})`);
     }
+  }
+  // Resumen de cambios con nombres VISIBLES (nm): nunca el nombre guardado en bruto (puede estar en chino).
+  const KIND = { object: 'pieza de mobiliario', room: 'estancia', wall: 'muro', opening: 'hueco', material: 'material' };
+  const CHG = { added: 'añadida', removed: 'quitada', modified: 'modificada' };
+  function changeList() {
+    const proj = side => pair[side].project, find = (c) => { for (const side of ['after', 'before']) { const p = proj(side), arr = c.entity === 'object' ? p.objects : c.entity === 'room' ? p.rooms : c.entity === 'wall' ? p.walls : c.entity === 'opening' ? p.openings : []; const e = (arr || []).find(x => x.id === c.entityId); if (e) return e; } return null; };
+    const name = c => { const e = find(c); const n = e && e.name ? nm2(e.name) : ''; return n && !/[\u3400-\u9fff]/.test(n) ? `«${n}»` : ''; };
+    return cmp.changes.slice(0, 3).map(c => `${KIND[c.entity] || c.entity} ${name(c)} ${CHG[c.change] || c.change}`.replace(/\s+/g, ' ').trim()).join(' · ') + (cmp.changes.length > 3 ? ' …' : '');
   }
   function mark(w, id) { const n = w.querySelector(`[data-room-id="${id}"], [data-id="${id}"]`); if (n) n.classList.add('gl-mark'); }
   async function show3d(on) {
@@ -88,10 +98,10 @@
       else { dlg.classList.remove('gl-see-through'); if (app.viewMode === '3d') await setView('2d'); } }
     catch (e) { note('3d-error', { message: e.message }); kind.textContent = 'La vista 3D no está disponible en este equipo: el plano sigue disponible.'; }
   }
-  async function go(fn, source) { const before = P.step; fn(); note('step', { from: before, to: P.step, source }); if (before !== P.step) { if (P.step === '3d') await show3d(true); else if (before === '3d') await show3d(false); } render(); }
+  async function go(fn, source) { const before = P.step; fn(); note('step', { from: before, to: P.step, source }); render(); if (before !== P.step) { if (P.step === '3d') await show3d(true); else if (before === '3d') await show3d(false); render(); } }
   const next = s => go(() => P.next(), s), prev = s => go(() => P.prev(), s);
   prevB.onclick = () => prev('button'); nextB.onclick = () => next('button'); sideB.onclick = () => { setSide(); note('side', { side: P.side, source: 'button' }); };
-  dlg.addEventListener('keydown', e => { if (e.target.closest('input,textarea')) return; if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next('keyboard'); } else if (e.key === 'ArrowLeft') { e.preventDefault(); prev('keyboard'); } else if (/^[ad]$/i.test(e.key)) { setSide(e.key.toLowerCase() === 'a' ? 'before' : 'after'); note('side', { side: P.side, source: 'keyboard' }); } });
+  document.addEventListener('keydown', e => { if (!dlg.open || e.target.closest?.('input,textarea')) return; if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next('keyboard'); } else if (e.key === 'ArrowLeft') { e.preventDefault(); prev('keyboard'); } else if (/^[ad]$/i.test(e.key)) { setSide(e.key.toLowerCase() === 'a' ? 'before' : 'after'); note('side', { side: P.side, source: 'keyboard' }); } });
 
   // ── Webcam (opcional, explícita) ──
   let stream = null, hands = null, token = 0, running = false;
