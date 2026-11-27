@@ -2,6 +2,23 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## Aprobaciones del propietario (27/11, noche) y autorización de integración
+| Bloque | Rama · SHA aprobado | Preview revisada | Evidencia |
+|---|---|---|---|
+| §9 Cabecera y proyectos | `claude/cabecera-proyectos` · `fccda24b` | https://floorplan-3d-piotfpkn3-juanma-espinosas-projects.vercel.app/ | `docs/qa/cabecera-proyectos/` (vídeos JSON y P10, `json-menu/`, `distancia-conocida/`, `regresion/`) |
+| Entregar: D3, P2/FOT-01 y cuadrícula P8 → P9 → P10 | `claude/entregar-asistencia` · `7b2e01ab` | https://floorplan-3d-eyj9ph0s3-juanma-espinosas-projects.vercel.app/ | `docs/qa/entregar-asistencia/revision-27-11/` |
+| Home: muestra de estilos con procedencia en cada imagen | misma rama y SHA | la misma | `revision-27-11/home/` |
+
+- La propuesta comercial (`docs/propuestas/…`) sigue en **borrador**.
+- **Autorizado:** integrar los tres bloques en `master` vigente (`dacb5d39`), validando el conjunto con los recorridos
+  aprobados y su regresión, y fusionar si la evidencia es satisfactoria y conforme a la coordinación con Codex.
+- **Fuera de esta tanda:**
+  - Gesture Labs §6, pendiente de la prueba con la cámara frontal del móvil: P11, los accesos por gestos desde Home y P1 y
+    el código de cámara siguen en `claude/gesture-labs`;
+  - Película del proyecto §11, bloque aparte: su aprobación llegará con el MP4 de 720p.
+- **Añadido tras la aprobación, a petición del propietario:** D3 «Preparar imágenes» que falla o mientras la persona sale
+  (`2f4a25d9`, prueba D3 5/5).
+
 ## Estado tras aplicar la revisión del 27/11 (tarde) · L = local · V = Preview Vercel · H = revisión humana
 | Bloque | Rama · SHA | Preview (V) | Entrada | Evidencia | Estado |
 |---|---|---|---|---|---|

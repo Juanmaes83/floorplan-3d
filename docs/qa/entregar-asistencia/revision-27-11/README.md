@@ -1,5 +1,10 @@
 # Entregar · revisión humana del 27/11 · D3, P2/FOT-01 y cuadrícula P8 → P9 → P10
 
+> **APROBADO por el propietario (27/11, noche)** en `7b2e01ab`: D3, P2/FOT-01, cuadrícula P8 → P9 → P10 y la muestra de
+> estilos de Home, revisados en https://floorplan-3d-eyj9ph0s3-juanma-espinosas-projects.vercel.app/. La propuesta comercial
+> sigue en borrador. Integración autorizada sobre `master` vigente junto con §9. Añadido posterior, a petición del
+> propietario: D3 «Preparar imágenes» que falla o mientras la persona sale (`2f4a25d9`, D3 5/5).
+
 Rama `claude/entregar-asistencia`. D3 y P2 se verifican en **una misma Preview**, la del último SHA de la rama (ver el handoff).
 
 ## Cuadrícula de Entregar · P8 → P9 → P10 y sin tarjetas aisladas
