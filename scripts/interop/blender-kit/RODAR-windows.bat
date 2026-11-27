@@ -15,6 +15,18 @@ if "%TOMA%"=="" set "TOMA=interior"
 set "LUZ=%~3"
 if "%LUZ%"=="" set "LUZ=dia"
 set "FR=%~4"
+set "PELI="
+set "MP4=rodaje.mp4"
+rem Pelicula elegida en RUBIK - Entregar - Video: RODAR-windows.bat pelicula (lee rubik-pelicula-guion.json)
+if /i "%PERFIL%"=="pelicula" (
+  if not exist "rubik-pelicula-guion.json" ( echo Falta rubik-pelicula-guion.json: prepara la pelicula desde RUBIK - Entregar - Video. & goto :fin_error )
+  set "PELI=--con-guion"
+  set "TOMA=pelicula"
+  set "MP4=pelicula.mp4"
+  set "PERFIL=revision"
+  for /f "tokens=2 delims=:," %%P in ('findstr /c:"\"profile\"" rubik-pelicula-guion.json') do set "PERFIL=%%~P"
+  set "PERFIL=!PERFIL: =!"
+)
 if /i not "%PERFIL%"=="revision" if /i not "%PERFIL%"=="entrega1440" if /i not "%PERFIL%"=="entrega4k" (
   echo Perfil desconocido / unknown profile: %PERFIL% ^(revision, entrega1440, entrega4k^)
   goto :fin_error
@@ -41,11 +53,12 @@ if not exist "escena-preparada\scene.blend" (
 )
 
 set "SALIDA=resultados\rodaje-%PERFIL%-%TOMA%-%LUZ%"
+if not "%PELI%"=="" set "SALIDA=resultados\pelicula"
 if not exist "resultados" mkdir "resultados"
 set "FRARG="
 if not "%FR%"=="" set "FRARG=--frames %FR%"
 echo 2-3/4 - Recursos y rodaje ^(%PERFIL%, %TOMA%, %LUZ%^) / assets and shoot...
-"%BL%" --background --factory-startup --python-exit-code 1 --python rubik_blender_rodaje.py -- escena-preparada . "%SALIDA%" --profile %PERFIL% --shot %TOMA% --light %LUZ% --tex rodaje-texturas --fetch %FRARG%
+"%BL%" --background --factory-startup --python-exit-code 1 --python rubik_blender_rodaje.py -- escena-preparada . "%SALIDA%" --profile %PERFIL% --shot %TOMA% --light %LUZ% --tex rodaje-texturas %PELI% --fetch %FRARG%
 if errorlevel 1 ( echo El rodaje se detuvo. Vuelve a lanzarlo: continua por el primer fotograma que falte. & goto :fin_error )
 
 where ffmpeg >nul 2>nul
@@ -53,9 +66,9 @@ if errorlevel 1 (
   echo 4/4 - FFmpeg no esta instalado: los fotogramas estan en %SALIDA%\frames ^(montalos a 24 fps^).
 ) else (
   echo 4/4 - Montando el MP4 / building the MP4...
-  ffmpeg -y -loglevel error -framerate 24 -i "%SALIDA%\frames\f%%04d.png" -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -movflags +faststart "%SALIDA%\rodaje.mp4"
+  ffmpeg -y -loglevel error -framerate 24 -i "%SALIDA%\frames\f%%04d.png" -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -movflags +faststart "%SALIDA%\%MP4%"
   if errorlevel 1 ( echo El montaje del MP4 fallo; los fotogramas siguen en %SALIDA%\frames. & goto :fin_error )
-  echo Listo / Done: %SALIDA%\rodaje.mp4
+  echo Listo / Done: %SALIDA%\%MP4%
 )
 echo Informe / report: %SALIDA%\rodaje-report.json ^(equipo, tiempos, acabados y aproximaciones^). Abrelo en RUBIK - Entregar.
 pause
