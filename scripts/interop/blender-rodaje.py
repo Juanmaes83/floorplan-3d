@@ -27,6 +27,7 @@ from mathutils import Vector
 HERE = Path(__file__).resolve()
 _spec = importlib.util.spec_from_file_location("rubik_render", next(p for p in (HERE.with_name("blender-scene-render.py"), HERE.with_name("rubik_blender_render.py")) if p.exists()))
 R = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(R)
+PKG = [None]  # carpeta del ZIP (la usa «Desde el paisaje» para el entorno)
 PROFILES = {"revision": {"res": "1280x720", "samples": 16}, "entrega1440": {"res": "2560x1440", "samples": 32}, "entrega4k": {"res": "3840x2160", "samples": 24}}
 
 def arg(n, d=None):
@@ -745,6 +746,8 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     """Del plano a la vivienda: planta legible → muros que crecen desde su huella → huecos → mobiliario → entrada a la estancia.
     Solo se animan transformaciones de los nodos de entidad (rubik_id) y siempre terminan en su valor de entrada."""
     from mathutils import Vector as V
+    if ((TL.get("guion") or {}).get("effect")) == "desde-el-paisaje":
+        return paisaje(sc, cd, derived, origin, h, TL, declared, nframes)
     fps = TL["output"]["fps"]; S = {x["id"]: x["frames"] for x in TL["shots"]}
     ents = [o for o in bpy.data.objects if o.parent and o.parent.name == "RUBIK_scene" and o.get("rubik_role")]
     by = {}
@@ -855,6 +858,51 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     declared.append("Pieza a pieza: piezas reales del ZIP caen (huecos 0,9 m, muebles 1,2 m) y encajan sobre su huella; órbita alta continua; sin entrada al interior (techo y luminarias fuera)") if PIEZA else declared.append(f"estancia final «{labels.get(room['id'], room['id'])}» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m")
     return lambda f: (at(f, 1), at(f, 2))
 
+def paisaje(sc, cd, derived, origin, h, TL, declared, nframes):
+    """«Desde el paisaje»: la vivienda en su terreno real (MDT05 + ortofoto PNOA del ZIP), acercamiento a escala comprensible,
+    el acceso y el paso por la PUERTA REAL del modelo (rubik-estancias.json › entrance) hasta el interior. Sin crecimientos:
+    la vivienda está completa. La cámara va a la altura de los ojos sobre el terreno real (rayo vertical), nunca bajo él."""
+    from mathutils import Vector as V
+    import importlib.util as iu
+    pkg = Path(PKG[0]); src = next((p for p in (HERE.with_name("blender-entorno.py"), HERE.with_name("rubik_blender_entorno.py")) if p.exists()), None)
+    if not (pkg / "rubik-entorno.json").exists() or not src:
+        raise SystemExit("«Desde el paisaje» necesita el entorno del ZIP (rubik-entorno.json): complétalo en RUBIK › Analizar › Contexto territorial.")
+    sp = iu.spec_from_file_location("rubik_entorno", src); EN = iu.module_from_spec(sp); sp.loader.exec_module(EN)
+    info = EN.importar(pkg, origin)
+    ent = json.loads((pkg / "rubik-estancias.json").read_bytes()).get("entrance")
+    if not ent: raise SystemExit("«Desde el paisaje» necesita la puerta de entrada marcada en el modelo (rubik-estancias.json › entrance).")
+    fps = TL["output"]["fps"]; S = {x["id"]: x["frames"] for x in TL["shots"]}
+    door = R.to_blender(ent["centerMm"]["x"], ent["centerMm"]["y"], origin, 0); out = V((ent["outward"]["x"], -ent["outward"]["y"], 0)).normalized()
+    terr = bpy.data.objects.get(info["object"]); dg = bpy.context.evaluated_depsgraph_get()
+    def ground(p):
+        hit, loc, *_ = sc.ray_cast(dg, V((p.x, p.y, 2000.0)), V((0, 0, -1)))
+        return loc.z if hit else 0.0
+    def eye(p, above=1.6): q = V((p.x, p.y, 0)); return V((q.x, q.y, max(ground(q), 0.0 if (q - door).length < 1.2 else ground(q)) + above))
+    pts = [o.matrix_world @ V(c) for o in bpy.data.objects if o.type == "MESH" and o.get("rubik_role") in ("room", "wall") for c in o.bound_box]
+    lo = V([min(p[i] for p in pts) for i in range(3)]); hi = V([max(p[i] for p in pts) for i in range(3)]); ctr = V(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, h / 2)); diag = (hi - lo).length
+    side = out.cross(V((0, 0, 1))).normalized()
+    far0 = ctr + out * diag * 6 + side * diag * 2 + V((0, 0, diag * 5)); far1 = ctr + out * diag * 3.2 + side * diag * .8 + V((0, 0, diag * 2.2))
+    acc = eye(door + out * 9 + side * 1.5, 1.7); near = eye(door + out * 2.4, 1.6); thr = V((door.x, door.y, 1.55)) + out * 0.2; inside = V((door.x, door.y, 1.5)) - out * 3.2
+    tdoor = V((door.x, door.y, 1.15)); tin = V((door.x, door.y, 1.3)) - out * 9
+    K = [(0, far0, ctr, 30), (S["site"][1], far1, ctr, 32), (S["approach"][1], acc, tdoor + V((0, 0, .6)), 26), (S["access"][1], near, tdoor, 24),
+         (S["door"][1], thr, tin, 20), (nframes - 1, inside, tin + side * 2.5, 18)]
+    def cr(p0, p1, p2, p3, t): return .5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3)
+    def at(f, idx):
+        for k in range(len(K) - 1):
+            if K[k][0] <= f <= K[k + 1][0]:
+                t = (f - K[k][0]) / max(1, K[k + 1][0] - K[k][0]); t = t * t * (3 - 2 * t) if k in (0, len(K) - 2) else t
+                g = lambda j: K[min(max(j, 0), len(K) - 1)][idx]
+                return cr(g(k - 1), g(k), g(k + 1), g(k + 2), t) if idx < 3 else g(k) + (g(k + 1) - g(k)) * t
+        return K[-1][idx]
+    for f in range(0, nframes, 6): cd.lens = at(f, 3); cd.keyframe_insert("lens", frame=f)
+    cd.clip_start = .05; cd.clip_end = diag * 60
+    bajo = [f for f in range(nframes) if (lambda p: (p - door).length > 1.5 and p.z < ground(p) + 0.4)(at(f, 1))]
+    sc.render.use_persistent_data = True
+    declared.append(f"Desde el paisaje: terreno MDT05 y ortofoto PNOA del ZIP ({info['vertices']} vértices, cotas {info['zMin']:.1f}–{info['zMax']:.1f} m sobre la cota cero del modelo); atribución: {' · '.join(info['attributions'])}")
+    declared.append(f"puerta real del modelo «{ent['openingId']}» ({ent['widthMm']} × {ent['heightMm']} mm), cruzada en el tramo «door»; la cámara va a 1,6–1,7 m sobre el terreno real; fotogramas con la cámara a menos de 0,4 m del suelo: {len(bajo)}")
+    declared.append("la parcela catastral no está en el ZIP (licencia restringida) y no aparece en el vídeo")
+    return lambda f: (at(f, 1), at(f, 2))
+
 def main():
     pos = [a for a in sys.argv[sys.argv.index("--") + 1:] if not a.startswith("--")]
     # posicionales = los tres primeros que no son valor de una opción
@@ -863,7 +911,7 @@ def main():
         if a[i].startswith("--"):
             i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales", "--con-guion") else 2; continue
         pos.append(a[i]); i += 1
-    prep, pkg, out = (Path(p).resolve() for p in pos[:3])
+    prep, pkg, out = (Path(p).resolve() for p in pos[:3]); PKG[0] = str(pkg)
     # «Tu proyecto cobra vida»: el guion elegido en RUBIK › Entregar › Vídeo (rubik-pelicula-guion.json en el ZIP) manda sobre
     # efecto, planos, fotogramas y perfil. Sin guion, el kit funciona como siempre.
     GUION = None; gp = arg("--guion") or (str(Path(pos[1]).resolve() / "rubik-pelicula-guion.json") if flag("--con-guion") else None)
@@ -875,7 +923,7 @@ def main():
     shot = arg("--shot", "aereo"); light = arg("--light", "dia"); fps = int(arg("--fps", "24")); secs = float(arg("--seconds", "2"))
     nframes = max(1, int(round(fps * secs)))
     TL = None
-    EFECTOS_KIT = {"maqueta-abierta", "pieza-a-pieza"}  # coreografías disponibles en este kit; las demás se declaran pendientes (sin inventar)
+    EFECTOS_KIT = {"maqueta-abierta", "pieza-a-pieza", "desde-el-paisaje"}  # coreografías disponibles en este kit; las demás se declaran pendientes (sin inventar)
     if GUION:
         if GUION["effect"] not in EFECTOS_KIT:
             raise SystemExit(f"El efecto «{GUION['effect']}» aún no tiene coreografía en este kit (pendiente); no se renderiza nada.")
@@ -1041,6 +1089,9 @@ def main():
             return a0.lerp(a1, t), tgt
     elif shot == "pelicula":
         pose_f = pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes)
+        if ((TL.get("guion") or {}).get("effect")) == "desde-el-paisaje":  # vivienda completa: techos y luminarias visibles
+            if ceilings: ceilings.hide_render = False
+            if fixtures: fixtures.hide_render = False
     else:
         if ceilings: ceilings.hide_render = False
         if fixtures: fixtures.hide_render = False
