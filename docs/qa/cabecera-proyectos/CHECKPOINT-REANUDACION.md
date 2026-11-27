@@ -2,6 +2,15 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## Estado tras aplicar la revisión del 27/11 (tarde) · L = local · V = Preview Vercel · H = revisión humana
+| Bloque | Rama · SHA | Preview (V) | Entrada | Evidencia | Estado |
+|---|---|---|---|---|---|
+| §9 cabecera | `claude/cabecera-proyectos` · `fccda24b` | https://floorplan-3d-piotfpkn3-juanma-espinosas-projects.vercel.app/ | Diseñar → «Proyecto ▾» · Tareas del proyecto | `video/9-json-descargar-reimportar-*`, `json-menu/`, `regresion/regresion-final-2e23820a.txt` | L: regresión sobre `2e23820a` 401 · 395 ok · 2 fallos de base (G-02 y P16, mismo error en `cd694e88`); regresión del SHA final en curso (`scratchpad/hdr-regr-final4.log`) · H pendiente |
+| Entregar: D3, P2/FOT-01, cuadrícula y Home | `claude/entregar-asistencia` · `7b2e01ab` | https://floorplan-3d-eyj9ph0s3-juanma-espinosas-projects.vercel.app/ (en construcción al escribir) | Entregar → D3 · P2 · P8–P10 · Home → «Estilos · muestra ilustrativa» | `docs/qa/entregar-asistencia/revision-27-11/` | L: D3 3/3, FOT-01 2/2, C4 2/2; regresión photo-project y perla-* (28 archivos) encadenada (`scratchpad/ent-regr.log`) · H pendiente |
+| Propuesta comercial | `claude/entregar-asistencia` · `7b2e01ab` | — | `docs/propuestas/oferta-comercial-rubik-2026-11.md` | — | borrador, sin precios · H pendiente |
+| §6 Presentación con gestos | `claude/gesture-labs` · `e72f34dd` | https://floorplan-3d-4jvsx2qf8-juanma-espinosas-projects.vercel.app/?gesture-lab=1 | Home → «Módulos para tu trabajo» · Entregar → P11 · P1 | `docs/qa/gesture-labs/` (vídeos continuos escritorio y móvil) | L 12/12, sintético · cámara física pendiente (propietario) · H pendiente |
+| §11 Película del proyecto | `claude/rodaje-cierre-1440` · `67e147e9` | — | ZIP de Entregar + kit Blender (`--shot pelicula`) | `docs/qa/pelicula-proyecto/control-720/` (3 fotogramas + report) | clip 720p en cola tras las regresiones (`scratchpad/rodaje/pel-clip.log`) · H pendiente |
+
 ## Revisión humana consolidada (27/11, mañana) · sustituye los mensajes parciales anteriores
 **Aprobado:** §5.3 corte 2 (Preview `852e0f44`; aprobación `32de044c`; regresión 153/153 `e31a9264`). Siguen vigentes §5.2 BC3,
 §5.1 Visita 3D, §7.1 Muros con cota, StoryLayersV1 §§7.2·7.3·8.3 y tapicería v3. Altura libre manual = tarea aparte; conservar
