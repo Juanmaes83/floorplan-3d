@@ -64,3 +64,19 @@ proyecto JSON» en la fila 2; deshacer/rehacer en la fila 1. Después: lo indica
   el paso; **«Escena 3D»** solo cambia la vista. Contrato `journey-orientation` actualizado por este cambio de nombre.
 - Prueba `cabecera-proyectos` ampliada: importar de verdad el JSON descargado; «Exportar diseño» solo con salidas; grupos de «Más».
   Local 2/2. Regresión completa: pendiente (tras la del §5.3).
+
+## Regresión de §9 y contraste con la base (27/11, noche)
+- **Regresión de 44 archivos sobre `c921c60f`:** 401 pruebas · 331 superadas · **66 fallos** · 4 omitidas.
+- **Contraste en la base `cd694e88`, mismos 21 archivos con fallos y mismas condiciones:** 269 · 262 superadas · **3 fallos**
+  preexistentes: G-02 (nombre del DXF por planta), persistencia F0.2b (`TypeError` del observador de `story-layers-ui.js`,
+  introducido por StoryLayersV1) y P16 (ya conocido).
+- **Causas de §9 y corrección (`79ca6670`):**
+  | Causa | Tipo | Corrección |
+  |---|---|---|
+  | rótulos de los grupos de «Más» sin traducir al cambiar de idioma | defecto del producto | se repintan con `lang` |
+  | botón rápido «Guardar JSON» retirado de la fila 2 (UX-BETA-001, U11 aprobados) | defecto del producto | restaurado; el menú conserva su entrada |
+  | aviso de variante acortado («Variante «X»») | pérdida de mensaje aprobado | frase completa en escritorio ≥ 1280 px; corta en móvil |
+  | clic fantasma táctil al abrir «Distancia conocida» | defecto expuesto por el cambio de cabecera | `js/tracing-ui.js` ignora ese clic (mismo punto, < 700 ms) |
+  | `TypeError` del observador de `<body>` (preexistente) | defecto preexistente | el observador espera al DOM |
+  | pruebas que pulsaban controles que ahora viven en el menú de proyecto | adaptación de pruebas | `mostrar()` llega por el menú; `premium-shell` exige la entrada visible fusionada; `upload` describe el diseño de §9 |
+- Verificación de la corrección: nueva ejecución de los 21 archivos sobre `79ca6670` (en curso; resultado abajo).
