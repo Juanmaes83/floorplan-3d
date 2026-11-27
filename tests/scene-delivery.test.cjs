@@ -78,3 +78,21 @@ test('Residual 2 · LEEME completo en ES, EN y ZH (mismas claves, sin huecos)', 
   assert.match(D.readme(m, 'zh'), /文件 › 导入 › glTF 2\.0/); assert.equal(D.readme(m, 'fr'), D.readme(m, 'es'), 'unknown language falls back to Spanish');
   for (const lang of ['es', 'en', 'zh']) assert.doesNotMatch(D.readme(m, lang), /undefined|\$\{/);
 });
+
+// «Desde el paisaje» (claude/pelicula-efectos): el entorno solo cambia el paquete cuando existe.
+test('sin emplazamiento el manifiesto y el ZIP son idénticos a los de siempre; con entorno listo se añaden y declaran sus dos archivos', async () => {
+  const capture = sampleCapture(), glb = C.toGLB(capture.doc), project = { id: 'prj_demo' };
+  const base = await D.manifest({ capture, glb, project, digest }), absent = await D.manifest({ capture, glb, project, digest, site: { status: 'absent' } });
+  assert.deepEqual(absent, base); assert.equal('site' in base, false);
+  const z0 = D.packageFiles({ manifest: base, glb, lang: 'es', zip: Package.zip }), z1 = D.packageFiles({ manifest: absent, glb, lang: 'es', zip: Package.zip, site: { status: 'absent' } });
+  assert.deepEqual([...z1.entries.keys()], [...z0.entries.keys()]); assert.deepEqual(Buffer.from(await z1.bytes.arrayBuffer()), Buffer.from(await z0.bytes.arrayBuffer()));
+  const doc = { attributions: ['Sistema Cartográfico Nacional'], layers: { parcel: { canExport: false }, terrain: { canExport: true }, orthophoto: { canExport: true } } };
+  const site = { status: 'ready', doc, files: new Map([['rubik-entorno.json', new TextEncoder().encode('{}\n')], ['rubik-ortofoto.jpg', new Uint8Array([0xff, 0xd8])]]) };
+  const m = await D.manifest({ capture, glb, project, digest, site });
+  assert.equal(m.site.status, 'ready'); assert.deepEqual(m.site.attributions, ['Sistema Cartográfico Nacional']); assert.match(m.site.parcel, /not exported/);
+  assert.equal(m.files['rubik-ortofoto.jpg'].sha256, await digest(new Uint8Array([0xff, 0xd8])));
+  const z = D.packageFiles({ manifest: m, glb, lang: 'es', zip: Package.zip, site });
+  assert.deepEqual([...z.entries.keys()].sort(), ['LEEME.txt', 'manifest.json', 'rubik-entorno.json', 'rubik-ortofoto.jpg', 'scene.glb']);
+  const inc = await D.manifest({ capture, glb, project, digest, site: { status: 'incomplete', missing: ['terrain'] } });
+  assert.deepEqual(inc.site, { status: 'incomplete', missing: ['terrain'] }); assert.equal(D.packageFiles({ manifest: inc, glb, lang: 'es', zip: Package.zip }).entries.size, 3);
+});
