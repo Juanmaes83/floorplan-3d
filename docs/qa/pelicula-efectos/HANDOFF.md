@@ -45,6 +45,19 @@
 | Maqueta abierta | Planta legible con la estancia de destino localizable | La planta gana volumen; la maqueta abierta, sin techo, muestra cómo se conectan las estancias; descenso con referencias visibles | Interior de esa misma estancia, encuadre estable y luz continua; se puede señalar en la planta dónde terminó |
 | Desde el paisaje | La vivienda en el entorno representado del proyecto | Aproximación a escala comprensible, el acceso y el paso por un hueco real | Interior que conserva la relación con el exterior y el acceso; terraza, agua o luz exterior solo si existen en los datos |
 
+## «Desde el paisaje» · proyecto con entorno (búsqueda 27/11, 22:05) → DECISIÓN DEL PROPIETARIO
+- RUBIK **sí representa entorno** en la app: terreno IGN MDT05 (`js/ign-mdt05-terrain-provider.js`, `terrain-core.js`), ortofoto
+  PNOA (`pnoa-orthophoto-provider.js`), parcela de Catastro (`catastro-parcel-provider.js`), sol (`solar-core.js`), con
+  política de licencias y atribución (`territory-export-policy.js`).
+- El **ZIP de Blender no lo exporta**: `scene-capture-core.js` solo asigna roles de vivienda (estancias, muros, huecos, objetos,
+  techo, luminarias, cubierta, volúmenes exteriores, escalera). Ningún fixture del repositorio trae terreno ni parcela
+  georreferenciada; el ejemplo y los proyectos de prueba no están situados.
+- **Acceso real:** sí existe en los datos (puerta de entrada en muro exterior; huecos de fachada).
+- **Conclusión:** sin ampliar la exportación, «Desde el paisaje» solo podría usar volúmenes exteriores (terrazas, balcones) y un
+  fondo neutro: no cumpliría «situar la vivienda en el entorno representado». Se plantea al propietario:
+  (A) ampliar el ZIP con terreno MDT05 + ortofoto PNOA de la parcela (con atribución CC BY 4.0 en el informe y en el vídeo) y
+  elegir un proyecto situado; o (B) limitar la primera entrega a exteriores del propio modelo y declararlo.
+
 ## Estado
 - 27/11 21:58 · rama creada y plan registrado. Sin código todavía.
 - 27/11 · interpretación aprobada; precisiones registradas. Siguiente: identificar el proyecto con entorno para «Desde el paisaje».
