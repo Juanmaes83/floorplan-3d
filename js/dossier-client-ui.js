@@ -108,6 +108,8 @@
     preparing = true; prepError = null; step = 'review'; dlg.close();
     window.toast?.(L('Preparando las vistas reales… Tu borrador del dossier está guardado.', 'Preparing the real views… Your dossier draft is saved.', '正在准备视图…草稿已保存。'), 4000);
     try { await V.prepare(); } catch (e) { prepError = e?.message || String(e); }
+    // V04 (#324): prepare() no lanza cuando falla la captura 3D real; deja status() en 'error' y el motivo en V.error.
+    if (!prepError && V.status?.() === 'error') prepError = String(V.error || L('la captura 3D no se pudo completar', 'the 3D capture could not be completed', '三维截图未完成'));
     preparing = false;
     if (inDeliver()) { window.FloorPlanDossier?.open?.(style); go('review'); if (prepError) window.toast?.(L('No se pudieron preparar las imágenes: ', 'The images could not be prepared: ', '无法准备图像：') + prepError, 7000); return; }
     window.toast?.(prepError ? L('No se pudieron preparar las imágenes: ', 'The images could not be prepared: ', '无法准备图像：') + prepError + L(' · Tu borrador del dossier sigue guardado en Entregar → D3.', ' · Your dossier draft is still saved in Deliver → D3.', '')

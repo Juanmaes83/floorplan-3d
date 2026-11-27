@@ -85,6 +85,22 @@ test('D3 · si «Preparar imágenes» falla: vuelve a «Revisar», explica el mo
  assert.match(await page.locator('#dcPrepError').innerText(),/No se pudieron preparar las imágenes: La vista 3D no está disponible.*Tu borrador está guardado/);
  assert.equal(await page.locator('#dc-note').inputValue(),'Borrador que no se pierde (fallo).');assert.equal(await page.locator('#dcPrepareViews').isVisible(),true,'se puede reintentar');
  assert.deepEqual(errors,[]);await ctx.close();});
+// V04 (#324, auditoría de Codex): el fallo REAL de la captura 3D (View3D.deliveryShot) con el prepare() real. prepare() no
+// lanza; deja status() en 'error'. D3 debe explicarlo, conservar el borrador y permitir reintentar con éxito.
+test('D3 · V04 · si falla la captura 3D real: explica el motivo, conserva el borrador y el reintento prepara las vistas',{timeout:300000},async()=>{
+ const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await d3Review(page,'Borrador que no se pierde (captura).');
+ await page.evaluate(()=>{window.__shot=window.View3D.deliveryShot;window.View3D.deliveryShot=()=>{throw new Error('QA: captura 3D indisponible');};});
+ await page.locator('#dcPrepareViews').click();
+ await page.waitForFunction(()=>document.querySelector('#dossierDialog').open&&!!document.querySelector('#dcPrepError'),null,{timeout:60000});
+ assert.equal(await page.evaluate(()=>FloorPlanProjectViews.status()),'error');
+ assert.match(await page.locator('#dcPrepError').innerText(),/No se pudieron preparar las imágenes: QA: captura 3D indisponible.*Tu borrador está guardado/);
+ assert.equal(await page.locator('#dossierDialog').getAttribute('data-dc-step'),'review');assert.equal(await page.locator('#dc-note').inputValue(),'Borrador que no se pierde (captura).');
+ // Reintento con la captura disponible: sin aviso de error y con vistas reales.
+ await page.evaluate(()=>{window.View3D.deliveryShot=window.__shot;});await page.locator('#dcPrepareViews').click();
+ await page.waitForFunction(()=>document.querySelector('#dossierDialog').open&&FloorPlanProjectViews.status()!=='error'&&(FloorPlanProjectViews.current()||[]).length>0&&!document.querySelector('#dcPrepError'),null,{timeout:120000});
+ assert.equal(await page.locator('#dc-note').inputValue(),'Borrador que no se pierde (captura).');
+ assert.deepEqual(errors,[]);await ctx.close();});
 test('D3 · si la persona sale mientras se preparan las vistas: no se reabre el dossier encima; aviso y borrador intacto',{timeout:180000},async()=>{
  const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const b=await d3Review(page,'Borrador que no se pierde (salida).');
