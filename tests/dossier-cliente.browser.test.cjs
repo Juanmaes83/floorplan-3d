@@ -30,6 +30,12 @@ test('D3 dossier cliente '+vp.tag,{timeout:180000},async()=>{const REC=process.e
  assert.match(await page.locator('#dcMissing').innerText(),/(falta|Todas las secciones)/);
  assert.ok(!/[㐀-鿿]/.test(await page.locator('#dossierDialog').innerText()),'sin chino visible');
  await page.locator('#dossierDocument .dossier-for').scrollIntoViewIfNeeded();await pause(2500);if(SHOTS){await page.screenshot({path:path.join(SHOTS,`d3-portada-${vp.tag}.png`)});}
+ // Imprimir: la ventana de impresión lleva la MISMA copia del documento; se comprueba qué campos salen y cuáles no.
+ await page.evaluate(()=>{window.__printCalls=0;const o=window.open;window.open=(...a)=>{const w=o.apply(window,a);if(w)w.print=()=>{window.__printCalls++;};return w;};});
+ const [win]=await Promise.all([ctx.waitForEvent('page'),page.locator('#dossierPrint').click()]);await win.waitForSelector('#dossierDocument .dossier-for');
+ const printed=await win.locator('#dossierDocument').innerText();assert.match(printed,/Preparado para\s*Sra\. Lucía Prueba/i);assert.match(printed,/visitar la obra/);
+ for(const no of ['NOTA-INTERNA','Margen interno','presupuesto cerrado','NO-DEBE-SALIR','Lo que nos pidió','Requisito'])assert.ok(!printed.includes(no),'no se imprime: '+no);
+ await win.locator('#dossierDocument .dossier-for').scrollIntoViewIfNeeded();await pause(2500);if(SHOTS)await win.screenshot({path:path.join(SHOTS,`d3-impresion-${vp.tag}.png`)});await win.close();
  // Persistencia por proyecto: al reabrir, la ficha sigue.
  await page.locator('#dossierClose').click();await b.click();await page.waitForSelector('#dossierDialog[open]');assert.equal(await page.locator('#dc-name').inputValue(),'Lucía Prueba');
  assert.deepEqual(errors,[]);const v=REC&&page.video();await ctx.close();if(v)fs.renameSync(await v.path(),path.join(REC,`d3-dossier-cliente-${vp.tag}.webm`));});
