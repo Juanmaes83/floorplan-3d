@@ -53,7 +53,20 @@
     // cada pieza el acabado de su tipo (tejido, madera, vegetación…) en lugar de adivinarlo por el color.
     const objects = (Array.isArray(project.objects) ? project.objects : []).filter(o => o && typeof o.id === 'string')
       .map(o => ({ id: o.id, type: /^[a-z0-9_-]{1,40}$/.test(o.type || '') ? o.type : null }));
-    return { format: 'rubik-sota.scene-rooms', version: '1.2.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms, objects };
+    // 1.3.0 (aditivo) · puerta de entrada marcada en el modelo (isEntrance): centro del hueco en el plano, sentido hacia el
+    // exterior (el lado sin estancia) y ancho/alto. La usa «Desde el paisaje» para cruzar la puerta real; sin entrada, null.
+    const entrance = (() => {
+      const o = (project.openings || []).find(x => x && x.isEntrance === true && /door/.test(x.kind || '')), w = o && (project.walls || []).find(x => x.id === o.wallId);
+      if (!o || !w) return null;
+      const dx = w.end.x - w.start.x, dy = w.end.y - w.start.y, L = Math.hypot(dx, dy); if (!(L > 0)) return null;
+      const ux = dx / L, uy = dy / L, t = (o.offsetMm || 0) + (o.widthMm || 0) / 2, cx = w.start.x + ux * t, cy = w.start.y + uy * t;
+      const inside = (poly, x, y) => { let h = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j]; if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) h = !h; } return h; };
+      const d = (w.thicknessMm || 200) / 2 + 300, roomAt = (x, y) => (project.rooms || []).some(r => Array.isArray(r.polygon) && r.polygon.length >= 3 && inside(r.polygon, x, y));
+      let nx = -uy, ny = ux; if (roomAt(cx + nx * d, cy + ny * d) && !roomAt(cx - nx * d, cy - ny * d)) { nx = -nx; ny = -ny; }
+      const clear = !roomAt(cx + nx * d, cy + ny * d) && roomAt(cx - nx * d, cy - ny * d);
+      return { openingId: o.id, wallId: w.id, centerMm: { x: Math.round(cx), y: Math.round(cy) }, outward: { x: +nx.toFixed(4), y: +ny.toFixed(4) }, widthMm: o.widthMm || null, heightMm: o.heightMm || null, sides: clear ? 'room inside, outside free' : 'ambiguous' };
+    })();
+    return { format: 'rubik-sota.scene-rooms', version: '1.3.0', units: 'mm (RUBIK plan)', wallHeightMm: (project.defaults && project.defaults.wallHeightMm) || 2800, rooms, objects, entrance };
   }
 
   /** Manifiesto de la entrega. `capture` = resultado de View3D.captureScene() ({doc, info}). */

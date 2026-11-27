@@ -27,7 +27,7 @@ const project = { id: 'prj_demo', name: 'Demo', defaults: { wallHeightMm: 2700 }
 
 test('M03 · rooms file: geometry, floor colour and the VISIBLE name only (never the stored raw name)', () => {
   const r = D.roomsDoc({ project, label: room => room.id === 'rom_a' ? 'Salón' : 'Baño' });
-  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped'); assert.equal(r.version, '1.2.0'); assert.ok(Array.isArray(r.objects), 'objetos con su tipo (sin nombres)');
+  assert.equal(r.format, 'rubik-sota.scene-rooms'); assert.equal(r.wallHeightMm, 2700); assert.equal(r.rooms.length, 2, 'rooms without a polygon are skipped'); assert.equal(r.version, '1.3.0'); assert.ok(Array.isArray(r.objects), 'objetos con su tipo (sin nombres)'); assert.ok('entrance' in r, '1.3.0: entrada (o null)');
   assert.deepEqual(r.rooms.map(x => [x.id, x.label, x.counted, x.floorColor]), [['rom_a', 'Salón', true, '#c8a27a'], ['rom_b', 'Baño', false, null]]);
   assert.doesNotMatch(JSON.stringify(r), CJK); assert.throws(() => D.roomsDoc({}));
   // 1.2.0 · clave del material de suelo y su familia (identificadores ASCII del sistema): el rodaje resuelve el acabado por material
@@ -90,4 +90,10 @@ test('M03 · licence (owner decision): only the three bpy scripts are GPL-3.0-or
   const n = fs.readFileSync(path.join(root, D.KIT_SOURCES.licence), 'utf8');
   for (const f of ['rubik_blender_prepare.py', 'rubik_blender_render.py', 'rubik_blender_verify.py', 'COPYING-GPL-3.0.txt', 'renderizar.sh', 'RENDERIZAR-windows.bat', 'scene.glb', '.blend']) assert.ok(n.includes(f), f);
   assert.match(n, /GPL-3\.0-or-later/); assert.match(n, /NO cubre|Not covered/);
+});
+
+test('1.3.0 · entrada del modelo: el ejemplo de RUBIK marca opn_door-5; centro en el hueco y sentido hacia el lado sin estancia', () => {
+  const ref = require('../js/reference-project.js'), r = D.roomsDoc({ project: ref, label: x => x.id });
+  assert.deepEqual(r.entrance, { openingId: 'opn_door-5', wallId: 'wal_ref-door-5', centerMm: { x: 4700, y: 8755 }, outward: { x: -1, y: 0 }, widthMm: 890, heightMm: 2100, sides: 'room inside, outside free' });
+  assert.equal(D.roomsDoc({ project: { ...ref, openings: ref.openings.map(o => ({ ...o, isEntrance: false })) }, label: x => x.id }).entrance, null, 'sin entrada marcada: null');
 });
