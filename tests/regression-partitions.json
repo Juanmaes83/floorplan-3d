@@ -1,6 +1,13 @@
 {
  "_": "Browser tests that no other workflow runs (cross review of #240: 39 of 145). `blocking` must be green on every PR. `historical` shards run on every PR but do NOT block: they were never in CI, so each red must first be classified (pre-existing defect, obsolete assertion or new regression) in `classification`; a file moves to `blocking` once it is green and classified. scripts/qa/check-browser-test-coverage.cjs fails when a *.browser.test.cjs is neither named in a workflow nor listed here.",
  "blocking": [
+  "tests/cabecera-proyectos.browser.test.cjs",
+  "tests/dossier-cliente.browser.test.cjs",
+  "tests/fot01-casos.browser.test.cjs",
+  "tests/story-assist.browser.test.cjs",
+  "tests/story-flow.browser.test.cjs",
+  "tests/story-layers.browser.test.cjs",
+  "tests/story-proposal.browser.test.cjs",
  "tests/asistente-memoria.browser.test.cjs",
   "tests/render-ia-resolucion.browser.test.cjs",
   "tests/asesor-home.browser.test.cjs",
