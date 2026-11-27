@@ -779,23 +779,36 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     side = (tg0 - eye0).cross(V((0, 0, 1))).normalized() * 1.6; tg1 = tg0 + side
     # Rótulos de estancia (nombre visible del proyecto) tendidos sobre la planta: se leen en el cenital y se retiran al girar.
     mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = mat.node_tree.nodes.get("Principled BSDF"); bs.inputs["Base Color"].default_value = (.03, .03, .035, 1); bs.inputs["Roughness"].default_value = .9
+    plate = bpy.data.materials.new("RUBIK_rotulo_placa"); plate.use_nodes = True; pb = plate.node_tree.nodes.get("Principled BSDF"); pb.inputs["Base Color"].default_value = (.92, .91, .88, 1); pb.inputs["Roughness"].default_value = .95
     f_out = S["floors"][1] - int(.6 * fps); nlab = 0
     for r in rooms:
         t = labels.get(r["id"]) or ""
         if not t or re.search(r"[㐀-鿿]", t): continue
         if area(r) / 1e6 < 2.5: continue  # p. ej. miradores: el rótulo no cabe; la estancia sigue visible en la planta
         lines = t.split(" ", 1) if len(t) > 11 and " " in t else [t]; longest = max(len(x) for x in lines)
-        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.26, min(.55, (max(xs_) - min(xs_)) / 1000 / max(4, longest) * 1.6, wmin * .28 / len(lines) * 1.4)); cu.extrude = .002
+        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.34, min(.75, (max(xs_) - min(xs_)) / 1000 / max(4, longest) * 2.0, wmin * .34 / len(lines) * 1.4)); cu.extrude = .002
         ob = bpy.data.objects.new(cu.name, cu); ob.data.materials.append(mat); derived.objects.link(ob); cc = R.centroid(r["polygon"])
         L = R.to_blender(cc["x"], cc["y"], origin, .03); key(ob, 0, L, V((1, 1, 1))); key(ob, f_out, L, V((1, 1, 1))); key(ob, f_out + int(.6 * fps), L, V((.0005, .0005, .0005))); nlab += 1
+        # placa clara bajo el rótulo (contraste sobre cualquier suelo); se retira con él
+        pw, ph = cu.size * longest * .62 + .16, cu.size * 1.25 * len(lines) + .1
+        bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object; pl.name = "RUBIK_rotulo_placa_" + r["id"]; pl.scale = (pw, ph, 1); bpy.ops.object.transform_apply(scale=True)
+        for cl in list(pl.users_collection): cl.objects.unlink(pl)
+        derived.objects.link(pl); pl.data.materials.append(plate); Lp = R.to_blender(cc["x"], cc["y"], origin, .026)
+        key(pl, 0, Lp, V((1, 1, 1))); key(pl, f_out, Lp, V((1, 1, 1))); key(pl, f_out + int(.6 * fps), Lp, V((.0005, .0005, .0005)))
     # Cámara: puntos clave y Catmull-Rom (velocidad continua: sin cortes entre 2D y volumen).
     def orbit(az, el, d): az, el = math.radians(az), math.radians(el); return ctr + V((math.cos(el) * math.sin(az), -math.cos(el) * math.cos(az), math.sin(el))) * d * diag
     top = lambda z: ctr + V((0, -.002 * diag, z * diag))
     lens_top = 50; H = (max(hi.x - lo.x, (hi.y - lo.y) * 16 / 9) * 1.18) * lens_top / 36 / diag  # planta entera en el encuadre
-    up = (eye0 - lc); up.z = 0; aprox = lc + up.normalized() * 2.0 + V((0, 0, h + 2.2)); dentro = lc + up.normalized() * 1.2 + V((0, 0, h - .5))
-    K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .97), ctr, lens_top), (S["floors"][1], orbit(-30, 58, 1.25), ctr, 40),
-         (S["walls"][1], orbit(-2, 46, 1.15), ctr, 35), (S["openings"][1], orbit(18, 42, 1.05), ctr, 35),
-         (S["furniture"][1], aprox, lc, 30), (S["enter"][0] + int(2.5 * fps), dentro, lc + V((0, 0, .6)), 24), (S["enter"][1], eye0, tg0, 18), (nframes - 1, eye1, tg1, 18)]
+    # Entrada (auditoría 27/11: caía casi en vertical y levantaba la mirada de golpe): planeo tendido en el plano vertical que
+    # contiene la mirada final; el objetivo se desliza del centro de la estancia a la pared del fondo, que siempre está a la vista.
+    Rr = ((far["x"] - c["x"]) ** 2 + (far["y"] - c["y"]) ** 2) ** .5 / 1000
+    back = (eye0 - lc); back.z = 0; back = back.normalized()
+    aprox = lc + back * (1.7 * Rr + 1.5) + V((0, 0, h + 2.4)); umbral = lc + back * (.95 * Rr) + V((0, 0, h - .15))
+    tg_mid = (lc + V((0, 0, .5))).lerp(tg0, .55)
+    eye1 = lc + back * (.32 * Rr) + V((0, 0, 1.4)); tg1 = tg0 + side * 1.5  # final: avance lento (≈ 0,3 R) y paneo suave
+    K = [(0, top(H), ctr, lens_top), (S["plan"][1], top(H * .985), ctr, lens_top), (S["floors"][1], orbit(-22, 60, 1.25), ctr, 40),
+         (S["walls"][1], orbit(-9, 50, 1.16), ctr, 36), (S["openings"][1], orbit(2, 46, 1.1), ctr, 35),
+         (S["furniture"][1], aprox, lc + V((0, 0, .3)), 28), (S["enter"][0] + int(3.8 * fps), umbral, tg_mid, 22), (S["enter"][1], eye0, tg0, 18), (nframes - 1, eye1, tg1, 18)]
     def cr(p0, p1, p2, p3, t): return .5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3)
     def at(f, idx):
         for k in range(len(K) - 1):
@@ -809,6 +822,26 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     # Techos y luminarias: entran cuando la cámara ya está por debajo del techo, fuera del encuadre.
     f_in = next((f for f in range(S["furniture"][1], nframes) if at(f, 1).z < h - .25), S["enter"][1])
     for o in by.get("ceiling", []) + by.get("fixture", []): grow(o, f_in, f_in + 2, (.0005, .0005, .0005))
+    # Continuidad de luz (auditoría 27/11, salto en 532→533): techo y luminarias no proyectan sombra ni rebotan en ningún momento;
+    # solo los ve la cámara. La luz de la escena es la misma antes y después de entrar.
+    nray = 0
+    for o in bpy.data.objects:
+        if o.get("rubik_role") in ("ceiling", "fixture") or (o.parent and o.parent.get("rubik_role") in ("ceiling", "fixture")):
+            for a in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"): setattr(o, a, False)
+            nray += 1
+    # Fondo (auditoría: azul de una escena sin entorno): el proyecto no trae entorno; la CÁMARA ve un fondo neutro declarado y la
+    # iluminación del cielo no cambia (Light Path · rayo de cámara).
+    w = sc.world
+    if w and w.use_nodes:
+        N = w.node_tree.nodes; Lk = w.node_tree.links; outw = next(n for n in N if n.type == "OUTPUT_WORLD"); cur = outw.inputs["Surface"].links[0].from_socket
+        lp = N.new("ShaderNodeLightPath"); neu = N.new("ShaderNodeBackground"); neu.inputs["Color"].default_value = (.58, .58, .57, 1); neu.inputs["Strength"].default_value = 1.0
+        mx = N.new("ShaderNodeMixShader"); Lk.new(lp.outputs["Is Camera Ray"], mx.inputs["Fac"]); Lk.new(cur, mx.inputs[1]); Lk.new(neu.outputs["Background"], mx.inputs[2]); Lk.new(mx.outputs["Shader"], outw.inputs["Surface"])
+    # Vidrio (moteado del ventanal): sin cáusticas y con brillo filtrado; se declara
+    sc.cycles.caustics_reflective = False; sc.cycles.caustics_refractive = False; sc.cycles.blur_glossy = 1.0; sc.cycles.sample_clamp_direct = 10.0
+    try: sc.cycles.denoising_prefilter = "ACCURATE"
+    except Exception: pass
+    declared.append(f"continuidad de luz: techo y luminarias ({nray} objetos) solo visibles para la cámara, sin sombra ni rebote; fondo de cámara neutro gris (el proyecto no trae entorno), el cielo ilumina igual")
+    declared.append("vidrio: sin cáusticas, brillo filtrado 1,0, límite directo 10, OIDN con prefiltro preciso")
     sc.render.use_persistent_data = True  # misma escena en todos los fotogramas: se reutiliza entre ellos
     declared.append(f"Película del proyecto · «Del plano a la vivienda»: {nframes} fotogramas a {fps} fps sin sonido; cronología {TL['_sha256'][:12]}")
     declared.append(f"planta legible: cenital con objetivo de {lens_top} mm, suelos del ZIP, huella de los muros al 3 % y {nlab} rótulos con el nombre visible de cada estancia (se retiran al girar)")
@@ -1016,6 +1049,12 @@ def main():
         else:
             cam.rotation_euler = (look - loc).to_track_quat("-Z", "Y").to_euler()
         cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f)
+    if shot == "pelicula":  # velocidad angular de la mirada (auditoría: giro brusco al entrar); se declara el máximo por tramo
+        dirs = [(lambda L, T: (T - L).normalized())(*pose_f(f)) for f in range(nframes)]
+        vel = [math.degrees(dirs[f].angle(dirs[f + 1])) * fps if dirs[f].length and dirs[f + 1].length else 0 for f in range(nframes - 1)]
+        for x in TL["shots"]:
+            a, b = x["frames"]; seg = vel[a:min(b, nframes - 2) + 1] or [0]
+            declared.append(f"mirada · tramo «{x['id']}» ({x['seconds'][0]}–{x['seconds'][1]} s): giro máximo {max(seg):.1f}°/s")
     if shot == "pelicula":  # al final de la película todo está en su sitio: huella = escena de entrada
         sc.frame_set(nframes - 1); geo2 = huella_geometria(); dif = sorted(k for k in geo0 if geo2.get(k) != geo1.get(k))
         integridad["finalPelicula"] = {"fotograma": nframes - 1, "cambiados": len(dif), "resultado": "posiciones y dimensiones finales = escena de entrada" if not dif else "DIFERENCIAS: " + ", ".join(dif[:8])}
