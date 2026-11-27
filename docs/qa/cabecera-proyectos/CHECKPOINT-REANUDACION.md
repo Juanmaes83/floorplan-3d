@@ -80,7 +80,7 @@ aprobaciones; examen de cinco proyectos al final; trabaja desde las ramas propia
 ## Actualización 27/11 · 00:30 — noche de trabajo continuo (instrucción del propietario)
 | Objetivo | Entrada en RUBIK | Rama · SHA | Evidencia | Pruebas | Revisar al volver |
 |---|---|---|---|---|---|
-| A · §5.3 plan vacío → borrador → revisado sin recargar; imágenes; inventario | Presupuestar → Plan de obra · Analizar → Exterior | `claude/ux-presupuestar-analizar` · `a901452e` | `docs/qa/ux-presupuestar-analizar/corte2/video/` (MP4 escritorio y móvil + hoja de contactos), inventario en `corte2/` | regresión completa EN CURSO (136 superadas, 0 fallos) · `p53-regr2.log` | vídeo y Preview `852e0f44` |
+| A · §5.3 plan vacío → borrador → revisado sin recargar; imágenes; inventario | Presupuestar → Plan de obra · Analizar → Exterior | `claude/ux-presupuestar-analizar` · `a901452e` | `docs/qa/ux-presupuestar-analizar/corte2/video/` (MP4 escritorio y móvil + hoja de contactos), inventario en `corte2/` | regresión completa **153/153, 0 fallos** (`e31a9264`) | vídeo y Preview `852e0f44` |
 | B · §9 cabecera: JSON y P10 con una vuelta | menú de proyecto ▾ · Entregar → P10 | `claude/cabecera-proyectos` · `5acb40dc` | `docs/qa/cabecera-proyectos/video/` (4 MP4; **aún sin revisar fotograma a fotograma**) | `cabecera-proyectos` 2/2 local; **regresión pendiente** | vídeos y Preview del último SHA |
 | Rodaje MP4 | — | `claude/rodaje-cierre-1440` · `6c7a214e` | comando completo fuera de /tmp: `docs/qa/rodaje/mp4-completo/README.md` | — | en pausa: `f0003` primero pendiente |
 Gesture Labs (E): **EN ESPERA por orden del propietario** («espera»). Donantes clonados en solo lectura y fijados:
@@ -92,7 +92,7 @@ deslizamiento con |dx|≥0,18, |dy|≤0,11, velocidad ≥0,55/s y 850 ms entre d
 de pistas al salir. Base propuesta del laboratorio: el comparador `comparar/` de StoryLayers (dos revisiones reales, cortina).
 
 ### REANUDACIÓN (esta noche)
-1. Consulta `p53-regr2.log`; si terminó, publica el resultado en el handoff de §5.3 (Preview `852e0f44`/`a901452e`).
+1. §5.3 cerrado en local: regresión 153/153 registrada en `e31a9264`; espera revisión humana (Preview `852e0f44`).
 2. Revisa los 4 vídeos de §9 (fotogramas) y lanza la regresión de §9 (`claude/cabecera-proyectos`, adaptar las pruebas que pulsaban
    «Subir plano» en la fila 2 para que abran el menú de proyecto); publica resultado y Preview.
 3. C · §8 D3 Dossier (Mi estudio + ficha de cliente + asistencia local, salida sin notas internas) → D · §10 casos FOT-01 →
