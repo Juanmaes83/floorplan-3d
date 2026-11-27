@@ -97,3 +97,14 @@ de pistas al salir. Base propuesta del laboratorio: el comparador `comparar/` de
    «Subir plano» en la fila 2 para que abran el menú de proyecto); publica resultado y Preview.
 3. C · §8 D3 Dossier (Mi estudio + ficha de cliente + asistencia local, salida sin notas internas) → D · §10 casos FOT-01 →
    F · §11 Blueprint (escena y report para 720p). Gesture Labs solo cuando el propietario lo libere.
+
+## Actualización 27/11 · noche (2.ª instrucción del propietario: bucle nocturno)
+| Bloque | Rama · SHA | Estado | Evidencia / siguiente |
+|---|---|---|---|
+| §9 cabecera | `claude/cabecera-proyectos` · `c921c60f` (+ ayudante `mostrar()` en curso) | regresión de 44 archivos EN CURSO (`scratchpad/hdr-regr.log`); fallos sobre todo por controles movidos al menú de proyecto; **regresión propia corregida**: clic fantasma táctil en «Distancia conocida» (`js/tracing-ui.js`) | contrastar los archivos con fallos en la base `cd694e88` (`/home/user/story`) con la máquina libre; adaptar pruebas con `mostrar()`; reproducir 360×800 y 390×844; regrabar P10 con cambio guardado |
+| §8 D3 Dossier | `claude/entregar-asistencia` · `24cc42c8` | implementado y probado (2/2) | `docs/qa/entregar-asistencia/d3/` · falta Preview y repasar el vídeo (empieza en Entregar → D3; impresión) |
+| §10 FOT-01 | `claude/entregar-asistencia` · `13546c5a` | código sin probar | generar pares con `tests/zz-fot01-ejemplos.browser.test.cjs` (FOT_OUT, FOT_FLOOR=mat_wood), prueba y vídeos |
+| §6 Gesture Labs | `claude/gesture-labs` · `5c55b8ea` (base `cd694e88`) | núcleo 7/7; laboratorio `?gesture-lab=1` escrito; prueba `tests/gesture-lab.browser.test.cjs` sin ejecutar | autorización del propietario registrada (donantes públicos y suyos, 27/11) |
+| §11 Blueprint | `claude/rodaje-cierre-1440` · `f4f3ce84` | cronología + conciliación contra el ZIP real; **rótulos corregidos** (mallas ≠ entidades) | render 720p: falta integrar la cronología en `blender-rodaje.py` (otra ventana) |
+| §5.3 | `claude/ux-presupuestar-analizar` · `e31a9264` | regresión 153/153 publicada | revisión humana (Preview `852e0f44`) |
+Reglas de la noche: MP4 1440p y render Blueprint en pausa; una tanda pesada a la vez.
