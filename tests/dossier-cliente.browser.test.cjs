@@ -66,3 +66,33 @@ test('D3 · «Preparar imágenes» desde el aviso: vuelve al dossier, a «Revisa
  assert.equal(await page.locator('#dc-note').inputValue(),'Nota escrita antes de preparar las imágenes.','lo escrito se conserva');
  assert.ok(await page.locator('#dossierDocument .dossier-gallery img').count()>=1,'el dossier ya lleva las vistas reales');
  assert.equal(await page.locator('#dcPrepareViews').count(),0,'el aviso ya no pide las imágenes');assert.deepEqual(errors,[]);await ctx.close();});
+
+// Revisión 27/11 · «Preparar imágenes» que falla o mientras la persona se va a otra área: el borrador se conserva y el
+// dossier respeta su navegación (no se reabre encima de lo que esté haciendo).
+async function d3Review(page,note){
+ await page.goto(env.base);await page.waitForFunction(()=>document.documentElement.dataset.editorReady==='true');if(await page.locator('#welcomeDialog').evaluate(d=>d.open).catch(()=>false))await page.keyboard.press('Escape');
+ await page.locator('#workArea-deliver').click();const b=await accion(page,'#professionalWorkspace [data-route="dossier"]');await b.scrollIntoViewIfNeeded();await b.click();
+ await page.waitForSelector('#dossierDialog[open]');await page.selectOption('#dossierStyle','client');
+ await page.locator('#dossierDialog [data-dc-step="note"]').click();await page.locator('#dc-note').fill(note);
+ await page.locator('#dossierDialog [data-dc-step="review"]').click();return b;}
+test('D3 · si «Preparar imágenes» falla: vuelve a «Revisar», explica el motivo y conserva el borrador',{timeout:180000},async()=>{
+ const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await d3Review(page,'Borrador que no se pierde (fallo).');
+ await page.evaluate(()=>{FloorPlanProjectViews.prepare=async()=>{await new Promise(r=>setTimeout(r,300));throw new Error('La vista 3D no está disponible en este dispositivo.');};});
+ await page.locator('#dcPrepareViews').click();
+ await page.waitForFunction(()=>document.querySelector('#dossierDialog').open&&!!document.querySelector('#dcPrepError'),null,{timeout:20000});
+ assert.equal(await page.locator('#dossierDialog').getAttribute('data-dc-step'),'review');
+ assert.match(await page.locator('#dcPrepError').innerText(),/No se pudieron preparar las imágenes: La vista 3D no está disponible.*Tu borrador está guardado/);
+ assert.equal(await page.locator('#dc-note').inputValue(),'Borrador que no se pierde (fallo).');assert.equal(await page.locator('#dcPrepareViews').isVisible(),true,'se puede reintentar');
+ assert.deepEqual(errors,[]);await ctx.close();});
+test('D3 · si la persona sale mientras se preparan las vistas: no se reabre el dossier encima; aviso y borrador intacto',{timeout:180000},async()=>{
+ const ctx=await env.browser.newContext({viewport:{width:1440,height:900}});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const b=await d3Review(page,'Borrador que no se pierde (salida).');
+ await page.evaluate(()=>{FloorPlanProjectViews.prepare=async()=>{window.__prepRelease=null;await new Promise(r=>{window.__prepRelease=r;});};});
+ await page.locator('#dcPrepareViews').click();await page.waitForFunction(()=>!document.querySelector('#dossierDialog').open&&typeof window.__prepRelease==='function');
+ await page.locator('#workArea-design').click();await page.waitForTimeout(300);
+ await page.evaluate(()=>window.__prepRelease());await page.waitForFunction(()=>/tu dossier sigue en Entregar → D3/.test(document.querySelector('#toast')?.textContent||''),null,{timeout:10000});
+ assert.equal(await page.locator('#dossierDialog').evaluate(d=>d.open),false,'no se reabre encima del editor');
+ await page.locator('#workArea-deliver').click();await (await accion(page,'#professionalWorkspace [data-route="dossier"]')).click();await page.waitForSelector('#dossierDialog[open]');
+ assert.equal(await page.locator('#dc-note').inputValue(),'Borrador que no se pierde (salida).');assert.equal(await page.locator('#dossierDialog').getAttribute('data-dc-step'),'review','vuelve a donde lo dejó');
+ assert.deepEqual(errors,[]);await ctx.close();});
