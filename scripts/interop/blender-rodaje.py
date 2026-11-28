@@ -791,7 +791,7 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
         if not t or re.search(r"[㐀-鿿]", t): continue
         if area(r) / 1e6 < 2.5: continue  # p. ej. miradores: el rótulo no cabe; la estancia sigue visible en la planta
         lines = t.split(" ", 1) if len(t) > 11 and " " in t else [t]; longest = max(len(x) for x in lines)
-        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.34, min(.75, (max(xs_) - min(xs_)) / 1000 / max(4, longest) * 2.0, wmin * .34 / len(lines) * 1.4)); cu.extrude = .002
+        cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.24, min(.75, ((max(xs_) - min(xs_)) / 1000 - .36) / (longest * .62), wmin * .34 / len(lines) * 1.4))  # placa (size·longest·0,62 + 0,16) dentro del ancho de la estancia con 0,1 m por lado: sin invadir muros vecinos; cu.extrude = .002
         ob = bpy.data.objects.new(cu.name, cu); ob.data.materials.append(mat); derived.objects.link(ob); cc = R.centroid(r["polygon"])
         L = R.to_blender(cc["x"], cc["y"], origin, .03); key(ob, 0, L, V((1, 1, 1))); key(ob, f_out, L, V((1, 1, 1))); key(ob, f_out + int(.6 * fps), L, V((.0005, .0005, .0005))); nlab += 1
         # placa clara bajo el rótulo (contraste sobre cualquier suelo); se retira con él
