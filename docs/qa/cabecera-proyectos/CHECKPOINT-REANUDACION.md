@@ -2,6 +2,21 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT · 28/11/2026, 11:10 (bucle autónomo, cinco frentes)
+
+1. **avc1**: Chromium 153 sobre `ad928d43` → P10 §8.3 rc 0, sin aviso, MP4 del cliente completo (9,95 s, 138 fotogramas, sha = manifiesto).
+   `reanudacion/avc1-ci/chromium153-ad928d43/` (9635c77a). Cambio mínimo de CI propuesto SIN aplicar: consolidation-regression.yml
+   L47/L87 playwright 1.62.1 → 1.63.0 (42 fijaciones en 31 workflows). Espera autorización de Juanma. #324 en borrador.
+2. **Pieza a pieza pulido**: efectos `pasos/12-pieza-a-pieza-pulido` (código b33d56fb, evidencia 1ª línea de este push). Rótulo sin encogerse,
+   contorno naranja. Defecto nuevo: relevo de rótulos superpuesto ~6 fotogramas → siguiente corrección.
+3. **Muestra para el profesional**: código 228eb656 (núcleo `sample`, kit `--muestra`, `rodar muestra`, aviso en la confirmación).
+   Pendiente: demostración con caso real (ZIP descargado de RUBIK → `sh rodar.sh muestra` con BLENDER→bpy) y prueba UI.
+4. **Desde el paisaje**: Catastro sigue limitado (11:0x, RCCOOR 403 límite por hora); GML INSPIRE (www.catastro.hacienda.gob.es)
+   acepta conexión pero no responde en 30 s. Bloqueado: necesita que Catastro responda o la parcela que indique Juanma.
+   En desarrollo, sin validar: rótulo «vivienda ficticia sobre entorno real» + atribución en el vídeo (cambio local en blender-rodaje.py, sin commit).
+5. **Inventario de ramas**: `inventario-ramas/` parcial; el script sigue corriendo en segundo plano.
+Si hay reinicio: nada que reanude solo; relanzar `inventario.sh` y la validación del rótulo de paisaje.
+
 ## ▶ CHECKPOINT · 28/11/2026, mañana (tanda dirigida de Juanma: avc1, rótulos, Pieza a pieza por grupos)
 
 1. **avc1 / P10 §8.3 (#324 `ad928d43`)** → `reanudacion/avc1-ci/` (commit 594a6c1b). Chromium de CI (151, playwright 1.62.1) instalado

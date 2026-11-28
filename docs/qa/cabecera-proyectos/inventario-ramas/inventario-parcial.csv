@@ -1,0 +1,175 @@
+rama,fecha,commits_propios,ficheros,identicos_en_master,ausentes_en_master,distintos,ultimo_asunto
+docs/competitive-opportunity-matrix,2026-09-30,63,93,49,1,43,docs: incorporate externally supplied official competitor evidence
+docs/ecosystem-integration-audit,2026-09-30,62,93,49,0,44,docs: identify Astra lab and verify its Blender MCP source
+docs/f2-entry-evaluation,2026-09-30,21,44,19,0,25,fix: reconcile F2 entry coverage requirements
+docs/immersphere-product-roadmap,2026-09-30,6,4,0,0,4,docs: add product and Immersphere integration roadmap
+feat/f2-evaluation-harness,2026-09-30,40,63,26,0,37,Reconcile F2 review and preview record
+feat/f2-local-raw-export,2026-09-30,48,73,35,0,38,Record raw export QA and external review blockers
+feat/f2-local-wall-assist,2026-09-30,26,59,23,0,36,docs: record F2 review publication blockers and test evidence
+feat/f3-authorized-assets,2026-09-30,53,92,49,0,43,Record F3 review blockers and normalize audit inventory
+feat/rubik-sota-spanish-brand,2026-09-30,8,3,0,0,3,fix: translate interpolated and contextual UI copy
+docs/f0-product-contract-audit,2026-10-01,80,174,120,0,54,docs: merge current master and reconcile historical F0 decisions
+docs/record-ecosystem-audit-merge,2026-10-01,62,93,49,0,44,docs: record ecosystem audit merge
+docs/roadmap-2-evolution,2026-10-01,79,171,119,0,52,docs: normalize inherited Roadmap 2 Markdown whitespace
+docs/room-dimension-editing-discovery,2026-10-01,63,94,49,0,45,docs: specify room dimension editing discovery
+feat/f3-asset-lab-pipeline,2026-10-01,87,349,274,0,75,feat: normalize Asset Lab GLBs for Rubik catalog
+feat/f3-textured-external-catalog,2026-10-01,72,142,93,0,49,docs: normalize regression transcript whitespace
+feat/home-room-dimensions,2026-10-01,74,170,118,0,52,docs: normalize preview diagnostic transcript
+feat/legal-authorship-terms,2026-10-01,91,349,274,0,75,fix: restore visible legal dialog close button
+feat/surface-material-library,2026-10-01,85,327,253,0,74,docs: record published branch and review infrastructure blockers
+codex/legal-roadmap-qa-20261002,2026-10-02,90,350,276,0,74,docs: record Chromium regression and exact preview evidence
+codex/rubik-blender-candidate,2026-10-02,90,392,315,0,77,feat: add deterministic Rubik Blender candidate and bounded asset profiles
+docs/clarify-roadmap-deployment-sha,2026-10-02,92,392,316,0,76,docs: clarify which roadmap SHA had production READY
+docs/closeout-pr24-roadmaps,2026-10-02,93,392,316,0,76,docs: close human review status for PR #24
+claude/intelligent-pasteur-vci64k,2026-10-06,99,668,585,0,83,docs: record Phase B integration (PR #29) and Phase C authorization
+claude/phase-b-3d-capture,2026-10-06,97,668,585,0,83,feat: Phase B configurable 3D capture size and aspect (proposal; not canonical)
+claude/phase-c-safe-variants,2026-10-06,99,682,595,0,87,docs: Phase C test battery results versus master
+codex/local-readonly-mcp-json,2026-10-07,98,675,585,0,90,feat: add read-only local MCP for exported Rubik JSON
+docs/local-mcp-roadmap-pascal,2026-10-07,104,690,595,0,95,docs: corrige salto de línea del encabezado histórico
+claude/subir-plano-multiformato,2026-10-12,106,744,645,0,99,docs: add QA screenshots for DXF; IFC; vector PDF; RoomPlan and image detection
+feat/visible-floorplan-upload,2026-10-12,102,689,595,0,94,feat: connect upload CTA to image import flow
+baseline/control-2026-10-13-88b0cb5,2026-10-13,103,725,623,0,102,Merge pull request #35 from Juanmaes83/docs/guided-experience-merge-closure
+docs/guided-experience-merge-closure,2026-10-13,103,725,623,0,102,docs: close guided experience integration and reconcile release status
+docs/reconcile-pr28-pr32-20261013,2026-10-13,104,727,629,0,98,docs: reconcile PR 28 and 32 without changing product
+feat/multiformat-guided-import,2026-10-13,115,828,725,0,103,fix: verify PR 38 multiformat and mobile workflows locally
+feat/unified-guided-experience,2026-10-13,102,724,618,0,106,fix: restore welcome and guide back navigation without losing projects
+docs/casa-serra-floorplan-integration,2026-10-14,106,731,628,0,103,docs: preparar desarrollo continuo y reanudación de mejoras en terminal
+docs/close-d01-professional-housing-20261017,2026-10-17,214,1302,1188,0,114,docs: reprioritize D-01 audiences (docs/ROADMAP-2-proposal.md)
+docs/loralab-deep-review,2026-10-17,109,731,632,0,99,docs: LoRA LAB / Summerz deep review matrix of roadmap candidates
+docs/loralab-roadmap-review,2026-10-17,108,730,631,0,99,docs: keep LoRA LAB candidates within roadmap gates
+docs/multilevel-contract-gate0,2026-10-17,218,1303,1189,0,114,docs: record Juanma's approval of option D for the first multi-level cut
+docs/post-merge-roadmap-20261017,2026-10-17,208,1302,1187,0,115,docs: reconcile post-merge roadmap state (docs/technical/loralab-video-gap-audit-2026-10-1
+docs/summerz-cad-blender-reference,2026-10-17,105,728,630,0,98,docs: register Summerz CAD and Blender reference for roadmap evaluation
+feat/casa-serra-larga-improvements,2026-10-17,194,1255,1140,0,115,docs(qa): record Juanma's representative GPU regression for R10
+docs/mcp-stage1-closeout-20261018,2026-10-18,254,1466,1312,0,130,docs: record MCP stage 1 cut integration and remaining route gate
+docs/stair-merge-roadmap-20261018,2026-10-18,246,1453,1302,0,127,docs: reconcile stair fixes and next roadmap gate
+feat/multilevel-first-cut,2026-10-18,228,1357,1219,0,132,docs(qa): track unapproved stair opening overlap for follow-up
+feat/rubik-mcp-clearance-connectivity,2026-10-18,235,1369,1228,0,135,Merge reconciled MCP diagnostics into clearance and connectivity (#43)
+feat/rubik-mcp-diagnostics-measures,2026-10-18,234,1366,1225,0,135,Merge reconciled MCP spatial relations into diagnostics and measures (#41)
+feat/rubik-mcp-spatial-relations,2026-10-18,232,1362,1222,0,134,Merge current master into MCP spatial relations (#40)
+feat/stair-conflict-bw5,2026-10-18,240,1438,1287,0,127,docs(roadmap): BW5 closing scope and the stacked assisted-relocation PR
+feat/stair-relocation-assist,2026-10-18,245,1453,1302,0,127,test(building): relocation captures at the final SHA; no page scroll with the panel open
+fix/stair-void-overlap,2026-10-18,232,1382,1252,0,124,fix(building): room labels prefer furniture-free places in tiers; final 3-viewport evidenc
+docs/closeout-editor-ux-20261019,2026-10-19,267,1575,1416,0,135,docs: cerrar roadmap de interfaz contextual #60 y #62
+docs/closeout-ux-roadmap-20261019,2026-10-19,272,1581,1423,0,134,docs: record #57 merged and the approved two-level presentation candidate (#65)
+docs/handoff-floorplan-20261019,2026-10-19,256,1467,1312,1,130,docs: actualizar handoff tras integrar #60 y #62
+docs/loralab-ux-mcp-gates,2026-10-19,259,1468,1312,2,130,docs: place UX evidence link away from LoRA study insertion
+docs/opening-contextual-ux-gate,2026-10-19,262,1469,1312,3,130,docs: reconcile stacked UX decision with updated study evidence
+feat/contextual-openings,2026-10-19,261,1513,1354,0,135,docs(roadmap): record the second round of the openings cut
+feat/editor-ux-pattern,2026-10-19,266,1575,1416,0,135,qa(ux): before/after captures; flow metrics and results by SHA
+feat/rubik-mcp-route-2d,2026-10-19,269,1581,1424,0,133,Merge current master into MCP route audit branch
+docs/loralab-study-gate,2026-10-20,286,1621,1424,19,133,docs(loralab): own folder for the reference captures and the 47 s video (V3)
+feat/building-presentation-two-levels,2026-10-20,273,1617,1464,0,129,qa(presentation): compare the 3D presentation suites with master test by test
+feat/premium-ux-system,2026-10-20,288,1669,1508,0,137,docs(qa): record A12 and A13 regression rounds
+feat/ux-build-palette,2026-10-20,276,1624,1467,0,133,fix(ux): palette End key and shared opening between two rooms
+feat/premium-3d-setting,2026-10-21,293,1688,1526,0,138,docs(qa): cut B regression against #66 base
+feat/premium-brand,2026-10-21,302,1749,1587,0,138,fix(brand): persist delivery text before presentation starts
+feat/professional-entry-enviz,2026-10-21,304,1751,1587,0,140,fix(welcome): keep initial actions before optional profile
+docs/exterior-location-video-20261022,2026-10-22,303,1750,1587,1,138,docs(product): record exterior; 3D furniture; immersion; location and video candidates
+docs/points-of-interest-study,2026-10-22,304,1750,1588,0,138,docs(product): points of interest — Matterport official sources (what to take; what not)
+docs/tour-video-study,2026-10-22,303,1750,1588,0,138,docs(product): tour video — five concepts; MediaRecorder codecs measured; limits and fir
+feat/plan-provenance,2026-10-22,305,1752,1590,0,138,style: own CSS line in index.html (no shared line with the other professional PRs)
+feat/scaled-sheet,2026-10-22,305,1759,1592,0,139,fix(sheet): the scale describes the model; estimated calibration is stated; uncalibrated p
+docs/delivery-programme-20261022,2026-10-23,315,1761,1598,0,139,docs(programme): record Juanma's choice of the side-column landscape composition (D) for #
+feat/professional-entry,2026-10-23,338,1843,1675,0,144,Merge feat/journey-orientation: guided header wraps in 3D and with two levels
+feat/solutions,2026-10-23,342,1843,1675,0,144,Merge feat/professional-entry: guided header wraps in 3D and with two levels
+fix/duplex-overview-framing,2026-10-23,303,1750,1587,0,139,fix(presentation): the overview fits the whole level box in the region the card leaves fre
+fix/master-regressions,2026-10-23,310,1792,1630,0,138,docs(qa): commit the step and sheet logs as .txt (*.log is gitignored; so the cited files 
+fix/presentation-card-hierarchy,2026-10-23,303,1749,1587,0,138,fix(presentation): client navigation first; professional tools in one group
+integration/2026-10-22,2026-10-23,363,1921,1709,32,150,docs(qa): presentation per case on 9726eb5 — 54 PASS / 1 FAIL / 3 TIMEOUT; runner and re
+integration/2026-10-23-delivery,2026-10-23,341,1894,1692,34,144,docs(qa): temporary integration of #79/#80/#78/#81/#82/#83 — per-SHA results; #78 depend
+docs/recorrer-visibilidad-cortes-video,2026-10-24,303,1750,1588,0,138,docs(product): Recorrer visibility and video cuts plan; reconcile #83
+docs/recorrido-entrega-video-20261024,2026-10-24,303,1750,1587,1,138,docs(product): definir recorrido; revisión profesional y entrega en vídeo
+feat/client-review,2026-10-24,310,1753,1587,0,142,test(review): closing «Añadir observación» with Escape returns the focus to its button
+feat/delivery-image,2026-10-24,322,1804,1638,0,142,Merge feat/share-image (focus return) into feat/delivery-image
+feat/journey-orientation,2026-10-24,330,1835,1670,0,141,qa(journey): N stops at the first task when «← Paso anterior» is disabled and says why
+feat/share-image,2026-10-24,311,1751,1588,0,139,fix(presentation): closing «Compartir imagen» returns the focus to its button
+fix/editor-panels-desktop,2026-10-24,307,1749,1587,0,138,fix(palette): on a phone; the «tap a room first» hint goes away once followed
+fix/furniture-overlaps,2026-10-24,306,1751,1592,0,135,test(furniture): a tap with no room chosen uses the nearest room with space
+fix/guide-stage-follows-card,2026-10-24,351,1843,1677,0,142,fix(guide): one button per action in «Tareas y ayuda»; its heading stays in view
+fix/walk-start,2026-10-24,311,1751,1587,0,140,fix(walk): entry card keeps controls and button when the scene is short; test nothing is c
+ci/integration-browser-20261025,2026-10-25,439,1983,1800,0,155,ci: run browser gate on its validation branch
+feat/tour-video-v1,2026-10-25,305,1751,1587,0,140,fix(video): V1 video opens on its first stop; every stop is painted before its hold; the v
+fix/presentation-focus,2026-10-25,305,1750,1587,0,139,fix(presentation): do not move the focus while a batch has every control disabled
+fix/room-label-clear,2026-10-25,304,1750,1588,0,138,fix(plan): dim a room label lying under the selected piece's handle or size tag
+ci/compare-93-camera-20261026,2026-10-26,308,1753,1587,1,141,ci: trigger #93 camera comparison
+ci/integration-browser-gate-20261026,2026-10-26,441,1983,1800,0,155,ci: open exact integration browser gate
+docs/approved-next-capabilities-20261025,2026-10-26,305,1981,1800,0,157,Merge master into approved future capabilities docs
+feat/block-1-build-measure-context,2026-10-26,306,1983,1802,0,157,feat(build): find Seleccionar; Medir and Dibujar muro from «¿Qué quieres hacer?»
+feat/point-2-wall-declared-type,2026-10-26,310,1985,1803,0,158,test(mobile): guard wall-properties header spacing at 390
+feat/point-3-surface-hierarchy,2026-10-26,313,1988,1806,0,157,chore: remove accidental empty file
+integration/2026-10-23-full,2026-10-26,444,1984,1800,0,156,fix(video): restore exact presentation camera after recording
+docs/close-point-7a-20261027,2026-10-27,314,2043,1866,0,153,docs(product): finalize Point 7A closure record
+docs/close-point-7b-20261027,2026-10-27,316,2048,1867,0,157,docs(product): close Point 7B after PR #110
+docs/close-point-7c-a-20261027,2026-10-27,318,2053,1872,0,157,docs(product): finalize Point 7C-A closure evidence
+docs/close-point-7c-b-20261027,2026-10-27,320,2056,1875,0,157,docs(product): close Point 7C-B after PR #114
+docs/current-status-points-1-6-20261027,2026-10-27,313,2040,1863,0,153,docs(product): mark 2026-10-22 delivery programme as historical
+docs/point-6-geo-provider-20261027,2026-10-27,311,1993,1810,2,157,docs(product): define territorial provider and exterior reuse
+docs/point-8b-roof-volume-guardrails,2026-10-27,323,2065,1888,0,153,docs(product): link Point 8B scope guardrails from roadmap
+feat/point-4-room-family-name,2026-10-27,310,1987,1809,0,154,Localize legacy room name in properties and clarify unspecified type
+feat/point-5-professional-surface-sheet,2026-10-27,314,1991,1810,0,157,test(privacy): allow local surface sheet stylesheet only
+feat/point-6-orientation-location-solar,2026-10-27,314,2039,1862,0,153,test(guide): block vendored Three runtime when WebGL is disabled
+feat/point-7a-quantity-engine,2026-10-27,316,2043,1865,0,154,docs(point-7a): keep specification diff-check clean
+feat/point-7b-budget-core,2026-10-27,319,2048,1866,0,158,docs(product): mark Point 7B as candidate
+feat/point-7c-a-cost-provider-core,2026-10-27,322,2053,1871,0,158,test(solar): bound the continuous UI journey by contract phase
+feat/point-7c-b-manual-cost-provider,2026-10-27,320,2056,1874,0,158,docs(product): mark Point 7C-B as candidate
+feat/point-7c-c-budget-provider-provenance,2026-10-27,322,2059,1882,0,153,docs(product): mark Point 7C-C as candidate
+feat/point-7c-d-fiebdc3-bc3-codec,2026-10-27,327,2064,1887,0,153,docs(7c-d): specify concept identity and separator whitespace
+feat/point-7c-e-bcca-es-provider,2026-10-27,328,2071,1895,0,152,test(7c-e): cover impossible legal review dates
+docs/close-point-7d-after-120,2026-10-28,326,2075,1899,0,152,docs(product): advance roadmap to Point 8
+docs/close-point-8b,2026-10-28,330,2092,1918,0,150,docs(product): close Point 8B and advance 8C [skip ci]
+docs/point-8b-guardrails-current,2026-10-28,327,2076,1900,0,152,docs(product): make Point 8B guardrails canonical
+feat/point-7d-budget-presentation-export,2026-10-28,327,2075,1898,0,153,docs(product): point old canonical status to 28-10
+feat/point-7d-budget-presentation-export-2,2026-10-28,322,2071,1895,0,152,feat(costs): Punto 7C-E — BCCA_ES provider and legal gate (#118)
+feat/point-8a-exterior-v1,2026-10-28,324,2068,1890,0,154,fix(exterior): exclude vetoed interior openings
+feat/point-8b-a-flat-roof-envelope,2026-10-28,327,2085,1905,0,156,Add conservative flat roof envelope for point 8B-A
+feat/point-8b-b-parapets-simple-volumes,2026-10-28,329,2091,1911,0,156,fix(schema): gate roofParapet to ProjectV1 1.8.0
+feat/point-8c-a-geo-provider-contracts,2026-10-28,331,2097,1921,0,152,feat(geo): add 8C-A territorial provider contract and site adapter
+feat/point-8c-b-parcel-source-geometry,2026-10-28,334,2110,1931,0,155,fix(ui): lazy-load territory stylesheet
+feat/point-8c-c-orthophoto-context,2026-10-28,333,2120,1940,0,156,feat: add parcel-aligned PNOA orthophoto context
+feat/point-8c-d-terrain-elevation,2026-10-28,335,2133,1952,0,157,test(browser): allow numeric names for local JS privacy gate
+feat/point-8c-e-territorial-integration,2026-10-28,338,2153,1976,0,153,fix(geo): desacopla capas de ortofoto y terreno
+fix/point-8b-geometry-audit,2026-10-28,330,2091,1913,0,154,fix(exterior): validate indoor room edges against roof footprint
+checkpoint/pre-integration-2026-10-30,2026-10-29,345,2156,1981,0,151,docs(product): añadir benchmark competitivo y roadmap estratégico [skip ci]
+backup/ft3d-2a-pre-integration,2026-10-30,350,2165,1986,0,155,feat(presentation): FT3D-2a motor de historias; un reproductor para todas las narrativas
+checkpoint/post-c3-pre-ft3d-2026-10-30,2026-10-30,362,2214,2026,0,164,integration: Fase C C3 sobre master consolidado
+docs/current-status-2026-10-30,2026-10-30,366,2216,2026,0,166,docs(product): registrar gate FT3D-1a reconciliado
+docs/flat-to-3d-knowledge-integration,2026-10-30,346,2157,1982,0,151,docs(product): documentar programa Flat-to-3D por fases
+feat/ai-alternatives-b8,2026-10-30,369,2202,2018,0,160,Merge feat/moodboard-b7 (margen de tiempo revisión 2 Punto 9)
+feat/ai-render-b2,2026-10-30,363,2185,2007,0,154,Merge feat/client-share-b1 (margen de tiempo revisión 2 Punto 9)
+feat/anchored-comments-b6,2026-10-30,367,2198,2015,0,159,Merge feat/plan-service-b5 (margen de tiempo revisión 2 Punto 9)
+feat/bc3-c3,2026-10-30,373,2229,2025,0,164,feat(budget): precios de referencia desde un BC3 propio y exportación BC3 (Fase C · C3)
+feat/budget-c2,2026-10-30,372,2226,2022,0,164,chore: quitar capturas de test añadidas por error
+feat/client-share-b1,2026-10-30,361,2181,2006,0,151,Merge feat/project-first-dossier-a4 (margen de tiempo revisión 2 Punto 9)
+feat/ft3d-1a-plan-reveal,2026-10-30,348,2162,1983,0,155,fix(presentation): FT3D-1a continúa desde la vista 2D; sin doble transición
+feat/ft3d-1b-room-descent,2026-10-30,349,2164,1984,0,156,feat(presentation): FT3D-1b «Entrar en la estancia»; descenso continuo y reversible
+feat/moodboard-b7,2026-10-30,368,2202,2018,0,160,Merge feat/anchored-comments-b6 (margen de tiempo revisión 2 Punto 9)
+feat/plan-service-b5,2026-10-30,366,2195,2011,0,160,Merge feat/share-link-b4 (margen de tiempo revisión 2 Punto 9)
+feat/point-9-ux-professional-discoverability,2026-10-30,351,2161,1998,0,139,test(ux): margen de tiempo para la revisión 2 del Punto 9 en CI
+feat/project-first-analyze-a3,2026-10-30,357,2176,2006,0,146,Merge feat/project-first-views-a2 (margen de tiempo revisión 2 Punto 9)
+feat/project-first-dossier-a4,2026-10-30,359,2179,2006,0,149,Merge feat/project-first-analyze-a3 (margen de tiempo revisión 2 Punto 9)
+feat/project-first-experience-a1,2026-10-30,353,2169,2000,0,145,Merge origin/feat/point-9-ux-professional-discoverability (margen de tiempo revisión 2 Pu
+feat/project-first-views-a2,2026-10-30,355,2171,2002,0,145,Merge feat/project-first-experience-a1 (margen de tiempo revisión 2 Punto 9)
+feat/quantities-c1,2026-10-30,370,2206,2021,0,161,feat(budget): cantidades del proyecto con estado y CSV (Fase C · C1)
+feat/share-link-b4,2026-10-30,365,2192,2008,0,160,Merge feat/tour-video-b3 (margen de tiempo revisión 2 Punto 9)
+feat/tour-video-b3,2026-10-30,364,2187,2008,0,155,Merge feat/ai-render-b2 (margen de tiempo revisión 2 Punto 9)
+integration/ft3d-1b-on-consolidated-master,2026-10-30,368,2223,2028,0,171,feat(presentation): FT3D-1b «Entrar en la estancia»; descenso continuo y reversible
+integration/point9-on-consolidated-master,2026-10-30,347,2163,1999,0,140,integration: Punto 9 sobre master consolidado con documentación FT3D
+checkpoint/post-c4-pre-b-validations-2026-10-31,2026-10-31,382,2230,2033,0,173,docs(product): marcar Fase C 4/4 tras C4
+checkpoint/post-ft3d-1-pre-ft3d-2-2026-10-31,2026-10-31,370,2223,2028,0,171,docs(product): actualizar matriz tras FT3D-1b
+checkpoint/post-ft3d-2-pre-c4-2026-10-31,2026-10-31,375,2224,2030,0,170,feat(presentation): FT3D-2a motor de historias; un reproductor para todas las narrativas
+docs/current-status-post-ft3d-1a,2026-10-31,367,2221,2027,0,170,docs(product): actualizar matriz tras FT3D-1a
+docs/ft3d-6-profile-templates-contract,2026-10-31,394,2236,2037,1,174,docs(product): corregir mínimos y familias del draft FT3D-6
+feat/c4-economic-dossier,2026-10-31,380,2230,2033,0,173,fix(c4): reflejar estado real del presupuesto en Entregar
+feat/ft3d-3-dynamic-section,2026-10-31,389,2234,2036,0,174,FT3D-3: el botón «Ver sección dinámica» sólo existe con la sección activada (OFF = 
+feat/ft3d-4-elevation-facade,2026-10-31,396,2238,2037,0,177,FT3D-4: las marcas de fachada del minimapa no sobreviven a su escena; ajustes del test de 
+integration/ft3d-1a-on-consolidated-master,2026-10-31,365,2219,2027,0,168,test(ci): adaptar smoke de recorder al botón de vídeo B3
+integration/ft3d-2a-on-consolidated-master,2026-10-31,375,2224,2030,0,170,feat(presentation): FT3D-2a motor de historias; un reproductor para todas las narrativas
+docs/ft3d-5-axon-exploded-contract,2026-11-01,402,2240,2041,0,175,docs(product): cerrar auditoría 55 puntos FT3D-5
+docs/ft3d-6-canonical-contract-2026-11-01,2026-11-01,413,2252,2052,0,176,docs(product): promote FT3D-6 contract to canonical V1
+docs/ft3d-6-reconciliation-2026-11-01,2026-11-01,419,2254,2052,0,176,chore: remove temporary promotion probe
+docs/ft3d-6-working-contract-after-ft3d4,2026-11-01,403,2240,2039,1,176,docs(product): precisar gate ejecutivo FT3D-6
+docs/ft3d-donor-code-gap-analysis-2026-11-01,2026-11-01,401,2241,2040,2,175,docs(product): analyse FT3D donor continuity foundation
+docs/ft3d-donor-code-gap-analysis-cut2-2026-11-01,2026-11-01,403,2241,2040,2,175,docs(product): align Cut 2 handoff sequence
+docs/ft3d-donor-global-reconciliation-2026-11-01,2026-11-01,412,2251,2051,0,176,docs(product): reconcile FT3D donor analysis cuts 1-5
+docs/ft3d-reference-atlas-2026-11-01,2026-11-01,400,2240,2040,1,175,docs(product): build canonical FT3D reference atlas
