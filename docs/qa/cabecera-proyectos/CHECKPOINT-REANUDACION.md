@@ -24,7 +24,7 @@ Leer esto primero; sustituye al de las 00:30 para el estado de las validaciones.
 
 **En curso:** buscar sitio llano. `scratchpad/sondas/llano.cjs` (MDT05 directo, excluye agua aplanada). Candidatos 25 m con desnivel
 ≈0,05 m: La Janda N 250053/4013538, La Janda S 252653/4008758, Campiña Jerez 228223/4062248, Conil 222553/4021778 (EPSG:25830).
-Siguiente: ortofoto de cada candidato (campo + camino, sin edificar) → parcela en Catastro por coordenadas (a las 01:51 Catastro **seguía** devolviendo «límite de peticiones por hora»; reintento ≈03:00; si no, `WFS_REPLAY` no vale: es otra parcela) → montaje con la sonda → previa suelo/terreno/camino/puerta → revisión de Juanma.
+Siguiente: ortofoto de cada candidato (campo + camino, sin edificar) → parcela en Catastro por coordenadas (a las 01:51 Catastro **seguía** devolviendo «límite de peticiones por hora»; reintento único a las 03:05: **sigue limitado** (la IP de salida cambia y es compartida: el límite no depende solo de esta sesión). No se insiste; queda bloqueado por Catastro: reintentar en otra sesión o con la parcela que indique Juanma; si no, `WFS_REPLAY` no vale: es otra parcela) → montaje con la sonda → previa suelo/terreno/camino/puerta → revisión de Juanma.
 **Después:** renders largos uno cada vez (piloto v1.1 → Maqueta abierta → Pieza a pieza → Desde el paisaje aprobado); examen de los
 cinco proyectos el último. Si hay reinicio: no hay cadena activa; relanzar `fase1-v2.sh` solo salta pasos con rc=0.
 
