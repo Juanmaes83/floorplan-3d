@@ -963,6 +963,36 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     declared.append("Pieza a pieza: piezas reales del ZIP caen (huecos 0,9 m, muebles 1,2 m) y encajan sobre su huella; órbita alta continua; sin entrada al interior (techo y luminarias fuera)") if PIEZA else declared.append(f"estancia final «{labels.get(room['id'], room['id'])}» (reconocible en la planta): descenso dentro de ella y giro lento a 1,4 m")
     return lambda f: (at(f, 1), at(f, 2))
 
+def rotulos_paisaje(sc, cam, nframes, at, attributions, declared):
+    """«Desde el paisaje»: rótulo fijo en pantalla durante todo el vídeo que identifica la vivienda como FICTICIA sobre entorno real
+    y lleva la atribución obligatoria del terreno y la ortofoto (licencia CC BY 4.0 del Sistema Cartográfico Nacional)."""
+    from mathutils import Vector as V
+    def mat(name, col, strength, alpha):
+        m = bpy.data.materials.new(name); m.use_nodes = True; b = m.node_tree.nodes.get("Principled BSDF")
+        b.inputs["Base Color"].default_value = col; b.inputs["Emission Color"].default_value = col; b.inputs["Emission Strength"].default_value = strength
+        b.inputs["Alpha"].default_value = alpha
+        for k in ("Specular IOR Level", "Specular"):
+            if k in b.inputs: b.inputs[k].default_value = 0.0
+        return m
+    def no_rays(o):
+        for a in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"): setattr(o, a, False)
+    col = bpy.data.collections.new("RUBIK_rotulos_paisaje"); sc.collection.children.link(col)
+    hold = bpy.data.objects.new("RUBIK_rotulo_paisaje", None); col.objects.link(hold); hold.parent = cam; hold.location = (0, 0, -1)
+    for f in range(0, nframes + 6, 6):
+        w = 36.0 / at(min(f, nframes - 1), 3); hold.scale = (w, w, w); hold.keyframe_insert("scale", frame=f)
+    txt = mat("RUBIK_rotulo_paisaje_texto", (1, 1, 1, 1), 2.0, 1.0); fondo = mat("RUBIK_rotulo_paisaje_fondo", (.06, .06, .07, 1), .3, .7)
+    lineas = [("Proyecto de demostración sobre entorno real · vivienda ficticia de RUBIK", .022, -.215),
+              (("Terreno y ortofoto: " + " · ".join(attributions)) if attributions else "", .0135, -.245)]
+    for body, size, y in lineas:
+        if not body: continue
+        cu = bpy.data.curves.new("RUBIK_paisaje_txt", "FONT"); cu.body = body; cu.align_x = "LEFT"; cu.align_y = "CENTER"; cu.size = size
+        t = bpy.data.objects.new("RUBIK_paisaje_txt", cu); col.objects.link(t); t.parent = hold; t.location = (-.47, y, 0); cu.materials.append(txt); no_rays(t)
+        wpl = size * len(body) * .47 + .02
+        bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object
+        for c in list(pl.users_collection): c.objects.unlink(pl)
+        col.objects.link(pl); pl.parent = hold; pl.data.materials.append(fondo); no_rays(pl); pl.location = (-.47 - .01 + wpl / 2, y, -.001); pl.scale = (wpl, size * 1.7, 1)
+    declared.append("rótulo fijo en pantalla: «Proyecto de demostración sobre entorno real · vivienda ficticia de RUBIK» y la atribución del terreno y la ortofoto")
+
 def paisaje(sc, cd, derived, origin, h, TL, declared, nframes):
     """«Desde el paisaje»: la vivienda en su terreno real (MDT05 + ortofoto PNOA del ZIP), acercamiento a escala comprensible,
     el acceso y el paso por la PUERTA REAL del modelo (rubik-estancias.json › entrance) hasta el interior. Sin crecimientos:
@@ -1015,6 +1045,7 @@ def paisaje(sc, cd, derived, origin, h, TL, declared, nframes):
         return K[-1][idx]
     for f in range(0, nframes, 6): cd.lens = at(f, 3); cd.keyframe_insert("lens", frame=f)
     cd.clip_start = .05; cd.clip_end = diag * 60
+    rotulos_paisaje(sc, sc.camera, nframes, at, info.get("attributions", []), declared)
     bajo = [f for f in range(nframes) if (lambda p: (p - door).length > 1.5 and p.z < ground(p) + 0.4)(at(f, 1))]
     sc.render.use_persistent_data = True
     declared.append(f"Desde el paisaje: terreno MDT05 y ortofoto PNOA del ZIP ({info['vertices']} vértices, cotas {info['zMin']:.1f}–{info['zMax']:.1f} m sobre la cota cero del modelo); atribución: {' · '.join(info['attributions'])}")
