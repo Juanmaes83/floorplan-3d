@@ -2,6 +2,31 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT DE TRASPASO · 28/11/2026, 11:20 (leer primero)
+
+Repos/ramas y SHA:
+- #324 `claude/integracion-cabecera-entregar` **ad928d43** (borrador; sin cambios). CI `contract` falla por aviso avc1 de Chromium 151.
+- Efectos `claude/pelicula-efectos` **8bf9baa3** (HEAD). Kit/código: Pieza a pieza pulido b33d56fb; muestra 228eb656;
+  rótulo de paisaje 8bf9baa3 **PENDIENTE DE VALIDACIÓN** (sin render de prueba).
+- Checkpoint `claude/cabecera-proyectos` (este archivo).
+
+Estado por frente:
+1. **avc1 / #324**: diagnosticado y contrastado (`reanudacion/avc1-ci/`, Chromium 153 rc 0, MP4 del cliente completo). Cambio mínimo de CI
+   propuesto (consolidation-regression.yml L47/L87 playwright 1.62.1 → 1.63.0) **sin aplicar: espera autorización de Juanma**.
+2. **Pieza a pieza**: comparativa antes/después publicada (`efectos/docs/qa/pelicula-efectos/pasos/12-pieza-a-pieza-pulido/`).
+   **Por corregir**: solapamiento de rótulos en el relevo «Llegan …» → «… encajados» (~6 fotogramas): relevo secuencial.
+3. **Muestra para el profesional**: implementada (guion `sample`, kit `--muestra`, `rodar muestra`, aviso en la confirmación).
+   **Por validar**: con un ZIP real descargado de RUBIK (Pieza a pieza o Maqueta abierta) → `BLENDER=<envoltorio bpy> sh rodar.sh muestra`
+   → `resultados/muestra/muestra.mp4` + informe; y la prueba UI `tests/pelicula-efectos.browser.test.cjs` (comprueba #peliculaMuestra 312-587).
+4. **Desde el paisaje**: bloqueado por Catastro (RCCOOR «límite por hora» todo el día; GML INSPIRE sin respuesta en 30 s). Candidato llano
+   Conil EPSG:25830 222553/4021778. Validar el rótulo de 8bf9baa3 con un fotograma sobre `scratchpad/demo-paisaje/zipx` (escena de la demo rechazada).
+5. **Inventario de ramas**: 182/337 en `inventario-ramas/` (última `feat/hybrid-registered-elevation-v1`); cómo retomar en su README.
+
+**Cola** (no lanzar hasta cerrar 2–4 y la revisión de Juanma): renders largos uno cada vez → piloto v1.1 → Maqueta abierta → Pieza a pieza →
+Desde el paisaje (tras aprobar la previa). Cada MP4 > 20 s con revisión propia. **Examen de los cinco proyectos: última acción, tras la
+fusión autorizada de #324.**
+Entorno: `scratchpad/pw1621` (Chromium 151 de CI), `scratchpad/bpy52`, `scratchpad/rodaje/kit5-f5`; si faltan, ver README de pelicula-proyecto.
+
 ## ▶ CHECKPOINT · 28/11/2026, 11:10 (bucle autónomo, cinco frentes)
 
 1. **avc1**: Chromium 153 sobre `ad928d43` → P10 §8.3 rc 0, sin aviso, MP4 del cliente completo (9,95 s, 138 fotogramas, sha = manifiesto).

@@ -173,3 +173,11 @@ docs/ft3d-donor-code-gap-analysis-2026-11-01,2026-11-01,401,2241,2040,2,175,docs
 docs/ft3d-donor-code-gap-analysis-cut2-2026-11-01,2026-11-01,403,2241,2040,2,175,docs(product): align Cut 2 handoff sequence
 docs/ft3d-donor-global-reconciliation-2026-11-01,2026-11-01,412,2251,2051,0,176,docs(product): reconcile FT3D donor analysis cuts 1-5
 docs/ft3d-reference-atlas-2026-11-01,2026-11-01,400,2240,2040,1,175,docs(product): build canonical FT3D reference atlas
+docs/ft3d-reference-sculpture-rea-methodology,2026-11-01,400,2240,2040,1,175,docs(product): definir metodologia REA y escultura para FT3D
+feat/ft3d-5-axon-exploded,2026-11-01,411,2245,2045,0,176,Reconcile FT3D-5 with master@5f4e3d20
+feat/ft3d-6-professional-presentation-templates,2026-11-02,423,2259,2057,0,178,ci(presentation): allow complete visual evidence capture
+audit/donor-runtime-7x14-2026-11-02,2026-11-03,454,3890,2057,1631,178,audit: persist validated global completion state
+docs/legal-rubik-proteccion-extraccion-2026-11-03,2026-11-03,425,2260,2057,1,178,docs(legal): record Rubik protection decision and discovery handoff
+docs/multi-agent-ops-status-2026-11-02,2026-11-03,468,2465,2055,21,180,docs: advance VQ-01 to CP1-B after fixture PASS
+docs/vecinia-visual-lineage-references-2026-11-03,2026-11-03,424,2260,2057,1,178,docs(research): preserve VECINIA visual evolution and register three reference images
+feat/hybrid-registered-elevation-v1,2026-11-03,434,2270,2053,9,182,hybrid elevation (F11): ink contours follow off-screen capture buffers — View3D.shot and
