@@ -742,6 +742,31 @@ def realismo(project, labels, light, sun, tex):
         out.append(f"cielo: HDRI CC0 «{sky['id']}» 0,6, girado al azimut del sol capturado; el sol del visor se conserva")
     return out
 
+def sitio_placa(poly, w, hgt, cc):
+    """Centro donde la placa (w × hgt mm) cabe entera dentro de la estancia, lo más lejos posible de sus bordes; el centroide si cabe.
+    En estancias en L (p. ej. el pasillo) el centroide cae junto a un muro y la placa lo invadía."""
+    P = [(q["x"], q["y"]) for q in poly]
+    def inside(x, y):
+        c = False
+        for i in range(len(P)):
+            (x1, y1), (x2, y2) = P[i], P[i - 1]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+        return c
+    def margin(x, y):
+        pts = [(x + dx * w / 2, y + dy * hgt / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+        if not all(inside(*q) for q in pts): return -1
+        def dseg(px, py, a, b):
+            (ax, ay), (bx, by) = a, b; vx, vy = bx - ax, by - ay; L2 = vx * vx + vy * vy or 1
+            t = max(0, min(1, ((px - ax) * vx + (py - ay) * vy) / L2)); return ((ax + t * vx - px) ** 2 + (ay + t * vy - py) ** 2) ** .5
+        return min(dseg(qx, qy, P[i], P[i - 1]) for qx, qy in pts for i in range(len(P)))
+    if margin(cc["x"], cc["y"]) >= 100: return cc
+    xs = [q[0] for q in P]; ys = [q[1] for q in P]; best = (margin(cc["x"], cc["y"]), cc["x"], cc["y"])
+    for i in range(41):
+        for j in range(41):
+            x = min(xs) + (max(xs) - min(xs)) * i / 40; y = min(ys) + (max(ys) - min(ys)) * j / 40; m = margin(x, y)
+            if m > best[0] + 1e-6 or (abs(m - best[0]) < 1e-6 and m >= 0 and (x - cc["x"]) ** 2 + (y - cc["y"]) ** 2 < (best[1] - cc["x"]) ** 2 + (best[2] - cc["y"]) ** 2): best = (m, x, y)
+    return {"x": best[1], "y": best[2]} if best[0] >= 0 else cc
+
 def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes):
     """Del plano a la vivienda: planta legible → muros que crecen desde su huella → huecos → mobiliario → entrada a la estancia.
     Solo se animan transformaciones de los nodos de entidad (rubik_id) y siempre terminan en su valor de entrada."""
@@ -783,7 +808,9 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     tg0 = R.to_blender(c["x"] - .9 * (far["x"] - c["x"]), c["y"] - .9 * (far["y"] - c["y"]), origin, 1.1)
     side = (tg0 - eye0).cross(V((0, 0, 1))).normalized() * 1.6; tg1 = tg0 + side
     # Rótulos de estancia (nombre visible del proyecto) tendidos sobre la planta: se leen en el cenital y se retiran al girar.
-    mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = mat.node_tree.nodes.get("Principled BSDF"); bs.inputs["Base Color"].default_value = (.03, .03, .035, 1); bs.inputs["Roughness"].default_value = .9
+    mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = mat.node_tree.nodes.get("Principled BSDF"); bs.inputs["Base Color"].default_value = (.015, .015, .02, 1); bs.inputs["Roughness"].default_value = 1.0
+    for k in ("Specular IOR Level", "Specular"):
+        if k in bs.inputs: bs.inputs[k].default_value = 0.0  # sin reflejo del cielo: el texto sale casi negro (contraste)
     plate = bpy.data.materials.new("RUBIK_rotulo_placa"); plate.use_nodes = True; pb = plate.node_tree.nodes.get("Principled BSDF"); pb.inputs["Base Color"].default_value = (.92, .91, .88, 1); pb.inputs["Roughness"].default_value = .95
     f_out = S["floors"][1] - int(.6 * fps); nlab = 0
     for r in rooms:
@@ -793,9 +820,10 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
         lines = t.split(" ", 1) if len(t) > 11 and " " in t else [t]; longest = max(len(x) for x in lines)
         cu = bpy.data.curves.new("RUBIK_rotulo_" + r["id"], "FONT"); cu.body = "\n".join(lines); cu.align_x = "CENTER"; cu.align_y = "CENTER"; xs_ = [p["x"] for p in r["polygon"]]; ys_ = [p["y"] for p in r["polygon"]]; wmin = min(max(xs_) - min(xs_), max(ys_) - min(ys_)) / 1000; cu.size = max(.24, min(.75, ((max(xs_) - min(xs_)) / 1000 - .36) / (longest * .62), wmin * .34 / len(lines) * 1.4))  # placa (size·longest·0,62 + 0,16) dentro del ancho de la estancia con 0,1 m por lado: sin invadir muros vecinos; cu.extrude = .002
         ob = bpy.data.objects.new(cu.name, cu); ob.data.materials.append(mat); derived.objects.link(ob); cc = R.centroid(r["polygon"])
+        pw, ph = cu.size * longest * .62 + .16, cu.size * 1.25 * len(lines) + .1
+        cc = sitio_placa(r["polygon"], pw * 1000, ph * 1000, cc)
         L = R.to_blender(cc["x"], cc["y"], origin, .03); key(ob, 0, L, V((1, 1, 1))); key(ob, f_out, L, V((1, 1, 1))); key(ob, f_out + int(.6 * fps), L, V((.0005, .0005, .0005))); nlab += 1
         # placa clara bajo el rótulo (contraste sobre cualquier suelo); se retira con él
-        pw, ph = cu.size * longest * .62 + .16, cu.size * 1.25 * len(lines) + .1
         bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object; pl.name = "RUBIK_rotulo_placa_" + r["id"]; pl.scale = (pw, ph, 1); bpy.ops.object.transform_apply(scale=True)
         for cl in list(pl.users_collection): cl.objects.unlink(pl)
         derived.objects.link(pl); pl.data.materials.append(plate); Lp = R.to_blender(cc["x"], cc["y"], origin, .026)
