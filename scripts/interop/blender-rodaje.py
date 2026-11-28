@@ -767,6 +767,65 @@ def sitio_placa(poly, w, hgt, cc):
             if m > best[0] + 1e-6 or (abs(m - best[0]) < 1e-6 and m >= 0 and (x - cc["x"]) ** 2 + (y - cc["y"]) ** 2 < (best[1] - cc["x"]) ** 2 + (best[2] - cc["y"]) ** 2): best = (m, x, y)
     return {"x": best[1], "y": best[2]} if best[0] >= 0 else cc
 
+def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared):
+    """«Pieza a pieza» por grupos (28/11): el espectador ve QUÉ grupo llega (rótulo fijo en pantalla con su número real de piezas),
+    DÓNDE encaja (huella de destino en color de acento sobre la planta, desde que empieza el grupo hasta que cada pieza encaja) y QUÉ
+    cambia al quedar montado (la huella desaparece y el rótulo pasa a «… encajados»). Piezas reales del ZIP; nada inventado."""
+    from mathutils import Vector as V
+    bpy.context.view_layer.update()
+    def mat_emit(name, col, strength, alpha):
+        m = bpy.data.materials.new(name); m.use_nodes = True; b = m.node_tree.nodes.get("Principled BSDF")
+        b.inputs["Base Color"].default_value = col; b.inputs["Emission Color"].default_value = col; b.inputs["Emission Strength"].default_value = strength
+        b.inputs["Alpha"].default_value = alpha; b.inputs["Roughness"].default_value = 1.0
+        for k in ("Specular IOR Level", "Specular"):
+            if k in b.inputs: b.inputs[k].default_value = 0.0
+        return m
+    def no_rays(o):
+        for a in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"): setattr(o, a, False)
+    def pop(o, f_on, f_off, full):
+        tiny = V((.0005, .0005, .0005)); seq = [(0, tiny), (max(1, f_on), tiny), (f_on + int(.35 * fps), full)]
+        if f_off is not None: seq += [(f_off, full), (f_off + 3, tiny)]
+        for f, sc_ in seq: o.scale = sc_; o.keyframe_insert("scale", frame=f)
+    col = bpy.data.collections.new("RUBIK_montaje"); sc.collection.children.link(col)
+    acc = mat_emit("RUBIK_huella_destino", (1.0, .42, .04, 1), 2.5, .55); nghost = 0
+    for role in ("opening", "opening-leaf", "object"):
+        for o in by.get(role, []):
+            if o.name not in LAND: continue
+            ms = [c for c in o.children_recursive if c.type == "MESH"] + ([o] if o.type == "MESH" else [])
+            pts = [m.matrix_world @ V(c) for m in ms for c in m.bound_box]
+            if not pts: continue
+            x0, x1 = min(p.x for p in pts), max(p.x for p in pts); y0, y1 = min(p.y for p in pts), max(p.y for p in pts)
+            sh, land = LAND[o.name]
+            z0, z1 = min(p.z for p in pts), max(p.z for p in pts)
+            # Volumen de destino: la caja real de la pieza en su sitio final (se ve en los huecos del muro y sobre el suelo).
+            bpy.ops.mesh.primitive_cube_add(size=1); g = bpy.context.active_object; g.name = "RUBIK_destino_" + o.name
+            for c in list(g.users_collection): c.objects.unlink(g)
+            col.objects.link(g); g.data.materials.append(acc); no_rays(g)
+            g.location = V(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)); pop(g, S[sh][0], land, V((max(x1 - x0, .06) + .02, max(y1 - y0, .06) + .02, max(z1 - z0, .06) + .02))); nghost += 1
+    # Rótulo fijo en pantalla: hijo de la cámara; un vacío a 1 m delante escala con el objetivo (anchura visible = 36 mm / lens).
+    hold = bpy.data.objects.new("RUBIK_rotulo_grupo", None); col.objects.link(hold); hold.parent = cam; hold.location = (0, 0, -1)
+    for f in range(0, nframes + 6, 6):
+        w = 36.0 / at(min(f, nframes - 1), 3); hold.scale = (w, w, w); hold.keyframe_insert("scale", frame=f)
+    txt = mat_emit("RUBIK_rotulo_grupo_texto", (1, 1, 1, 1), 2.0, 1.0); fondo = mat_emit("RUBIK_rotulo_grupo_fondo", (.06, .06, .07, 1), .3, .72)
+    n_rooms = len(by.get("room", [])); n_op = len(by.get("opening", [])) + len(by.get("opening-leaf", [])); n_obj = len(by.get("object", []))
+    grupos = [("floors", f"Llegan los suelos · {n_rooms} estancias", "Suelos sobre la planta"), ("walls", f"Llegan los muros · {len(ws)} piezas", "Muros encajados"),
+              ("openings", f"Llegan huecos y carpinterías · {n_op} piezas", "Huecos y carpinterías encajados"),
+              ("furniture", f"Llega el mobiliario · {n_obj} piezas", "Mobiliario encajado")]
+    def rotulo(body, f_on, f_off):
+        cu = bpy.data.curves.new("RUBIK_grupo_txt", "FONT"); cu.body = body; cu.align_x = "LEFT"; cu.align_y = "CENTER"; cu.size = .028
+        t = bpy.data.objects.new("RUBIK_grupo_txt", cu); col.objects.link(t); t.parent = hold; t.location = (-.47, -.235, 0); cu.materials.append(txt); no_rays(t)
+        wpl = .028 * len(body) * .47 + .03
+        bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object
+        for c in list(pl.users_collection): c.objects.unlink(pl)
+        col.objects.link(pl); pl.parent = hold; pl.data.materials.append(fondo); no_rays(pl); pl.location = (-.47 - .015 + wpl / 2, -.235, -.001)
+        pop(t, f_on, f_off, V((1, 1, 1))); pop(pl, f_on, f_off, V((wpl, .05, 1)))
+    for sh, llega, hecho in grupos:
+        if sh not in S: continue
+        a, b = S[sh]; cut = b - int(1.1 * fps)
+        rotulo(llega, a, cut); rotulo(hecho, cut + 3, b)
+    declared.append(f"montaje por grupos: rótulo en pantalla por grupo (suelos {n_rooms}, muros {len(ws)}, huecos/carpinterías {n_op}, muebles {n_obj}); "
+                    f"{nghost} volúmenes de destino (caja real de cada pieza, acento translúcido) en su sitio final, visibles desde que empieza su grupo hasta que la pieza encaja")
+
 def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes):
     """Del plano a la vivienda: planta legible → muros que crecen desde su huella → huecos → mobiliario → entrada a la estancia.
     Solo se animan transformaciones de los nodos de entidad (rubik_id) y siempre terminan en su valor de entrada."""
@@ -793,10 +852,11 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
         grow(o, a, a + int(1.2 * fps), (1, 1, .03) if base else (1, 1, 0.0005))
     EFF = ((TL.get("guion") or {}).get("effect")) or "maqueta-abierta"
     PIEZA = EFF == "pieza-a-pieza"  # «Pieza a pieza»: las piezas reales caen y encajan sobre su huella; el plano sigue visible
+    LAND = {}
     for role, sh, drop in (("opening", "openings", .9 if PIEZA else .0), ("opening-leaf", "openings", .9 if PIEZA else .0), ("object", "furniture", 1.2 if PIEZA else .45)):
         a0, a1 = S[sh]; xs = sorted(by.get(role, []), key=lambda o: (ang(o), o.name)); n = max(1, len(xs)); span = a1 - a0 - int(.8 * fps)
         for i, o in enumerate(xs):
-            a = a0 + int(span * i / n); grow(o, a, a + int(.8 * fps), (.0005, .0005, .0005), drop)
+            a = a0 + int(span * i / n); grow(o, a, a + int(.8 * fps), (.0005, .0005, .0005), drop); LAND[o.name] = (sh, a + int(.8 * fps))
     # Estancia final: la que el proyecto llama salón (por su nombre visible) o, si no, la mayor contada.
     rooms = [r for r in project["rooms"] if r.get("counted", True)]
     area = lambda r: abs(sum(p["x"] * q["y"] - q["x"] * p["y"] for p, q in zip(r["polygon"], r["polygon"][1:] + r["polygon"][:1]))) / 2
@@ -856,6 +916,7 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
         return K[-1][idx]
     for f in range(0, nframes, 6): cd.lens = at(f, 3); cd.keyframe_insert("lens", frame=f)
     cd.clip_start = .05; cd.clip_end = diag * 10
+    if PIEZA: montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
     # Techos y luminarias: entran cuando la cámara ya está por debajo del techo, fuera del encuadre.
     f_in = nframes + 10 if PIEZA else next((f for f in range(S["furniture"][1], nframes) if at(f, 1).z < h - .25), S["enter"][1])
     for o in by.get("ceiling", []) + by.get("fixture", []): grow(o, f_in, f_in + 2, (.0005, .0005, .0005))
