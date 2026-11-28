@@ -869,6 +869,20 @@ def paisaje(sc, cd, derived, origin, h, TL, declared, nframes):
         raise SystemExit("«Desde el paisaje» necesita el entorno del ZIP (rubik-entorno.json): complétalo en RUBIK › Analizar › Contexto territorial.")
     sp = iu.spec_from_file_location("rubik_entorno", src); EN = iu.module_from_spec(sp); sp.loader.exec_module(EN)
     info = EN.importar(pkg, origin)
+    # Vista exterior: el techo del visor es de una cara (transparente desde arriba) y la vivienda se veía abierta. Aquí se ve
+    # cerrado por fuera: copia del material con las dos caras visibles (cubierta plana del color del techo, declarado).
+    roof = {}
+    for o in bpy.data.objects:
+        if o.type == "MESH" and (o.get("rubik_role") == "ceiling" or (o.parent and o.parent.get("rubik_role") == "ceiling")):
+            for i, m in enumerate(o.data.materials):
+                if not m or not m.use_nodes: continue
+                if m.name not in roof:
+                    c2 = m.copy(); c2.name = m.name + "·dos-caras"
+                    for n in c2.node_tree.nodes:
+                        if n.type == "MIX_SHADER" and n.inputs["Fac"].links: c2.node_tree.links.remove(n.inputs["Fac"].links[0]); n.inputs["Fac"].default_value = 0.0
+                    roof[m.name] = c2
+                o.data.materials[i] = roof[m.name]
+    declared.append(f"cubierta: el techo se ve por las dos caras desde fuera ({len(roof)} materiales); el modelo no trae cubierta propia")
     ent = json.loads((pkg / "rubik-estancias.json").read_bytes()).get("entrance")
     if not ent: raise SystemExit("«Desde el paisaje» necesita la puerta de entrada marcada en el modelo (rubik-estancias.json › entrance).")
     fps = TL["output"]["fps"]; S = {x["id"]: x["frames"] for x in TL["shots"]}
