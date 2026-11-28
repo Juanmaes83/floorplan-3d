@@ -1,0 +1,67 @@
+{
+ "placement": {
+  "northOffsetDeg": 180,
+  "horizontal": {
+   "modelAnchorMm": {
+    "x": 5900,
+    "y": 5280
+   },
+   "parcelLocalAnchorMm": {
+    "x": -14790,
+    "y": -37400
+   },
+   "source": {
+    "type": "user-entered"
+   }
+  },
+  "vertical": {
+   "modelZeroElevationM": 133.744,
+   "verticalReference": "orthometric",
+   "source": {
+    "type": "derived",
+    "derivedFrom": "site.terrain",
+    "sourceId": "Elevacion25830_5",
+    "retrievedAt": "2026-11-28T00:46:27.500Z"
+   }
+  },
+  "sourceCrs": "EPSG:25830",
+  "parcelFrame": {
+   "originX": 234076.78999999998,
+   "originY": 4015937.6
+  },
+  "meaning": "site position, scale and orientation entered in RUBIK (Analyze › Territorial context); the cadastral parcel itself is not exported"
+ },
+ "parcel": {
+  "exported": false,
+  "reference": null,
+  "reason": "Catastro INSPIRE CP licence is restricted: the geometry is used inside RUBIK to check the site and is not distributed"
+ },
+ "layers": {
+  "parcel": {
+   "canDisplay": true,
+   "canExport": false,
+   "requiredAttribution": [],
+   "reason": "restricted"
+  },
+  "terrain": {
+   "canDisplay": true,
+   "canExport": true,
+   "requiredAttribution": [
+    "MDT05-cob1 2008–2015 · Sistema Cartográfico Nacional (IGN, FEGA y Comunidades autónomas) · CC BY 4.0"
+   ],
+   "reason": "verified-with-attribution"
+  },
+  "orthophoto": {
+   "canDisplay": true,
+   "canExport": true,
+   "requiredAttribution": [
+    "Sistema Cartográfico Nacional"
+   ],
+   "reason": "verified-with-attribution"
+  }
+ },
+ "attributions": [
+  "MDT05-cob1 2008–2015 · Sistema Cartográfico Nacional (IGN, FEGA y Comunidades autónomas) · CC BY 4.0",
+  "Sistema Cartográfico Nacional"
+ ]
+}
