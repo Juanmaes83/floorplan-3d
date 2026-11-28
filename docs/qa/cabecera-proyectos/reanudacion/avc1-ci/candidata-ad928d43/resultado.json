@@ -1,0 +1,25 @@
+{
+ "browser": "151.0.7922.34",
+ "meta": {
+  "type": "video/mp4",
+  "size": 149443,
+  "mime": "video/mp4;codecs=avc1.42E01E",
+  "recorder": null
+ },
+ "play": {
+  "duration": 7.3729,
+  "result": "ended",
+  "currentTime": 7.3729,
+  "videoWidth": 1280,
+  "videoHeight": 720,
+  "wallMs": 2470,
+  "decoded": 29,
+  "dropped": 28
+ },
+ "consolaDuranteGrabacion": [
+  "error: When using \"avc1\" for mp4 encoding, the codec description is not supposed to change during the entire recording. Normally, a change in the encoding resolution may lead to this situation. Consider switching to \"avc3\" instead to resolve this problem"
+ ],
+ "consolaTotal": [
+  "error: When using \"avc1\" for mp4 encoding, the codec description is not supposed to change during the entire recording. Normally, a change in the encoding resolution may lead to this situation. Consider switching to \"avc3\" instead to resolve this problem"
+ ]
+}
