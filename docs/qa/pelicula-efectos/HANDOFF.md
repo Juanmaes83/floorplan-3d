@@ -145,3 +145,10 @@ en `emplazamiento/`. Se puede llevar sola a master (un archivo y su prueba), sin
 
 Siguiente: montaje demo «Desde el paisaje» y previa suelo/terreno/camino/puerta (revisión de Juanma); exportación sin emplazamiento.
 Renders largos después; examen de los cinco proyectos el último.
+
+## 28/11/2026 · mañana · tanda dirigida (enlaces directos)
+- **Rótulos a 1440p** (mínimo 0,24 + contraste + posición): [pasos/10-rotulos-1440](pasos/10-rotulos-1440/) · código `54bed980`.
+  Revisar `comparativa-1a1-antes-arriba.png` sin ampliar.
+- **Pieza a pieza por grupos**: [pasos/11-pieza-a-pieza-grupos](pasos/11-pieza-a-pieza-grupos/) · código `6e5c32ce` · clip 13 s.
+  Revisar si se distingue grupo, destino y cambio al montarse frente a Maqueta abierta.
+- **avc1 de #324**: diagnóstico en `claude/cabecera-proyectos` › `docs/qa/cabecera-proyectos/reanudacion/avc1-ci/` (594a6c1b).
