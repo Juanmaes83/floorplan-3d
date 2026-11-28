@@ -18,3 +18,8 @@ test('estimación: sin medición real dice «no disponible»; con medición da r
 test('los perfiles son los del kit de rodaje (mismos id, resolución y muestras)',()=>{
  const py=require('node:fs').readFileSync(require('node:path').join(__dirname,'../scripts/interop/blender-rodaje.py'),'utf8');const m=JSON.parse(/^PROFILES = (\{.*\})$/m.exec(py)[1]);
  for(const p of E.PROFILES){assert.equal(m[p.id].res,p.res,p.id);assert.equal(m[p.id].samples,p.samples,p.id);}});
+test('muestra: transición completa del propio guion, continua a 24 fps, reconocible (≥ 8 s) y más corta que la película',()=>{
+ const esperado={'pieza-a-pieza':['walls','openings'],'maqueta-abierta':['furniture','enter'],'desde-el-paisaje':['access','door']};
+ for(const e of E.EFFECTS){const s=E.script(e.id),m=s.sample;assert.deepEqual(m.shots,esperado[e.id],e.id);
+  const a=s.shots.find(x=>x.id===m.shots[0]),b=s.shots.find(x=>x.id===m.shots.at(-1));assert.deepEqual(m.frames,[a.frames[0],b.frames[1]]);
+  assert.ok(m.seconds[1]-m.seconds[0]>=8&&m.seconds[1]-m.seconds[0]<s.seconds,e.id);assert.equal(s.fps,24);}});

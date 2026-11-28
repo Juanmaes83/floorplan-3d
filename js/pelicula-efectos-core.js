@@ -23,7 +23,8 @@
       transition: t3('Suelos, muros, huecos y carpinterías y mobiliario entran por sistemas y encajan en su sitio; el plano sigue visible.', 'Floors, walls, openings and furniture come in by system and fit into place; the plan stays visible.'),
       end: t3('La vivienda montada, con el volumen y la huella de origen a la vista.', 'The assembled home, with the volume and its footprint in view.'),
       needs: ['rooms', 'walls'],
-      shots: [['plan', 0, 3.5], ['floors', 3.5, 7], ['walls', 7, 12.5], ['openings', 12.5, 16], ['furniture', 16, 20], ['assembled', 20, 24]] },
+      shots: [['plan', 0, 3.5], ['floors', 3.5, 7], ['walls', 7, 12.5], ['openings', 12.5, 16], ['furniture', 16, 20], ['assembled', 20, 24]],
+      sample: ['walls', 'openings'] },
     { id: 'maqueta-abierta', name: t3('Maqueta abierta', 'Open model'),
       explains: t3('Cómo se distribuye y se vive por dentro: la maqueta abierta enseña cómo se conectan las estancias y termina dentro de una.', 'How it is laid out and lived in: the open model shows how rooms connect and ends inside one.'),
       chooseWhen: t3('Para un comprador o un cliente de interiorismo que quiere entender la distribución.', 'For a buyer or an interior-design client who wants to understand the layout.'),
@@ -31,7 +32,8 @@
       transition: t3('La planta gana volumen; la maqueta sin techo muestra las conexiones; descenso con referencias visibles.', 'The plan gains volume; the roofless model shows the connections; descent with visible references.'),
       end: t3('Interior de esa misma estancia, con encuadre estable y luz continua.', 'Inside that same room, with a steady frame and continuous light.'),
       needs: ['rooms', 'walls', 'countedRoom'],
-      shots: [['plan', 0, 2.5], ['floors', 2.5, 5], ['walls', 5, 10], ['openings', 10, 13], ['furniture', 13, 17], ['enter', 17, 24.5], ['living', 24.5, 30]] },
+      shots: [['plan', 0, 2.5], ['floors', 2.5, 5], ['walls', 5, 10], ['openings', 10, 13], ['furniture', 13, 17], ['enter', 17, 24.5], ['living', 24.5, 30]],
+      sample: ['furniture', 'enter'] },
     { id: 'desde-el-paisaje', name: t3('Desde el paisaje', 'From the landscape'),
       explains: t3('Cómo se relaciona con su entorno y cómo se llega: del emplazamiento real al acceso y al interior.', 'How it relates to its setting and how you arrive: from the real site to the entrance and inside.'),
       chooseWhen: t3('Para vivienda en parcela, terraza o venta sobre plano donde el contexto vende.', 'For a house on a plot, terraces or off-plan sales where the setting sells.'),
@@ -39,7 +41,8 @@
       transition: t3('Acercamiento a escala comprensible, el acceso y el paso por la puerta real del modelo.', 'Approach at an understandable scale, the access and the passage through the model\'s real door.'),
       end: t3('Interior con la relación con el exterior y el acceso a la vista.', 'Interior keeping the relation with the outside and the access in view.'),
       needs: ['rooms', 'walls', 'entrance', 'site'],
-      shots: [['site', 0, 4], ['approach', 4, 11], ['access', 11, 16], ['door', 16, 19.5], ['inside', 19.5, 25]] },
+      shots: [['site', 0, 4], ['approach', 4, 11], ['access', 11, 16], ['door', 16, 19.5], ['inside', 19.5, 25]],
+      sample: ['access', 'door'] },
   ]);
   const byId = id => EFFECTS.find(e => e.id === id) || null;
 
@@ -65,7 +68,11 @@
     const shots = e.shots.map(([id, a, b]) => ({ id, seconds: [a, b], frames: [Math.round(a * fps), Math.round(b * fps) - 1] }));
     const seconds = e.shots[e.shots.length - 1][2];
     if (!(seconds > 20)) throw Error('script: an effect must last more than 20 s');
-    return { format: 'rubik-sota.pelicula-script', version: VERSION, effect: e.id, fps, seconds, frames: Math.round(seconds * fps), shots, revision };
+    // Muestra para el profesional: una transición completa y reconocible del efecto (planos contiguos del guion), la misma
+    // cámara y los mismos fotogramas que el render final; el kit la rueda con «rodar muestra» antes de confirmar el render.
+    const sIds = e.sample, a = shots.find(x => x.id === sIds[0]), b = shots.find(x => x.id === sIds[sIds.length - 1]);
+    const sample = { shots: shots.filter(x => x.seconds[0] >= a.seconds[0] && x.seconds[1] <= b.seconds[1]).map(x => x.id), seconds: [a.seconds[0], b.seconds[1]], frames: [a.frames[0], b.frames[1]] };
+    return { format: 'rubik-sota.pelicula-script', version: VERSION, effect: e.id, fps, seconds, frames: Math.round(seconds * fps), shots, sample, revision };
   }
 
   /** Estimación por perfil. measures = { [profile]: secondsPerFrame } medido en una prueba real; sin medida → no disponible. */

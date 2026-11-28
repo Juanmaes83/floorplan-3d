@@ -1028,7 +1028,7 @@ def main():
     a = sys.argv[sys.argv.index("--") + 1:]; pos = []; i = 0
     while i < len(a):
         if a[i].startswith("--"):
-            i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales", "--con-guion") else 2; continue
+            i += 1 if a[i] in ("--still", "--preflight", "--fetch", "--sin-materiales", "--con-guion", "--muestra") else 2; continue
         pos.append(a[i]); i += 1
     prep, pkg, out = (Path(p).resolve() for p in pos[:3]); PKG[0] = str(pkg)
     # «Tu proyecto cobra vida»: el guion elegido en RUBIK › Entregar › Vídeo (rubik-pelicula-guion.json en el ZIP) manda sobre
@@ -1052,12 +1052,17 @@ def main():
         tlp = Path(arg("--timeline")).resolve(); TL = json.loads(tlp.read_bytes()); TL["_sha256"] = hashlib.sha256(tlp.read_bytes()).hexdigest()
         fps = int(TL["output"]["fps"]); nframes = int(TL["output"]["frames"])
     fr = arg("--frames"); f0, f1 = (int(x) for x in fr.split("-")) if fr else (0, nframes - 1)
+    MUESTRA = flag("--muestra")  # muestra para el profesional: solo el tramo «sample» del guion, continuo, mismos fotogramas
+    if MUESTRA:
+        if not (GUION and GUION.get("sample")): raise SystemExit("--muestra necesita el guion de RUBIK con su tramo de muestra (rubik-pelicula-guion.json)")
+        f0, f1 = (int(x) for x in GUION["sample"]["frames"])
     manifest = json.loads((pkg / "manifest.json").read_bytes()); cargar_materiales(pkg, manifest)
     project, labels = R.load_rooms(pkg, manifest)
     origin = manifest["scene"]["frame"]["originPlanMm"]; ORIGIN[0] = origin
     bpy.ops.wm.open_mainfile(filepath=str(prep / "scene.blend"))
     sc = bpy.context.scene
     derived = bpy.data.collections.new("RUBIK_derived"); sc.collection.children.link(derived); declared = []
+    if MUESTRA: declared.append(f"MUESTRA para el profesional: tramo {'→'.join(GUION['sample']['shots'])} del guion ({GUION['sample']['seconds'][0]}–{GUION['sample']['seconds'][1]} s), fotogramas {f0}–{f1} continuos a {fps} fps; misma cámara y piezas que el render final")
     # Motor y color
     sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = samples
     sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.02
