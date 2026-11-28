@@ -34,6 +34,7 @@ test(`Home y Entregar · ${vp.tag} · ${lang}`,{timeout:180000},async t=>{
  assert.match(await page.locator('#peliculaEstimate').textContent(),lang==='en'?/Estimate not available/:/Estimación no disponible/);
  await page.locator('#peliculaPreviewPlay').click();await page.waitForFunction(()=>document.querySelector('#peliculaPreview')?.dataset.played==='false');
  await page.locator('#peliculaConfirm').click();assert.equal(await page.evaluate(()=>document.querySelector('#peliculaEfectosDialog').dataset.state),'confirm');
+ const mu=page.locator('#peliculaMuestra');assert.equal(await mu.getAttribute('data-frames'),'312-587','muestra de Maqueta abierta: mobiliario → entrada (13–24,5 s)');assert.match(await mu.innerText(),/rodar\.sh muestra|rodar\.sh muestra/);
  await page.locator('#peliculaCancel').click();assert.equal(await page.evaluate(()=>document.querySelector('#peliculaEfectosDialog').dataset.state),'choose','cancelar no inicia nada');
  assert.equal(await page.evaluate(()=>window.RubikPeliculaEfectos._last||null),null,'nada preparado tras cancelar');
  assert.equal(await page.evaluate(()=>{const d=document.querySelector('#peliculaEfectosDialog').getBoundingClientRect();return d.left>=0&&d.right<=innerWidth+1;}),true,'sin desborde');
