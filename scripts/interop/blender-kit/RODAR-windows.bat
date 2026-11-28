@@ -28,8 +28,6 @@ if /i "%PERFIL%"=="pelicula" (
   set "MP4=pelicula.mp4"
   if not "!MUESTRA!"=="" set "MP4=muestra.mp4"
   set "PERFIL=revision"
-  for /f "tokens=2 delims=:," %%P in ('findstr /c:"\"profile\"" rubik-pelicula-guion.json') do set "PERFIL=%%~P"
-  set "PERFIL=!PERFIL: =!"
 )
 if /i not "%PERFIL%"=="revision" if /i not "%PERFIL%"=="entrega1440" if /i not "%PERFIL%"=="entrega4k" (
   echo Perfil desconocido / unknown profile: %PERFIL% ^(revision, entrega1440, entrega4k^)
@@ -62,8 +60,11 @@ if not "%MUESTRA%"=="" set "SALIDA=resultados\muestra"
 if not exist "resultados" mkdir "resultados"
 set "FRARG="
 if not "%FR%"=="" set "FRARG=--frames %FR%"
+rem El rodaje lee el perfil del JSON directamente en modo pelicula o muestra.
+set "PROFARG=--profile %PERFIL%"
+if not "%PELI%"=="" set "PROFARG="
 echo 2-3/4 - Recursos y rodaje ^(%PERFIL%, %TOMA%, %LUZ%^) / assets and shoot...
-"%BL%" --background --factory-startup --python-exit-code 1 --python rubik_blender_rodaje.py -- escena-preparada . "%SALIDA%" --profile %PERFIL% --shot %TOMA% --light %LUZ% --tex rodaje-texturas %PELI% %MUESTRA% --fetch %FRARG%
+"%BL%" --background --factory-startup --python-exit-code 1 --python rubik_blender_rodaje.py -- escena-preparada . "%SALIDA%" %PROFARG% --shot %TOMA% --light %LUZ% --tex rodaje-texturas %PELI% %MUESTRA% --fetch %FRARG%
 if errorlevel 1 ( echo El rodaje se detuvo. Vuelve a lanzarlo: continua por el primer fotograma que falte. & goto :fin_error )
 
 where ffmpeg >nul 2>nul

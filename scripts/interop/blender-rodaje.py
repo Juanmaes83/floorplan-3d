@@ -774,7 +774,7 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
     from mathutils import Vector as V
     bpy.context.view_layer.update()
     def mat_emit(name, col, strength, alpha):
-        m = bpy.data.materials.new(name); m.use_nodes = True; b = m.node_tree.nodes.get("Principled BSDF")
+        m = bpy.data.materials.new(name); m.use_nodes = True; b = next(node for node in m.node_tree.nodes if node.type == "BSDF_PRINCIPLED")
         b.inputs["Base Color"].default_value = col; b.inputs["Emission Color"].default_value = col; b.inputs["Emission Strength"].default_value = strength
         b.inputs["Alpha"].default_value = alpha; b.inputs["Roughness"].default_value = 1.0
         for k in ("Specular IOR Level", "Specular"):
@@ -817,7 +817,7 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
               ("openings", f"Llegan huecos y carpinterías · {n_op} piezas", "Huecos y carpinterías encajados"),
               ("furniture", f"Llega el mobiliario · {n_obj} piezas", "Mobiliario encajado")]
     def fade(m, f_on, f_off, amax):  # opacidad 0 → amax en 6 fotogramas y vuelta; la escala no cambia (antes se encogía)
-        a = m.node_tree.nodes.get("Principled BSDF").inputs["Alpha"]
+        a = next(node for node in m.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"]
         for f, v in ((0, 0.0), (max(0, f_on - 1), 0.0), (f_on + 6, amax), (f_off - 6, amax), (f_off, 0.0)):
             a.default_value = v; a.keyframe_insert("default_value", frame=f)
     def rotulo(body, f_on, f_off):
@@ -884,10 +884,10 @@ def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nfr
     tg0 = R.to_blender(c["x"] - .9 * (far["x"] - c["x"]), c["y"] - .9 * (far["y"] - c["y"]), origin, 1.1)
     side = (tg0 - eye0).cross(V((0, 0, 1))).normalized() * 1.6; tg1 = tg0 + side
     # Rótulos de estancia (nombre visible del proyecto) tendidos sobre la planta: se leen en el cenital y se retiran al girar.
-    mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = mat.node_tree.nodes.get("Principled BSDF"); bs.inputs["Base Color"].default_value = (.015, .015, .02, 1); bs.inputs["Roughness"].default_value = 1.0
+    mat = bpy.data.materials.new("RUBIK_rotulo"); mat.use_nodes = True; bs = next(node for node in mat.node_tree.nodes if node.type == "BSDF_PRINCIPLED"); bs.inputs["Base Color"].default_value = (.015, .015, .02, 1); bs.inputs["Roughness"].default_value = 1.0
     for k in ("Specular IOR Level", "Specular"):
         if k in bs.inputs: bs.inputs[k].default_value = 0.0  # sin reflejo del cielo: el texto sale casi negro (contraste)
-    plate = bpy.data.materials.new("RUBIK_rotulo_placa"); plate.use_nodes = True; pb = plate.node_tree.nodes.get("Principled BSDF"); pb.inputs["Base Color"].default_value = (.92, .91, .88, 1); pb.inputs["Roughness"].default_value = .95
+    plate = bpy.data.materials.new("RUBIK_rotulo_placa"); plate.use_nodes = True; pb = next(node for node in plate.node_tree.nodes if node.type == "BSDF_PRINCIPLED"); pb.inputs["Base Color"].default_value = (.92, .91, .88, 1); pb.inputs["Roughness"].default_value = .95
     f_out = S["floors"][1] - int(.6 * fps); nlab = 0
     for r in rooms:
         t = labels.get(r["id"]) or ""
@@ -968,7 +968,7 @@ def rotulos_paisaje(sc, cam, nframes, at, attributions, declared):
     y lleva la atribución obligatoria del terreno y la ortofoto (licencia CC BY 4.0 del Sistema Cartográfico Nacional)."""
     from mathutils import Vector as V
     def mat(name, col, strength, alpha):
-        m = bpy.data.materials.new(name); m.use_nodes = True; b = m.node_tree.nodes.get("Principled BSDF")
+        m = bpy.data.materials.new(name); m.use_nodes = True; b = next(node for node in m.node_tree.nodes if node.type == "BSDF_PRINCIPLED")
         b.inputs["Base Color"].default_value = col; b.inputs["Emission Color"].default_value = col; b.inputs["Emission Strength"].default_value = strength
         b.inputs["Alpha"].default_value = alpha
         for k in ("Specular IOR Level", "Specular"):
