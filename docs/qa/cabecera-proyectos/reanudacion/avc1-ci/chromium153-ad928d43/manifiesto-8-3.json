@@ -1,0 +1,96 @@
+{
+ "schema": "rubik-sota.story-client",
+ "version": "1.0.0",
+ "title": "Salón más cálido: moqueta de lana",
+ "preparedBy": "Estudio Norte Interiorismo",
+ "preparedFor": "Sra. Laura Gómez (cliente sintético)",
+ "requests": [
+  "obra en menos de dos semanas"
+ ],
+ "date": "2026-11-28",
+ "summary": "Proponemos: Suelo de Salón: Baldosa 80×80 → Moqueta.",
+ "changes": [
+  "Suelo de Salón: Baldosa 80×80 → Moqueta."
+ ],
+ "kept": [
+  "La superficie útil se conserva: 87,18 m².",
+  "Se conservan las 13 estancias.",
+  "La distribución se conserva: no se añade ni se quita ningún muro.",
+  "Puertas y ventanas se conservan."
+ ],
+ "sections": [
+  {
+   "title": "Por qué y qué mejora busca",
+   "text": "Más confort acústico y térmico donde la familia pasa más horas.",
+   "lines": null,
+   "pending": false
+  },
+  {
+   "title": "Cómo se haría y qué implica",
+   "text": "Retirada de la baldosa, recrecido y moqueta de lana en tres días.",
+   "lines": null,
+   "pending": false
+  },
+  {
+   "title": "Cuánto cuesta y qué incluye",
+   "text": null,
+   "lines": [],
+   "pending": [
+    "No hay un presupuesto guardado que corresponda a esta propuesta.",
+    "Pendiente de valorar."
+   ]
+  },
+  {
+   "title": "Qué debes decidir ahora",
+   "text": "Aprobar la propuesta para pedir muestras.",
+   "lines": null,
+   "pending": false
+  }
+ ],
+ "notes": [
+  "En Salón proponemos cambiar el suelo de Baldosa 80×80 a Moqueta. La superficie útil y la distribución se conservan. Lo planteamos teniendo en cuenta lo que nos indicó: tonos cálidos y poco mantenimiento. Muestras de color arena en el estudio."
+ ],
+ "pages": [
+  {
+   "file": "propuesta/01-portada.png",
+   "sha256": "98ad5ff5b2b418c2a5e2e9643c6dd22d9d5947e7711ff5351ac04cc0f26b884b",
+   "bytes": 201127,
+   "content": [
+    "Salón más cálido: moqueta de lana",
+    "Qué se propone y dónde",
+    "Suelo de Salón"
+   ]
+  },
+  {
+   "file": "propuesta/02-pagina.png",
+   "sha256": "0b0a3856e42454a9d496f7ac82724342592add8a4421acc3111edf747c986176",
+   "bytes": 373875,
+   "content": [
+    "Vistas de la propuesta",
+    "Vista general",
+    "Suelo de Salón"
+   ]
+  },
+  {
+   "file": "propuesta/03-pagina.png",
+   "sha256": "f8abca616748006f174d708e1592fe5caf2a41023ef49668dc498fbbc891f7bf",
+   "bytes": 180788,
+   "content": [
+    "Por qué y qué mejora busca",
+    "Cómo se haría y qué implica",
+    "Cuánto cuesta y qué incluye",
+    "Qué debes decidir ahora"
+   ]
+  }
+ ],
+ "attachments": [
+  {
+   "file": "propuesta/video-recorrido.mp4",
+   "sha256": "698ae007cb1d3bcd9b11e8d196359c0b9fe7703365b419ac521955dc3d24f7d6",
+   "bytes": 188840,
+   "content": [
+    "Vídeo del recorrido de la propuesta"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "browser": "153.0.8010.12",
+ "meta": {
+  "type": "video/mp4",
+  "size": 189666,
+  "mime": "video/mp4;codecs=avc1.42E01E",
+  "recorder": null
+ },
+ "play": {
+  "duration": 10.2251,
+  "result": "ended",
+  "currentTime": 10.2251,
+  "videoWidth": 1280,
+  "videoHeight": 720,
+  "wallMs": 2767,
+  "decoded": 138,
+  "dropped": 0
+ },
+ "consolaDuranteGrabacion": [],
+ "consolaTotal": [
+  "warning: [.WebGL-0x1e64001a7200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "warning: [.WebGL-0x1e64001a7200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "warning: [.WebGL-0x1e64001a7200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "warning: [.WebGL-0x1e64001a7200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+ ]
+}
