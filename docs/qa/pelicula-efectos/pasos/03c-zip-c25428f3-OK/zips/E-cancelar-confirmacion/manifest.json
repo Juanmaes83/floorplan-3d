@@ -1,0 +1,298 @@
+{
+ "format": "rubik-sota.scene-delivery",
+ "version": "1.0.0",
+ "status": "integration-candidate · observed visual snapshot, not canonical geometry",
+ "createdAt": null,
+ "captureId": "b7ef5c8f-25bc-46cd-8cfb-d5b059246d17",
+ "source": {
+  "projectId": "prj_reference-home",
+  "projectUpdatedAt": "2026-11-28T00:41:02.701Z",
+  "observedProjectSha256": "3962d9d1d16bf70db6913dd1ba898be5b66332cdb769ec210ce39756ce68d80d",
+  "meaning": "project as observed in the viewer at capture time; not a confirmed F0 revision"
+ },
+ "app": {
+  "revision": null,
+  "captureCore": "1.0.0",
+  "schema": "rubik-sota.observed-scene"
+ },
+ "scene": {
+  "scope": "active-level",
+  "frame": {
+   "source": "RUBIK View3D",
+   "originPlanMm": {
+    "x": 5925,
+    "y": 5280
+   },
+   "mapping": "x=(planX-originX)/1000, y=elevation/1000 (active level at y=0), z=(planY-originY)/1000",
+   "activeLevelId": null,
+   "levelView": "active"
+  },
+  "view": {
+   "camera": {
+    "position": [
+     5.446446,
+     14.886953,
+     8.895862
+    ],
+    "quaternion": [
+     -0.444307,
+     0.240617,
+     0.125211,
+     0.853825
+    ],
+    "target": [
+     0,
+     0,
+     0
+    ],
+    "fovDeg": 45,
+    "aspect": 1.087331,
+    "source": "viewer"
+   },
+   "light": {
+    "mode": "day",
+    "hour": 10,
+    "exposure": 1.05,
+    "sun": {
+     "direction": [
+      0.300367,
+      0.951793,
+      -0.0622
+     ],
+     "color": "#faf4ed",
+     "intensity": 2.785641
+    },
+    "hemi": {
+     "sky": "#fff8ee",
+     "ground": "#b9a88f",
+     "intensity": 1.1
+    },
+    "background": "#f1f2f2",
+    "lamps": {
+     "on": false,
+     "intensity": 0,
+     "distance": 7,
+     "color": "#ffd9a8"
+    }
+   }
+  },
+  "units": "metres",
+  "axes": "three-y-up",
+  "stats": {
+   "meshes": 1491,
+   "vertices": 418017,
+   "faces": 190272,
+   "instancesExpanded": 172,
+   "roles": {
+    "room": 15,
+    "opening": 97,
+    "ceiling": 13,
+    "wall": 292,
+    "opening-leaf": 12,
+    "object": 1051,
+    "fixture": 11
+   },
+   "entities": 178,
+   "unlinked": 0,
+   "bounds": {
+    "min": [
+     -6.185,
+     -0.000896,
+     -5.52
+    ],
+    "max": [
+     6.185,
+     2.8,
+     5.52
+    ]
+   }
+  },
+  "excluded": {
+   "decorative-ground": 1,
+   "hidden": 144,
+   "unapplied-proposal": 1,
+   "territorial-context": 1
+  },
+  "skipped": {},
+  "policy": {
+   "excludedUserData": [
+    {
+     "key": "renderExclude",
+     "reason": "excluded-by-marker"
+    },
+    {
+     "key": "presentationOutline",
+     "reason": "presentation-outline"
+    },
+    {
+     "key": "presentationSection",
+     "reason": "presentation-section"
+    },
+    {
+     "key": "sectionCap",
+     "reason": "section-cap"
+    },
+    {
+     "key": "contactRoomId",
+     "reason": "contact-shadow-decal"
+    },
+    {
+     "key": "territorialContext",
+     "reason": "territorial-context"
+    }
+   ],
+   "excludedNames": [
+    {
+     "name": "smart-furnishing-preview",
+     "reason": "unapplied-proposal"
+    }
+   ],
+   "surfacesOnly": "Mesh and InstancedMesh triangles; lines, points and sprites skipped",
+   "supportSlab": false,
+   "textures": "never copied; hasMap declared",
+   "normals": "vertex normals transformed by the normal matrix"
+  }
+ },
+ "blender": {
+  "import": "File › Import › glTF 2.0 (.glb/.gltf), default options",
+  "transform": "glTF Y up → Blender Z up: (XB, YB, ZB) = (x, -z, y), applied once by the importer",
+  "properties": "each object carries rubik_id, rubik_role, rubik_level, rubik_mesh (Object Properties › Custom Properties)",
+  "camera": "RUBIK_camera = viewer pose at capture",
+  "paths": {
+   "native": {
+    "how": "File › Import › glTF 2.0 › scene.glb",
+    "gives": [
+     "geometry in metres",
+     "base colours/roughness/metalness",
+     "rubik_* identifiers",
+     "RUBIK_camera"
+    ],
+    "notIncluded": [
+     "viewer sun, sky and night fixtures (Blender default world)",
+     "glass transmission (imported as alpha blend)",
+     "viewer back-face culling (ceilings may hide the interior from above)"
+    ],
+    "expectation": "not the same render as the prepared scene or the RUBIK viewer"
+   },
+   "prepared": {
+    "script": "rubik_blender_prepare.py",
+    "sha256": "f8b1e27802597fc505529e93348b7e112732411c60e1e29eca72872d4040bf51",
+    "command": "blender --background --factory-startup --python rubik_blender_prepare.py -- . escena-preparada",
+    "output": "escena-preparada/scene.blend",
+    "adds": [
+     "viewer sun and sky (declared conversion)",
+     "night fixtures when captured at night",
+     "glass transmission",
+     "back faces hidden as in the viewer",
+     "collections by role"
+    ],
+    "testedWith": "Blender 5.2.1 LTS",
+    "note": "runs headless only: it starts from an empty scene and never touches an open session"
+   },
+   "render": {
+    "launchers": {
+     "windows": "RENDERIZAR-windows.bat",
+     "macosLinux": "sh renderizar.sh [review|preview|delivery]"
+    },
+    "steps": [
+     "prepare (rubik_blender_prepare.py)",
+     "render with Cycles (rubik_blender_render.py, resumable view by view)",
+     "verify the saved scene reopens identically (rubik_blender_verify.py, fresh process)"
+    ],
+    "output": "resultados/<profile>/: one PNG per view, review.blend (editable), render-report.json, verificacion-reapertura.json",
+    "views": "auto = viewer camera + axonometry + up to 4 representative interiors (counted rooms >= 5 m2, largest first)",
+    "review": "RUBIK › Deliver › Scene for Blender › Review render… (integrity, comparison, clean and branded delivery)",
+    "testedWith": "Blender 5.2.1 LTS, Cycles CPU; see handoff for platform coverage"
+   }
+  }
+ },
+ "fallbacks": {
+  "texturesNotCopied": 13,
+  "assets": {
+   "generic": 45
+  },
+  "assetErrors": [],
+  "catalogModels": [],
+  "proceduralObjects": 45
+ },
+ "stability": {
+  "rule": "no asset loading, no camera/door motion, identical scene signature",
+  "stableFrames": 30
+ },
+ "files": {
+  "scene.glb": {
+   "bytes": 12602412,
+   "sha256": "8e6075b5f9fbe593818990e6a3e6dc526386bc500ac5efc6cdf816953217b2c9"
+  },
+  "rubik_blender_prepare.py": {
+   "bytes": 13968,
+   "sha256": "f8b1e27802597fc505529e93348b7e112732411c60e1e29eca72872d4040bf51"
+  },
+  "rubik_blender_render.py": {
+   "bytes": 30113,
+   "sha256": "cb2e1a01323b35884cd2bb8c7a58ca185890b913b3152c0fa1a0319d70deb852"
+  },
+  "rubik_blender_verify.py": {
+   "bytes": 4339,
+   "sha256": "c8859883f32e5644d0fc8282ad670b47833b0747e13698225d94880dcc4d5bdc"
+  },
+  "rubik_render_profiles.json": {
+   "bytes": 633,
+   "sha256": "518a006ebc28f757370508ef0be94262b3cd1177dd8720972285da3e2f6d7c1a"
+  },
+  "renderizar.sh": {
+   "bytes": 3858,
+   "sha256": "e2c80ed4d59d679041584f1177ac138193147b32aae37cb49b3102ef447b251a"
+  },
+  "RENDERIZAR-windows.bat": {
+   "bytes": 3759,
+   "sha256": "8fe4957159f9720e012773092015d8c1ce654624f16c07963000aed195478610"
+  },
+  "LICENCIA-SCRIPTS.txt": {
+   "bytes": 3761,
+   "sha256": "b8d9d23e1c0d6bf49145f47a2dd6561429bbcd22bd2b6602cf657db23f0cf78d"
+  },
+  "COPYING-GPL-3.0.txt": {
+   "bytes": 35149,
+   "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  "rubik_blender_rodaje.py": {
+   "bytes": 106321,
+   "sha256": "677e40b4e1cd1cef4702c251e6f5091fb8af8c06afe2e01d3460e7a885bca905"
+  },
+  "rubik_rodaje_recursos.json": {
+   "bytes": 12843,
+   "sha256": "4138a2027325d1e49b516e8007e34721098770128be441197e4a9289a18199ab"
+  },
+  "rodar.sh": {
+   "bytes": 3220,
+   "sha256": "58aa0fdebe64c21e5b06f32dda110e3c4682dabb07c3a89c29300c5675f8b63d"
+  },
+  "RODAR-windows.bat": {
+   "bytes": 4269,
+   "sha256": "898c001280a8d5984261f2267f66d8acb81218070c97a4682363cea9dafd629a"
+  },
+  "rubik_blender_entorno.py": {
+   "bytes": 3944,
+   "sha256": "f46fb1e7710ad9d0c37db5393b2dd4f13c1c201ece1e888b754e6298dcdf6116"
+  },
+  "rubik-estancias.json": {
+   "bytes": 8730,
+   "sha256": "fb9ac555d886c0b678f82c24be8850800dba6cbe6fe49b5b3fdaea385a507857"
+  },
+  "referencia-rubik.png": {
+   "bytes": 479327,
+   "sha256": "a3d4de547030aed51302b01c2a971e9b60d40eb497d5a561232270214ebc3b98"
+  },
+  "rubik-materiales.json": {
+   "bytes": 19916,
+   "sha256": "96d69ae636c2cff5aaf3c3c8a845471a2a9c583bca0373856ac4a9b570a05111"
+  }
+ },
+ "privacy": "no photos, textures, URLs or free text from the project are included; geometry, colours, IDs, the displayed room names and one reference image of the 3D view (referencia-rubik.png)",
+ "limitations": [
+  "Visual observation of the 3D view: procedural furniture is the viewer representation, not manufacturer geometry.",
+  "Textured surfaces travel as their flat colour (hasMap declared).",
+  "Not a measured survey: accuracy against a real building is not claimed."
+ ]
+}

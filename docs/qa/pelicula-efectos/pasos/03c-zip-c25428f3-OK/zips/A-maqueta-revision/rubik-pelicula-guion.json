@@ -1,0 +1,96 @@
+{
+ "format": "rubik-sota.pelicula-script",
+ "version": "1.0.0",
+ "effect": "maqueta-abierta",
+ "fps": 24,
+ "seconds": 30,
+ "frames": 720,
+ "shots": [
+  {
+   "id": "plan",
+   "seconds": [
+    0,
+    2.5
+   ],
+   "frames": [
+    0,
+    59
+   ]
+  },
+  {
+   "id": "floors",
+   "seconds": [
+    2.5,
+    5
+   ],
+   "frames": [
+    60,
+    119
+   ]
+  },
+  {
+   "id": "walls",
+   "seconds": [
+    5,
+    10
+   ],
+   "frames": [
+    120,
+    239
+   ]
+  },
+  {
+   "id": "openings",
+   "seconds": [
+    10,
+    13
+   ],
+   "frames": [
+    240,
+    311
+   ]
+  },
+  {
+   "id": "furniture",
+   "seconds": [
+    13,
+    17
+   ],
+   "frames": [
+    312,
+    407
+   ]
+  },
+  {
+   "id": "enter",
+   "seconds": [
+    17,
+    24.5
+   ],
+   "frames": [
+    408,
+    587
+   ]
+  },
+  {
+   "id": "living",
+   "seconds": [
+    24.5,
+    30
+   ],
+   "frames": [
+    588,
+    719
+   ]
+  }
+ ],
+ "revision": {
+  "projectId": "prj_reference-home",
+  "name": "Proyecto de ejemplo",
+  "updatedAt": "2026-09-30T00:00:00Z",
+  "levels": 1,
+  "activeLevel": null,
+  "entryId": "prj_7f4ae5ad50a44d03bab73451c576ea0c"
+ },
+ "profile": "revision"
+}

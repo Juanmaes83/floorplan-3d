@@ -1,0 +1,129 @@
+[
+ {
+  "check": "1 · la Escena para Blender anuncia la película pendiente",
+  "ok": true,
+  "detail": "Incluye el guion de la película: Maqueta abierta · 30 s · perfil revision"
+ },
+ {
+  "check": "1 · guion A: efecto y perfil",
+  "ok": true,
+  "detail": {
+   "effect": "maqueta-abierta",
+   "profile": "revision"
+  }
+ },
+ {
+  "check": "1 · guion A: revisión (proyecto, entrada, fecha)",
+  "ok": true,
+  "detail": {
+   "projectId": "prj_reference-home",
+   "name": "Proyecto de ejemplo",
+   "updatedAt": "2026-09-30T00:00:00Z",
+   "levels": 1,
+   "activeLevel": null,
+   "entryId": "prj_7f4ae5ad50a44d03bab73451c576ea0c"
+  }
+ },
+ {
+  "check": "1 · manifiesto A: película declarada con huella",
+  "ok": true,
+  "detail": {
+   "file": "rubik-pelicula-guion.json",
+   "effect": "maqueta-abierta",
+   "seconds": 30,
+   "frames": 720,
+   "profile": "revision"
+  }
+ },
+ {
+  "check": "1 · manifiesto A: proyecto",
+  "ok": true,
+  "detail": "prj_reference-home"
+ },
+ {
+  "check": "1 · ZIP A lleva el kit que consume el guion",
+  "ok": true,
+  "detail": [
+   "rubik_blender_rodaje.py",
+   "rubik_rodaje_recursos.json",
+   "rodar.sh"
+  ]
+ },
+ {
+  "check": "2 · guion B: efecto y perfil nuevos",
+  "ok": true,
+  "detail": {
+   "effect": "pieza-a-pieza",
+   "profile": "entrega1440",
+   "seconds": 24
+  }
+ },
+ {
+  "check": "2 · manifiesto B coincide con su guion",
+  "ok": true,
+  "detail": {
+   "file": "rubik-pelicula-guion.json",
+   "effect": "pieza-a-pieza",
+   "seconds": 24,
+   "frames": 576,
+   "profile": "entrega1440"
+  }
+ },
+ {
+  "check": "2 · A y B: misma revisión del proyecto (sin editar)",
+  "ok": true,
+  "detail": {
+   "a": "2f755be470b3",
+   "b": "2f755be470b3"
+  }
+ },
+ {
+  "check": "3 · editado tras elegir: el ZIP no lleva el guion de otra revisión",
+  "ok": true,
+  "detail": {
+   "guion": false,
+   "film": null
+  }
+ },
+ {
+  "check": "3 · y la interfaz lo dice",
+  "ok": true,
+  "detail": {
+   "state": "dropped",
+   "text": "La elección de película se descartó: el proyecto cambió después de elegir el efecto. Vuelve a elegirlo en Entregar › Vídeo."
+  }
+ },
+ {
+  "check": "3 · la revisión exportada es la editada",
+  "ok": true,
+  "detail": null
+ },
+ {
+  "check": "4 · al volver, la elección sigue y se ve",
+  "ok": true,
+  "detail": "Incluye el guion de la película: Pieza a pieza · 24 s · perfil revision"
+ },
+ {
+  "check": "4 · el ZIP lleva Pieza a pieza · revision de la revisión actual",
+  "ok": true,
+  "detail": {
+   "effect": "pieza-a-pieza",
+   "profile": "revision"
+  }
+ },
+ {
+  "check": "5 · cancelar en la confirmación: sin guion",
+  "ok": true,
+  "detail": null
+ },
+ {
+  "check": "6 · otro proyecto: sin guion heredado y su propio id",
+  "ok": true,
+  "detail": "prj_op10-f3-openings"
+ },
+ {
+  "check": "sin errores de página",
+  "ok": true,
+  "detail": []
+ }
+]

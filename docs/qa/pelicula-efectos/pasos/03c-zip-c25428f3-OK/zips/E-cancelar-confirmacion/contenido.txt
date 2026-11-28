@@ -1,0 +1,24 @@
+Archive:  /tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad/zip3b-out/E-cancelar-confirmacion.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+ 12602412  1980-00-00 00:00   scene.glb
+     8596  1980-00-00 00:00   manifest.json
+     3485  1980-00-00 00:00   LEEME.txt
+    13968  1980-00-00 00:00   rubik_blender_prepare.py
+    30113  1980-00-00 00:00   rubik_blender_render.py
+     4339  1980-00-00 00:00   rubik_blender_verify.py
+      633  1980-00-00 00:00   rubik_render_profiles.json
+     3858  1980-00-00 00:00   renderizar.sh
+     3759  1980-00-00 00:00   RENDERIZAR-windows.bat
+     3761  1980-00-00 00:00   LICENCIA-SCRIPTS.txt
+    35149  1980-00-00 00:00   COPYING-GPL-3.0.txt
+   106321  1980-00-00 00:00   rubik_blender_rodaje.py
+    12843  1980-00-00 00:00   rubik_rodaje_recursos.json
+     3220  1980-00-00 00:00   rodar.sh
+     4269  1980-00-00 00:00   RODAR-windows.bat
+     3944  1980-00-00 00:00   rubik_blender_entorno.py
+     8730  1980-00-00 00:00   rubik-estancias.json
+   479327  1980-00-00 00:00   referencia-rubik.png
+    19916  1980-00-00 00:00   rubik-materiales.json
+---------                     -------
+ 13348643                     19 files
