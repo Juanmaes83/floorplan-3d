@@ -1,0 +1,24 @@
+{
+ "format": "rubik-sota.pelicula-script",
+ "version": "1.0.0",
+ "effect": "maqueta-abierta",
+ "fps": 24,
+ "seconds": 30,
+ "frames": 720,
+ "shots": [
+  {
+   "id": "plan",
+   "seconds": [
+    0,
+    2.5
+   ],
+   "frames": [
+    0,
+    59
+   ]
+  },
+  {
+   "id": "floors",
+   "seconds": [
+    2.5,
+    5

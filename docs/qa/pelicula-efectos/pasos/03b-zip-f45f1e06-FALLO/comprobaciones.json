@@ -1,0 +1,61 @@
+[
+ {
+  "check": "1 · la Escena para Blender anuncia la película pendiente",
+  "ok": true,
+  "detail": "Incluye el guion de la película: Maqueta abierta · 30 s · perfil revision"
+ },
+ {
+  "check": "1 · guion A: efecto y perfil",
+  "ok": true,
+  "detail": {
+   "effect": "maqueta-abierta",
+   "profile": "revision"
+  }
+ },
+ {
+  "check": "1 · guion A: revisión (proyecto, entrada, fecha)",
+  "ok": true,
+  "detail": {
+   "projectId": "prj_reference-home",
+   "name": "Proyecto de ejemplo",
+   "updatedAt": "2026-09-30T00:00:00Z",
+   "levels": 1,
+   "activeLevel": null,
+   "entryId": "prj_4c4127334f88473eb80265bd0571467a"
+  }
+ },
+ {
+  "check": "1 · manifiesto A: película declarada con huella",
+  "ok": true,
+  "detail": {
+   "file": "rubik-pelicula-guion.json",
+   "effect": "maqueta-abierta",
+   "seconds": 30,
+   "frames": 720,
+   "profile": "revision"
+  }
+ },
+ {
+  "check": "1 · manifiesto A: proyecto",
+  "ok": true,
+  "detail": "prj_reference-home"
+ },
+ {
+  "check": "1 · ZIP A lleva el kit que consume el guion",
+  "ok": true,
+  "detail": [
+   "rubik_blender_rodaje.py",
+   "rubik_rodaje_recursos.json",
+   "rodar.sh"
+  ]
+ },
+ {
+  "check": "2 · guion B: efecto y perfil nuevos",
+  "ok": false,
+  "detail": {
+   "effect": "maqueta-abierta",
+   "profile": "revision",
+   "seconds": 30
+  }
+ }
+]
