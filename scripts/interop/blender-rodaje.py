@@ -787,7 +787,8 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
         if f_off is not None: seq += [(f_off, full), (f_off + 3, tiny)]
         for f, sc_ in seq: o.scale = sc_; o.keyframe_insert("scale", frame=f)
     col = bpy.data.collections.new("RUBIK_montaje"); sc.collection.children.link(col)
-    acc = mat_emit("RUBIK_huella_destino", (1.0, .42, .04, 1), 2.5, .55); nghost = 0
+    sc.cycles.transparent_max_bounces = max(sc.cycles.transparent_max_bounces, 48)  # rótulos y volúmenes translúcidos apilados
+    acc = mat_emit("RUBIK_huella_destino", (1.0, .42, .04, 1), 2.0, .35); borde = mat_emit("RUBIK_huella_destino_borde", (1.0, .36, .0, 1), 4.0, 1.0); nghost = 0
     for role in ("opening", "opening-leaf", "object"):
         for o in by.get(role, []):
             if o.name not in LAND: continue
@@ -801,7 +802,11 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
             bpy.ops.mesh.primitive_cube_add(size=1); g = bpy.context.active_object; g.name = "RUBIK_destino_" + o.name
             for c in list(g.users_collection): c.objects.unlink(g)
             col.objects.link(g); g.data.materials.append(acc); no_rays(g)
-            g.location = V(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)); pop(g, S[sh][0], land, V((max(x1 - x0, .06) + .02, max(y1 - y0, .06) + .02, max(z1 - z0, .06) + .02))); nghost += 1
+            dims = V((max(x1 - x0, .06) + .02, max(y1 - y0, .06) + .02, max(z1 - z0, .06) + .02))
+            g.location = V(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)); pop(g, S[sh][0], land, dims); nghost += 1
+            # Contorno nítido (aristas de la caja): se distingue sobre suelos claros donde el relleno translúcido se pierde.
+            e = g.copy(); e.data = g.data.copy(); e.name = "RUBIK_destino_borde_" + o.name; col.objects.link(e); e.data.materials[0] = borde
+            wf = e.modifiers.new("borde", "WIREFRAME"); wf.thickness = .022 / max(min(dims), .1); wf.use_relative_offset = False; wf.use_even_offset = True; no_rays(e)
     # Rótulo fijo en pantalla: hijo de la cámara; un vacío a 1 m delante escala con el objetivo (anchura visible = 36 mm / lens).
     hold = bpy.data.objects.new("RUBIK_rotulo_grupo", None); col.objects.link(hold); hold.parent = cam; hold.location = (0, 0, -1)
     for f in range(0, nframes + 6, 6):
@@ -811,6 +816,10 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
     grupos = [("floors", f"Llegan los suelos · {n_rooms} estancias", "Suelos sobre la planta"), ("walls", f"Llegan los muros · {len(ws)} piezas", "Muros encajados"),
               ("openings", f"Llegan huecos y carpinterías · {n_op} piezas", "Huecos y carpinterías encajados"),
               ("furniture", f"Llega el mobiliario · {n_obj} piezas", "Mobiliario encajado")]
+    def fade(m, f_on, f_off, amax):  # opacidad 0 → amax en 6 fotogramas y vuelta; la escala no cambia (antes se encogía)
+        a = m.node_tree.nodes.get("Principled BSDF").inputs["Alpha"]
+        for f, v in ((0, 0.0), (max(0, f_on - 1), 0.0), (f_on + 6, amax), (f_off - 6, amax), (f_off, 0.0)):
+            a.default_value = v; a.keyframe_insert("default_value", frame=f)
     def rotulo(body, f_on, f_off):
         cu = bpy.data.curves.new("RUBIK_grupo_txt", "FONT"); cu.body = body; cu.align_x = "LEFT"; cu.align_y = "CENTER"; cu.size = .028
         t = bpy.data.objects.new("RUBIK_grupo_txt", cu); col.objects.link(t); t.parent = hold; t.location = (-.47, -.235, 0); cu.materials.append(txt); no_rays(t)
@@ -818,13 +827,20 @@ def montaje_por_grupos(sc, cam, cd, by, ws, LAND, S, fps, nframes, at, declared)
         bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object
         for c in list(pl.users_collection): c.objects.unlink(pl)
         col.objects.link(pl); pl.parent = hold; pl.data.materials.append(fondo); no_rays(pl); pl.location = (-.47 - .015 + wpl / 2, -.235, -.001)
-        pop(t, f_on, f_off, V((1, 1, 1))); pop(pl, f_on, f_off, V((wpl, .05, 1)))
+        # Fuera de su tramo (opacidad ya 0) el rótulo se retira a escala mínima: sin capas transparentes apiladas que lo corten.
+        # Claves en fotogramas consecutivos: el cambio es instantáneo y cae donde la opacidad ya es 0 (nunca se ve encogerse).
+        for ob_, full in ((t, V((1, 1, 1))), (pl, V((wpl, .05, 1)))):
+            tiny = V((.0005, .0005, .0005))
+            for f, v in ((0, tiny), (max(0, f_on - 2), tiny), (max(1, f_on - 1), full), (f_off, full), (f_off + 1, tiny)):
+                ob_.scale = v; ob_.keyframe_insert("scale", frame=f)
+        mt = txt.copy(); mf = fondo.copy(); t.data.materials[0] = mt; pl.data.materials[0] = mf
+        fade(mt, f_on, f_off, 1.0); fade(mf, f_on, f_off, .72)
     for sh, llega, hecho in grupos:
         if sh not in S: continue
         a, b = S[sh]; cut = b - int(1.1 * fps)
-        rotulo(llega, a, cut); rotulo(hecho, cut + 3, b)
+        rotulo(llega, a, cut + 3); rotulo(hecho, cut - 3, b)
     declared.append(f"montaje por grupos: rótulo en pantalla por grupo (suelos {n_rooms}, muros {len(ws)}, huecos/carpinterías {n_op}, muebles {n_obj}); "
-                    f"{nghost} volúmenes de destino (caja real de cada pieza, acento translúcido) en su sitio final, visibles desde que empieza su grupo hasta que la pieza encaja")
+                    f"{nghost} volúmenes de destino (caja real de cada pieza: relleno translúcido y contorno de aristas en acento) en su sitio final; rótulos con fundido de opacidad, visibles desde que empieza su grupo hasta que la pieza encaja")
 
 def pelicula(sc, cd, cam, derived, project, labels, origin, h, TL, declared, nframes):
     """Del plano a la vivienda: planta legible → muros que crecen desde su huella → huecos → mobiliario → entrada a la estancia.
