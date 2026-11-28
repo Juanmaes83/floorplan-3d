@@ -151,7 +151,10 @@
   if(filmDropped){n.textContent=filmDropped==='edited'?(en?'The film choice was discarded: the project changed after choosing the effect. Choose it again in Deliver › Video.':'La elección de película se descartó: el proyecto cambió después de elegir el efecto. Vuelve a elegirlo en Entregar › Vídeo.'):(en?'The film choice belonged to another project and was discarded.':'La elección de película era de otro proyecto y se descartó.');n.dataset.film='dropped';n.hidden=false;return;}
   const f=l&&l.projectId===(window.FloorPlanApp?.project?.id||null)?l:null;n.hidden=!f;n.dataset.film=f?'pending':'none';
   if(f){const name=window.FloorPlanPeliculaEfectos?.byId(f.effect)?.name;n.textContent=(en?'Includes the film script: ':'Incluye el guion de la película: ')+(name?(en?name.en:name.es):f.effect)+' · '+f.script.seconds+' s · '+(en?'profile ':'perfil ')+f.profile;}}
- function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';filmDropped=null;render();filmNote();dlg.showModal();(primary.hidden?secondary:primary).focus();}
+ function open(){if(state!=='ready')state='idle';else if(!result.stillCurrent())state='stale';
+  // Un paquete preparado no se reutiliza si hay una elección de película pendiente (la nueva no entraría) ni si ya lleva un guion
+  // (sería la elección anterior, ya consumida): se vuelve a preparar y el ZIP lleva exactamente lo elegido ahora, o nada.
+  else if(window.RubikPeliculaEfectos?._last||result.manifest?.film)state='idle';filmDropped=null;render();filmNote();dlg.showModal();(primary.hidden?secondary:primary).focus();}
  // Entrada: «Entregar» → grupo «Documentación». Botón SECUNDARIO, como las demás tarjetas (sin acciones primarias en tarjetas).
  const addCard=()=>{const items=document.querySelector('[data-group="documentation"] .professional-group-items');if(!items||document.getElementById('sceneExportCard'))return; // una sola tarjeta: Entregar puede colocarla en otro grupo (UX-312 F3)
   const card=el('article',{class:'professional-card scene-export-card',id:'sceneExportCard','data-module':'blender-scene'},items);el('h3',{},card,tx('Escena para Blender','Scene for Blender','Blender 场景'));
