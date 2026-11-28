@@ -17,3 +17,4 @@ Mismo encuadre (fotograma 24 de Maqueta abierta, planta cenital), kit de rodaje,
 - Ningún texto ni placa invade muros: Pasillo ya no toca el muro.
 - Baño en suite, Baño de invitados, Pasillo, Balcón-lavadero y Balcón de estar se leen al tamaño real.
 Límite: la fuente del kit es de trazo fino; si se quiere más peso en secundarios hace falta una fuente con negrita (cambio de recurso).
+- Nota de trazabilidad: `despues-2560x1440.jpg` se renderizó con `offset` 0,012 aún presente; con 0,03 los valores medidos fueron idénticos (sin efecto), por eso se retiró. El código publicado es el mismo menos esa línea.
