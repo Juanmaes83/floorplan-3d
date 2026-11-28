@@ -131,3 +131,17 @@ en `emplazamiento/`. Se puede llevar sola a master (un archivo y su prueba), sin
   - Pruebas: núcleo 5/5, scene-delivery 14/14 (incluida la entrada del ejemplo `opn_door-5`), kit 6/6.
   - En cola (`scratchpad/fase1.sh`, tras la regresión de #324): prueba de navegador UI (escritorio/móvil, ES/EN), prueba del ZIP
     (efecto/perfil/proyecto/revisión, cambio de efecto, cancelar, cambio de proyecto) y previas ligeras de Maqueta abierta y Pieza a pieza.
+
+## Estado 28/11/2026 · 00:45 · pasos publicados por separado (`pasos/`)
+| Paso | SHA probado | Código de salida | Resultado |
+|---|---|---|---|
+| 3 · ZIP | d46eb6be | 1 | kit ausente → corregido en a4719374 (+ guarda `scene-kit-heads`) |
+| 3b · ZIP | f45f1e06 | 1 | ZIP B con guion de A → corregido en c25428f3 |
+| **3c · ZIP** | c25428f3 / 3df7ed6f | **0** | **17/17**, seis descargas, grabación |
+| 4 · Interfaz | 8e536411 y 3df7ed6f | 0 y 0 | 4/4 (escritorio/móvil, ES/EN) |
+| 5 · Previa Maqueta abierta | kit d46eb6be | 0 | 60 fotogramas · revisión de Juanma |
+| 6 · Previa Pieza a pieza | kit d46eb6be | 0 | 48 fotogramas · revisión de Juanma |
+| 7 · Rótulos de planta | f45f1e06 | 0 (1 fotograma) | ya no invaden muros · **decisión de Juanma: mínimo 0,24 / 0,34 / ocultar** |
+
+Siguiente: montaje demo «Desde el paisaje» y previa suelo/terreno/camino/puerta (revisión de Juanma); exportación sin emplazamiento.
+Renders largos después; examen de los cinco proyectos el último.
