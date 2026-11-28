@@ -1,0 +1,386 @@
+SHA dacb5d395abf32449102d73ffd03200e6c09c019
+TAP version 13
+# Subtest: G-02 downloads only the active building level without changing the editor or saved project
+not ok 1 - G-02 downloads only the active building level without changing the editor or saved project
+  ---
+  duration_ms: 3007.819811
+  type: 'test'
+  location: '/home/user/base53/tests/g02-dxf.browser.test.cjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(file.name.endsWith(level.name+'.dxf'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/base53/tests/g02-dxf.browser.test.cjs:33:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: G-02 downloads the current variant and reimports it in RUBIK with estimated scale
+ok 2 - G-02 downloads the current variant and reimports it in RUBIK with estimated scale
+  ---
+  duration_ms: 2780.96067
+  type: 'test'
+  ...
+# Subtest: G-02 warns when an edited DXF must be rebuilt from visible walls
+ok 3 - G-02 warns when an edited DXF must be rebuilt from visible walls
+  ---
+  duration_ms: 2438.253377
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+ok 4 - R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+  ---
+  duration_ms: 24576.062548
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 390x844
+ok 5 - R2 P01/P02 search and closed-guide entry preserve the project 390x844
+  ---
+  duration_ms: 26749.699972
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 844x390
+ok 6 - R2 P01/P02 search and closed-guide entry preserve the project 844x390
+  ---
+  duration_ms: 46566.579988
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 360x800
+ok 7 - R2 P01/P02 search and closed-guide entry preserve the project 360x800
+  ---
+  duration_ms: 26267.963484
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 1440x900
+ok 8 - R2 P13 presentation PNG is real and restores the view 1440x900
+  ---
+  duration_ms: 37207.849539
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 390x844
+ok 9 - R2 P13 presentation PNG is real and restores the view 390x844
+  ---
+  duration_ms: 24172.283894
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 844x390
+ok 10 - R2 P13 presentation PNG is real and restores the view 844x390
+  ---
+  duration_ms: 28982.144376
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 360x800
+ok 11 - R2 P13 presentation PNG is real and restores the view 360x800
+  ---
+  duration_ms: 27327.294935
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 1440x900
+ok 12 - presentation starts from a real room and restores 2D 1440x900
+  ---
+  duration_ms: 25638.077636
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 390x844
+ok 13 - presentation starts from a real room and restores 2D 390x844
+  ---
+  duration_ms: 19688.566155
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 844x390
+ok 14 - presentation starts from a real room and restores 2D 844x390
+  ---
+  duration_ms: 23562.831865
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 360x800
+ok 15 - presentation starts from a real room and restores 2D 360x800
+  ---
+  duration_ms: 18901.707874
+  type: 'test'
+  ...
+# Subtest: R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+ok 16 - R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+  ---
+  duration_ms: 32872.546989
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 1440x900
+ok 17 - R2 P11 missing GLB keeps generic furniture and warns 1440x900
+  ---
+  duration_ms: 23057.927299
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 390x844
+ok 18 - R2 P11 missing GLB keeps generic furniture and warns 390x844
+  ---
+  duration_ms: 18832.58842
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 844x390
+ok 19 - R2 P11 missing GLB keeps generic furniture and warns 844x390
+  ---
+  duration_ms: 22417.109564
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 360x800
+ok 20 - R2 P11 missing GLB keeps generic furniture and warns 360x800
+  ---
+  duration_ms: 18503.748729
+  type: 'test'
+  ...
+# Subtest: R2 P11 corrupt GLB also keeps the generic and the project
+ok 21 - R2 P11 corrupt GLB also keeps the generic and the project
+  ---
+  duration_ms: 16718.745411
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 1440x900
+ok 22 - R2 P11 WebGL context loss returns intact 2D 1440x900
+  ---
+  duration_ms: 19593.396282
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 390x844
+ok 23 - R2 P11 WebGL context loss returns intact 2D 390x844
+  ---
+  duration_ms: 17589.753863
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 844x390
+ok 24 - R2 P11 WebGL context loss returns intact 2D 844x390
+  ---
+  duration_ms: 26001.629219
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 360x800
+ok 25 - R2 P11 WebGL context loss returns intact 2D 360x800
+  ---
+  duration_ms: 18205.859245
+  type: 'test'
+  ...
+# Subtest: R2 P11 context loss while 3D starts cannot reopen the presentation
+ok 26 - R2 P11 context loss while 3D starts cannot reopen the presentation
+  ---
+  duration_ms: 9807.669106
+  type: 'test'
+  ...
+# Subtest: R2 P14 reduced motion and four resize aspects keep the active stop framed
+ok 27 - R2 P14 reduced motion and four resize aspects keep the active stop framed
+  ---
+  duration_ms: 24473.12573
+  type: 'test'
+  ...
+# Subtest: R2 P14 presentation entered from 3D restores camera and final viewport aspect
+ok 28 - R2 P14 presentation entered from 3D restores camera and final viewport aspect
+  ---
+  duration_ms: 20690.46389
+  type: 'test'
+  ...
+# Subtest: R2 P15 ten presentation cycles release their loop and keep renderer memory stable
+ok 29 - R2 P15 ten presentation cycles release their loop and keep renderer memory stable
+  ---
+  duration_ms: 138641.884281
+  type: 'test'
+  ...
+# cycle renderer memory=[{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9}]
+# renderer memory warm={"geometries":1189,"textures":9} final={"geometries":1189,"textures":9}
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 1440x900
+not ok 30 - R2 P16 long HTML-like room name stays text and controls fit 1440x900
+  ---
+  duration_ms: 22404.170203
+  type: 'test'
+  location: '/home/user/base53/tests/presentation.browser.test.cjs:269:118'
+  failureType: 'testCodeFailure'
+  error: 'selected stop remains visible within card {"viewport":{"width":1440,"height":900},"card":{"x":1108,"y":62,"width":320,"height":820,"top":62,"right":1428,"bottom":882,"left":1108},"close":{"x":1125,"y":107,"width":108.65625,"height":44,"top":107,"right":1233.65625,"bottom":151,"left":1125},"stop":{"x":1125,"y":824,"width":286,"height":70.5,"top":824,"right":1411,"bottom":894.5,"left":1125},"stopContentFits":true,"overflow":false}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/base53/tests/presentation.browser.test.cjs:290:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 390x844
+ok 31 - R2 P16 long HTML-like room name stays text and controls fit 390x844
+  ---
+  duration_ms: 20462.899269
+  type: 'test'
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 844x390
+ok 32 - R2 P16 long HTML-like room name stays text and controls fit 844x390
+  ---
+  duration_ms: 22560.307614
+  type: 'test'
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 360x800
+ok 33 - R2 P16 long HTML-like room name stays text and controls fit 360x800
+  ---
+  duration_ms: 20167.033615
+  type: 'test'
+  ...
+# Subtest: R2 P16 mixed room name follows the visible language, stays text and leaves the saved name intact
+ok 34 - R2 P16 mixed room name follows the visible language, stays text and leaves the saved name intact
+  ---
+  duration_ms: 60210.021885
+  type: 'test'
+  ...
+# Subtest: 3D camera, focus and editor state return after Escape and browser Back
+ok 35 - 3D camera, focus and editor state return after Escape and browser Back
+  ---
+  duration_ms: 37622.127395
+  type: 'test'
+  ...
+# Subtest: R2 P08 walk pointer lock releases for presentation and needs a new gesture on return
+ok 36 - R2 P08 walk pointer lock releases for presentation and needs a new gesture on return
+  ---
+  duration_ms: 25180.293941
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 390x844
+ok 37 - R2 P08 touch walk stops and resumes by gesture 390x844
+  ---
+  duration_ms: 19751.304917
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 844x390
+ok 38 - R2 P08 touch walk stops and resumes by gesture 844x390
+  ---
+  duration_ms: 23663.898088
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 360x800
+ok 39 - R2 P08 touch walk stops and resumes by gesture 360x800
+  ---
+  duration_ms: 21724.972117
+  type: 'test'
+  ...
+# Subtest: Escape during 3D loading cancels without a late presentation
+ok 40 - Escape during 3D loading cancels without a late presentation
+  ---
+  duration_ms: 13844.860208
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back while 2D presentation is loading restores editor 1440x900
+ok 41 - R2 P07 Back while 2D presentation is loading restores editor 1440x900
+  ---
+  duration_ms: 19384.62953
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close while 2D presentation is loading restores editor 390x844
+ok 42 - R2 P07 Close while 2D presentation is loading restores editor 390x844
+  ---
+  duration_ms: 15880.176517
+  type: 'test'
+  ...
+# Subtest: R2 P07 Escape while 2D presentation is loading restores editor 844x390
+ok 43 - R2 P07 Escape while 2D presentation is loading restores editor 844x390
+  ---
+  duration_ms: 19856.585909
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back while 2D presentation is loading restores editor 360x800
+ok 44 - R2 P07 Back while 2D presentation is loading restores editor 360x800
+  ---
+  duration_ms: 16314.432627
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close during room flight restores editor 1440x900
+ok 45 - R2 P07 Close during room flight restores editor 1440x900
+  ---
+  duration_ms: 23559.337621
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back during room flight restores editor 390x844
+ok 46 - R2 P07 Back during room flight restores editor 390x844
+  ---
+  duration_ms: 19354.668576
+  type: 'test'
+  ...
+# Subtest: R2 P07 Escape during room flight restores editor 844x390
+ok 47 - R2 P07 Escape during room flight restores editor 844x390
+  ---
+  duration_ms: 22335.385299
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close during room flight restores editor 360x800
+ok 48 - R2 P07 Close during room flight restores editor 360x800
+  ---
+  duration_ms: 18289.283278
+  type: 'test'
+  ...
+# Subtest: missing 3D runtime returns to the 2D document with an explanation
+ok 49 - missing 3D runtime returns to the 2D document with an explanation
+  ---
+  duration_ms: 3776.659101
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 1440x900
+ok 50 - R2 P03 empty project explains layout in both entry paths 1440x900
+  ---
+  duration_ms: 2688.732928
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 390x844
+ok 51 - R2 P03 empty project explains layout in both entry paths 390x844
+  ---
+  duration_ms: 2703.891271
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 844x390
+ok 52 - R2 P03 empty project explains layout in both entry paths 844x390
+  ---
+  duration_ms: 2696.938638
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 360x800
+ok 53 - R2 P03 empty project explains layout in both entry paths 360x800
+  ---
+  duration_ms: 2590.736543
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 1440x900
+ok 54 - R2 P05 own and imported room data and poses follow active IDs 1440x900
+  ---
+  duration_ms: 59488.406043
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 390x844
+ok 55 - R2 P05 own and imported room data and poses follow active IDs 390x844
+  ---
+  duration_ms: 48529.608202
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 844x390
+ok 56 - R2 P05 own and imported room data and poses follow active IDs 844x390
+  ---
+  duration_ms: 63666.193797
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 360x800
+ok 57 - R2 P05 own and imported room data and poses follow active IDs 360x800
+  ---
+  duration_ms: 48222.501399
+  type: 'test'
+  ...
+# Subtest: R2 room selection and order persist outside project; stale room IDs reconcile on reload
+ok 58 - R2 room selection and order persist outside project; stale room IDs reconcile on reload
+  ---
+  duration_ms: 25836.65419
+  type: 'test'
+  ...
+# Subtest: R2 changing active project invalidates the live plan and keeps sidecars isolated
+ok 59 - R2 changing active project invalidates the live plan and keeps sidecars isolated
+  ---
+  duration_ms: 28357.24636
+  type: 'test'
+  ...

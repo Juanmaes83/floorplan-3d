@@ -1,0 +1,30 @@
+{
+ "tag": "base53",
+ "root": "/home/user/base53",
+ "rows": [
+  {
+   "run": 1,
+   "type": "video/mp4",
+   "size": 191962,
+   "file": "base53-1.mp4",
+   "seconds": 38,
+   "avisos": []
+  },
+  {
+   "run": 2,
+   "type": "video/mp4",
+   "size": 189538,
+   "file": "base53-2.mp4",
+   "seconds": 40,
+   "avisos": []
+  },
+  {
+   "run": 3,
+   "type": "video/mp4",
+   "size": 190182,
+   "file": "base53-3.mp4",
+   "seconds": 38,
+   "avisos": []
+  }
+ ]
+}

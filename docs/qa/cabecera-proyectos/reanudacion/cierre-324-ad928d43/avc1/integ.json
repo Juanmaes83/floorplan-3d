@@ -1,0 +1,30 @@
+{
+ "tag": "integ",
+ "root": "/home/user/integ",
+ "rows": [
+  {
+   "run": 1,
+   "type": "video/mp4",
+   "size": 189824,
+   "file": "integ-1.mp4",
+   "seconds": 38,
+   "avisos": []
+  },
+  {
+   "run": 2,
+   "type": "video/mp4",
+   "size": 189506,
+   "file": "integ-2.mp4",
+   "seconds": 36,
+   "avisos": []
+  },
+  {
+   "run": 3,
+   "type": "video/mp4",
+   "size": 190249,
+   "file": "integ-3.mp4",
+   "seconds": 37,
+   "avisos": []
+  }
+ ]
+}

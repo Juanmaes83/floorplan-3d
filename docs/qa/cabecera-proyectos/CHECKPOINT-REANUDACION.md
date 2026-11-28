@@ -2,6 +2,32 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT DE COMPACTACIÓN · 28/11/2026, 00:30 (leer primero; el roadmap de las 22:30 sigue como orden general)
+
+**Procesos:** ninguno activo. El contenedor se reinició ~00:20 (uptime 0) y cortó `fase1.sh` en el paso «story-assist 1».
+Nada encadenado: `pel-v11.sh` parado (bloqueo `scratchpad/pel-v11-STOP`), sin tareas programadas. Worktrees limpios: las salidas
+regeneradas por la regresión (docs/qa/artifacts, qa-results/serra-r1) se devolvieron a su estado; no se publica ninguna.
+
+### Frentes (repo `Juanmaes83/floorplan-3d`)
+| Frente | Rama · SHA | Verificado | Pendiente | Logs / evidencias |
+|---|---|---|---|---|
+| #324 (borrador) | `claude/integracion-cabecera-entregar` · **`ad928d43`** | Regresión local completa **482 · 479 ok · 3 fallos de base** (G-02, P16 1440 y «Estudio de imágenes» fallan igual en `master` `dacb5d39`; G-02 y P16 en el contraste de esta noche, «Estudio de imágenes» en el de la tarde). CI 95/96: solo `contract` §8.3 P10 con aviso `avc1`. **avc1 local: 6 grabaciones reproducibles (3 master, 3 #324) por la interfaz real, 0 avisos, MP4 válidos** → no reproduce con Chromium 153; propio del Chromium 1234 de la CI | P10 §8.3 repetida ×2 en local; relanzar `contract` en CI o decidir avc3; CI + Preview del SHA final; comentario por hallazgo (borrador publicado) | `reanudacion/cierre-324-ad928d43/`: `regresion-ad928d43.tap`, `contraste-master-dacb5d39.tap`, `avc1/*.json` + 6 MP4, `grabar.cjs`, `borrador-comentario-324.md` |
+| Tres efectos | `claude/pelicula-efectos` · **`d46eb6be`** | Núcleo 5/5; scene-delivery 14/14 + kit 6/6; scene-site 8/8; sonda UI local (Home tras Dibujo vivo, Entregar P12 tras P1, 0 errores, sin chino); kit con guion y 3 coreografías (código) | **Prueba UI** `tests/pelicula-efectos.browser.test.cjs` y **prueba ZIP** `tests/pelicula-efectos-zip.browser.test.cjs` (d46eb6be): **escritas, pendientes de ejecución** (grabación PEL_REC + ZIP + comprobaciones.json); previas Blender de Maqueta abierta y Pieza a pieza; montaje demo «Desde el paisaje» (`sonda-montar-demo-paisaje.cjs`) y previa suelo/terreno/camino/puerta | `docs/qa/pelicula-efectos/HANDOFF.md`; guiones `reanudacion/cierre-324-ad928d43/guion-*.json` |
+| Piloto v1.1 | `claude/rodaje-cierre-1440` · `230c7316` (también fusionado en efectos) | código de las 4 correcciones | render 720p (fase 2, entrega propia) | `pel-v11.sh` en `cierre-324-ad928d43/` |
+| Gesture Labs | `claude/gesture-labs` · `92ffb5f1` | navegador 6/6 ×2, core 11/11 | grabación de Juanma con cámara frontal | `docs/qa/gesture-labs/` |
+| Cabecera/§9 | `claude/cabecera-proyectos` (este checkpoint) | — | — | — |
+
+### Reanudar (orden)
+1. `bash docs/qa/cabecera-proyectos/reanudacion/cierre-324-ad928d43/fase1-resto.sh` (desligado con setsid): P10 ×2 → UI efectos →
+   ZIP efectos (grabación + 6 ZIP + comprobaciones.json) → previas Blender. Log: `scratchpad/fase1-resto.log`.
+2. Publicar resultados y evidencias (vídeo, ZIP, capturas de previas) en `docs/qa/pelicula-efectos/` con el SHA probado.
+3. Montaje demo «Desde el paisaje» (sonda) + exportación sin emplazamiento + previa suelo/terreno/camino/puerta → **revisión de Juanma**.
+4. #324: CI/Preview del SHA final y comentario por hallazgo (borrador). Sin fusión sin autorización expresa.
+5. Fase 2 (renders largos, uno cada vez): piloto v1.1 → Maqueta abierta → Pieza a pieza → Desde el paisaje (tras aprobar la previa).
+6. Fase 3: examen de los cinco proyectos (depende de la fusión de #324).
+**Dependencias de /tmp:** venv `scratchpad/bpy52` y `scratchpad/rodaje/kit5-f5` (si se perdieron: README de `docs/qa/pelicula-proyecto/`
+y ZIP `entrada/` para reconstruir); sondas y guiones ya copiados al repositorio.
+
 ## ▶ ROADMAP · 27/11/2026, 22:30 (leer primero; sustituye al orden anterior)
 
 ### Ahora mismo

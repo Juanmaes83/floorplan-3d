@@ -1,0 +1,2981 @@
+SHA ad928d433c6b60e19622fc07030b518532b534de
+TAP version 13
+# Subtest: Phase B2: AI render of a real view with consent, access code and honest labels
+ok 1 - Phase B2: AI render of a real view with consent, access code and honest labels
+  ---
+  duration_ms: 32856.719629
+  type: 'test'
+  ...
+# Subtest: sin elegir la IA no sale ninguna petición; si el servicio no está autorizado se explica y la consulta guiada sigue igual
+ok 2 - sin elegir la IA no sale ninguna petición; si el servicio no está autorizado se explica y la consulta guiada sigue igual
+  ---
+  duration_ms: 3029.637871
+  type: 'test'
+  ...
+# Subtest: la envoltura de Preview explica el piloto cerrado y la pausa de almacenamiento
+ok 3 - la envoltura de Preview explica el piloto cerrado y la pausa de almacenamiento
+  ---
+  duration_ms: 7211.678591
+  type: 'test'
+  ...
+# Subtest: conversación con IA: consentimiento, herramientas reales de RUBIK, respuesta fundamentada con coste; propuesta → aplicar → deshacer; ruta real
+ok 4 - conversación con IA: consentimiento, herramientas reales de RUBIK, respuesta fundamentada con coste; propuesta → aplicar → deshacer; ruta real
+  ---
+  duration_ms: 6111.127484
+  type: 'test'
+  ...
+# Subtest: errores: tope alcanzado, código incorrecto y herramienta fuera de lista no rompen nada; la consulta guiada sigue disponible
+ok 5 - errores: tope alcanzado, código incorrecto y herramienta fuera de lista no rompen nada; la consulta guiada sigue disponible
+  ---
+  duration_ms: 4549.540709
+  type: 'test'
+  ...
+# Subtest: móvil 390×844 EN: modo IA, consentimiento y respuesta dentro de la pantalla, objetivos táctiles de 44 px
+ok 6 - móvil 390×844 EN: modo IA, consentimiento y respuesta dentro de la pantalla, objetivos táctiles de 44 px
+  ---
+  duration_ms: 3825.296431
+  type: 'test'
+  ...
+# Subtest: aislamiento: proyecto A → B → C y estudio → estudio: nada de A viaja a B, se exige consentimiento de nuevo, la respuesta en curso se descarta; la consulta guiada sigue igual
+ok 7 - aislamiento: proyecto A → B → C y estudio → estudio: nada de A viaja a B, se exige consentimiento de nuevo, la respuesta en curso se descarta; la consulta guiada sigue igual
+  ---
+  duration_ms: 5120.937596
+  type: 'test'
+  ...
+# Subtest: privacidad: la pregunta libre se envía sin correos, teléfonos ni enlaces reconocibles; el aviso no promete más de lo que se cumple (ES/EN/ZH)
+ok 8 - privacidad: la pregunta libre se envía sin correos, teléfonos ni enlaces reconocibles; el aviso no promete más de lo que se cumple (ES/EN/ZH)
+  ---
+  duration_ms: 3691.836262
+  type: 'test'
+  ...
+# Subtest: code-gated mode, private in-memory chat and a stale tool turn on the same project
+ok 9 - code-gated mode, private in-memory chat and a stale tool turn on the same project
+  ---
+  duration_ms: 3104.537909
+  type: 'test'
+  ...
+# Subtest: volver a consulta guiada detiene un turno generativo antes del siguiente paso
+ok 10 - volver a consulta guiada detiene un turno generativo antes del siguiente paso
+  ---
+  duration_ms: 2806.925686
+  type: 'test'
+  ...
+# Subtest: V01 · el presupuesto de una planta lo dice en Presupuestar, D4 (pantalla e impresión), CSV, JSON y al cambiar de planta
+ok 11 - V01 · el presupuesto de una planta lo dice en Presupuestar, D4 (pantalla e impresión), CSV, JSON y al cambiar de planta
+  ---
+  duration_ms: 5092.950689
+  type: 'test'
+  ...
+# Subtest: V01 · con un proyecto de una sola planta nada cambia: sin línea de alcance ni columna extra en el CSV
+ok 12 - V01 · con un proyecto de una sola planta nada cambia: sin línea de alcance ni columna extra en el CSV
+  ---
+  duration_ms: 2776.390985
+  type: 'test'
+  ...
+# Subtest: V02 · Analizar, la portada de D3 y el HTML P7 nombran el edificio y sus dos plantas (nunca «Planta única»)
+ok 13 - V02 · Analizar, la portada de D3 y el HTML P7 nombran el edificio y sus dos plantas (nunca «Planta única»)
+  ---
+  duration_ms: 2241.919733
+  type: 'test'
+  ...
+# Subtest: V02 · control de una planta: el ejemplo sigue diciendo «Planta única»
+ok 14 - V02 · control de una planta: el ejemplo sigue diciendo «Planta única»
+  ---
+  duration_ms: 2291.972412
+  type: 'test'
+  ...
+# Subtest: V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura falla; reintentar lo guarda · escritorio
+ok 15 - V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura falla; reintentar lo guarda · escritorio
+  ---
+  duration_ms: 3188.577793
+  type: 'test'
+  ...
+# Subtest: V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura falla; reintentar lo guarda · movil
+ok 16 - V03 · D3 no pierde el borrador ni lo da por guardado cuando la escritura falla; reintentar lo guarda · movil
+  ---
+  duration_ms: 3107.793051
+  type: 'test'
+  ...
+# Subtest: V05 · abrir «Escena 3D» no da por hecha la revisión; «Revisar en 3D» sí, y volver a 2D la conserva
+ok 17 - V05 · abrir «Escena 3D» no da por hecha la revisión; «Revisar en 3D» sí, y volver a 2D la conserva
+  ---
+  duration_ms: 27292.198091
+  type: 'test'
+  ...
+# Subtest: V07 · P3 con dos plantas: dice el límite junto a la acción y ofrece P1, que abre la presentación del edificio
+ok 18 - V07 · P3 con dos plantas: dice el límite junto a la acción y ofrece P1, que abre la presentación del edificio
+  ---
+  duration_ms: 2518.963492
+  type: 'test'
+  ...
+# Subtest: professional brand 1440x900
+ok 19 - professional brand 1440x900
+  ---
+  duration_ms: 57647.009236
+  type: 'test'
+  ...
+# Subtest: professional brand 390x844
+ok 20 - professional brand 390x844
+  ---
+  duration_ms: 21450.952603
+  type: 'test'
+  ...
+# Subtest: professional brand 844x390
+ok 21 - professional brand 844x390
+  ---
+  duration_ms: 23339.925501
+  type: 'test'
+  ...
+# Subtest: 2D reference drawing and actual edit/duplicate/history/persistence remain functional
+ok 22 - 2D reference drawing and actual edit/duplicate/history/persistence remain functional
+  ---
+  duration_ms: 5638.15465
+  type: 'test'
+  ...
+# Subtest: actual file import and export preserve full F0 contract including optional data
+ok 23 - actual file import and export preserve full F0 contract including optional data
+  ---
+  duration_ms: 3236.995411
+  type: 'test'
+  ...
+# Subtest: room finishes, measurements/history and wall demolition update the canonical project
+ok 24 - room finishes, measurements/history and wall demolition update the canonical project
+  ---
+  duration_ms: 4597.856719
+  type: 'test'
+  ...
+# Subtest: opening and exporting a project does not add absent optional fields
+ok 25 - opening and exporting a project does not add absent optional fields
+  ---
+  duration_ms: 2762.909851
+  type: 'test'
+  ...
+# Subtest: file handler rejects invalid inputs atomically with visible element-specific errors
+ok 26 - file handler rejects invalid inputs atomically with visible element-specific errors
+  ---
+  duration_ms: 3897.913931
+  type: 'test'
+  ...
+# Subtest: hostile names and material names stay text; ID/color payloads cannot create events
+ok 27 - hostile names and material names stay text; ID/color payloads cannot create events
+  ---
+  duration_ms: 3214.333546
+  type: 'test'
+  ...
+# Subtest: browser legacy migration is repeatable and keeps the original key
+ok 28 - browser legacy migration is repeatable and keeps the original key
+  ---
+  duration_ms: 3320.051182
+  type: 'test'
+  ...
+# Subtest: mobile touch placement and responsive 2D are usable in emulation
+ok 29 - mobile touch placement and responsive 2D are usable in emulation
+  ---
+  duration_ms: 2974.210652
+  type: 'test'
+  ...
+# Subtest: 3D renders the same project, follows imported geometry and returns to 2D
+ok 30 - 3D renders the same project, follows imported geometry and returns to 2D
+  ---
+  duration_ms: 20577.34523
+  type: 'test'
+  ...
+# Subtest: F1 completion: local project UI, reload, isolation, confirmation and full import/export
+ok 31 - F1 completion: local project UI, reload, isolation, confirmation and full import/export
+  ---
+  duration_ms: 8009.359005
+  type: 'test'
+  ...
+# Subtest: F1 completion: touch 2D/3D 390x844
+ok 32 - F1 completion: touch 2D/3D 390x844
+  ---
+  duration_ms: 34224.315918
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"ratio":0.6729857819905213,"width":390,"overflow":false,"colors":180,"same":true}
+# Subtest: F1 completion: touch 2D/3D 844x390
+ok 33 - F1 completion: touch 2D/3D 844x390
+  ---
+  duration_ms: 32349.892712
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"ratio":0.6820512820512821,"width":844,"overflow":false,"colors":116,"same":true}
+# Subtest: F1 completion: no WebGL gives readable message and keeps 2D editable
+ok 34 - F1 completion: no WebGL gives readable message and keeps 2D editable
+  ---
+  duration_ms: 3327.072111
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1 completion: collection adopts F1a migration and preserves both historical keys
+ok 35 - F1 completion: collection adopts F1a migration and preserves both historical keys
+  ---
+  duration_ms: 4100.651916
+  type: 'test'
+  ...
+# Subtest: F1b full workflow 390x844
+ok 36 - F1b full workflow 390x844
+  ---
+  duration_ms: 31585.954326
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b full workflow 844x390
+ok 37 - F1b full workflow 844x390
+  ---
+  duration_ms: 28903.885669
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b full workflow 1440x900
+ok 38 - F1b full workflow 1440x900
+  ---
+  duration_ms: 27408.999547
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b storage/image editing and shared-reference deletion stay local and recoverable
+ok 39 - F1b storage/image editing and shared-reference deletion stay local and recoverable
+  ---
+  duration_ms: 4821.596173
+  type: 'test'
+  ...
+# Subtest: F1b rejects signature-valid but corrupt image payload without changing projects
+ok 40 - F1b rejects signature-valid but corrupt image payload without changing projects
+  ---
+  duration_ms: 2603.731815
+  type: 'test'
+  ...
+# Subtest: F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+ok 41 - F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+  ---
+  duration_ms: 3711.174896
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 360x800
+ok 42 - image import clarity and complete WebP workflow 360x800
+  ---
+  duration_ms: 10944.472108
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 390x844
+ok 43 - image import clarity and complete WebP workflow 390x844
+  ---
+  duration_ms: 10929.856895
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 844x390
+ok 44 - image import clarity and complete WebP workflow 844x390
+  ---
+  duration_ms: 10140.735915
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 1440x900
+ok 45 - image import clarity and complete WebP workflow 1440x900
+  ---
+  duration_ms: 9897.233982
+  type: 'test'
+  ...
+# Subtest: image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+ok 46 - image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+  ---
+  duration_ms: 27645.752833
+  type: 'test'
+  ...
+# Subtest: image import failures preserve current project, collection and image keys atomically
+ok 47 - image import failures preserve current project, collection and image keys atomically
+  ---
+  duration_ms: 5611.596458
+  type: 'test'
+  ...
+# Subtest: upload control label and accessible help follow Spanish, English and Chinese
+ok 48 - upload control label and accessible help follow Spanish, English and Chinese
+  ---
+  duration_ms: 3284.668628
+  type: 'test'
+  ...
+# Subtest: F2 local wall assistance privacy/review 360x800
+ok 49 - F2 local wall assistance privacy/review 360x800
+  ---
+  duration_ms: 14300.272711
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":360,"height":800},"requests":556,"unexpected":0,"wallIds":["wal_4c57ad23133a425db4575b1daacc07fb","wal_e6d4945de53f462fbb6503978660aaba"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 390x844
+ok 50 - F2 local wall assistance privacy/review 390x844
+  ---
+  duration_ms: 14796.283226
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":390,"height":844},"requests":556,"unexpected":0,"wallIds":["wal_94a51a260c0e4eeebd2ead08ffa9148c","wal_015e73934eed4be28e0c72cca1f28ab7"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 844x390
+ok 51 - F2 local wall assistance privacy/review 844x390
+  ---
+  duration_ms: 13487.535512
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":844,"height":390},"requests":557,"unexpected":0,"wallIds":["wal_81c9c61fe0634068a843b7fccc28bbe1","wal_3f8496f5f9624f6f9ef1b6ca0db339f3"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 1440x900
+ok 52 - F2 local wall assistance privacy/review 1440x900
+  ---
+  duration_ms: 13010.241399
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":1440,"height":900},"requests":559,"unexpected":0,"wallIds":["wal_d128af06fb044cd6a53121d8d5c8f30c","wal_1b4697080ab343ffada0ee0dfcb9171c"],"candidateCount":4}
+# Subtest: F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+ok 53 - F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+  ---
+  duration_ms: 4849.129353
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 360x800
+ok 54 - F2 raw export private snapshot 360x800
+  ---
+  duration_ms: 7532.738761
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 390x844
+ok 55 - F2 raw export private snapshot 390x844
+  ---
+  duration_ms: 6842.646041
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 844x390
+ok 56 - F2 raw export private snapshot 844x390
+  ---
+  duration_ms: 6579.378939
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 1440x900
+ok 57 - F2 raw export private snapshot 1440x900
+  ---
+  duration_ms: 5221.963324
+  type: 'test'
+  ...
+# Subtest: F2 raw export invalidates pending download on reference, scale, image, project and review changes
+ok 58 - F2 raw export invalidates pending download on reference, scale, image, project and review changes
+  ---
+  duration_ms: 5324.674539
+  type: 'test'
+  ...
+# Subtest: room labels and guide selection preserve legacy names and prefer explicit family
+ok 59 - room labels and guide selection preserve legacy names and prefer explicit family
+  ---
+  duration_ms: 3265.384287
+  type: 'test'
+  ...
+# Subtest: room properties show localized legacy name without saving and distinguish unspecified type
+ok 60 - room properties show localized legacy name without saving and distinguish unspecified type
+  ---
+  duration_ms: 3973.671104
+  type: 'test'
+  ...
+# Subtest: creation palette 1440x900
+ok 61 - creation palette 1440x900
+  ---
+  duration_ms: 33496.629351
+  type: 'test'
+  ...
+# Subtest: creation palette 390x844
+ok 62 - creation palette 390x844
+  ---
+  duration_ms: 32803.708638
+  type: 'test'
+  ...
+# Subtest: creation palette 844x390
+ok 63 - creation palette 844x390
+  ---
+  duration_ms: 32903.651229
+  type: 'test'
+  ...
+# Subtest: multi-level first cut end to end 1440x900
+ok 64 - multi-level first cut end to end 1440x900
+  ---
+  duration_ms: 40828.511636
+  type: 'test'
+  ...
+# Subtest: multi-level first cut end to end 390x844
+ok 65 - multi-level first cut end to end 390x844
+  ---
+  duration_ms: 71247.177934
+  type: 'test'
+  ...
+# Subtest: multi-level first cut end to end 844x390
+ok 66 - multi-level first cut end to end 844x390
+  ---
+  duration_ms: 40051.114887
+  type: 'test'
+  ...
+# Subtest: §9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada acción del menú y una sola vuelta
+ok 67 - §9 · escritorio 1440×900: un control de proyecto, fila 2 de tarea, cada acción del menú y una sola vuelta
+  ---
+  duration_ms: 6245.854162
+  type: 'test'
+  ...
+# Subtest: §9 · móvil 390×844: el menú de proyecto se alcanza y cabe; sin desplazamiento horizontal
+ok 68 - §9 · móvil 390×844: el menú de proyecto se alcanza y cabe; sin desplazamiento horizontal
+  ---
+  duration_ms: 2528.917891
+  type: 'test'
+  ...
+# Subtest: CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación → duplicar/deshacer/rehacer/reabrir → ficha nueva → Asistente y dossier con las mismas cifras → borrar → exportar
+ok 69 - CAT-04 escritorio: catálogo → Presupuestar → precio con confirmación → duplicar/deshacer/rehacer/reabrir → ficha nueva → Asistente y dossier con las mismas cifras → borrar → exportar
+  ---
+  duration_ms: 15208.635842
+  type: 'test'
+  ...
+# Subtest: CAT-04 Estudio de imágenes → referencia visual vinculada → reconocida en Presupuestar sin importe → consultada por el Asistente → persiste al reabrir
+ok 70 - CAT-04 Estudio de imágenes → referencia visual vinculada → reconocida en Presupuestar sin importe → consultada por el Asistente → persiste al reabrir
+  ---
+  duration_ms: 12117.098519
+  type: 'test'
+  ...
+# Subtest: CAT-04 móvil 390×844 EN: colocar con toques, partida en Presupuestar, sin desbordes, objetivos táctiles y Asistente en su idioma
+ok 71 - CAT-04 móvil 390×844 EN: colocar con toques, partida en Presupuestar, sin desbordes, objetivos táctiles y Asistente en su idioma
+  ---
+  duration_ms: 5465.139301
+  type: 'test'
+  ...
+# Subtest: CAT-04 apaisado 844×390 ZH: colocar con toques, partida en Presupuestar, sin desbordes, objetivos táctiles y Asistente en su idioma
+ok 72 - CAT-04 apaisado 844×390 ZH: colocar con toques, partida en Presupuestar, sin desbordes, objetivos táctiles y Asistente en su idioma
+  ---
+  duration_ms: 5970.940477
+  type: 'test'
+  ...
+# Subtest: CAT-03 escritorio: modelo validado / volumen genérico / no colocable, panel, partidas, deshacer, duplicar, 3D, reabrir, exportar e importar
+ok 73 - CAT-03 escritorio: modelo validado / volumen genérico / no colocable, panel, partidas, deshacer, duplicar, 3D, reabrir, exportar e importar
+  ---
+  duration_ms: 28051.491746
+  type: 'test'
+  ...
+# Subtest: CAT-03 planta girada 30° y teléfono 390×844: colocación válida, solape explicado por el editor (aviso, no bloqueo), sin desbordes
+ok 74 - CAT-03 planta girada 30° y teléfono 390×844: colocación válida, solape explicado por el editor (aviso, no bloqueo), sin desbordes
+  ---
+  duration_ms: 4631.691883
+  type: 'test'
+  ...
+# Subtest: professional → client → professional by file 1440x900
+ok 75 - professional → client → professional by file 1440x900
+  ---
+  duration_ms: 11487.476358
+  type: 'test'
+  ...
+# Subtest: professional → client → professional by file 390x844
+ok 76 - professional → client → professional by file 390x844
+  ---
+  duration_ms: 10513.399463
+  type: 'test'
+  ...
+# Subtest: professional → client → professional by file 844x390
+ok 77 - professional → client → professional by file 844x390
+  ---
+  duration_ms: 10577.125037
+  type: 'test'
+  ...
+# Subtest: keyboard: the dialog opens with focus on its title and closes with Escape
+ok 78 - keyboard: the dialog opens with focus on its title and closes with Escape
+  ---
+  duration_ms: 2400.329686
+  type: 'test'
+  ...
+# Subtest: Escape over the presentation closes the observation dialog only; a second Escape ends the presentation
+ok 79 - Escape over the presentation closes the observation dialog only; a second Escape ends the presentation
+  ---
+  duration_ms: 24135.441226
+  type: 'test'
+  ...
+# Subtest: CONSOLIDACIÓN · un mismo proyecto: 2D/3D → catálogo → presupuesto con IVA → reabrir → Asistente → exportar → aislamiento → otro navegador → importar presupuesto
+ok 80 - CONSOLIDACIÓN · un mismo proyecto: 2D/3D → catálogo → presupuesto con IVA → reabrir → Asistente → exportar → aislamiento → otro navegador → importar presupuesto
+  ---
+  duration_ms: 34775.445288
+  type: 'test'
+  ...
+# Subtest: CONSOLIDACIÓN · proyecto propio (id único) llevado a otro navegador: conserva su id y su presupuesto entra sin casilla, con IVA propio y revisión
+ok 81 - CONSOLIDACIÓN · proyecto propio (id único) llevado a otro navegador: conserva su id y su presupuesto entra sin casilla, con IVA propio y revisión
+  ---
+  duration_ms: 7346.267664
+  type: 'test'
+  ...
+# Subtest: CON-02 · a price typed in an imported copy does not change the budget of the original
+ok 82 - CON-02 · a price typed in an imported copy does not change the budget of the original
+  ---
+  duration_ms: 4189.609774
+  type: 'test'
+  ...
+# Subtest: a separate browser opens the published 3D visit and revocation removes both document and snapshot
+ok 83 - a separate browser opens the published 3D visit and revocation removes both document and snapshot
+  ---
+  duration_ms: 7608.699229
+  type: 'test'
+  ...
+# Subtest: D3 dossier cliente escritorio
+ok 84 - D3 dossier cliente escritorio
+  ---
+  duration_ms: 6364.794546
+  type: 'test'
+  ...
+# Subtest: D3 dossier cliente movil
+ok 85 - D3 dossier cliente movil
+  ---
+  duration_ms: 4513.483258
+  type: 'test'
+  ...
+# Subtest: D3 · «Preparar imágenes» desde el aviso: vuelve al dossier, a «Revisar», con lo escrito y las vistas reales
+ok 86 - D3 · «Preparar imágenes» desde el aviso: vuelve al dossier, a «Revisar», con lo escrito y las vistas reales
+  ---
+  duration_ms: 28310.942016
+  type: 'test'
+  ...
+# Subtest: D3 · si «Preparar imágenes» falla: vuelve a «Revisar», explica el motivo y conserva el borrador
+ok 87 - D3 · si «Preparar imágenes» falla: vuelve a «Revisar», explica el motivo y conserva el borrador
+  ---
+  duration_ms: 3814.473733
+  type: 'test'
+  ...
+# Subtest: D3 · V04 · si falla la captura 3D real: explica el motivo, conserva el borrador y el reintento prepara las vistas
+ok 88 - D3 · V04 · si falla la captura 3D real: explica el motivo, conserva el borrador y el reintento prepara las vistas
+  ---
+  duration_ms: 34578.607755
+  type: 'test'
+  ...
+# Subtest: D3 · si la persona sale mientras se preparan las vistas: no se reabre el dossier encima; aviso y borrador intacto
+ok 89 - D3 · si la persona sale mientras se preparan las vistas: no se reabre el dossier encima; aviso y borrador intacto
+  ---
+  duration_ms: 4971.749768
+  type: 'test'
+  ...
+# Subtest: E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; verify distingue íntegro de vigente; cero escrituras
+ok 90 - E2.3 + D02 · cambio en otra pestaña: aviso, sin preparar ni descargar; verify distingue íntegro de vigente; cero escrituras
+  ---
+  duration_ms: 3295.282751
+  type: 'test'
+  ...
+# Subtest: E2.5 · orden de cambio: motivo obligatorio; con presupuestos completos lleva delta; incoherentes no; sin plazo; sin firma
+ok 91 - E2.5 · orden de cambio: motivo obligatorio; con presupuestos completos lleva delta; incoherentes no; sin plazo; sin firma
+  ---
+  duration_ms: 3188.847771
+  type: 'test'
+  ...
+# Subtest: E2.4 · escritorio: contexto visible y sin desplazamiento horizontal
+ok 92 - E2.4 · escritorio: contexto visible y sin desplazamiento horizontal
+  ---
+  duration_ms: 1490.294942
+  type: 'test'
+  ...
+# Subtest: E2.4 · tableta: contexto visible y sin desplazamiento horizontal
+ok 93 - E2.4 · tableta: contexto visible y sin desplazamiento horizontal
+  ---
+  duration_ms: 1282.86313
+  type: 'test'
+  ...
+# Subtest: E2.4 · movil: contexto visible y sin desplazamiento horizontal
+ok 94 - E2.4 · movil: contexto visible y sin desplazamiento horizontal
+  ---
+  duration_ms: 1430.233012
+  type: 'test'
+  ...
+# Subtest: E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el comparador existente con el mismo handoff
+ok 95 - E2.1 · Entregar: sin variante explica cómo crearla; con variante abre el comparador existente con el mismo handoff
+  ---
+  duration_ms: 4572.524629
+  type: 'test'
+  ...
+# Subtest: E2 · asistente presente en toda la plataforma: acceso dentro del diálogo de presupuesto y panel encima, sin contaminar el diálogo
+ok 96 - E2 · asistente presente en toda la plataforma: acceso dentro del diálogo de presupuesto y panel encima, sin contaminar el diálogo
+  ---
+  duration_ms: 2755.516966
+  type: 'test'
+  ...
+# Subtest: E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»
+ok 97 - E2 · asistente en móvil 390×844: dentro de un diálogo con cabecera en fila (territorio) no desborda la cabecera ni tapa «Cerrar»
+  ---
+  duration_ms: 2436.340245
+  type: 'test'
+  ...
+# Subtest: E2 · asistente 390×844: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 98 - E2 · asistente 390×844: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+  ---
+  duration_ms: 2142.251707
+  type: 'test'
+  ...
+# Subtest: E2 · asistente 844×390: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 99 - E2 · asistente 844×390: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+  ---
+  duration_ms: 1948.057845
+  type: 'test'
+  ...
+# Subtest: E2 · asistente 1440×900: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+ok 100 - E2 · asistente 1440×900: en una superficie no modal no tapa sus controles; al cerrarla vuelve el acceso normal
+  ---
+  duration_ms: 2344.676934
+  type: 'test'
+  ...
+# Subtest: A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente
+ok 101 - A26/H03 · cambio de datos DURANTE la generación asíncrona: el borrador se descarta, no se puede descargar ni dar por vigente
+  ---
+  duration_ms: 2404.441324
+  type: 'test'
+  ...
+# Subtest: A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta
+ok 102 - A26/H03 · orden de cambio: cambio de datos DURANTE su generación la descarta
+  ---
+  duration_ms: 2248.999197
+  type: 'test'
+  ...
+# Subtest: Marca · los borradores del comparador no llevan la marca: cambiarla no los desfasa ni altera su contenido
+ok 103 - Marca · los borradores del comparador no llevan la marca: cambiarla no los desfasa ni altera su contenido
+  ---
+  duration_ms: 1486.447989
+  type: 'test'
+  ...
+# Subtest: C4: economic dossier 1440x900
+ok 104 - C4: economic dossier 1440x900
+  ---
+  duration_ms: 11600.103808
+  type: 'test'
+  ...
+# Subtest: C4: economic dossier 390x844
+ok 105 - C4: economic dossier 390x844
+  ---
+  duration_ms: 9316.055543
+  type: 'test'
+  ...
+# Subtest: Exterior remains reversible across Walk, Presentation, captures and two offset levels
+ok 106 - Exterior remains reversible across Walk, Presentation, captures and two offset levels
+  ---
+  duration_ms: 22100.091957
+  type: 'test'
+  ...
+# Subtest: FOT-01 · casos inmobiliaria e interiorismo · escritorio
+ok 107 - FOT-01 · casos inmobiliaria e interiorismo · escritorio
+  ---
+  duration_ms: 3771.895445
+  type: 'test'
+  ...
+# Subtest: FOT-01 · casos inmobiliaria e interiorismo · movil
+ok 108 - FOT-01 · casos inmobiliaria e interiorismo · movil
+  ---
+  duration_ms: 3187.454149
+  type: 'test'
+  ...
+# Subtest: G-02 downloads only the active building level without changing the editor or saved project
+not ok 109 - G-02 downloads only the active building level without changing the editor or saved project
+  ---
+  duration_ms: 2816.182722
+  type: 'test'
+  location: '/home/user/integ/tests/g02-dxf.browser.test.cjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(file.name.endsWith(level.name+'.dxf'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/integ/tests/g02-dxf.browser.test.cjs:33:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: G-02 downloads the current variant and reimports it in RUBIK with estimated scale
+ok 110 - G-02 downloads the current variant and reimports it in RUBIK with estimated scale
+  ---
+  duration_ms: 2913.17407
+  type: 'test'
+  ...
+# Subtest: G-02 warns when an edited DXF must be rebuilt from visible walls
+ok 111 - G-02 warns when an edited DXF must be rebuilt from visible walls
+  ---
+  duration_ms: 2488.144695
+  type: 'test'
+  ...
+# Subtest: S2 focus: after cancel, withdrawal, a wrong code and the history buttons, focus stays in the dialog next to what was acted on
+ok 112 - S2 focus: after cancel, withdrawal, a wrong code and the history buttons, focus stays in the dialog next to what was acted on
+  ---
+  duration_ms: 4847.803945
+  type: 'test'
+  ...
+# Subtest: S3: every link expires (7/30/90, 30 by default); expired links close, legacy ones are only identified, expired files are purged
+ok 113 - S3: every link expires (7/30/90, 30 by default); expired links close, legacy ones are only identified, expired files are purged
+  ---
+  duration_ms: 22367.434375
+  type: 'test'
+  ...
+# Subtest: S3 · ENT-01: an expired 3D visit says so and offers no retry; before its date it opens; legacy visits keep opening
+ok 114 - S3 · ENT-01: an expired 3D visit says so and offers no retry; before its date it opens; legacy visits keep opening
+  ---
+  duration_ms: 3367.864595
+  type: 'test'
+  ...
+# Subtest: S3 consistency from the UI: page, tour video and 3D visit share one publication id and date, and close and purge together
+ok 115 - S3 consistency from the UI: page, tour video and 3D visit share one publication id and date, and close and purge together
+  ---
+  duration_ms: 12952.245043
+  type: 'test'
+  ...
+# Subtest: S3 on a phone 390×844: the expiry choice and the store fit, without horizontal overflow
+ok 116 - S3 on a phone 390×844: the expiry choice and the store fit, without horizontal overflow
+  ---
+  duration_ms: 3030.864978
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 1440x900
+ok 117 - native Back, visible home, explicit reopening and task return 1440x900
+  ---
+  duration_ms: 5449.33334
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 390x844
+ok 118 - native Back, visible home, explicit reopening and task return 390x844
+  ---
+  duration_ms: 5091.955324
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 844x390
+ok 119 - native Back, visible home, explicit reopening and task return 844x390
+  ---
+  duration_ms: 5001.062341
+  type: 'test'
+  ...
+# Subtest: cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+ok 120 - cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+  ---
+  duration_ms: 2675.515521
+  type: 'test'
+  ...
+# Subtest: guide stage follows the card 1440x900
+ok 121 - guide stage follows the card 1440x900
+  ---
+  duration_ms: 2547.964627
+  type: 'test'
+  ...
+# Subtest: guide stage follows the card 390x844
+ok 122 - guide stage follows the card 390x844
+  ---
+  duration_ms: 2557.042609
+  type: 'test'
+  ...
+# Subtest: a changed example says so and its copy keeps the change 1440x900
+ok 123 - a changed example says so and its copy keeps the change 1440x900
+  ---
+  duration_ms: 2373.201359
+  type: 'test'
+  ...
+# Subtest: a changed example says so and its copy keeps the change 390x844
+ok 124 - a changed example says so and its copy keeps the change 390x844
+  ---
+  duration_ms: 2252.907154
+  type: 'test'
+  ...
+# Subtest: the example asks for the copy in place 1440x900
+ok 125 - the example asks for the copy in place 1440x900
+  ---
+  duration_ms: 3338.894033
+  type: 'test'
+  ...
+# Subtest: the example asks for the copy in place 390x844
+ok 126 - the example asks for the copy in place 390x844
+  ---
+  duration_ms: 3428.700866
+  type: 'test'
+  ...
+# Subtest: trying the example again reuses it or keeps the changed one apart 1440x900
+ok 127 - trying the example again reuses it or keeps the changed one apart 1440x900
+  ---
+  duration_ms: 3485.232729
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 1440x900
+ok 128 - delivery is reachable from the guide 1440x900
+  ---
+  duration_ms: 2773.474336
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 390x844
+ok 129 - delivery is reachable from the guide 390x844
+  ---
+  duration_ms: 2949.413202
+  type: 'test'
+  ...
+# Subtest: delivery is reachable from the guide 844x390
+ok 130 - delivery is reachable from the guide 844x390
+  ---
+  duration_ms: 2917.151828
+  type: 'test'
+  ...
+# Subtest: guided journey, search, goals, 3D and persistence 1440x900
+ok 131 - guided journey, search, goals, 3D and persistence 1440x900
+  ---
+  duration_ms: 14588.249257
+  type: 'test'
+  ...
+# Subtest: guided journey, search, goals, 3D and persistence 390x844
+ok 132 - guided journey, search, goals, 3D and persistence 390x844
+  ---
+  duration_ms: 13675.135692
+  type: 'test'
+  ...
+# Subtest: guided journey, search, goals, 3D and persistence 844x390
+ok 133 - guided journey, search, goals, 3D and persistence 844x390
+  ---
+  duration_ms: 13108.236407
+  type: 'test'
+  ...
+# Subtest: image import, calibration, review, project switching and rejected input
+ok 134 - image import, calibration, review, project switching and rejected input
+  ---
+  duration_ms: 7091.327937
+  type: 'test'
+  ...
+# Subtest: keyboard suggestions, unsupported requests, language, deletion confirmation and failed save
+ok 135 - keyboard suggestions, unsupported requests, language, deletion confirmation and failed save
+  ---
+  duration_ms: 3954.220875
+  type: 'test'
+  ...
+# Subtest: H01 · presupuesto sí, marca sí
+ok 136 - H01 · presupuesto sí, marca sí
+  ---
+  duration_ms: 3935.369971
+  type: 'test'
+  ...
+# Subtest: H01 · presupuesto sí, marca no
+ok 137 - H01 · presupuesto sí, marca no
+  ---
+  duration_ms: 2889.740869
+  type: 'test'
+  ...
+# Subtest: H01 · presupuesto no, marca sí
+ok 138 - H01 · presupuesto no, marca sí
+  ---
+  duration_ms: 2256.780327
+  type: 'test'
+  ...
+# Subtest: H01 · presupuesto no, marca no
+ok 139 - H01 · presupuesto no, marca no
+  ---
+  duration_ms: 1475.768151
+  type: 'test'
+  ...
+# Subtest: Home UX-312: contenido aprobado, inventarios y sin desbordes 1440x900
+ok 140 - Home UX-312: contenido aprobado, inventarios y sin desbordes 1440x900
+  ---
+  duration_ms: 2213.938756
+  type: 'test'
+  ...
+# Subtest: Home UX-312: contenido aprobado, inventarios y sin desbordes 390x844
+ok 141 - Home UX-312: contenido aprobado, inventarios y sin desbordes 390x844
+  ---
+  duration_ms: 1958.924397
+  type: 'test'
+  ...
+# Subtest: Home UX-312: la profesión ordena entregables y soluciones sin tocar el proyecto 1440x900
+ok 142 - Home UX-312: la profesión ordena entregables y soluciones sin tocar el proyecto 1440x900
+  ---
+  duration_ms: 4545.838878
+  type: 'test'
+  ...
+# Subtest: Home UX-312: accesos reales (entregar, presupuesto, Armarios, FAQ, footer, legal) 1440x900
+ok 143 - Home UX-312: accesos reales (entregar, presupuesto, Armarios, FAQ, footer, legal) 1440x900
+  ---
+  duration_ms: 12269.716992
+  type: 'test'
+  ...
+# Subtest: Home UX-312: accesos reales (entregar, presupuesto, Armarios, FAQ, footer, legal) 390x844
+ok 144 - Home UX-312: accesos reales (entregar, presupuesto, Armarios, FAQ, footer, legal) 390x844
+  ---
+  duration_ms: 12495.917652
+  type: 'test'
+  ...
+# Subtest: \#321: guía y módulos por profesión, FAQ por temas y footer 1440x900
+ok 145 - \#321: guía y módulos por profesión, FAQ por temas y footer 1440x900
+  ---
+  duration_ms: 3890.060025
+  type: 'test'
+  ...
+# Subtest: \#321: guía y módulos por profesión, FAQ por temas y footer 390x844
+ok 146 - \#321: guía y módulos por profesión, FAQ por temas y footer 390x844
+  ---
+  duration_ms: 3998.778403
+  type: 'test'
+  ...
+# Subtest: \#321: movimiento reducido y EN/ZH sin chino visible en EN
+ok 147 - \#321: movimiento reducido y EN/ZH sin chino visible en EN
+  ---
+  duration_ms: 2557.296352
+  type: 'test'
+  ...
+# Subtest: escritorio: UX-12 -> NAV3D -> MUE-01 -> FOT-01 -> reabrir
+ok 148 - escritorio: UX-12 -> NAV3D -> MUE-01 -> FOT-01 -> reabrir
+  ---
+  duration_ms: 42687.235628
+  type: 'test'
+  ...
+# Subtest: móvil táctil: UX-12, paseo NAV3D con joystick y minimapa, mueble propio y FOT-01 sobre el mismo proyecto
+ok 149 - móvil táctil: UX-12, paseo NAV3D con joystick y minimapa, mueble propio y FOT-01 sobre el mismo proyecto
+  ---
+  duration_ms: 27627.224376
+  type: 'test'
+  ...
+# Subtest: cadena completa escritorio: techo R02-A + armario R03, UX-12, NAV3D, mueble propio, FOT-01, cerrar y reabrir
+ok 150 - cadena completa escritorio: techo R02-A + armario R03, UX-12, NAV3D, mueble propio, FOT-01, cerrar y reabrir
+  ---
+  duration_ms: 60920.588585
+  type: 'test'
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 1440x900
+ok 151 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 1440x900
+  ---
+  duration_ms: 6281.052031
+  type: 'test'
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 390x844
+ok 152 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 390x844
+  ---
+  duration_ms: 6949.845123
+  type: 'test'
+  ...
+# Subtest: T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 844x390
+ok 153 - T1/T9/T10 after the first room: doors and windows next, the button opens «Construir», nothing changes by itself 844x390
+  ---
+  duration_ms: 6735.799169
+  type: 'test'
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 1440x900
+ok 154 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 1440x900
+  ---
+  duration_ms: 2709.665519
+  type: 'test'
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 390x844
+ok 155 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 390x844
+  ---
+  duration_ms: 3165.546803
+  type: 'test'
+  ...
+# Subtest: T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 844x390
+ok 156 - T3 an uploaded image: «Empezar a ajustar» starts calibrating instead of opening the task list 844x390
+  ---
+  duration_ms: 3243.074853
+  type: 'test'
+  ...
+# Subtest: T4 back to the first task and reload: a done task says so and its button goes on with what is left
+ok 157 - T4 back to the first task and reload: a done task says so and its button goes on with what is left
+  ---
+  duration_ms: 5002.57397
+  type: 'test'
+  ...
+# Subtest: T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 1440x900
+ok 158 - T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 1440x900
+  ---
+  duration_ms: 3453.495432
+  type: 'test'
+  ...
+# Subtest: T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 390x844
+ok 159 - T5/T8 a duplex with conflicts: «Ver conflictos» first; the level switch is in the guided header 390x844
+  ---
+  duration_ms: 3325.836073
+  type: 'test'
+  ...
+# Subtest: T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 390x844
+ok 160 - T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 390x844
+  ---
+  duration_ms: 9787.785691
+  type: 'test'
+  ...
+# Subtest: T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 844x390
+ok 161 - T7 phone: a message sits above the selection bar, and the palette cancels a door being placed 844x390
+  ---
+  duration_ms: 9531.38729
+  type: 'test'
+  ...
+# Subtest: T8 guided header: «Rehacer» next to «Deshacer»; the presentation entry is present but not a second dominant action
+ok 162 - T8 guided header: «Rehacer» next to «Deshacer»; the presentation entry is present but not a second dominant action
+  ---
+  duration_ms: 4463.876738
+  type: 'test'
+  ...
+# Subtest: T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 1440x900
+ok 163 - T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 1440x900
+  ---
+  duration_ms: 35477.721817
+  type: 'test'
+  ...
+# Subtest: T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 390x844
+ok 164 - T2/T6 example: «Construir» first; in 3D no 3D offer and no early «Objetivo completado»; presenting counts as reviewing 390x844
+  ---
+  duration_ms: 29023.687585
+  type: 'test'
+  ...
+# Subtest: T11 phone guide (M4): every guide control on screen; desktop header stays inside the screen with one presentation entry
+ok 165 - T11 phone guide (M4): every guide control on screen; desktop header stays inside the screen with one presentation entry
+  ---
+  duration_ms: 6778.157211
+  type: 'test'
+  ...
+# Subtest: T12 guided header keeps every control on screen in 2D, 3D and with two levels 1440x900
+ok 166 - T12 guided header keeps every control on screen in 2D, 3D and with two levels 1440x900
+  ---
+  duration_ms: 17527.139776
+  type: 'test'
+  ...
+# Subtest: T13 building conflicts highlight «Diseñar» 1440x900
+ok 167 - T13 building conflicts highlight «Diseñar» 1440x900
+  ---
+  duration_ms: 2272.242967
+  type: 'test'
+  ...
+# Subtest: Construir y Amueblar: la paleta cambia con el idioma abierta, ES→EN→ZH→ES, y equivale a cargar en ese idioma (1440x900)
+ok 168 - Construir y Amueblar: la paleta cambia con el idioma abierta, ES→EN→ZH→ES, y equivale a cargar en ese idioma (1440x900)
+  ---
+  duration_ms: 17518.840278
+  type: 'test'
+  ...
+# Subtest: Construir: herramientas, atajos y nombres de estancia siguen su función en los tres idiomas (1440x900)
+ok 169 - Construir: herramientas, atajos y nombres de estancia siguen su función en los tres idiomas (1440x900)
+  ---
+  duration_ms: 11927.67218
+  type: 'test'
+  ...
+# Subtest: Propiedades · overview: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 170 - Propiedades · overview: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 10100.210952
+  type: 'test'
+  ...
+# Subtest: Propiedades · room: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 171 - Propiedades · room: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 10203.870989
+  type: 'test'
+  ...
+# Subtest: Propiedades · furniture: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 172 - Propiedades · furniture: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 9549.153625
+  type: 'test'
+  ...
+# Subtest: Propiedades · wall: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 173 - Propiedades · wall: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 9702.418807
+  type: 'test'
+  ...
+# Subtest: Propiedades · opening: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 174 - Propiedades · opening: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 10314.262538
+  type: 'test'
+  ...
+# Subtest: Propiedades · openingEdit: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 175 - Propiedades · openingEdit: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 11235.20623
+  type: 'test'
+  ...
+# Subtest: Propiedades · openingError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 176 - Propiedades · openingError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 11027.750497
+  type: 'test'
+  ...
+# Subtest: Propiedades · smart: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 177 - Propiedades · smart: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 10681.731512
+  type: 'test'
+  ...
+# Subtest: Propiedades · smartError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+ok 178 - Propiedades · smartError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (1440x900)
+  ---
+  duration_ms: 10158.429544
+  type: 'test'
+  ...
+# Subtest: Construir y Amueblar: la paleta cambia con el idioma abierta, ES→EN→ZH→ES, y equivale a cargar en ese idioma (390x844)
+ok 179 - Construir y Amueblar: la paleta cambia con el idioma abierta, ES→EN→ZH→ES, y equivale a cargar en ese idioma (390x844)
+  ---
+  duration_ms: 17531.614085
+  type: 'test'
+  ...
+# Subtest: Construir: herramientas, atajos y nombres de estancia siguen su función en los tres idiomas (390x844)
+ok 180 - Construir: herramientas, atajos y nombres de estancia siguen su función en los tres idiomas (390x844)
+  ---
+  duration_ms: 13297.661173
+  type: 'test'
+  ...
+# Subtest: Propiedades · overview: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 181 - Propiedades · overview: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 9560.701655
+  type: 'test'
+  ...
+# Subtest: Propiedades · room: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 182 - Propiedades · room: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 9413.168371
+  type: 'test'
+  ...
+# Subtest: Propiedades · furniture: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 183 - Propiedades · furniture: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 9604.217292
+  type: 'test'
+  ...
+# Subtest: Propiedades · wall: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 184 - Propiedades · wall: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 10087.988369
+  type: 'test'
+  ...
+# Subtest: Propiedades · opening: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 185 - Propiedades · opening: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 10152.516969
+  type: 'test'
+  ...
+# Subtest: Propiedades · openingEdit: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 186 - Propiedades · openingEdit: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 12705.216341
+  type: 'test'
+  ...
+# Subtest: Propiedades · openingError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 187 - Propiedades · openingError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 11658.014341
+  type: 'test'
+  ...
+# Subtest: Propiedades · smart: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 188 - Propiedades · smart: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 10857.93821
+  type: 'test'
+  ...
+# Subtest: Propiedades · smartError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+ok 189 - Propiedades · smartError: el panel y la barra de selección cambian abiertos, ES→EN→ZH→ES, y no queda otro idioma (390x844)
+  ---
+  duration_ms: 10128.095091
+  type: 'test'
+  ...
+# Subtest: Diálogo «room»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 190 - Diálogo «room»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7139.167062
+  type: 'test'
+  ...
+# Subtest: Diálogo «roomPreview»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 191 - Diálogo «roomPreview»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 6980.430139
+  type: 'test'
+  ...
+# Subtest: Diálogo «dimensionsRefusal»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 192 - Diálogo «dimensionsRefusal»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7654.32485
+  type: 'test'
+  ...
+# Subtest: Diálogo «dimensions»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 193 - Diálogo «dimensions»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 8152.63787
+  type: 'test'
+  ...
+# Subtest: Diálogo «project»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 194 - Diálogo «project»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7954.728783
+  type: 'test'
+  ...
+# Subtest: Diálogo «floor»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 195 - Diálogo «floor»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7270.199691
+  type: 'test'
+  ...
+# Subtest: Diálogo «wall»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 196 - Diálogo «wall»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7090.268579
+  type: 'test'
+  ...
+# Subtest: Diálogo «ownFurniture»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+ok 197 - Diálogo «ownFurniture»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (1440x900)
+  ---
+  duration_ms: 7817.371166
+  type: 'test'
+  ...
+# Subtest: Diálogo «room»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 198 - Diálogo «room»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 7888.598156
+  type: 'test'
+  ...
+# Subtest: Diálogo «roomPreview»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 199 - Diálogo «roomPreview»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 7996.779551
+  type: 'test'
+  ...
+# Subtest: Diálogo «dimensionsRefusal»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 200 - Diálogo «dimensionsRefusal»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 8163.186964
+  type: 'test'
+  ...
+# Subtest: Diálogo «dimensions»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 201 - Diálogo «dimensions»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 10302.947261
+  type: 'test'
+  ...
+# Subtest: Diálogo «project»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 202 - Diálogo «project»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 8200.73173
+  type: 'test'
+  ...
+# Subtest: Diálogo «floor»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 203 - Diálogo «floor»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 8284.523514
+  type: 'test'
+  ...
+# Subtest: Diálogo «wall»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 204 - Diálogo «wall»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 7691.724155
+  type: 'test'
+  ...
+# Subtest: Diálogo «ownFurniture»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+ok 205 - Diálogo «ownFurniture»: se abre en ES, EN y ZH sin restos de otro idioma y Escape devuelve el foco (390x844)
+  ---
+  duration_ms: 9058.59775
+  type: 'test'
+  ...
+# Subtest: Estados con datos de RUBIK: propuesta de amueblamiento y edición de huecos en EN y ZH sin español
+ok 206 - Estados con datos de RUBIK: propuesta de amueblamiento y edición de huecos en EN y ZH sin español
+  ---
+  duration_ms: 29078.434022
+  type: 'test'
+  ...
+# Subtest: Amueblar: la búsqueda se rehace al cambiar de idioma y conserva la consulta; los nombres de modelos y acabados siguen los datos originales
+ok 207 - Amueblar: la búsqueda se rehace al cambiar de idioma y conserva la consulta; los nombres de modelos y acabados siguen los datos originales
+  ---
+  duration_ms: 3279.122895
+  type: 'test'
+  ...
+# Subtest: El panel de propiedades cambia de idioma sin perder la selección ni la posición del foco lógico
+ok 208 - El panel de propiedades cambia de idioma sin perder la selección ni la posición del foco lógico
+  ---
+  duration_ms: 3108.56603
+  type: 'test'
+  ...
+# Subtest: Home: ES→EN→ZH→ES with the Home open, by keyboard, equals a fresh load in each language (1440x900)
+ok 209 - Home: ES→EN→ZH→ES with the Home open, by keyboard, equals a fresh load in each language (1440x900)
+  ---
+  duration_ms: 7875.905228
+  type: 'test'
+  ...
+# Subtest: Home: ES→EN→ZH→ES with the Home open, by keyboard, equals a fresh load in each language (390x844)
+ok 210 - Home: ES→EN→ZH→ES with the Home open, by keyboard, equals a fresh load in each language (390x844)
+  ---
+  duration_ms: 7603.002262
+  type: 'test'
+  ...
+# Subtest: Editor: every work area stays open and equals a fresh load after ES→EN→ZH→ES (1440x900)
+ok 211 - Editor: every work area stays open and equals a fresh load after ES→EN→ZH→ES (1440x900)
+  ---
+  duration_ms: 46237.667021
+  type: 'test'
+  ...
+# Subtest: Editor: every work area stays open and equals a fresh load after ES→EN→ZH→ES (390x844)
+ok 212 - Editor: every work area stays open and equals a fresh load after ES→EN→ZH→ES (390x844)
+  ---
+  duration_ms: 47576.768417
+  type: 'test'
+  ...
+# Subtest: Home → editor → Home keeps working in every language: Escape returns focus and the language survives a reload
+ok 213 - Home → editor → Home keeps working in every language: Escape returns focus and the language survives a reload
+  ---
+  duration_ms: 4994.642417
+  type: 'test'
+  ...
+# Subtest: Names policy: the project and its names are shown as stored and never rewritten when the language changes
+ok 214 - Names policy: the project and its names are shown as stored and never rewritten when the language changes
+  ---
+  duration_ms: 2629.391147
+  type: 'test'
+  ...
+# Subtest: General notices and dialogs of the core have no Spanish-only literal (static guard)
+ok 215 - General notices and dialogs of the core have no Spanish-only literal (static guard)
+  ---
+  duration_ms: 6.781506
+  type: 'test'
+  ...
+# Subtest: M2-QA-01 · same house in every area: subject, revision and level verified; no import, no lab
+ok 216 - M2-QA-01 · same house in every area: subject, revision and level verified; no import, no lab
+  ---
+  duration_ms: 4148.769923
+  type: 'test'
+  ...
+# Subtest: M2-QA-02 · Catastro in Analizar: official lookup (intercepted), association, explicit placement, saved and reopened
+ok 217 - M2-QA-02 · Catastro in Analizar: official lookup (intercepted), association, explicit placement, saved and reopened
+  ---
+  duration_ms: 3880.922423
+  type: 'test'
+  ...
+# Subtest: M2-QA-03/04 · BC3 price applied in Presupuestar; one item in two tasks and two element groups; both directions; no double amount
+ok 218 - M2-QA-03/04 · BC3 price applied in Presupuestar; one item in two tasks and two element groups; both directions; no double amount
+  ---
+  duration_ms: 7040.400621
+  type: 'test'
+  ...
+# Subtest: M2-QA-05 · Evolución: scene, Gantt, date, card and amounts from one evaluation (simultaneous works, task without geometry)
+ok 219 - M2-QA-05 · Evolución: scene, Gantt, date, card and amounts from one evaluation (simultaneous works, task without geometry)
+  ---
+  duration_ms: 10582.452562
+  type: 'test'
+  ...
+# Subtest: M2-QA-06 · two houses with the same name and a building: switching never mixes parcel, prices, plan or brand
+ok 220 - M2-QA-06 · two houses with the same name and a building: switching never mixes parcel, prices, plan or brand
+  ---
+  duration_ms: 5962.210903
+  type: 'test'
+  ...
+# Subtest: M2-QA-07/08 · local delivery with Mi estudio signature; later changes make it obsolete; history kept; no restricted layer
+ok 221 - M2-QA-07/08 · local delivery with Mi estudio signature; later changes make it obsolete; history kept; no restricted layer
+  ---
+  duration_ms: 9558.605927
+  type: 'test'
+  ...
+# Subtest: M2-QA-08 · MP4 of the same plan, downloaded and inspected (Chromium WebCodecs)
+ok 222 - M2-QA-08 · MP4 of the same plan, downloaded and inspected (Chromium WebCodecs)
+  ---
+  duration_ms: 158139.464404
+  type: 'test'
+  ...
+# Subtest: M2-QA-09 · full route Biblioteca → Analizar → Presupuestar → Plan de obra → Evolución → Entregar, with no lab and no JSON
+ok 223 - M2-QA-09 · full route Biblioteca → Analizar → Presupuestar → Plan de obra → Evolución → Entregar, with no lab and no JSON
+  ---
+  duration_ms: 7393.69262
+  type: 'test'
+  ...
+# Subtest: M2-QA-10 · desktop 1280×720: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 224 - M2-QA-10 · desktop 1280×720: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+  ---
+  duration_ms: 5615.199246
+  type: 'test'
+  ...
+# Subtest: M2-QA-10 · desktop 1366×768: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 225 - M2-QA-10 · desktop 1366×768: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+  ---
+  duration_ms: 5513.275582
+  type: 'test'
+  ...
+# Subtest: M2-QA-10 · desktop 1440×900: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 226 - M2-QA-10 · desktop 1440×900: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+  ---
+  duration_ms: 5512.650831
+  type: 'test'
+  ...
+# Subtest: M2-QA-10 · desktop 1920×1080: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+ok 227 - M2-QA-10 · desktop 1920×1080: house, controls, date, card and Gantt visible without page scroll inside RUBIK
+  ---
+  duration_ms: 6206.349598
+  type: 'test'
+  ...
+# Subtest: M2-QA-10 · mobile 390×844, keyboard and reduced motion: plan editor and evolution usable, no horizontal scroll
+ok 228 - M2-QA-10 · mobile 390×844, keyboard and reduced motion: plan editor and evolution usable, no horizontal scroll
+  ---
+  duration_ms: 5943.350403
+  type: 'test'
+  ...
+# Subtest: M2 · Entregar with a partially priced budget answers (master froze here: endless mutation loop in the C4 summary)
+ok 229 - M2 · Entregar with a partially priced budget answers (master froze here: endless mutation loop in the C4 summary)
+  ---
+  duration_ms: 2888.287443
+  type: 'test'
+  ...
+# Subtest: M08 material detail same scene and return 1440x900
+ok 230 - M08 material detail same scene and return 1440x900
+  ---
+  duration_ms: 51804.271351
+  type: 'test'
+  ...
+# Subtest: M08 material detail same scene and return 390x844
+ok 231 - M08 material detail same scene and return 390x844
+  ---
+  duration_ms: 29600.931384
+  type: 'test'
+  ...
+# Subtest: M08 material detail same scene and return 844x390
+ok 232 - M08 material detail same scene and return 844x390
+  ---
+  duration_ms: 33815.098566
+  type: 'test'
+  ...
+# Subtest: M08 material detail same scene and return 360x800
+ok 233 - M08 material detail same scene and return 360x800
+  ---
+  duration_ms: 30532.052652
+  type: 'test'
+  ...
+# Subtest: M08 rejects HTTP, hash and decode failures while preserving albedo and disposing on context loss
+ok 234 - M08 rejects HTTP, hash and decode failures while preserving albedo and disposing on context loss
+  ---
+  duration_ms: 22839.162743
+  type: 'test'
+  ...
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 1440x900
+ok 235 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 1440x900
+  ---
+  duration_ms: 4016.300888
+  type: 'test'
+  ...
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 390x844
+ok 236 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 390x844
+  ---
+  duration_ms: 3968.615599
+  type: 'test'
+  ...
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 844x390
+ok 237 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 844x390
+  ---
+  duration_ms: 3813.446671
+  type: 'test'
+  ...
+# Subtest: raster import requires image readiness and calibration; ZIP retains the image and all existing projects
+ok 238 - raster import requires image readiness and calibration; ZIP retains the image and all existing projects
+  ---
+  duration_ms: 2616.950255
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after home; a retry is independent
+ok 239 - late import cannot replace the project after home; a retry is independent
+  ---
+  duration_ms: 2319.555685
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after back; a retry is independent
+ok 240 - late import cannot replace the project after back; a retry is independent
+  ---
+  duration_ms: 2068.180334
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after cancel; a retry is independent
+ok 241 - late import cannot replace the project after cancel; a retry is independent
+  ---
+  duration_ms: 2143.980012
+  type: 'test'
+  ...
+# Subtest: PDF page and vector cancellation preserve project, guide and navigation
+ok 242 - PDF page and vector cancellation preserve project, guide and navigation
+  ---
+  duration_ms: 2246.103047
+  type: 'test'
+  ...
+# Subtest: delayed converter load is dismissed by Home and never reopens a PDF dialog
+ok 243 - delayed converter load is dismissed by Home and never reopens a PDF dialog
+  ---
+  duration_ms: 2429.95208
+  type: 'test'
+  ...
+# Subtest: sin chino visible en ES: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+ok 244 - sin chino visible en ES: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+  ---
+  duration_ms: 15503.515271
+  type: 'test'
+  ...
+# Subtest: sin chino visible en EN: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+ok 245 - sin chino visible en EN: plano, paneles, interiores R03 con holguras, techo R02-A, áreas de trabajo y cantidades
+  ---
+  duration_ms: 15305.682712
+  type: 'test'
+  ...
+# Subtest: E3: ten previews decode and navigation stays clear of the Assistant on small screens
+    # Subtest: 393×659
+    ok 1 - 393×659
+      ---
+      duration_ms: 5085.144108
+      type: 'test'
+      ...
+    # Subtest: 844×390
+    ok 2 - 844×390
+      ---
+      duration_ms: 5521.189688
+      type: 'test'
+      ...
+    1..2
+ok 246 - E3: ten previews decode and navigation stays clear of the Assistant on small screens
+  ---
+  duration_ms: 10607.373426
+  type: 'test'
+  ...
+# Subtest: selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control
+ok 247 - selector de idioma: ES / EN / ZH, el chino sigue disponible y en ES/EN no hay ningún carácter chino en el control
+  ---
+  duration_ms: 3987.697083
+  type: 'test'
+  ...
+# Subtest: FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original
+ok 248 - FloorPlanDisplayName: traducción, red de seguridad por tipo y genérico; en chino se respeta el original
+  ---
+  duration_ms: 2943.888266
+  type: 'test'
+  ...
+# Subtest: U9 el Asistente no tapa controles de los diálogos 390x844
+ok 249 - U9 el Asistente no tapa controles de los diálogos 390x844
+  ---
+  duration_ms: 10174.621022
+  type: 'test'
+  ...
+# Subtest: U9 el Asistente no tapa controles de los diálogos 844x390
+ok 250 - U9 el Asistente no tapa controles de los diálogos 844x390
+  ---
+  duration_ms: 10227.13275
+  type: 'test'
+  ...
+# Subtest: U11 botón hecho 1440x900
+ok 251 - U11 botón hecho 1440x900
+  ---
+  duration_ms: 4259.23889
+  type: 'test'
+  ...
+# Subtest: U11 botón hecho 390x844
+ok 252 - U11 botón hecho 390x844
+  ---
+  duration_ms: 3741.979229
+  type: 'test'
+  ...
+# Subtest: U9 «Volver» devuelve al origen 1440x900
+ok 253 - U9 «Volver» devuelve al origen 1440x900
+  ---
+  duration_ms: 11827.058197
+  type: 'test'
+  ...
+# Subtest: U9 «Volver» devuelve al origen 390x844
+ok 254 - U9 «Volver» devuelve al origen 390x844
+  ---
+  duration_ms: 11137.247003
+  type: 'test'
+  ...
+# Subtest: U10 semáforo 1440x900
+ok 255 - U10 semáforo 1440x900
+  ---
+  duration_ms: 5919.922793
+  type: 'test'
+  ...
+# Subtest: U10 semáforo 390x844
+ok 256 - U10 semáforo 390x844
+  ---
+  duration_ms: 5120.426625
+  type: 'test'
+  ...
+# Subtest: migration copies byte for byte, never touches localStorage, and is idempotent
+ok 257 - migration copies byte for byte, never touches localStorage, and is idempotent
+  ---
+  duration_ms: 559.165671
+  type: 'test'
+  ...
+# Subtest: a migration interrupted between its phases is repeated and completes, with localStorage intact
+ok 258 - a migration interrupted between its phases is repeated and completes, with localStorage intact
+  ---
+  duration_ms: 356.541609
+  type: 'test'
+  ...
+# Subtest: «saved» only after the transaction completes; unconfirmed changes are shown as pending; reopening gives the last confirmed state
+ok 259 - «saved» only after the transaction completes; unconfirmed changes are shown as pending; reopening gives the last confirmed state
+  ---
+  duration_ms: 511.617157
+  type: 'test'
+  ...
+# Subtest: storage permission follows a trusted confirmed save; status, autosave, empty save and a conflict never ask
+ok 260 - storage permission follows a trusted confirmed save; status, autosave, empty save and a conflict never ask
+  ---
+  duration_ms: 684.821998
+  type: 'test'
+  ...
+# Subtest: a real exhausted quota fails visibly, keeps the change in memory and in the emergency export, and loses nothing confirmed
+ok 261 - a real exhausted quota fails visibly, keeps the change in memory and in the emergency export, and loses nothing confirmed
+  ---
+  duration_ms: 1085.180064
+  type: 'test'
+  ...
+# Subtest: two tabs: the second commit does not overwrite the first; its work is kept as a recoverable conflict
+ok 262 - two tabs: the second commit does not overwrite the first; its work is kept as a recoverable conflict
+  ---
+  duration_ms: 545.256389
+  type: 'test'
+  ...
+# Subtest: downgrade: an older RUBIK reads the latest confirmed state; if the mirror fails it refuses visibly; its later writes become a conflict
+ok 263 - downgrade: an older RUBIK reads the latest confirmed state; if the mirror fails it refuses visibly; its later writes become a conflict
+  ---
+  duration_ms: 469.171055
+  type: 'test'
+  ...
+# Subtest: image collection never deletes an image of a restore in progress or just committed in another tab
+ok 264 - image collection never deletes an image of a restore in progress or just committed in another tab
+  ---
+  duration_ms: 1216.738458
+  type: 'test'
+  ...
+# Subtest: recover() with a tab’s stale copy of the library does not undo a restore another tab committed
+ok 265 - recover() with a tab’s stale copy of the library does not undo a restore another tab committed
+  ---
+  duration_ms: 508.257727
+  type: 'test'
+  ...
+# Subtest: a snapshot and its revision always belong to the same confirmed state, even while another tab commits
+ok 266 - a snapshot and its revision always belong to the same confirmed state, even while another tab commits
+  ---
+  duration_ms: 725.012467
+  type: 'test'
+  ...
+# Subtest: a conflict keeps the COMPLETE work, including changes made during the transaction and after it, and can be rebuilt
+ok 267 - a conflict keeps the COMPLETE work, including changes made during the transaction and after it, and can be rebuilt
+  ---
+  duration_ms: 1045.401916
+  type: 'test'
+  ...
+# Subtest: images of conflicts and of other open tabs are never collected; the grace period is not the only guarantee
+ok 268 - images of conflicts and of other open tabs are never collected; the grace period is not the only guarantee
+  ---
+  duration_ms: 424.817433
+  type: 'test'
+  ...
+# Subtest: compatibility copy: an interruption between keys leaves the library blocked, never a mixture, and the next start repairs it
+ok 269 - compatibility copy: an interruption between keys leaves the library blocked, never a mixture, and the next start repairs it
+  ---
+  duration_ms: 376.285342
+  type: 'test'
+  ...
+# Subtest: compatibility copy: a partial failure stays blocked and is repaired; a failed barrier writes nothing; an older tab writing meanwhile is kept as a conflict
+ok 270 - compatibility copy: a partial failure stays blocked and is repaired; a failed barrier writes nothing; an older tab writing meanwhile is kept as a conflict
+  ---
+  duration_ms: 288.788064
+  type: 'test'
+  ...
+# Subtest: editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery
+ok 271 - editor F0.2b: five migrated keys, pending vs confirmed, JSON copy, inter-tab conflict and recovery
+  ---
+  duration_ms: 14475.240425
+  type: 'test'
+  ...
+# 24 ms · migrate five seeded keys and open both editors
+# 9525 ms · acquire the Web Lock and stage revision A
+# 9625 ms · download project JSON with the transaction blocked
+# 13150 ms · release the Web Lock and confirm revision 2
+# 13248 ms · detect the newer revision and record the conflict
+# 13402 ms · download the emergency copy
+# 13586 ms · accept recovery and wait for the reloaded editor
+# 14420 ms · verify the recovered and superseded revisions in IndexedDB
+# 14436 ms · close browser context
+# 14475 ms · browser context closed
+# Subtest: editor F0.2b: a confirmed read/write handoff to Evolución survives stale localStorage
+ok 272 - editor F0.2b: a confirmed read/write handoff to Evolución survives stale localStorage
+  ---
+  duration_ms: 10820.10673
+  type: 'test'
+  ...
+# Subtest: F0.2b an explicit save can request persistence after this tab autosaved a confirmed revision
+ok 273 - F0.2b an explicit save can request persistence after this tab autosaved a confirmed revision
+  ---
+  duration_ms: 397.157821
+  type: 'test'
+  ...
+# Subtest: F0.2b concurrent migration without Web Locks cannot reset a committed revision
+ok 274 - F0.2b concurrent migration without Web Locks cannot reset a committed revision
+  ---
+  duration_ms: 454.580555
+  type: 'test'
+  ...
+# Subtest: F0.2b confirmed reader is read-only before migration and the editor fails closed if IndexedDB is unavailable
+ok 275 - F0.2b confirmed reader is read-only before migration and the editor fails closed if IndexedDB is unavailable
+  ---
+  duration_ms: 421.863303
+  type: 'test'
+  ...
+# Subtest: F0.2b default, client preview and synthetic demos leave the professional database closed
+ok 276 - F0.2b default, client preview and synthetic demos leave the professional database closed
+  ---
+  duration_ms: 4626.453451
+  type: 'test'
+  ...
+# Subtest: F0.2b portable building includes exact per-level images, budget and review; interruption after staging retains the journal
+ok 277 - F0.2b portable building includes exact per-level images, budget and review; interruption after staging retains the journal
+  ---
+  duration_ms: 641.930984
+  type: 'test'
+  ...
+# Subtest: MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con cotas, deshacer/rehacer, guardar y reabrir, exportar e importar sin la foto
+ok 278 - MUE-01 escritorio: crear desde foto y medidas, 2D/3D, mover y rotar con cotas, deshacer/rehacer, guardar y reabrir, exportar e importar sin la foto
+  ---
+  duration_ms: 25866.32243
+  type: 'test'
+  ...
+# Subtest: MUE-01: si la foto no puede guardarse el mueble se crea igual y se avisa; quitar foto; estancia sin espacio
+ok 279 - MUE-01: si la foto no puede guardarse el mueble se crea igual y se avisa; quitar foto; estancia sin espacio
+  ---
+  duration_ms: 3368.39966
+  type: 'test'
+  ...
+# Subtest: MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y cotas; reforma con consentimiento y simulación rotulada
+ok 280 - MUE-01 + FOT-01 en teléfono 390×844: acceso, creación, colocación y cotas; reforma con consentimiento y simulación rotulada
+  ---
+  duration_ms: 6548.009765
+  type: 'test'
+  ...
+# Subtest: FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+ok 281 - FOT-01 escritorio: entrada distinta de «Desde una imagen», validaciones, proveedor bloqueado, simulación rotulada, error, cancelación, descarte y proyecto intacto
+  ---
+  duration_ms: 15051.486055
+  type: 'test'
+  ...
+# Subtest: premium shell 1440x900
+ok 282 - premium shell 1440x900
+  ---
+  duration_ms: 23967.161389
+  type: 'test'
+  ...
+# Subtest: premium shell 390x844
+ok 283 - premium shell 390x844
+  ---
+  duration_ms: 66886.367968
+  type: 'test'
+  ...
+# Subtest: premium shell 844x390
+ok 284 - premium shell 844x390
+  ---
+  duration_ms: 65993.776361
+  type: 'test'
+  ...
+# Subtest: premium shell 844x390 mouse
+ok 285 - premium shell 844x390 mouse
+  ---
+  duration_ms: 66041.750043
+  type: 'test'
+  ...
+# Subtest: mobile dock stays tappable in 3D with reduced motion
+ok 286 - mobile dock stays tappable in 3D with reduced motion
+  ---
+  duration_ms: 10631.016859
+  type: 'test'
+  ...
+# Subtest: M10 reveals only active room and restores 1440x900
+ok 287 - M10 reveals only active room and restores 1440x900
+  ---
+  duration_ms: 30528.794901
+  type: 'test'
+  ...
+# Subtest: M10 reveals only active room and restores 390x844
+ok 288 - M10 reveals only active room and restores 390x844
+  ---
+  duration_ms: 20644.430915
+  type: 'test'
+  ...
+# Subtest: M10 reveals only active room and restores 844x390
+ok 289 - M10 reveals only active room and restores 844x390
+  ---
+  duration_ms: 19534.196899
+  type: 'test'
+  ...
+# Subtest: M10 reveals only active room and restores 360x800
+ok 290 - M10 reveals only active room and restores 360x800
+  ---
+  duration_ms: 22664.379987
+  type: 'test'
+  ...
+# Subtest: M10 separates shared wall faces and preserves a concave floor
+ok 291 - M10 separates shared wall faces and preserves a concave floor
+  ---
+  duration_ms: 54911.403662
+  type: 'test'
+  ...
+# Subtest: M10 reduced motion skips overlay and close cancels active reveal
+ok 292 - M10 reduced motion skips overlay and close cancels active reveal
+  ---
+  duration_ms: 16971.695906
+  type: 'test'
+  ...
+# Subtest: M10 keeps an authorized GLB and returns to the existing 3D camera
+ok 293 - M10 keeps an authorized GLB and returns to the existing 3D camera
+  ---
+  duration_ms: 18848.03559
+  type: 'test'
+  ...
+# Subtest: M10 context loss during reveal releases overlays and keeps the document
+ok 294 - M10 context loss during reveal releases overlays and keeps the document
+  ---
+  duration_ms: 15308.941126
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+ok 295 - R2 P01/P02 search and closed-guide entry preserve the project 1440x900
+  ---
+  duration_ms: 25341.401907
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 390x844
+ok 296 - R2 P01/P02 search and closed-guide entry preserve the project 390x844
+  ---
+  duration_ms: 26759.362094
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 844x390
+ok 297 - R2 P01/P02 search and closed-guide entry preserve the project 844x390
+  ---
+  duration_ms: 47397.526621
+  type: 'test'
+  ...
+# Subtest: R2 P01/P02 search and closed-guide entry preserve the project 360x800
+ok 298 - R2 P01/P02 search and closed-guide entry preserve the project 360x800
+  ---
+  duration_ms: 26632.038598
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 1440x900
+ok 299 - R2 P13 presentation PNG is real and restores the view 1440x900
+  ---
+  duration_ms: 37628.70065
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 390x844
+ok 300 - R2 P13 presentation PNG is real and restores the view 390x844
+  ---
+  duration_ms: 24256.886738
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 844x390
+ok 301 - R2 P13 presentation PNG is real and restores the view 844x390
+  ---
+  duration_ms: 28960.279475
+  type: 'test'
+  ...
+# Subtest: R2 P13 presentation PNG is real and restores the view 360x800
+ok 302 - R2 P13 presentation PNG is real and restores the view 360x800
+  ---
+  duration_ms: 28222.426064
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 1440x900
+ok 303 - presentation starts from a real room and restores 2D 1440x900
+  ---
+  duration_ms: 26941.79656
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 390x844
+ok 304 - presentation starts from a real room and restores 2D 390x844
+  ---
+  duration_ms: 20198.516667
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 844x390
+ok 305 - presentation starts from a real room and restores 2D 844x390
+  ---
+  duration_ms: 24492.636962
+  type: 'test'
+  ...
+# Subtest: presentation starts from a real room and restores 2D 360x800
+ok 306 - presentation starts from a real room and restores 2D 360x800
+  ---
+  duration_ms: 20110.477172
+  type: 'test'
+  ...
+# Subtest: R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+ok 307 - R2 P06/P12 manual jumps and revisits count completed stops without guide evidence
+  ---
+  duration_ms: 33675.011869
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 1440x900
+ok 308 - R2 P11 missing GLB keeps generic furniture and warns 1440x900
+  ---
+  duration_ms: 24451.77913
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 390x844
+ok 309 - R2 P11 missing GLB keeps generic furniture and warns 390x844
+  ---
+  duration_ms: 18439.813079
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 844x390
+ok 310 - R2 P11 missing GLB keeps generic furniture and warns 844x390
+  ---
+  duration_ms: 22857.93369
+  type: 'test'
+  ...
+# Subtest: R2 P11 missing GLB keeps generic furniture and warns 360x800
+ok 311 - R2 P11 missing GLB keeps generic furniture and warns 360x800
+  ---
+  duration_ms: 18718.841171
+  type: 'test'
+  ...
+# Subtest: R2 P11 corrupt GLB also keeps the generic and the project
+ok 312 - R2 P11 corrupt GLB also keeps the generic and the project
+  ---
+  duration_ms: 17056.63455
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 1440x900
+ok 313 - R2 P11 WebGL context loss returns intact 2D 1440x900
+  ---
+  duration_ms: 19252.285361
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 390x844
+ok 314 - R2 P11 WebGL context loss returns intact 2D 390x844
+  ---
+  duration_ms: 17994.378187
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 844x390
+ok 315 - R2 P11 WebGL context loss returns intact 2D 844x390
+  ---
+  duration_ms: 26019.188106
+  type: 'test'
+  ...
+# Subtest: R2 P11 WebGL context loss returns intact 2D 360x800
+ok 316 - R2 P11 WebGL context loss returns intact 2D 360x800
+  ---
+  duration_ms: 17643.991035
+  type: 'test'
+  ...
+# Subtest: R2 P11 context loss while 3D starts cannot reopen the presentation
+ok 317 - R2 P11 context loss while 3D starts cannot reopen the presentation
+  ---
+  duration_ms: 9550.387371
+  type: 'test'
+  ...
+# Subtest: R2 P14 reduced motion and four resize aspects keep the active stop framed
+ok 318 - R2 P14 reduced motion and four resize aspects keep the active stop framed
+  ---
+  duration_ms: 25414.058464
+  type: 'test'
+  ...
+# Subtest: R2 P14 presentation entered from 3D restores camera and final viewport aspect
+ok 319 - R2 P14 presentation entered from 3D restores camera and final viewport aspect
+  ---
+  duration_ms: 21024.340442
+  type: 'test'
+  ...
+# Subtest: R2 P15 ten presentation cycles release their loop and keep renderer memory stable
+ok 320 - R2 P15 ten presentation cycles release their loop and keep renderer memory stable
+  ---
+  duration_ms: 140489.621092
+  type: 'test'
+  ...
+# cycle renderer memory=[{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9},{"geometries":1189,"textures":9}]
+# renderer memory warm={"geometries":1189,"textures":9} final={"geometries":1189,"textures":9}
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 1440x900
+not ok 321 - R2 P16 long HTML-like room name stays text and controls fit 1440x900
+  ---
+  duration_ms: 23012.861195
+  type: 'test'
+  location: '/home/user/integ/tests/presentation.browser.test.cjs:269:118'
+  failureType: 'testCodeFailure'
+  error: 'selected stop remains visible within card {"viewport":{"width":1440,"height":900},"card":{"x":1108,"y":62,"width":320,"height":820,"top":62,"right":1428,"bottom":882,"left":1108},"close":{"x":1125,"y":107,"width":108.65625,"height":44,"top":107,"right":1233.65625,"bottom":151,"left":1125},"stop":{"x":1125,"y":824,"width":286,"height":70.5,"top":824,"right":1411,"bottom":894.5,"left":1125},"stopContentFits":true,"overflow":false}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/integ/tests/presentation.browser.test.cjs:290:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 390x844
+ok 322 - R2 P16 long HTML-like room name stays text and controls fit 390x844
+  ---
+  duration_ms: 20352.002797
+  type: 'test'
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 844x390
+ok 323 - R2 P16 long HTML-like room name stays text and controls fit 844x390
+  ---
+  duration_ms: 23704.218905
+  type: 'test'
+  ...
+# Subtest: R2 P16 long HTML-like room name stays text and controls fit 360x800
+ok 324 - R2 P16 long HTML-like room name stays text and controls fit 360x800
+  ---
+  duration_ms: 19632.601993
+  type: 'test'
+  ...
+# Subtest: R2 P16 mixed room name follows the visible language, stays text and leaves the saved name intact
+ok 325 - R2 P16 mixed room name follows the visible language, stays text and leaves the saved name intact
+  ---
+  duration_ms: 62017.304744
+  type: 'test'
+  ...
+# Subtest: 3D camera, focus and editor state return after Escape and browser Back
+ok 326 - 3D camera, focus and editor state return after Escape and browser Back
+  ---
+  duration_ms: 41187.466311
+  type: 'test'
+  ...
+# Subtest: R2 P08 walk pointer lock releases for presentation and needs a new gesture on return
+ok 327 - R2 P08 walk pointer lock releases for presentation and needs a new gesture on return
+  ---
+  duration_ms: 25773.014064
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 390x844
+ok 328 - R2 P08 touch walk stops and resumes by gesture 390x844
+  ---
+  duration_ms: 19268.538714
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 844x390
+ok 329 - R2 P08 touch walk stops and resumes by gesture 844x390
+  ---
+  duration_ms: 24055.537423
+  type: 'test'
+  ...
+# Subtest: R2 P08 touch walk stops and resumes by gesture 360x800
+ok 330 - R2 P08 touch walk stops and resumes by gesture 360x800
+  ---
+  duration_ms: 21787.968875
+  type: 'test'
+  ...
+# Subtest: Escape during 3D loading cancels without a late presentation
+ok 331 - Escape during 3D loading cancels without a late presentation
+  ---
+  duration_ms: 13340.757421
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back while 2D presentation is loading restores editor 1440x900
+ok 332 - R2 P07 Back while 2D presentation is loading restores editor 1440x900
+  ---
+  duration_ms: 18982.436107
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close while 2D presentation is loading restores editor 390x844
+ok 333 - R2 P07 Close while 2D presentation is loading restores editor 390x844
+  ---
+  duration_ms: 16369.419979
+  type: 'test'
+  ...
+# Subtest: R2 P07 Escape while 2D presentation is loading restores editor 844x390
+ok 334 - R2 P07 Escape while 2D presentation is loading restores editor 844x390
+  ---
+  duration_ms: 19637.903502
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back while 2D presentation is loading restores editor 360x800
+ok 335 - R2 P07 Back while 2D presentation is loading restores editor 360x800
+  ---
+  duration_ms: 16021.243759
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close during room flight restores editor 1440x900
+ok 336 - R2 P07 Close during room flight restores editor 1440x900
+  ---
+  duration_ms: 22608.043071
+  type: 'test'
+  ...
+# Subtest: R2 P07 Back during room flight restores editor 390x844
+ok 337 - R2 P07 Back during room flight restores editor 390x844
+  ---
+  duration_ms: 19141.774489
+  type: 'test'
+  ...
+# Subtest: R2 P07 Escape during room flight restores editor 844x390
+ok 338 - R2 P07 Escape during room flight restores editor 844x390
+  ---
+  duration_ms: 22710.020948
+  type: 'test'
+  ...
+# Subtest: R2 P07 Close during room flight restores editor 360x800
+ok 339 - R2 P07 Close during room flight restores editor 360x800
+  ---
+  duration_ms: 18067.261018
+  type: 'test'
+  ...
+# Subtest: missing 3D runtime returns to the 2D document with an explanation
+ok 340 - missing 3D runtime returns to the 2D document with an explanation
+  ---
+  duration_ms: 3765.296497
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 1440x900
+ok 341 - R2 P03 empty project explains layout in both entry paths 1440x900
+  ---
+  duration_ms: 2734.587742
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 390x844
+ok 342 - R2 P03 empty project explains layout in both entry paths 390x844
+  ---
+  duration_ms: 2621.169884
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 844x390
+ok 343 - R2 P03 empty project explains layout in both entry paths 844x390
+  ---
+  duration_ms: 2767.385319
+  type: 'test'
+  ...
+# Subtest: R2 P03 empty project explains layout in both entry paths 360x800
+ok 344 - R2 P03 empty project explains layout in both entry paths 360x800
+  ---
+  duration_ms: 2728.314868
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 1440x900
+ok 345 - R2 P05 own and imported room data and poses follow active IDs 1440x900
+  ---
+  duration_ms: 59941.796125
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 390x844
+ok 346 - R2 P05 own and imported room data and poses follow active IDs 390x844
+  ---
+  duration_ms: 49000.01415
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 844x390
+ok 347 - R2 P05 own and imported room data and poses follow active IDs 844x390
+  ---
+  duration_ms: 64532.530279
+  type: 'test'
+  ...
+# Subtest: R2 P05 own and imported room data and poses follow active IDs 360x800
+ok 348 - R2 P05 own and imported room data and poses follow active IDs 360x800
+  ---
+  duration_ms: 48693.912731
+  type: 'test'
+  ...
+# Subtest: R2 room selection and order persist outside project; stale room IDs reconcile on reload
+ok 349 - R2 room selection and order persist outside project; stale room IDs reconcile on reload
+  ---
+  duration_ms: 25290.342434
+  type: 'test'
+  ...
+# Subtest: R2 changing active project invalidates the live plan and keeps sidecars isolated
+ok 350 - R2 changing active project invalidates the live plan and keeps sidecars isolated
+  ---
+  duration_ms: 28045.818148
+  type: 'test'
+  ...
+# Subtest: R2 geometry revision invalidates the tour and resize restores the current aspect
+ok 351 - R2 geometry revision invalidates the tour and resize restores the current aspect
+  ---
+  duration_ms: 25559.317091
+  type: 'test'
+  ...
+# Subtest: R2 project switch during 3D loading cannot reopen a stale presentation
+ok 352 - R2 project switch during 3D loading cannot reopen a stale presentation
+  ---
+  duration_ms: 16794.999049
+  type: 'test'
+  ...
+# Subtest: R2 variant starts with independent presentation metadata
+ok 353 - R2 variant starts with independent presentation metadata
+  ---
+  duration_ms: 23534.108183
+  type: 'test'
+  ...
+# Subtest: Point9 human tasks A–E, real routes and keyboard 1440x900
+ok 354 - Point9 human tasks A–E, real routes and keyboard 1440x900
+  ---
+  duration_ms: 8063.240864
+  type: 'test'
+  ...
+# Subtest: Point9 human tasks A–E, real routes and keyboard 1280x800
+ok 355 - Point9 human tasks A–E, real routes and keyboard 1280x800
+  ---
+  duration_ms: 8653.198852
+  type: 'test'
+  ...
+# Subtest: Point9 human tasks A–E, real routes and keyboard 390x844
+ok 356 - Point9 human tasks A–E, real routes and keyboard 390x844
+  ---
+  duration_ms: 7577.338871
+  type: 'test'
+  ...
+# Subtest: Point9 human tasks A–E, real routes and keyboard 844x390
+ok 357 - Point9 human tasks A–E, real routes and keyboard 844x390
+  ---
+  duration_ms: 9083.285002
+  type: 'test'
+  ...
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 1440x900
+ok 358 - Point9 human review 2: context, layers, hierarchy and preserved flow 1440x900
+  ---
+  duration_ms: 36315.793773
+  type: 'test'
+  ...
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 1280x800
+ok 359 - Point9 human review 2: context, layers, hierarchy and preserved flow 1280x800
+  ---
+  duration_ms: 26633.337036
+  type: 'test'
+  ...
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 390x844
+ok 360 - Point9 human review 2: context, layers, hierarchy and preserved flow 390x844
+  ---
+  duration_ms: 23097.933446
+  type: 'test'
+  ...
+# Subtest: Point9 human review 2: context, layers, hierarchy and preserved flow 844x390
+ok 361 - Point9 human review 2: context, layers, hierarchy and preserved flow 844x390
+  ---
+  duration_ms: 22176.197522
+  type: 'test'
+  ...
+# Subtest: Point9 global controls remain interactive and editor context returns 1440x900
+ok 362 - Point9 global controls remain interactive and editor context returns 1440x900
+  ---
+  duration_ms: 23680.780916
+  type: 'test'
+  ...
+# Subtest: Point9 global controls remain interactive and editor context returns 1280x800
+ok 363 - Point9 global controls remain interactive and editor context returns 1280x800
+  ---
+  duration_ms: 21729.925762
+  type: 'test'
+  ...
+# Subtest: Point9 global controls remain interactive and editor context returns 390x844
+ok 364 - Point9 global controls remain interactive and editor context returns 390x844
+  ---
+  duration_ms: 17414.9952
+  type: 'test'
+  ...
+# Subtest: Point9 global controls remain interactive and editor context returns 844x390
+ok 365 - Point9 global controls remain interactive and editor context returns 844x390
+  ---
+  duration_ms: 17217.872497
+  type: 'test'
+  ...
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 1440x900
+ok 366 - Point9 visual layer: honest project context, contrast and reduced motion 1440x900
+  ---
+  duration_ms: 3376.837659
+  type: 'test'
+  ...
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 1280x800
+ok 367 - Point9 visual layer: honest project context, contrast and reduced motion 1280x800
+  ---
+  duration_ms: 2707.296511
+  type: 'test'
+  ...
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 390x844
+ok 368 - Point9 visual layer: honest project context, contrast and reduced motion 390x844
+  ---
+  duration_ms: 3109.066136
+  type: 'test'
+  ...
+# Subtest: Point9 visual layer: honest project context, contrast and reduced motion 844x390
+ok 369 - Point9 visual layer: honest project context, contrast and reduced motion 844x390
+  ---
+  duration_ms: 2498.479099
+  type: 'test'
+  ...
+# Subtest: Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route
+ok 370 - Point9 saved studio identity, legacy shortcuts, guide delivery and exterior route
+  ---
+  duration_ms: 27863.741796
+  type: 'test'
+  ...
+# Subtest: Project-First A4: automatic dossier with professional styles 1440x900
+ok 371 - Project-First A4: automatic dossier with professional styles 1440x900
+  ---
+  duration_ms: 9860.411145
+  type: 'test'
+  ...
+# Subtest: Project-First A4: automatic dossier with professional styles 390x844
+ok 372 - Project-First A4: automatic dossier with professional styles 390x844
+  ---
+  duration_ms: 8663.668235
+  type: 'test'
+  ...
+# Subtest: Dossier adds an attributed IGN map and location link only when selected
+ok 373 - Dossier adds an attributed IGN map and location link only when selected
+  ---
+  duration_ms: 4234.204848
+  type: 'test'
+  ...
+# Subtest: IDENTIDAD · el mismo archivo importado dos veces: proyectos independientes; 11 € → 99 € en la copia no cambia el original; el Asistente no se mezcla; reabrir lo mantiene
+ok 374 - IDENTIDAD · el mismo archivo importado dos veces: proyectos independientes; 11 € → 99 € en la copia no cambia el original; el Asistente no se mezcla; reabrir lo mantiene
+  ---
+  duration_ms: 8262.872682
+  type: 'test'
+  ...
+# Subtest: IDENTIDAD · «Duplicar» y «Crear variante»: identidad nueva con importes, IVA propio y revisión; después, independientes entre A/B/C y tras reabrir
+ok 375 - IDENTIDAD · «Duplicar» y «Crear variante»: identidad nueva con importes, IVA propio y revisión; después, independientes entre A/B/C y tras reabrir
+  ---
+  duration_ms: 7877.200426
+  type: 'test'
+  ...
+# Subtest: IDENTIDAD · migración: una colección anterior con dos entradas y un solo id se separa una vez, sin perder cifras, y no se repite
+ok 376 - IDENTIDAD · migración: una colección anterior con dos entradas y un solo id se separa una vez, sin perder cifras, y no se repite
+  ---
+  duration_ms: 4526.891918
+  type: 'test'
+  ...
+# Subtest: IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y no comparte escrituras
+ok 377 - IDENTIDAD · si falla la migración, presupuestar queda de solo lectura y no comparte escrituras
+  ---
+  duration_ms: 2724.084858
+  type: 'test'
+  ...
+# Subtest: UX-BETA-001 · §9 · descarga JSON desde Proyecto ▾ con el mismo exportador; confirma y no duplica en la cabecera
+ok 378 - UX-BETA-001 · §9 · descarga JSON desde Proyecto ▾ con el mismo exportador; confirma y no duplica en la cabecera
+  ---
+  duration_ms: 3048.169273
+  type: 'test'
+  ...
+# Subtest: Project-First A2: real project views from the 3D view, restored editor 1440x900
+ok 379 - Project-First A2: real project views from the 3D view, restored editor 1440x900
+  ---
+  duration_ms: 27729.852949
+  type: 'test'
+  ...
+# Subtest: Project-First A2: real project views from the 3D view, restored editor 390x844
+ok 380 - Project-First A2: real project views from the 3D view, restored editor 390x844
+  ---
+  duration_ms: 23541.708623
+  type: 'test'
+  ...
+# Subtest: Phase C1: project quantities 1440x900
+ok 381 - Phase C1: project quantities 1440x900
+  ---
+  duration_ms: 2379.482538
+  type: 'test'
+  ...
+# Subtest: Phase C1: project quantities 390x844
+ok 382 - Phase C1: project quantities 390x844
+  ---
+  duration_ms: 1980.413409
+  type: 'test'
+  ...
+# Subtest: Render IA · catálogo y descargas 2K/4K desde la misma vista (1536×1024)
+ok 383 - Render IA · catálogo y descargas 2K/4K desde la misma vista (1536×1024)
+  ---
+  duration_ms: 27840.785531
+  type: 'test'
+  ...
+# Subtest: Render IA · catálogo y descargas 2K/4K desde la misma vista (1920×1080)
+ok 384 - Render IA · catálogo y descargas 2K/4K desde la misma vista (1920×1080)
+  ---
+  duration_ms: 28323.984154
+  type: 'test'
+  ...
+# Subtest: new home / room dimensions / history / software 3D 1440x900
+ok 385 - new home / room dimensions / history / software 3D 1440x900
+  ---
+  duration_ms: 14523.767402
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: new home / room dimensions / history / software 3D 390x844
+ok 386 - new home / room dimensions / history / software 3D 390x844
+  ---
+  duration_ms: 14249.908818
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: new home / room dimensions / history / software 3D 844x390
+ok 387 - new home / room dimensions / history / software 3D 844x390
+  ---
+  duration_ms: 14280.367432
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: cancel project dialog, image rejection and persistence failure preserve prior project
+ok 388 - cancel project dialog, image rejection and persistence failure preserve prior project
+  ---
+  duration_ms: 4046.453948
+  type: 'test'
+  ...
+# Subtest: moving door/window consent is explicit, cancellation and one-step history preserve IDs
+ok 389 - moving door/window consent is explicit, cancellation and one-step history preserve IDs
+  ---
+  duration_ms: 2651.174312
+  type: 'test'
+  ...
+# Subtest: C5 · interfaz real de principio a fin (chromium): ZIP con GLB + manifiesto + LEEME, sin mutación ni red
+ok 390 - C5 · interfaz real de principio a fin (chromium): ZIP con GLB + manifiesto + LEEME, sin mutación ni red
+  ---
+  duration_ms: 14368.355146
+  type: 'test'
+  ...
+# Subtest: C3: acwall has no visible coincident faces between louver and grille
+ok 391 - C3: acwall has no visible coincident faces between louver and grille
+  ---
+  duration_ms: 9261.764779
+  type: 'test'
+  ...
+# Subtest: Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportaciones sucesivas deterministas
+ok 392 - Robustez · GLB retrasado 6 s: espera y produce los MISMOS bytes; exportaciones sucesivas deterministas
+  ---
+  duration_ms: 32285.393823
+  type: 'test'
+  ...
+# Subtest: El encuadre observado conserva el centro del plano al entrar en 3D con un resize pendiente
+ok 393 - El encuadre observado conserva el centro del plano al entrar en 3D con un resize pendiente
+  ---
+  duration_ms: 8867.54133
+  type: 'test'
+  ...
+# Subtest: Robustez · modelo ausente: la escena se entrega con su representación genérica y lo declara
+ok 394 - Robustez · modelo ausente: la escena se entrega con su representación genérica y lo declara
+  ---
+  duration_ms: 8839.744444
+  type: 'test'
+  ...
+# Subtest: Robustez · cancelación: nada se genera y nada cambia
+ok 395 - Robustez · cancelación: nada se genera y nada cambia
+  ---
+  duration_ms: 7175.719391
+  type: 'test'
+  ...
+# Subtest: UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la salida; Escape cancela; móvil sin desbordes; OP-02 vuelve a reposo
+ok 396 - UX · sin 3D explica y ofrece abrirla; escena vacía explica la causa y la salida; Escape cancela; móvil sin desbordes; OP-02 vuelve a reposo
+  ---
+  duration_ms: 15141.594539
+  type: 'test'
+  ...
+# Subtest: Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/EN; el asistente no tapa ni roba las acciones
+ok 397 - Residuales · ZIP con los dos caminos y script idéntico; diálogo en ZH/EN; el asistente no tapa ni roba las acciones
+  ---
+  duration_ms: 51869.510518
+  type: 'test'
+  ...
+# Subtest: Phase B4: publish the client file as a link, with and without the tour video
+ok 398 - Phase B4: publish the client file as a link, with and without the tour video
+  ---
+  duration_ms: 44989.447236
+  type: 'test'
+  ...
+# Subtest: S2: «Mis publicaciones» withdraws a published link after confirmation, and only with the publishing code
+ok 399 - S2: «Mis publicaciones» withdraws a published link after confirmation, and only with the publishing code
+  ---
+  duration_ms: 20857.384235
+  type: 'test'
+  ...
+# Subtest: S2: clear history (no deletion) and no orphan videos when the page upload fails
+ok 400 - S2: clear history (no deletion) and no orphan videos when the page upload fails
+  ---
+  duration_ms: 5701.311851
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+ok 401 - R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+  ---
+  duration_ms: 2543.466563
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 390x844
+ok 402 - R3 M07 sheet downloads standalone SVG and restores editor 390x844
+  ---
+  duration_ms: 2307.882314
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 844x390
+ok 403 - R3 M07 sheet downloads standalone SVG and restores editor 844x390
+  ---
+  duration_ms: 2244.12
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 360x800
+ok 404 - R3 M07 sheet downloads standalone SVG and restores editor 360x800
+  ---
+  duration_ms: 2243.332451
+  type: 'test'
+  ...
+# Subtest: R3 M07 imported irregular room and localized sheet text stay tied to current project
+ok 405 - R3 M07 imported irregular room and localized sheet text stay tied to current project
+  ---
+  duration_ms: 3493.99749
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 1440x900
+ok 406 - R3 M07 own copy and DXF sheet use the active project 1440x900
+  ---
+  duration_ms: 3037.725303
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 390x844
+ok 407 - R3 M07 own copy and DXF sheet use the active project 390x844
+  ---
+  duration_ms: 2983.651441
+  type: 'test'
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 1440x900
+ok 408 - sheet reopened before the previous close event keeps its preview and downloads 1440x900
+  ---
+  duration_ms: 2136.82211
+  type: 'test'
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 390x844
+ok 409 - sheet reopened before the previous close event keeps its preview and downloads 390x844
+  ---
+  duration_ms: 2184.281998
+  type: 'test'
+  ...
+# Subtest: §8.3 · P10: dato comprobable, vista y vídeo vigentes, cliente sintético, identidad, ayuda editar/aceptar/descartar, nota interna excluida, archivo = vista previa
+ok 410 - §8.3 · P10: dato comprobable, vista y vídeo vigentes, cliente sintético, identidad, ayuda editar/aceptar/descartar, nota interna excluida, archivo = vista previa
+  ---
+  duration_ms: 60198.421211
+  type: 'test'
+  ...
+# Subtest: §7.2 · escritorio: sin variante → crear → idéntica → editar → cambio → revisión → descarga, con vuelta contextual y comparador
+ok 411 - §7.2 · escritorio: sin variante → crear → idéntica → editar → cambio → revisión → descarga, con vuelta contextual y comparador
+  ---
+  duration_ms: 13211.616771
+  type: 'test'
+  ...
+# Subtest: §7.2 · móvil 390×844: crear variante, barra sin solapes ni desbordes, volver a la historia y cerrar
+ok 412 - §7.2 · móvil 390×844: crear variante, barra sin solapes ni desbordes, volver a la historia y cerrar
+  ---
+  duration_ms: 3290.473569
+  type: 'test'
+  ...
+# Subtest: historia de dos revisiones: misma cámara en planta, ≥2 datos anclados a elementos visibles, cifras = ficha independiente
+ok 413 - historia de dos revisiones: misma cámara en planta, ≥2 datos anclados a elementos visibles, cifras = ficha independiente
+  ---
+  duration_ms: 68.370009
+  type: 'test'
+  ...
+# Subtest: dato ausente: una estancia nueva no tiene «antes» → se muestra AUSENTE, no 0
+ok 414 - dato ausente: una estancia nueva no tiene «antes» → se muestra AUSENTE, no 0
+  ---
+  duration_ms: 41.596161
+  type: 'test'
+  ...
+# Subtest: revisión profesional: ordenar y editar no cambia los datos; orden inválido rechazado
+ok 415 - revisión profesional: ordenar y editar no cambia los datos; orden inválido rechazado
+  ---
+  duration_ms: 26.842934
+  type: 'test'
+  ...
+# Subtest: preparación y obsolescencia: medio listo ≠ guardada ≠ vigente; si cambia el proyecto, la historia queda OBSOLETA
+ok 416 - preparación y obsolescencia: medio listo ≠ guardada ≠ vigente; si cambia el proyecto, la historia queda OBSOLETA
+  ---
+  duration_ms: 26.607195
+  type: 'test'
+  ...
+# Subtest: manifiesto de exportación: referencias durables (entradas + huellas) y huella de cada imagen
+ok 417 - manifiesto de exportación: referencias durables (entradas + huellas) y huella de cada imagen
+  ---
+  duration_ms: 15.626184
+  type: 'test'
+  ...
+# Subtest: P10 · historia de dos revisiones: encuadre común, rótulos anclados con datos trazables = ficha independiente, revisión, imágenes que abren, vuelta a Entregar
+ok 418 - P10 · historia de dos revisiones: encuadre común, rótulos anclados con datos trazables = ficha independiente, revisión, imágenes que abren, vuelta a Entregar
+  ---
+  duration_ms: 4985.881219
+  type: 'test'
+  ...
+# Subtest: P10 · obsolescencia: si cambia una revisión guardada, la historia queda OBSOLETA y no se entrega como vigente; cancelar no escribe
+ok 419 - P10 · obsolescencia: si cambia una revisión guardada, la historia queda OBSOLETA y no se entrega como vigente; cancelar no escribe
+  ---
+  duration_ms: 6608.631376
+  type: 'test'
+  ...
+# Subtest: P10 · es 390x844: teclado, sin desbordes, sin chino visible
+ok 420 - P10 · es 390x844: teclado, sin desbordes, sin chino visible
+  ---
+  duration_ms: 2492.680277
+  type: 'test'
+  ...
+# Subtest: P10 · en 1440x900: teclado, sin desbordes, sin chino visible
+ok 421 - P10 · en 1440x900: teclado, sin desbordes, sin chino visible
+  ---
+  duration_ms: 3345.313406
+  type: 'test'
+  ...
+# Subtest: caso de control Baldosa 800 → Moqueta: qué cambia y qué se conserva, en lenguaje natural
+ok 422 - caso de control Baldosa 800 → Moqueta: qué cambia y qué se conserva, en lenguaje natural
+  ---
+  duration_ms: 41.6743
+  type: 'test'
+  ...
+# Subtest: notas: las internas no entran en el documento ni en el manifiesto del cliente; las visibles van a su capítulo o generales
+ok 423 - notas: las internas no entran en el documento ni en el manifiesto del cliente; las visibles van a su capítulo o generales
+  ---
+  duration_ms: 21.775776
+  type: 'test'
+  ...
+# Subtest: coste: completo con importes trazables; parcial con lo pendiente; sin presupuesto o incoherente, ausente
+ok 424 - coste: completo con importes trazables; parcial con lo pendiente; sin presupuesto o incoherente, ausente
+  ---
+  duration_ms: 0.550721
+  type: 'test'
+  ...
+# Subtest: identidad: de Mi estudio, solo los campos elegidos; sin identidad, crédito genérico
+ok 425 - identidad: de Mi estudio, solo los campos elegidos; sin identidad, crédito genérico
+  ---
+  duration_ms: 0.205266
+  type: 'test'
+  ...
+# Subtest: ajuste de texto y paso de página: nada se trunca, ninguna línea ni página se desborda
+ok 426 - ajuste de texto y paso de página: nada se trunca, ninguna línea ni página se desborda
+  ---
+  duration_ms: 0.958767
+  type: 'test'
+  ...
+# Subtest: §7.2 · ningún cambio guardado se calla: quitar un mueble es un cambio con su capítulo; lo no detallado se cuenta como «otros ajustes»
+ok 427 - §7.2 · ningún cambio guardado se calla: quitar un mueble es un cambio con su capítulo; lo no detallado se cuenta como «otros ajustes»
+  ---
+  duration_ms: 32.759701
+  type: 'test'
+  ...
+# Subtest: §7.3 · caso Baldosa 800 → Moqueta: propuesta del estudio, notas con visibilidad, vista previa = archivo, texto largo en varias páginas
+ok 428 - §7.3 · caso Baldosa 800 → Moqueta: propuesta del estudio, notas con visibilidad, vista previa = archivo, texto largo en varias páginas
+  ---
+  duration_ms: 6710.151464
+  type: 'test'
+  ...
+# Subtest: §7.3 · sin identidad de estudio: aviso claro y propuesta sin nombre ni logo; móvil sin desbordes
+ok 429 - §7.3 · sin identidad de estudio: aviso claro y propuesta sin nombre ni logo; móvil sin desbordes
+  ---
+  duration_ms: 2462.283242
+  type: 'test'
+  ...
+# Subtest: §7.3 · muestra del caso Baldosa → Moqueta con propuesta realista: se entiende sin explicación y sin notas internas
+ok 430 - §7.3 · muestra del caso Baldosa → Moqueta con propuesta realista: se entiende sin explicación y sin notas internas
+  ---
+  duration_ms: 6264.609942
+  type: 'test'
+  ...
+# Subtest: surface library touch / keyboard / persistence / software 3D 1440x900
+ok 431 - surface library touch / keyboard / persistence / software 3D 1440x900
+  ---
+  duration_ms: 20495.55608
+  type: 'test'
+  ...
+# Subtest: surface library touch / keyboard / persistence / software 3D 390x844
+ok 432 - surface library touch / keyboard / persistence / software 3D 390x844
+  ---
+  duration_ms: 17970.721842
+  type: 'test'
+  ...
+# Subtest: surface library touch / keyboard / persistence / software 3D 844x390
+ok 433 - surface library touch / keyboard / persistence / software 3D 844x390
+  ---
+  duration_ms: 17850.356218
+  type: 'test'
+  ...
+# Subtest: every individual asset decodes, renders and disposes; mixed scene records transfer, memory and frame time
+ok 434 - every individual asset decodes, renders and disposes; mixed scene records transfer, memory and frame time
+  ---
+  duration_ms: 30885.447446
+  type: 'test'
+  ...
+# Subtest: HTTP, hash, decode, unknown preset and catalogue failures remain visible with safe fallback
+ok 435 - HTTP, hash, decode, unknown preset and catalogue failures remain visible with safe fallback
+  ---
+  duration_ms: 23308.084274
+  type: 'test'
+  ...
+# Subtest: cancel, invalid scale and failed persistence preserve the project and history
+ok 436 - cancel, invalid scale and failed persistence preserve the project and history
+  ---
+  duration_ms: 2810.166673
+  type: 'test'
+  ...
+# Subtest: comparison is real and new surfaces never acquire a zero price in English or Chinese
+ok 437 - comparison is real and new surfaces never acquire a zero price in English or Chinese
+  ---
+  duration_ms: 3037.603931
+  type: 'test'
+  ...
+# Subtest: Architectural detail uses compatible geometry and returns to the original project
+ok 438 - Architectural detail uses compatible geometry and returns to the original project
+  ---
+  duration_ms: 29173.721934
+  type: 'test'
+  ...
+# Subtest: OP-04 UX keeps join and contextual undo reachable in the guide at 1440×900
+ok 439 - OP-04 UX keeps join and contextual undo reachable in the guide at 1440×900
+  ---
+  duration_ms: 3420.921161
+  type: 'test'
+  ...
+# Subtest: OP-04 UX keeps join and contextual undo reachable in the guide at 820×1180
+ok 440 - OP-04 UX keeps join and contextual undo reachable in the guide at 820×1180
+  ---
+  duration_ms: 3196.750675
+  type: 'test'
+  ...
+# Subtest: OP-04 UX keeps join and contextual undo reachable in the guide at 390×844
+ok 441 - OP-04 UX keeps join and contextual undo reachable in the guide at 390×844
+  ---
+  duration_ms: 3463.952206
+  type: 'test'
+  ...
+# Subtest: OP-04 UX keeps join and contextual undo reachable in the guide at 844×390
+ok 442 - OP-04 UX keeps join and contextual undo reachable in the guide at 844×390
+  ---
+  duration_ms: 3252.947745
+  type: 'test'
+  ...
+# Subtest: OP-04 diagnoses the reference home block in 3d at 1440×900
+ok 443 - OP-04 diagnoses the reference home block in 3d at 1440×900
+  ---
+  duration_ms: 14593.234851
+  type: 'test'
+  ...
+# Subtest: OP-04 diagnoses the reference home block in 2d at 820×1180
+ok 444 - OP-04 diagnoses the reference home block in 2d at 820×1180
+  ---
+  duration_ms: 2272.39409
+  type: 'test'
+  ...
+# Subtest: OP-04 diagnoses the reference home block in 2d at 390×844
+ok 445 - OP-04 diagnoses the reference home block in 2d at 390×844
+  ---
+  duration_ms: 2474.016561
+  type: 'test'
+  ...
+# Subtest: OP-04 diagnoses the reference home block in 3d at 844×390
+ok 446 - OP-04 diagnoses the reference home block in 3d at 844×390
+  ---
+  duration_ms: 11185.119745
+  type: 'test'
+  ...
+# Subtest: OP-04 finds a compatible alternative, retains the scan on replacement error and only writes on confirmation
+ok 447 - OP-04 finds a compatible alternative, retains the scan on replacement error and only writes on confirmation
+  ---
+  duration_ms: 3121.363148
+  type: 'test'
+  ...
+# Subtest: OP-04 shows a safe recovery when the scan has no eligible doors
+ok 448 - OP-04 shows a safe recovery when the scan has no eligible doors
+  ---
+  duration_ms: 2132.87297
+  type: 'test'
+  ...
+# Subtest: OP-04 imports a blocked scan as a separate project only after explicit choice
+ok 449 - OP-04 imports a blocked scan as a separate project only after explicit choice
+  ---
+  duration_ms: 2260.198598
+  type: 'test'
+  ...
+# Subtest: OP-04 UX keeps the mobile properties dock reachable when opening all tools
+ok 450 - OP-04 UX keeps the mobile properties dock reachable when opening all tools
+  ---
+  duration_ms: 5052.383729
+  type: 'test'
+  ...
+# Subtest: OP-04 UX dismisses the original undo action after an edit or project switch
+ok 451 - OP-04 UX dismisses the original undo action after an edit or project switch
+  ---
+  duration_ms: 3088.986625
+  type: 'test'
+  ...
+# Subtest: OP-04 previews a RoomPlan door join without writing, commits once and reopens on the same entry
+ok 452 - OP-04 previews a RoomPlan door join without writing, commits once and reopens on the same entry
+  ---
+  duration_ms: 4200.913998
+  type: 'test'
+  ...
+# Subtest: a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access
+ok 453 - a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access
+  ---
+  duration_ms: 2770.340166
+  type: 'test'
+  ...
+# Subtest: raster, scan and document formats become a new calibratable project
+ok 454 - raster, scan and document formats become a new calibratable project
+  ---
+  duration_ms: 4149.910879
+  type: 'test'
+  ...
+# Subtest: multi-page PDF asks for the page and cancelling keeps the current project
+ok 455 - multi-page PDF asks for the page and cancelling keeps the current project
+  ---
+  duration_ms: 2794.251678
+  type: 'test'
+  ...
+# Subtest: DXF and RoomPlan produce measured walls; JSON projects still import; DWG and empty IFC get clear messages
+ok 456 - DXF and RoomPlan produce measured walls; JSON projects still import; DWG and empty IFC get clear messages
+  ---
+  duration_ms: 2976.103103
+  type: 'test'
+  ...
+# Subtest: drag and drop uploads the first file and keeps explicit JSON and ZIP exports
+ok 457 - drag and drop uploads the first file and keeps explicit JSON and ZIP exports
+  ---
+  duration_ms: 2825.578443
+  type: 'test'
+  ...
+# Subtest: DXF, IFC and RoomPlan produce doors, windows and named rooms on their walls
+ok 458 - DXF, IFC and RoomPlan produce doors, windows and named rooms on their walls
+  ---
+  duration_ms: 2903.167771
+  type: 'test'
+  ...
+# Subtest: vector PDF offers measured walls at the detected scale or a calibratable image
+ok 459 - vector PDF offers measured walls at the detected scale or a calibratable image
+  ---
+  duration_ms: 3121.112282
+  type: 'test'
+  ...
+# Subtest: raster plan detection needs calibration, then proposes walls, gaps and rooms that can be undone
+ok 460 - raster plan detection needs calibration, then proposes walls, gaps and rooms that can be undone
+  ---
+  duration_ms: 2532.951428
+  type: 'test'
+  ...
+# Subtest: flujo real editor → Variantes → comparador, mismo origen, solo lectura 1440x900
+ok 461 - flujo real editor → Variantes → comparador, mismo origen, solo lectura 1440x900
+  ---
+  duration_ms: 3504.022294
+  type: 'test'
+  ...
+# Subtest: flujo real editor → Variantes → comparador, mismo origen, solo lectura 390x844
+ok 462 - flujo real editor → Variantes → comparador, mismo origen, solo lectura 390x844
+  ---
+  duration_ms: 3146.555036
+  type: 'test'
+  ...
+# Subtest: flujo real editor → Variantes → comparador, mismo origen, solo lectura 844x390
+ok 463 - flujo real editor → Variantes → comparador, mismo origen, solo lectura 844x390
+  ---
+  duration_ms: 3207.794929
+  type: 'test'
+  ...
+# Subtest: presupuestos: completo, parcial, incoherente, ausente y de otro proyecto; nunca una diferencia engañosa
+ok 464 - presupuestos: completo, parcial, incoherente, ausente y de otro proyecto; nunca una diferencia engañosa
+  ---
+  duration_ms: 3875.655159
+  type: 'test'
+  ...
+# Subtest: negativos: sin parámetros, inexistentes, distinto grupo, identificadores inválidos, biblioteca dañada y variante borrada después
+ok 465 - negativos: sin parámetros, inexistentes, distinto grupo, identificadores inválidos, biblioteca dañada y variante borrada después
+  ---
+  duration_ms: 3548.261739
+  type: 'test'
+  ...
+# Subtest: edificio de dos plantas: el comparador nombra las plantas comparadas y no promete el edificio completo
+ok 466 - edificio de dos plantas: el comparador nombra las plantas comparadas y no promete el edificio completo
+  ---
+  duration_ms: 488.890716
+  type: 'test'
+  ...
+# Subtest: M12 common frame and isolated variant 1440x900
+ok 467 - M12 common frame and isolated variant 1440x900
+  ---
+  duration_ms: 3502.212074
+  type: 'test'
+  ...
+# Subtest: M12 common frame and isolated variant 390x844
+ok 468 - M12 common frame and isolated variant 390x844
+  ---
+  duration_ms: 3060.468153
+  type: 'test'
+  ...
+# Subtest: M12 common frame and isolated variant 844x390
+ok 469 - M12 common frame and isolated variant 844x390
+  ---
+  duration_ms: 2666.60348
+  type: 'test'
+  ...
+# Subtest: M12 common frame and isolated variant 360x800
+ok 470 - M12 common frame and isolated variant 360x800
+  ---
+  duration_ms: 3439.981547
+  type: 'test'
+  ...
+# Subtest: variants: create, edit, compare, reload, reopen original and delete with confirmation 1440x900
+ok 471 - variants: create, edit, compare, reload, reopen original and delete with confirmation 1440x900
+  ---
+  duration_ms: 6603.020056
+  type: 'test'
+  ...
+# Subtest: variants: create, edit, compare, reload, reopen original and delete with confirmation 390x844
+ok 472 - variants: create, edit, compare, reload, reopen original and delete with confirmation 390x844
+  ---
+  duration_ms: 6205.663937
+  type: 'test'
+  ...
+# Subtest: a full compatibility mirror cannot prevent committing a variant to IndexedDB
+ok 473 - a full compatibility mirror cannot prevent committing a variant to IndexedDB
+  ---
+  duration_ms: 4078.139151
+  type: 'test'
+  ...
+# quota filled with 5211136 chars in 10 keys; library 31106 chars before the attempt
+# Subtest: a project with a local raster image: the variant shares the stored image, nothing is duplicated, deleting keeps it
+ok 474 - a project with a local raster image: the variant shares the stored image, nothing is duplicated, deleting keeps it
+  ---
+  duration_ms: 3332.540848
+  type: 'test'
+  ...
+# image project 1755 chars; collection 33098 → 35015 chars (+1917); IndexedDB images 1 → 1
+# Subtest: Estudio de imágenes escritorio: zona dibujada, referencias del catálogo, coste bloqueado, simulación, revisión ACEPTABLE/RECHAZADA, ficha, cancelar y error
+not ok 475 - Estudio de imágenes escritorio: zona dibujada, referencias del catálogo, coste bloqueado, simulación, revisión ACEPTABLE/RECHAZADA, ficha, cancelar y error
+  ---
+  duration_ms: 9412.970659
+  type: 'test'
+  location: '/home/user/integ/tests/visual-studio.browser.test.cjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Cambios fuera de la zona: 0\.0 % \(tolerancia 1 %\)/. Input:
+    
+    'Cambios fuera de la zona: 0.1 % (tolerancia 1 %) · dentro: 57 %'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: 'Cambios fuera de la zona: 0.1 % (tolerancia 1 %) · dentro: 57 %'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (/home/user/integ/tests/visual-studio.browser.test.cjs:50:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: Estudio de imágenes teléfono 390×844 EN: táctil, atajo de zona, simulación, sin desbordes
+ok 476 - Estudio de imágenes teléfono 390×844 EN: táctil, atajo de zona, simulación, sin desbordes
+  ---
+  duration_ms: 6156.138951
+  type: 'test'
+  ...
+# Subtest: Private image beta requires a tester code and quote confirmation before upload, then downloads an accepted labelled proposal
+ok 477 - Private image beta requires a tester code and quote confirmation before upload, then downloads an accepted labelled proposal
+  ---
+  duration_ms: 7548.125058
+  type: 'test'
+  ...
+# Subtest: «Generar»: hierarchy, focus and the three paths 1440x900
+ok 478 - «Generar»: hierarchy, focus and the three paths 1440x900
+  ---
+  duration_ms: 6557.216693
+  type: 'test'
+  ...
+# Subtest: «Generar»: hierarchy, focus and the three paths 390x844
+ok 479 - «Generar»: hierarchy, focus and the three paths 390x844
+  ---
+  duration_ms: 6366.859523
+  type: 'test'
+  ...
+# Subtest: «Generar»: hierarchy, focus and the three paths 844x390
+ok 480 - «Generar»: hierarchy, focus and the three paths 844x390
+  ---
+  duration_ms: 6364.643932
+  type: 'test'
+  ...
+1..480
+# tests 482
+# suites 0
+# pass 479
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6065759.612441

@@ -1,0 +1,81 @@
+{
+ "format": "rubik-sota.pelicula-script",
+ "version": "1.0.0",
+ "effect": "pieza-a-pieza",
+ "fps": 24,
+ "seconds": 24,
+ "frames": 576,
+ "shots": [
+  {
+   "id": "plan",
+   "seconds": [
+    0,
+    3.5
+   ],
+   "frames": [
+    0,
+    83
+   ]
+  },
+  {
+   "id": "floors",
+   "seconds": [
+    3.5,
+    7
+   ],
+   "frames": [
+    84,
+    167
+   ]
+  },
+  {
+   "id": "walls",
+   "seconds": [
+    7,
+    12.5
+   ],
+   "frames": [
+    168,
+    299
+   ]
+  },
+  {
+   "id": "openings",
+   "seconds": [
+    12.5,
+    16
+   ],
+   "frames": [
+    300,
+    383
+   ]
+  },
+  {
+   "id": "furniture",
+   "seconds": [
+    16,
+    20
+   ],
+   "frames": [
+    384,
+    479
+   ]
+  },
+  {
+   "id": "assembled",
+   "seconds": [
+    20,
+    24
+   ],
+   "frames": [
+    480,
+    575
+   ]
+  }
+ ],
+ "revision": {
+  "projectId": "prj_op10-f5-furniture",
+  "source": "pilot ZIP 04e9fe78"
+ },
+ "profile": "revision"
+}
