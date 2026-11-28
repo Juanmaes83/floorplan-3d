@@ -20,7 +20,7 @@ Estado por frente:
    → `resultados/muestra/muestra.mp4` + informe; y la prueba UI `tests/pelicula-efectos.browser.test.cjs` (comprueba #peliculaMuestra 312-587).
 4. **Desde el paisaje**: bloqueado por Catastro (RCCOOR «límite por hora» todo el día; GML INSPIRE sin respuesta en 30 s). Candidato llano
    Conil EPSG:25830 222553/4021778. Validar el rótulo de 8bf9baa3 con un fotograma sobre `scratchpad/demo-paisaje/zipx` (escena de la demo rechazada).
-5. **Inventario de ramas**: 182/337 en `inventario-ramas/` (última `feat/hybrid-registered-elevation-v1`); cómo retomar en su README.
+5. **Inventario de ramas**: 215/337 en `inventario-ramas/` (última `fix/presentation-ci-green`; lanzar por tramos de < 30 min); cómo retomar en su README.
 
 **Cola** (no lanzar hasta cerrar 2–4 y la revisión de Juanma): renders largos uno cada vez → piloto v1.1 → Maqueta abierta → Pieza a pieza →
 Desde el paisaje (tras aprobar la previa). Cada MP4 > 20 s con revisión propia. **Examen de los cinco proyectos: última acción, tras la

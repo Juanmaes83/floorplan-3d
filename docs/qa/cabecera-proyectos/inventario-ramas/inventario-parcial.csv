@@ -181,3 +181,36 @@ docs/legal-rubik-proteccion-extraccion-2026-11-03,2026-11-03,425,2260,2057,1,178
 docs/multi-agent-ops-status-2026-11-02,2026-11-03,468,2465,2055,21,180,docs: advance VQ-01 to CP1-B after fixture PASS
 docs/vecinia-visual-lineage-references-2026-11-03,2026-11-03,424,2260,2057,1,178,docs(research): preserve VECINIA visual evolution and register three reference images
 feat/hybrid-registered-elevation-v1,2026-11-03,434,2270,2053,9,182,hybrid elevation (F11): ink contours follow off-screen capture buffers — View3D.shot and
+docs/cp2-ci-green-visual-families-handoff-2026-11-04,2026-11-04,430,2262,2057,3,178,docs(qa): distinguish partial human acceptance from unresolved global visual gap
+feat/delivery-client-3d-experience-v1,2026-11-04,434,2300,2028,36,212,Delivery 3D V1: visible focus ring and disabled accent state in the button system
+feat/visual-families-hero-fidelity-v2,2026-11-04,467,2317,2061,53,179,docs(visual-families): link draft handoff PR
+feat/visual-families-v1,2026-11-04,448,2290,2058,26,182,docs(visual-families): record approved F02 seam and smoke QA
+feat/vq-01-material-fidelity-foundation,2026-11-04,444,2278,2058,17,179,ci(vq-01): rerun CP2 impact QA when M08 browser export test changes
+fix/b2-b8-gpt-image-25-compat-2026-11-04,2026-11-04,428,2260,2057,1,178,test(ai): ensure preview-only token override cannot affect production
+fix/vq01-cp2-m08-png-export-2026-11-04,2026-11-04,443,2278,2058,17,179,test(vq-01): fix M08 software-PNG click wait while preserving real download validation
+qa/vq01-cp2-m08-pointer-proof-2026-11-04,2026-11-04,445,2279,2058,18,179,ci(qa): independently verify CP2 PNG download with real mouse input
+docs/f03-facade-visual-references-v1,2026-11-05,473,2365,2061,95,179,docs(f03): fix Kimi handoff canonical documentation path
+feat/agent-ai-ag1-readonly-2026-11-05,2026-11-05,430,2264,2057,4,179,docs(agent): record 79 passing AG-1 tests and safe staged LLM/API/cost gates
+feat/f03-facade-material-fidelity-v1,2026-11-05,480,2431,2081,138,182,docs(f03): checkpoint delivery report and draft PR
+feat/ft3d-8-s1-real-project-integration-2026-11-05,2026-11-05,446,2317,2090,13,190,fix(ft3d-8): label allocated amounts «sin IVA» in the card; video and client document
+feat/ft3d-8-ux4d-gate-d-2026-11-05,2026-11-05,457,2398,2099,85,190,fix(ft3d-8): GD-UX-01; the 4D experience fits the usable window on desktop
+feat/ft3d-8v-schedule-core-2026-11-05,2026-11-05,434,2298,2078,6,190,docs(ft3d-8): S1 specification verified against the repository
+feat/hybrid-v2-autonomous-c4-c5-2026-11-05,2026-11-05,427,2266,2058,0,184,fix(hybrid-v2): bound room mask memory and finish real materials by room end
+feat/section-spatial-visit-v1,2026-11-05,451,2279,2077,0,178,Section→Spatial Visit: phone evidence (portrait/landscape) and final validation notes
+feat/visual-families-next-f03-f04-f05-v1,2026-11-05,489,2489,2081,196,182,docs(agents): add binding human decision and method-transfer mission
+docs/referencias-nuevas-para-auditar-e-implementar-2026-11-06,2026-11-06,480,2353,2120,0,179,Add files via upload
+docs/rubik-evolution-preparation-2026-11-04,2026-11-06,460,2275,2054,16,181,docs(roadmap): priorizar cierre visual M2 y documentación P1; conservar HOME-UX-E2
+evidence/presentation-ux-2026-11-06,2026-11-06,481,2346,2120,23,179,docs(qa): Gate D evidence for PR #175 — real recordings BEFORE (master 0cfe6a5) and AFTE
+feat/ft3d-8-m2-s4-correcciones-2026-11-06,2026-11-06,477,2601,2190,179,198,docs(qa): correcciones M2 — informe; matriz de experiencia novato; rondas 1–3; vídeos
+feat/ft3d-8-m2-s4-integracion-2026-11-06,2026-11-06,475,2474,2131,109,200,M2: illustrations are never counted as project elements of a budget item (found by CI); re
+feat/ft3d-8-s2-s3-m1-2026-11-05,2026-11-06,430,2292,2074,13,181,docs(ft3d-8): M1 report; record CI history (fixed M1 race; flaky shared budget-ui test lef
+feat/hybrid-v2-living-drawing,2026-11-06,439,2289,2085,0,180,docs(hybrid-v2): integral delivery — implementation; tests; integration with Section and
+fix/e2-presentation-ux-stability,2026-11-06,492,2329,2125,0,180,test(presentation-ux): the page itself pauses «Dibujo vivo» on its first frame past the 
+fix/ft3d-4-expressive-facade-default,2026-11-06,496,2331,2128,0,179,Merge remote-tracking branch 'origin/master' into fix/ft3d-4-expressive-facade-default
+fix/section-visit-handover-2026-11-06,2026-11-06,457,2290,2087,0,179,docs(section): root cause; fix; tests and evidence of the spatial visit hand-over defect (
+integration/rubik-e2-hybrid-v2-2026-11-06,2026-11-06,477,2322,2119,0,179,ci(e2): run non-skipped Hybrid V2 and corrected Section browser gates
+integration/rubik-e2-section-2026-11-06,2026-11-06,457,2290,2087,0,179,docs(section): root cause; fix; tests and evidence of the spatial visit hand-over defect (
+qa/ft3d-8-m2-examen-final-2026-11-06,2026-11-06,476,2567,2134,196,203,qa(ft3d-8): examen final integral M2/S4 — tests; fixtures sintéticos; evidencias e info
+qa/hv2-integration-section-v1-2026-11-05,2026-11-06,477,2302,2081,9,186,Merge branch 'feat/hybrid-v2-living-drawing' into qa/hv2-integration-section-v1-2026-11-05
+feat/home-legal-authorship,2026-11-07,507,2333,2139,0,170,Merge remote-tracking branch 'origin/master' into feat/home-legal-authorship
+fix/presentation-ci-green,2026-11-07,506,2332,2138,0,170,test(presentation): the last transient-window waits are taken in the page (route 35 %; clo
