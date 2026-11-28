@@ -2,6 +2,28 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT · 28/11/2026, 00:55 (tras el reinicio de las 00:52)
+
+Leer esto primero; sustituye al de las 00:30 para el estado de las validaciones.
+
+**Fase 1 · validaciones (todas publicadas por paso, con SHA, código de salida y log)**
+- #324 `ad928d43`: P10 §8.3 ×2 rc=0 → `reanudacion/cierre-324-ad928d43/pasos/` (commit ba0a945b). Regresión 482/479 (3 de base) cerrada.
+  CI del SHA: todo verde salvo `contract` (aviso avc1, no reproducible en local) y `full-regression` (skipped); Preview Vercel OK.
+  `contract` relanzado (rerun de jobs fallidos, run 46072294158) a las 00:49: **pendiente de leer el resultado**.
+- Efectos `claude/pelicula-efectos` HEAD `3716f325` (`docs/qa/pelicula-efectos/pasos/` + tabla en HANDOFF):
+  ZIP d46eb6be FALLA (kit ausente) → a4719374; ZIP f45f1e06 FALLA (ZIP B con guion de A) → c25428f3; **ZIP c25428f3 rc=0, 17/17**;
+  interfaz rc=0 ×2; previas Maqueta abierta (60 f) y Pieza a pieza (48 f) rc=0; rótulos de planta corregidos (f45f1e06, decisión de
+  Juanma: mínimo 0,24/0,34/ocultar); cubierta visible desde fuera en Desde el paisaje (3716f325).
+- Desde el paisaje: demo montada (sonda corregida: procedencia del terreno) y ZIP con entorno sin parcela; **emplazamiento 11039A02800004
+  RECHAZADO** (ladera: −4,1…+4,0 m bajo la huella, puerta 2,3 m enterrada; ningún giro/posición < 1,36 m) → paso 8.
+
+**En curso:** buscar sitio llano. `scratchpad/sondas/llano.cjs` (MDT05 directo, excluye agua aplanada). Candidatos 25 m con desnivel
+≈0,05 m: La Janda N 250053/4013538, La Janda S 252653/4008758, Campiña Jerez 228223/4062248, Conil 222553/4021778 (EPSG:25830).
+Siguiente: ortofoto de cada candidato (campo + camino, sin edificar) → parcela en Catastro por coordenadas (límite por hora levantado
+≈01:45; si no, `WFS_REPLAY` no vale: es otra parcela) → montaje con la sonda → previa suelo/terreno/camino/puerta → revisión de Juanma.
+**Después:** renders largos uno cada vez (piloto v1.1 → Maqueta abierta → Pieza a pieza → Desde el paisaje aprobado); examen de los
+cinco proyectos el último. Si hay reinicio: no hay cadena activa; relanzar `fase1-v2.sh` solo salta pasos con rc=0.
+
 ## ▶ CHECKPOINT DE COMPACTACIÓN · 28/11/2026, 00:30 (leer primero; el roadmap de las 22:30 sigue como orden general)
 
 **Procesos:** ninguno activo. El contenedor se reinició ~00:20 (uptime 0) y cortó `fase1.sh` en el paso «story-assist 1».
