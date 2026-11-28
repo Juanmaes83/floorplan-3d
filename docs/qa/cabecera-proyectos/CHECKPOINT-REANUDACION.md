@@ -9,7 +9,12 @@ Leer esto primero; sustituye al de las 00:30 para el estado de las validaciones.
 **Fase 1 · validaciones (todas publicadas por paso, con SHA, código de salida y log)**
 - #324 `ad928d43`: P10 §8.3 ×2 rc=0 → `reanudacion/cierre-324-ad928d43/pasos/` (commit ba0a945b). Regresión 482/479 (3 de base) cerrada.
   CI del SHA: todo verde salvo `contract` (aviso avc1, no reproducible en local) y `full-regression` (skipped); Preview Vercel OK.
-  `contract` relanzado (rerun de jobs fallidos, run 46072294158) a las 00:49: **pendiente de leer el resultado**.
+  `contract` relanzado (run 46072294158, intento 2): **vuelve a fallar** (201/202), mismo test: P10 §8.3 `story-assist.browser.test.cjs:117`
+  recibe el aviso de Chromium «When using "avc1" for mp4 encoding, the codec description is not supposed to change… Consider switching to
+  "avc3"». **El test es nuevo en #324** (no existe en master), así que el fallo es de #324, no de base. CI 2/2; local 0/6 (Chromium 153 vs
+  chromium-1234 de CI). Grabador: `js/tour-recorder.js` (TYPES prefiere `video/mp4;codecs=avc1.42E01E`; lienzo fijo 1280×720).
+  **Decisión de Juanma**: (a) preferir `avc3` (lo que pide el aviso; riesgo de compatibilidad del MP4 en reproductores del cliente),
+  (b) preferir WebM en la propuesta, (c) investigar en el Chromium de CI por qué cambia la descripción del códec. No se relaja el test.
 - Efectos `claude/pelicula-efectos` HEAD `3716f325` (`docs/qa/pelicula-efectos/pasos/` + tabla en HANDOFF):
   ZIP d46eb6be FALLA (kit ausente) → a4719374; ZIP f45f1e06 FALLA (ZIP B con guion de A) → c25428f3; **ZIP c25428f3 rc=0, 17/17**;
   interfaz rc=0 ×2; previas Maqueta abierta (60 f) y Pieza a pieza (48 f) rc=0; rótulos de planta corregidos (f45f1e06, decisión de
@@ -19,8 +24,7 @@ Leer esto primero; sustituye al de las 00:30 para el estado de las validaciones.
 
 **En curso:** buscar sitio llano. `scratchpad/sondas/llano.cjs` (MDT05 directo, excluye agua aplanada). Candidatos 25 m con desnivel
 ≈0,05 m: La Janda N 250053/4013538, La Janda S 252653/4008758, Campiña Jerez 228223/4062248, Conil 222553/4021778 (EPSG:25830).
-Siguiente: ortofoto de cada candidato (campo + camino, sin edificar) → parcela en Catastro por coordenadas (límite por hora levantado
-≈01:45; si no, `WFS_REPLAY` no vale: es otra parcela) → montaje con la sonda → previa suelo/terreno/camino/puerta → revisión de Juanma.
+Siguiente: ortofoto de cada candidato (campo + camino, sin edificar) → parcela en Catastro por coordenadas (a las 01:51 Catastro **seguía** devolviendo «límite de peticiones por hora»; reintento ≈03:00; si no, `WFS_REPLAY` no vale: es otra parcela) → montaje con la sonda → previa suelo/terreno/camino/puerta → revisión de Juanma.
 **Después:** renders largos uno cada vez (piloto v1.1 → Maqueta abierta → Pieza a pieza → Desde el paisaje aprobado); examen de los
 cinco proyectos el último. Si hay reinicio: no hay cadena activa; relanzar `fase1-v2.sh` solo salta pasos con rc=0.
 
