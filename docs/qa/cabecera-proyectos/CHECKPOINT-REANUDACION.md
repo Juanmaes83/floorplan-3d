@@ -2,6 +2,17 @@
 
 Enlace a este checkpoint: https://github.com/Juanmaes83/floorplan-3d/blob/claude/cabecera-proyectos/docs/qa/cabecera-proyectos/CHECKPOINT-REANUDACION.md
 
+## ▶ CHECKPOINT · 28/11/2026, mañana (tanda dirigida de Juanma: avc1, rótulos, Pieza a pieza por grupos)
+
+1. **avc1 / P10 §8.3 (#324 `ad928d43`)** → `reanudacion/avc1-ci/` (commit 594a6c1b). Chromium de CI (151, playwright 1.62.1) instalado
+   aislado en `scratchpad/pw1621`: la prueba falla igual que CI (rc 1). Mismo recorrido de grabación en master `dacb5d39`: **mismo aviso**.
+   MP4 de ambos: se abren, duran ~7,4 s, se reproducen hasta `ended`, decodificación estricta limpia, SPS en banda = avcC (no cambia).
+   Recomendación: mantener avc1; alinear CI con Chromium ≥ 153 (decisión de Juanma); no relajar la aserción. #324 en borrador.
+2. **Rótulos** → efectos `pasos/10-rotulos-1440` (código 54bed980): 1:1 a 2560×1440; contraste 1,95→2,82 y 2,09→3,29; Pasillo ya no toca muro.
+3. **Pieza a pieza por grupos** → efectos `pasos/11-pieza-a-pieza-grupos` (código 6e5c32ce): clip continuo 13 s, rc 0.
+   Pendiente antes del render largo: fundido del rótulo de grupo (se encoge ~8 fotogramas) y naranja más visible sobre suelos claros.
+Sigue: Catastro (parcela llana de Conil), renders largos tras la revisión de Juanma, examen de los cinco proyectos el último.
+
 ## ▶ CHECKPOINT · 28/11/2026, 00:55 (tras el reinicio de las 00:52)
 
 Leer esto primero; sustituye al de las 00:30 para el estado de las validaciones.
