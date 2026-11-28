@@ -1,0 +1,10 @@
+Archive:  /tmp/claude-0/-home-user/8ae691a0-8fef-5086-ba65-d2c190bb8356/scratchpad/efectos-zip-out/A-maqueta-revision.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+ 13354348  1980-00-00 00:00   scene.glb
+     5911  1980-00-00 00:00   manifest.json
+     1671  1980-00-00 00:00   LEEME.txt
+    13968  1980-00-00 00:00   rubik_blender_prepare.py
+     1110  1980-00-00 00:00   rubik-pelicula-guion.json
+---------                     -------
+ 13377008                     5 files
